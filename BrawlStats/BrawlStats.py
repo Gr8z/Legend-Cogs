@@ -19,6 +19,8 @@ credits = "Bot by GR8 | Academy"
 
 headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
 
+path = os.path.join("data", "BrawlStats", "tags.json")
+
 # Converts seconds to time
 def sec2tme(sec):
 	m, s = divmod(sec, 60)
@@ -150,11 +152,11 @@ class BrawlStats:
 
     def __init__(self, bot):
     	self.bot = bot
-    	self.brawl = dataIO.load_json('data/BrawlStars/tags.json')
+    	self.brawl = dataIO.load_json(path)
 
 
     async def updateBrawl(self):
-        self.brawl = dataIO.load_json('data/BrawlStars/tags.json')
+        self.brawl = dataIO.load_json(path)
 
     @commands.command(pass_context=True)
     async def brawlProfile(self, ctx, member: discord.Member = None):
@@ -198,6 +200,7 @@ class BrawlStats:
     	    	clantag = self.brawl[author.id]['band_tag']
     	    except :
     	    	await self.bot.say("You need to first save your profile using ``!save brawl #GAMETAG``")
+    	    	return
 
     	clandata = getBand(clantag)
 
@@ -228,20 +231,7 @@ class BrawlStats:
     	embed.set_footer(text=credits, icon_url=creditIcon)
     	await self.bot.say(embed=embed)
 
-def check_folders():
-    if not os.path.exists("data/BrawlStars"):
-        print("Creating data/BrawlStars folder...")
-        os.makedirs("data/BrawlStars")
-
-def check_files():
-    f = "data/BrawlStars/tags.json"
-    if not fileIO(f, "check"):
-        print("Creating empty tags.json...")
-        fileIO(f, "save", [])
-
 def setup(bot):
-	check_folders()
-	check_files()
 	if soupAvailable:
 		bot.add_cog(BrawlStats(bot))
 	else:
