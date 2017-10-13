@@ -21,10 +21,6 @@ To install a cog on your bot instance:
 
 `[p]cog repo add Legend-Cogs https://github.com/Gr8z/Legend-Cogs`
 
-`[p]` stands for server prefix. So if you use `!` as to run bot commands, you would instead type:
-
-`!cog repo add Legend-Cogs https://github.com/Gr8z/Legend-Cogs`
-
 ### 2. Add the cog you want to installed
 
 `[p]cog install Legend-Cogs clashroyale`
