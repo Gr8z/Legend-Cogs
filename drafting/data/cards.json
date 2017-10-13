@@ -1,0 +1,387 @@
+[
+  {
+    "rarity": "Common",
+    "name": "Arrows",
+    "id": 28000001
+  },
+  {
+    "rarity": "Common",
+    "name": "Bomber",
+    "id": 26000013
+  },
+  {
+    "rarity": "Common",
+    "name": "Archers",
+    "id": 26000001
+  },
+  {
+    "rarity": "Common",
+    "name": "Knight",
+    "id": 26000000
+  },
+  {
+    "rarity": "Rare",
+    "name": "Fireball",
+    "id": 28000000
+  },
+  {
+    "rarity": "Rare",
+    "name": "Mini P.E.K.K.A.",
+    "id": 26000018
+  },
+  {
+    "rarity": "Rare",
+    "name": "Musketeer",
+    "id": 26000014
+  },
+  {
+    "rarity": "Rare",
+    "name": "Giant",
+    "id": 26000003
+  },
+  {
+    "rarity": "Epic",
+    "name": "Prince",
+    "id": 26000016
+  },
+  {
+    "rarity": "Epic",
+    "name": "Baby Dragon",
+    "id": 26000015
+  },
+  {
+    "rarity": "Epic",
+    "name": "Skeleton Army",
+    "id": 26000012
+  },
+  {
+    "rarity": "Epic",
+    "name": "Witch",
+    "id": 26000007
+  },
+  {
+    "rarity": "Common",
+    "name": "Spear Goblins",
+    "id": 26000019
+  },
+  {
+    "rarity": "Common",
+    "name": "Goblins",
+    "id": 26000002
+  },
+  {
+    "rarity": "Rare",
+    "name": "Goblin Hut",
+    "id": 27000001
+  },
+  {
+    "rarity": "Rare",
+    "name": "Valkyrie",
+    "id": 26000011
+  },
+  {
+    "rarity": "Epic",
+    "name": "Lightning",
+    "id": 28000007
+  },
+  {
+    "rarity": "Epic",
+    "name": "Goblin Barrel",
+    "id": 28000004
+  },
+  {
+    "rarity": "Common",
+    "name": "Skeletons",
+    "id": 26000010
+  },
+  {
+    "rarity": "Common",
+    "name": "Minions",
+    "id": 26000005
+  },
+  {
+    "rarity": "Rare",
+    "name": "Tombstone",
+    "id": 27000009
+  },
+  {
+    "rarity": "Rare",
+    "name": "Bomb Tower",
+    "id": 27000004
+  },
+  {
+    "rarity": "Epic",
+    "name": "Giant Skeleton",
+    "id": 26000020
+  },
+  {
+    "rarity": "Epic",
+    "name": "Balloon",
+    "id": 26000006
+  },
+  {
+    "rarity": "Common",
+    "name": "Cannon",
+    "id": 27000000
+  },
+  {
+    "rarity": "Common",
+    "name": "Barbarians",
+    "id": 26000008
+  },
+  {
+    "rarity": "Rare",
+    "name": "Rocket",
+    "id": 28000003
+  },
+  {
+    "rarity": "Rare",
+    "name": "Barbarian Hut",
+    "id": 27000005
+  },
+  {
+    "rarity": "Epic",
+    "name": "Rage",
+    "id": 28000002
+  },
+  {
+    "rarity": "Epic",
+    "name": "X-Bow",
+    "id": 27000008
+  },
+  {
+    "rarity": "Common",
+    "name": "Tesla",
+    "id": 27000006
+  },
+  {
+    "rarity": "Common",
+    "name": "Minion Horde",
+    "id": 26000022
+  },
+  {
+    "rarity": "Rare",
+    "name": "Inferno Tower",
+    "id": 27000003
+  },
+  {
+    "rarity": "Rare",
+    "name": "Hog Rider",
+    "id": 26000021
+  },
+  {
+    "rarity": "Epic",
+    "name": "Freeze",
+    "id": 28000005
+  },
+  {
+    "rarity": "Epic",
+    "name": "P.E.K.K.A.",
+    "id": 26000004
+  },
+  {
+    "rarity": "Legendary",
+    "name": "Inferno Dragon",
+    "id": 26000037
+  },
+  {
+    "rarity": "Legendary",
+    "name": "Lava Hound",
+    "id": 26000029
+  },
+  {
+    "rarity": "Common",
+    "name": "Zap",
+    "id": 28000008
+  },
+  {
+    "rarity": "Common",
+    "name": "Fire Spirits",
+    "id": 26000031
+  },
+  {
+    "rarity": "Rare",
+    "name": "Furnace",
+    "id": 27000010
+  },
+  {
+    "rarity": "Rare",
+    "name": "Wizard",
+    "id": 26000017
+  },
+  {
+    "rarity": "Epic",
+    "name": "Poison",
+    "id": 28000009
+  },
+  {
+    "rarity": "Epic",
+    "name": "Mirror",
+    "id": 28000006
+  },
+  {
+    "rarity": "Legendary",
+    "name": "Graveyard",
+    "id": 28000010
+  },
+  {
+    "rarity": "Legendary",
+    "name": "Ice Wizard",
+    "id": 26000023
+  },
+  {
+    "rarity": "Common",
+    "name": "Mortar",
+    "id": 27000002
+  },
+  {
+    "rarity": "Rare",
+    "name": "Elixir Collector",
+    "id": 27000007
+  },
+  {
+    "rarity": "Rare",
+    "name": "Battle Ram",
+    "id": 26000036
+  },
+  {
+    "rarity": "Epic",
+    "name": "Tornado",
+    "id": 28000012
+  },
+  {
+    "rarity": "Epic",
+    "name": "Golem",
+    "id": 26000009
+  },
+  {
+    "rarity": "Legendary",
+    "name": "The Log",
+    "id": 28000011
+  },
+  {
+    "rarity": "Legendary",
+    "name": "Sparky",
+    "id": 26000033
+  },
+  {
+    "rarity": "Legendary",
+    "name": "Miner",
+    "id": 26000032
+  },
+  {
+    "rarity": "Common",
+    "name": "Elite Barbarians",
+    "id": 26000043
+  },
+  {
+    "rarity": "Common",
+    "name": "Royal Giant",
+    "id": 26000024
+  },
+  {
+    "rarity": "Rare",
+    "name": "Mega Minion",
+    "id": 26000039
+  },
+  {
+    "rarity": "Rare",
+    "name": "Three Musketeers",
+    "id": 26000028
+  },
+  {
+    "rarity": "Epic",
+    "name": "Dark Prince",
+    "id": 26000027
+  },
+  {
+    "rarity": "Epic",
+    "name": "Guards",
+    "id": 26000025
+  },
+  {
+    "rarity": "Legendary",
+    "name": "Electro Wizard",
+    "id": 26000042
+  },
+  {
+    "rarity": "Legendary",
+    "name": "Princess",
+    "id": 26000026
+  },
+  {
+    "rarity": "Common",
+    "name": "Bats",
+    "id": 26000049
+  },
+  {
+    "rarity": "Common",
+    "name": "Ice Spirit",
+    "id": 26000030
+  },
+  {
+    "rarity": "Rare",
+    "name": "Ice Golem",
+    "id": 26000038
+  },
+  {
+    "rarity": "Epic",
+    "name": "Clone",
+    "id": 28000013
+  },
+  {
+    "rarity": "Epic",
+    "name": "Bowler",
+    "id": 26000034
+  },
+  {
+    "rarity": "Legendary",
+    "name": "Night Witch",
+    "id": 26000048
+  },
+  {
+    "rarity": "Legendary",
+    "name": "Lumberjack",
+    "id": 26000035
+  },
+  {
+    "rarity": "Common",
+    "name": "Goblin Gang",
+    "id": 26000041
+  },
+  {
+    "rarity": "Rare",
+    "name": "Dart Goblin",
+    "id": 26000040
+  },
+  {
+    "rarity": "Epic",
+    "name": "Executioner",
+    "id": 26000045
+  },
+  {
+    "rarity": "Rare",
+    "name": "Heal",
+    "id": 28000016
+  },
+  {
+    "rarity": "Legendary",
+    "name": "Bandit",
+    "id": 26000046
+  },
+  {
+    "name": "CannonCart",
+    "rarity": "Epic",
+    "id": 26000054
+  },
+  {
+    "name": "FlyingMachine",
+    "rarity": "Rare",
+    "id": 26000057
+  },
+  {
+    "name": "MegaKnight",
+    "rarity": "Legendary",
+    "id": 26000055
+  }
+]

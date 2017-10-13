@@ -1,0 +1,10 @@
+{
+    "AUTHOR" : "GR8",
+    "INSTALL_MSG" : "Draft Royale Addon added, if there are any issues, please mention them on https://github.com/Gr8z/LeGeND-Bot",
+    "NAME" : "drafting",
+    "SHORT" : "Draft Royale Bot",
+    "DESCRIPTION" : "Pick cards for drafting and create an in discord bracket",
+    "TAGS" : ["clashroyale", "draftroyale", "bracket"],
+    "REQUIREMENTS" : ["pickle", "json","re","requests","os","collections","pathlib"],
+    "HIDDEN" : false
+}

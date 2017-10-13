@@ -1,0 +1,10 @@
+{
+    "AUTHOR" : "GR8",
+    "INSTALL_MSG" : "Profanity Addon added, if there are any issues, please mention them on https://github.com/Gr8z/LeGeND-Bot",
+    "NAME" : "Profanity",
+    "SHORT" : "Profanity filter to keep the clan clean",
+    "DESCRIPTION" : "Bot looks into a list of bad words and see if a message includes it. Deletes the message and warns the user.",
+    "TAGS" : ["Profanity","chat filter"],
+    "REQUIREMENTS" : ["os","asyncio"],
+    "HIDDEN" : false
+}

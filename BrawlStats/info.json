@@ -1,0 +1,10 @@
+{
+    "AUTHOR" : "GR8",
+    "INSTALL_MSG" : "Brawl Stats Addon added, if there are any issues, please mention them on https://github.com/Gr8z/LeGeND-Bot",
+    "NAME" : "BrawlStats",
+    "SHORT" : "Statistics for Brawl Stars",
+    "DESCRIPTION" : "Check your profile, band and events for brawl stars.",
+    "TAGS" : ["brawlstars", "stats", "band"],
+    "REQUIREMENTS" : ["bs4", "json","flask","requests","os","aiohttp"],
+    "HIDDEN" : false
+}
