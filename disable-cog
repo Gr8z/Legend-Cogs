@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+if [ ${#} -ne 2 ]
+then
+  echo "Usage: $0 <cog-name> <Red-DiscordBot Folder>"
+  exit 1
+else
+  COG=$1
+  REDFOLDER=$2
+fi
+
+if [ ! -d ${PWD}/${COG} ]
+then
+  echo "ERROR: ${COG} cog doesn't exist."
+  exit 2
+fi
+
+if [ ! -d ${REDFOLDER} ]
+then
+  echo "ERROR: Can't find RedBot on ${REDFOLDER}"
+  exit 3
+fi
+
+if [ -e ${REDFOLDER}/data/${COG} ]
+then
+  rm -rf ${REDFOLDER}/data/${COG}
+fi
+
+cd ${COG}
+for file in *
+do
+  [ -e ${REDFOLDER}/cogs/${file} ] && rm ${REDFOLDER}/cogs/${file}
+done
