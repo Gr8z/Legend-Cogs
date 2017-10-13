@@ -17,15 +17,20 @@ BOTCOMMANDER_ROLES =  ["Bot Commander", "HUB head", "HUB manager", "HUB officer"
 creditIcon = "https://cdn.discordapp.com/avatars/112356193820758016/7bd5664d82cc7c9d2ae4704e58990da3.jpg"
 credits = "Bot by GR8 | Academy"
 
+clash = os.path.join("data", "clashroyale", "tags.json")
+clash_mini = os.path.join("data", "clashroyale", "mini_tags.json")
+brawl = os.path.join("data", "BrawlStats", "tags.json")
+cycle = os.path.join("data", "clashroyale", "chests.json")
+
 class clashroyale:
     """Live statistics for Clash Royale"""
 
     def __init__(self, bot):
     	self.bot = bot
-    	self.clash = dataIO.load_json('data/clashroyale/tags.json')
-    	self.clash_mini = dataIO.load_json('data/clashroyale/mini_tags.json')
-    	self.brawl = dataIO.load_json('data/BrawlStars/tags.json')
-    	self.cycle = dataIO.load_json('data/clashroyale/chests.json')
+    	self.clash = dataIO.load_json(clash)
+    	self.clash_mini = dataIO.load_json(clash_mini)
+    	self.brawl = dataIO.load_json(brawl)
+    	self.cycle = dataIO.load_json(cycle)
 
     @commands.command(pass_context=True)
     async def clashProfile(self, ctx, member: discord.Member = None):
