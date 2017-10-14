@@ -2,7 +2,7 @@
 
 Made with Python and [RED](https://github.com/Cog-Creators/Red-DiscordBot).
 
-If you want to see this bot in action, join the Legend Recruitment Hub at discord.me/CRLGD
+If you want to see this bot in action, join the Legend Recruitment Hub at [discord.me/CRLGD](http://discord.me/CRLGD)
 
 ## Cogs
 
