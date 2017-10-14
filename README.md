@@ -1,5 +1,8 @@
 # Legend-Cogs
-Made with Python and RED.
+
+Made with Python and [RED](https://github.com/Cog-Creators/Red-DiscordBot).
+
+If you want to see this bot in action, join the Legend Recruitment Hub at discord.me/CRLGD
 
 ## Cogs
 
@@ -21,6 +24,18 @@ To install a cog on your bot instance:
 
 `[p]cog repo add Legend-Cogs https://github.com/Gr8z/Legend-Cogs`
 
+`[p]` stands for server prefix. So if you use `!` as to run bot commands, you would instead type:
+
+`!cog repo add Legend-Cogs https://github.com/Gr8z/Legend-Cogs`
+
 ### 2. Add the cog you want to installed
 
 `[p]cog install Legend-Cogs clashroyale`
+
+
+## Cogs
+
+* [AtomToast](https://github.com/AtomToast)
+* [SML](https://github.com/smlbiobot)
+* [RED](https://github.com/Cog-Creators/Red-DiscordBot)
+* [CR-API](https://github.com/cr-api/cr-api)
