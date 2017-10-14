@@ -33,7 +33,7 @@ To install a cog on your bot instance:
 `[p]cog install Legend-Cogs clashroyale`
 
 
-## Cogs
+## Credits
 
 * [AtomToast](https://github.com/AtomToast)
 * [SML](https://github.com/smlbiobot)
