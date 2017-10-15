@@ -13,9 +13,6 @@ If you want to see this bot in action, join the Legend Recruitment Hub at [disco
  * **profanity** - filter and delete message that contain bad words.
  * **tourney** - Clash Royale open tournament finder.
 
-You can install these cogs by using these commands on your redbot:
-
-
 ## Installation
 
 To install a cog on your bot instance:
@@ -23,10 +20,6 @@ To install a cog on your bot instance:
 ### 1. Add the repo
 
 `[p]cog repo add Legend-Cogs https://github.com/Gr8z/Legend-Cogs`
-
-`[p]` stands for server prefix. So if you use `!` as to run bot commands, you would instead type:
-
-`!cog repo add Legend-Cogs https://github.com/Gr8z/Legend-Cogs`
 
 ### 2. Add the cog you want to installed
 
