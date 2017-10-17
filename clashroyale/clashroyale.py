@@ -41,8 +41,15 @@ class clashroyale:
 	    		member = ctx.message.author
 
 	    	profiletag = self.clash[member.id]['tag']
+
+
 	    	try:
 	    		profiledata = requests.get('http://api.cr-api.com/profile/'+profiletag, timeout=5).json()
+
+	    		if member.id in self.clash_mini:
+	    			profiletag = self.clash_mini[member.id]['tag']
+	    			profiledata_mini = requests.get('http://api.cr-api.com/profile/'+profiletag, timeout=5).json()
+
 	    	except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
 	    		await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 	    		return
@@ -86,6 +93,44 @@ class clashroyale:
 
     		await self.bot.say(embed=embed)
 
+    		if 'profiledata_mini' in locals():
+
+    			if profiledata_mini['clan'] is None:
+		    		clanurl = "https://clashroyale.com/images/badges/0.png"
+		    	else:
+		    		clanurl = "http://api.cr-api.com"+profiledata_mini['clan']['badge']['url']
+
+		    	embed=discord.Embed(title="", color=0x0080ff)
+		    	embed.set_author(name=profiledata_mini['name'] + " (#"+profiledata_mini['tag']+")", icon_url=clanurl)
+		    	embed.set_thumbnail(url="http://api.cr-api.com" + profiledata_mini['arena']['imageURL'])
+		    	embed.add_field(name="Trophies", value=profiledata_mini['trophies'], inline=True)
+		    	embed.add_field(name="Legendary Trophies", value=profiledata_mini['legendaryTrophies'], inline=True)
+		    	embed.add_field(name="Highest Trophies", value=profiledata_mini['stats']['maxTrophies'], inline=True)
+		    	embed.add_field(name="Level", value=profiledata_mini['experience']['level'], inline=True)
+		    	embed.add_field(name="Arena", value=profiledata_mini['arena']['name'], inline=True)
+		    	embed.add_field(name="Experience", value=str(profiledata_mini['experience']['xp'])+"/"+str(profiledata_mini['experience']['xpRequiredForLevelUp']), inline=True)
+		    	if profiledata_mini['clan'] is not None:
+		    		embed.add_field(name="Clan", value=profiledata_mini['clan']['name'], inline=True)
+		    		embed.add_field(name="Role", value=profiledata_mini['clan']['role'], inline=True)
+		    	embed.add_field(name="Cards Found", value=str(profiledata_mini['stats']['cardsFound'])+"/77", inline=True)
+		    	embed.add_field(name="Favourite Card", value=profiledata_mini['stats']['favoriteCard'], inline=True)
+		    	embed.add_field(name="Chests Opened", value=profiledata_mini['chestCycle']['position'], inline=True)
+		    	embed.add_field(name="Games Played", value=profiledata_mini['games']['total'], inline=True)
+		    	embed.add_field(name="Tournament Games Played", value=profiledata_mini['games']['tournamentGames'], inline=True)
+		    	embed.add_field(name="Win Streak", value=str(max(0,profiledata_mini['games']['currentWinStreak']))+" Wins", inline=True)
+		    	embed.add_field(name="Wins", value=profiledata_mini['games']['wins'], inline=True)
+		    	embed.add_field(name="Losses", value=profiledata_mini['games']['losses'], inline=True)
+		    	embed.add_field(name="Draws", value=profiledata_mini['games']['draws'], inline=True)
+		    	embed.add_field(name="Three Crown Wins", value=profiledata_mini['stats']['threeCrownWins'], inline=True)
+		    	embed.add_field(name="Total Donations", value=profiledata_mini['stats']['totalDonations'], inline=True)
+		    	if profiledata_mini['experience']['level'] > 7:
+		    		embed.add_field(name="Challenge Max Wins", value=profiledata_mini['stats']['challengeMaxWins'], inline=True)
+		    		embed.add_field(name="Challenge Cards Won", value=profiledata_mini['stats']['challengeCardsWon'], inline=True)
+		    	embed.add_field(name="Tournament Cards Won", value=profiledata_mini['stats']['tournamentCardsWon'], inline=True)
+		    	embed.set_footer(text=credits, icon_url=creditIcon)
+
+	    		await self.bot.say(embed=embed)
+
     	except:
     		await self.bot.say("You need to first save your profile using ``!save clash #GAMETAG``")
 
@@ -100,6 +145,11 @@ class clashroyale:
 	    	profiletag = self.clash[member.id]['tag']
 	    	try:
 	    		profiledata = requests.get('http://api.cr-api.com/profile/'+profiletag, timeout=5).json()
+
+	    		if member.id in self.clash_mini:
+	    			profiletag = self.clash_mini[member.id]['tag']
+	    			profiledata_mini = requests.get('http://api.cr-api.com/profile/'+profiletag, timeout=5).json()
+
 	    	except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
 	    		await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 	    		return
@@ -112,9 +162,20 @@ class clashroyale:
 	    	embed=discord.Embed(title="", description="", color=0x0080ff)
 	    	embed.set_author(name=profiledata['name'] + " (#"+profiledata['tag']+")", icon_url="http://api.cr-api.com"+profiledata['clan']['badge']['url'])
 	    	embed.add_field(name="Upcoming Shop Offers", value=offersdesc, inline=True)
-	    	embed.set_footer(text=credits, icon_url=creditIcon)
+	    	embed.set_footer(text=credits, icon_url=creditIcon)	    	
 
-    		await self.bot.say(embed=embed)
+	    	await self.bot.say(embed=embed)
+
+
+	    	if 'profiledata_mini' in locals():
+	    		offersdesc = "<:epicopen:359759279621668866> " + str(profiledata_mini['shopOffers']['epic']) + " Days   <:legendaryopen:359759298013691905> " + str(profiledata_mini['shopOffers']['legendary']) + " Days   <:shopoffer:359759315503939584> " + str(profiledata_mini['shopOffers']['arena']) + " Days"
+
+		    	embed=discord.Embed(title="", description="", color=0x0080ff)
+		    	embed.set_author(name=profiledata_mini['name'] + " (#"+profiledata_mini['tag']+")", icon_url="http://api.cr-api.com"+profiledata_mini['clan']['badge']['url'])
+		    	embed.add_field(name="Upcoming Shop Offers", value=offersdesc, inline=True)
+		    	embed.set_footer(text=credits, icon_url=creditIcon)
+
+	    		await self.bot.say(embed=embed)
 
     	except:
     		await self.bot.say("You need to first save your profile using ``!save clash #GAMETAG``")
@@ -127,9 +188,13 @@ class clashroyale:
 	    		member = ctx.message.author
 
 	    	profiletag = self.clash[member.id]['tag']
-
 	    	try:
 	    		profiledata = requests.get('http://api.cr-api.com/profile/'+profiletag, timeout=5).json()
+
+	    		if member.id in self.clash_mini:
+	    			profiletag = self.clash_mini[member.id]['tag']
+	    			profiledata_mini = requests.get('http://api.cr-api.com/profile/'+profiletag, timeout=5).json()
+
 	    	except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
 	    		await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 	    		return
@@ -138,18 +203,6 @@ class clashroyale:
 	    		return
 
 	    	valuechest = ""
-	    	
-	    	position = profiledata['chestCycle']['position']
-	    	index = position % len(self.cycle)
-
-	    	for x in range(0,10):
-	    		pos = index + x
-	    		newPos = -1
-	    		if pos < (len(self.cycle)-1):
-	    			valuechest += str(self.cycle[pos])
-	    		else:
-	    			newPos += 1
-	    			valuechest += str(self.cycle[newPos])
 
 	    	def chest_first_index(position, key):
 	    	    """First index of chest by key."""
@@ -160,6 +213,18 @@ class clashroyale:
 	    	            chests.extend(self.cycle)
 	    	            return chests.index(key)+1
 	    	    return None
+
+	    	position = profiledata['chestCycle']['position']
+	    	index = position % len(self.cycle)
+
+	    	for x in range(0,10):
+	    		pos = index + x
+	    		newPos = -1
+	    		if pos < (len(self.cycle)-1):
+	    			valuechest += str(self.cycle[pos])
+	    		else:
+	    			newPos += 1
+	    			valuechest += str(self.cycle[newPos])	    	
 
 	    	chest1 = "<:giant:348771194096320513> +" + str(chest_first_index(position, "<:giant:348771194096320513>")) + "  "
 	    	chest2 = "<:epic:348771172894113792> +" + str(profiledata['chestCycle']['epicPos']-position) + "  "
@@ -177,6 +242,38 @@ class clashroyale:
 	    	embed.add_field(name="Special Chests", value=chest1+chest2+chest3+chest4+chest5, inline=False)
 	    	embed.set_footer(text=credits, icon_url=creditIcon)
 	    	await self.bot.say(embed=embed)
+
+	    	if 'profiledata_mini' in locals():
+		    	position = profiledata_mini['chestCycle']['position']
+		    	index = position % len(self.cycle)
+
+		    	valuechest = ""
+
+		    	for x in range(0,10):
+		    		pos = index + x
+		    		newPos = -1
+		    		if pos < (len(self.cycle)-1):
+		    			valuechest += str(self.cycle[pos])
+		    		else:
+		    			newPos += 1
+		    			valuechest += str(self.cycle[newPos])		    	
+
+		    	chest1 = "<:giant:348771194096320513> +" + str(chest_first_index(position, "<:giant:348771194096320513>")) + "  "
+		    	chest2 = "<:epic:348771172894113792> +" + str(profiledata_mini['chestCycle']['epicPos']-position) + "  "
+		    	chest3 = "<:magic:348771235968319488> +" + str(chest_first_index(position, "<:magic:348771235968319488>")) + "  "
+		    	chest4 = "<:super:348771259976253442> +" + str(profiledata_mini['chestCycle']['superMagicalPos']-position) + "  " 
+		    	if profiledata_mini['chestCycle']['legendaryPos'] is not None:
+		    		chest5 = "<:legendary:348771222558998528> +" + str(profiledata_mini['chestCycle']['legendaryPos']-position)
+		    	else:
+		    		chest5 = ""
+
+		    	embed=discord.Embed(title="", color=0x0080ff, description=str(position)+" Chests Opened")
+		    	embed.set_author(name=profiledata_mini['name'] + " (#"+profiledata_mini['tag']+")", url='http://cr-api.com/profile/' + profiletag, icon_url="http://api.cr-api.com"+profiledata_mini['clan']['badge']['url'])
+		    	embed.add_field(name="Upcoming Chests", value=valuechest, inline=False)
+		    	embed.add_field(name="Special Chests", value=chest1+chest2+chest3+chest4+chest5, inline=False)
+		    	embed.set_footer(text=credits, icon_url=creditIcon)
+		    	await self.bot.say(embed=embed)
+
 	    except:
 	    	await self.bot.say("You need to first save your profile using ``!save clash #GAMETAG``")
 
@@ -281,8 +378,8 @@ class clashroyale:
 	    """ save your Clash Royale MINI Profile Tag	
 
 	    Example:
-	    	!save mini #CRRYTPTT @GR8
-	    	!save mini #CRRYRPCC
+	    	!save mini #8Q8LR0JJU @GR8
+	    	!save mini #8Q8LR0JJU
 
 	    Type !contact to ask for help.
 	    """
@@ -319,14 +416,14 @@ class clashroyale:
 	    try:
 		    profiledata = requests.get('http://api.cr-api.com/profile/'+profiletag, timeout=5).json()
 
-		    if profiledata['clan']['tag'] is not "8CL09V0C":
+		    if "8CL09V0C" not in profiledata['clan']['tag']:
 		    	await self.bot.say("This feature is only available to members of LeGEnD Minis!")
 		    	return
 
 		    self.clash_mini.update({member.id: {'tag': profiledata['tag']}})
 		    dataIO.save_json('data/clashroyale/mini_tags.json', self.clash_mini)
 
-		    await self.bot.say('Mini player**' +profiledata['name'] + ' (#'+ profiledata['tag'] + ')** has been successfully saved on ' + member.mention)
+		    await self.bot.say('Mini player **' +profiledata['name'] + ' (#'+ profiledata['tag'] + ')** has been successfully saved on ' + member.mention)
 	    except (requests.exceptions.Timeout):
 		    await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 		    return
@@ -334,6 +431,7 @@ class clashroyale:
 		    await self.bot.say(e)
 		    return
 	    except:
+	    	raise
 	    	await self.bot.say("We cannot find your ID in our database, please try again. Type !contact to ask for help.")
 
     @save.command(pass_context=True, name="brawl")
