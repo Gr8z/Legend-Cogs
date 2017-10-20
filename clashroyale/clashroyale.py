@@ -17,8 +17,8 @@ BOTCOMMANDER_ROLES =  ["Bot Commander", "HUB head", "HUB manager", "HUB officer"
 creditIcon = "https://cdn.discordapp.com/avatars/112356193820758016/7bd5664d82cc7c9d2ae4704e58990da3.jpg"
 credits = "Bot by GR8 | Academy"
 
-clash = os.path.join("data", "clashroyale", "tags.json")
-clash_mini = os.path.join("data", "clashroyale", "mini_tags.json")
+clash = os.path.join("cogs", "tags.json")
+clash_mini = os.path.join("cogs", "mini_tags.json")
 brawl = os.path.join("data", "BrawlStats", "tags.json")
 cycle = os.path.join("data", "clashroyale", "chests.json")
 
@@ -58,7 +58,7 @@ class clashroyale:
 	    		return
 
 	    	if profiledata['clan'] is None:
-	    		clanurl = "https://clashroyale.com/images/badges/0.png"
+	    		clanurl = "https://i.imgur.com/4EH5hUn.png"
 	    	else:
 	    		clanurl = "http://api.cr-api.com"+profiledata['clan']['badge']['url']
 
@@ -96,7 +96,7 @@ class clashroyale:
     		if 'profiledata_mini' in locals():
 
     			if profiledata_mini['clan'] is None:
-		    		clanurl = "https://clashroyale.com/images/badges/0.png"
+		    		clanurl = "https://i.imgur.com/4EH5hUn.png"
 		    	else:
 		    		clanurl = "http://api.cr-api.com"+profiledata_mini['clan']['badge']['url']
 
@@ -361,7 +361,7 @@ class clashroyale:
 		    profiledata = requests.get('http://api.cr-api.com/profile/'+profiletag, timeout=5).json()
 
 		    self.clash.update({member.id: {'tag': profiledata['tag']}})
-		    dataIO.save_json('data/clashroyale/tags.json', self.clash)
+		    dataIO.save_json('cogs/tags.json', self.clash)
 
 		    await self.bot.say('**' +profiledata['name'] + ' (#'+ profiledata['tag'] + ')** has been successfully saved on ' + member.mention)
 	    except (requests.exceptions.Timeout):
@@ -421,7 +421,7 @@ class clashroyale:
 		    	return
 
 		    self.clash_mini.update({member.id: {'tag': profiledata['tag']}})
-		    dataIO.save_json('data/clashroyale/mini_tags.json', self.clash_mini)
+		    dataIO.save_json('cogs/mini_tags.json', self.clash_mini)
 
 		    await self.bot.say('Mini player **' +profiledata['name'] + ' (#'+ profiledata['tag'] + ')** has been successfully saved on ' + member.mention)
 	    except (requests.exceptions.Timeout):
@@ -492,7 +492,7 @@ class clashroyale:
 	        tagUsername = soupObject.find('div', {'class':'player-name brawlstars-font'}).get_text()
 
 	        self.brawl.update({member.id: {'tag': profiletag, 'band_tag': band_tag}})
-	        dataIO.save_json('data/BrawlStars/tags.json', self.brawl)
+	        dataIO.save_json('data/BrawlStats/tags.json', self.brawl)
 
 	        await self.bot.say(tagUsername + ' has been successfully saved. Now you can use ``!brawlProfile`` ``!band``')
 	    except:
@@ -505,11 +505,11 @@ def check_folders():
         os.makedirs("data/clashroyale")
 
 def check_files():
-    f = "data/clashroyale/tags.json"
+    f = "cogs/tags.json"
     if not fileIO(f, "check"):
         print("Creating empty tags.json...")
         fileIO(f, "save", [])
-    f = "data/clashroyale/mini_tags.json"
+    f = "cogs/mini_tags.json"
     if not fileIO(f, "check"):
         print("Creating empty mini_tags.json...")
         fileIO(f, "save", [])
