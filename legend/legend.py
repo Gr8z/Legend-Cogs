@@ -97,11 +97,11 @@ class legend:
 
     def __init__(self, bot):
         self.bot = bot
-        self.clash = dataIO.load_json('data/clashroyale/tags.json')
+        self.clash = dataIO.load_json('cogs/tags.json')
         self.c = dataIO.load_json('data/legend/clans.json')
 
     async def updateClash(self):
-        self.clash = dataIO.load_json('data/clashroyale/tags.json')
+        self.clash = dataIO.load_json('cogs/tags.json')
 
     async def _add_roles(self, member, role_names):
         """Add roles"""
@@ -523,15 +523,12 @@ class legend:
         await self.bot.say(message)
 
 def check_folders():
-    if not os.path.exists("data/clashroyale"):
-        print("Creating data/clashroyale folder...")
-        os.makedirs("data/clashroyale")
     if not os.path.exists("data/legend"):
         print("Creating data/legend folder...")
         os.makedirs("data/legend")
 
 def check_files():
-    f = "data/clashroyale/tags.json"
+    f = "cogs/tags.json"
     if not fileIO(f, "check"):
         print("Creating empty tags.json...")
         fileIO(f, "save", [])
