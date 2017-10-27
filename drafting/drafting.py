@@ -69,14 +69,13 @@ class Drafting():
 	def __init__(self, bot):
 		self.bot = bot
 		self.opendrafts = []
-		#self.cards = sorted(requests.get("http://www.clashapi.xyz/api/cards").json(), key=lambda card: card["name"])
 		self.cards = sorted(dataIO.load_json('data/drafting/cards.json'), key=lambda card: card["name"])
 		
 	@commands.command(pass_context=True)
 	async def createdraft(self, ctx, *, optionalarguments=""):
 		"""creates a draft to join
 
-		Only usuable in the "draft_challenge"!
+		Only usuable in the "monthly_mayhem"!
 		Open Drafts will be pinned to the channel to keep track of them.
 		Players can enter by reacting with the star emoji(clicking on it).
 		Cancel the creation of the draft with the octagonal sign
@@ -94,17 +93,17 @@ class Drafting():
 
 		Example: '!createdraft size=4, tag, name=My fancy draft, starttime=2 am in the evening, eligible=V.I.P Drafter' creates a draft called 'My fancy draft' with the size 4 only for V.I.P Drafters aswell as tagging them in the message and mentioning the startingtime
 		"""
-		modRole = discord.utils.get(ctx.message.server.roles, name="Mod")
+		modRole = discord.utils.get(ctx.message.server.roles, name="Admin")
 		marshalRole = discord.utils.get(ctx.message.server.roles, name="Marshal")
 
-		draftlobby = discord.utils.get(ctx.message.server.channels, name="draft_challenge")
+		draftlobby = discord.utils.get(ctx.message.server.channels, name="monthly_mayhem")
 		if ctx.message.channel != draftlobby:
-			await self.bot.say("This command should only be used in 'draft_challenge' so we can keep everything in one place 😉", delete_after=autodeletetime)
+			await self.bot.say("This command should only be used in 'monthly_mayhem' so we can keep everything in one place 😉", delete_after=autodeletetime)
 			return
 
 		host = ctx.message.author
 		if not Path("data/drafting/playerData/"+host.id+".p").is_file():
-			await self.bot.say(host.mention+", you are not registered yet. Please do so with "+prefix[0]+"register if you want to participate in drafts", delete_after=autodeletetime)
+			await self.bot.say(host.mention+", you are not registered yet. Please do so with "+prefix[0]+"register if you want to participate in Monthly Mayhem", delete_after=autodeletetime)
 			return
 
 		if "size=" in optionalarguments:
@@ -139,7 +138,7 @@ class Drafting():
 			tag = "False"
 
 		if eligiblerole == ctx.message.server.default_role:
-			drafterrole = discord.utils.get(ctx.message.server.roles, name="Drafter")
+			drafterrole = discord.utils.get(ctx.message.server.roles, name="MM participant")
 			if tag == "False":
 				mention = ""
 			else:
@@ -272,7 +271,7 @@ class Drafting():
 									await self.bot.add_reaction(msg, b)
 
 					else:
-						await self.bot.say(react.user.mention+", you are not registered yet. Please do so with **"+prefix[0]+"register** if you want to participate in drafts", delete_after=autodeletetime)
+						await self.bot.say(react.user.mention+", you are not registered yet. Please do so with **"+prefix[0]+"register** if you want to participate in Monthly Mayhem", delete_after=autodeletetime)
 						await self.bot.remove_reaction(msg, react.reaction.emoji, react.user)
 
 		while True:
@@ -408,12 +407,13 @@ class Drafting():
 			with open("data/drafting/drafts/"+draftid+".p", "rb") as f:
 				draftobj = pickle.load(f)
 		except:
-			await self.bot.say("You can only use this command in a draft channel", delete_after=autodeletetime)
+			await self.bot.say("You can only use this command in a group channel", delete_after=autodeletetime)
+			raise
 			return
 
 		channel = ctx.message.server.get_channel(draftobj.channel)
 		if ctx.message.channel != channel:
-			await self.bot.say("You can only use this command in the draft channel", delete_after=autodeletetime)
+			await self.bot.say("You can only use this command in the group channel", delete_after=autodeletetime)
 			return
 		if draftobj.status != "running":
 			await self.bot.say("This draft is not running", delete_after=autodeletetime)
@@ -583,17 +583,18 @@ class Drafting():
 			with open("data/drafting/drafts/"+draftid+".p", "rb") as f:
 				draftobj = pickle.load(f)
 		except:
-			await self.bot.say("You can only use this command in a draft channel", delete_after=autodeletetime)
+			await self.bot.say("You can only use this command in a group channel", delete_after=autodeletetime)
+			raise
 			return
 
 		channel = ctx.message.server.get_channel(draftobj.channel)
 		if ctx.message.channel != channel:
-			await self.bot.say("You can only use this command in the draft channel", delete_after=autodeletetime)
+			await self.bot.say("You can only use this command in the group channel", delete_after=autodeletetime)
 			return
 		if draftobj.status != "running":
 			await self.bot.say("This draft is not running", delete_after=autodeletetime)
 			return
-		modRole = discord.utils.get(ctx.message.server.roles, name="Mod")
+		modRole = discord.utils.get(ctx.message.server.roles, name="Admin")
 		marshalRole = discord.utils.get(ctx.message.server.roles, name="Marshal")
 		if ctx.message.author.id != draftobj.host and not modRole in ctx.message.author.roles and not marshalRole in ctx.message.author.roles:
 			await self.bot.say("Only the host is able to create the bracket", delete_after=autodeletetime)
@@ -838,13 +839,13 @@ class Drafting():
 			await self.bot.say("This Draft has already been canceled")
 			return
 
-		modRole = discord.utils.get(ctx.message.server.roles, name="Mod")
+		modRole = discord.utils.get(ctx.message.server.roles, name="Admin")
 		marshalRole = discord.utils.get(ctx.message.server.roles, name="Marshal")
 		if ctx.message.author.id == draftobj.host or modRole in ctx.message.author.roles or marshalRole in ctx.message.author.roles:
 			playerRole = discord.utils.get(ctx.message.server.roles, id=draftobj.playerRole)
 			await self.bot.delete_role(ctx.message.server, playerRole)
 
-			lobby = discord.utils.get(ctx.message.server.channels, name="draft_challenge")
+			lobby = discord.utils.get(ctx.message.server.channels, name="monthly_mayhem")
 			await self.bot.send_message(lobby, ctx.message.author.mention +" canceled the draft '"+draftobj.name+"'("+draftid+")")
 			draftobj.status = "canceled"
 			with open("data/drafting/drafts/"+draftid+".p", "wb") as f:
@@ -890,7 +891,7 @@ class Drafting():
 			await self.bot.say("There is still a bracket running in this draft. Please complete or cancel it first")
 			return
 
-		modRole = discord.utils.get(ctx.message.server.roles, name="Mod")
+		modRole = discord.utils.get(ctx.message.server.roles, name="Admin")
 		marshalRole = discord.utils.get(ctx.message.server.roles, name="Marshal")
 		if ctx.message.author.id == draftobj.host or modRole in ctx.message.author.roles or marshalRole in ctx.message.author.roles:
 			
@@ -933,7 +934,7 @@ class Drafting():
 			with open("data/drafting/draftlist.p", "wb") as dl:
 				pickle.dump(l, dl)
 				
-			lobby = discord.utils.get(ctx.message.server.channels, name="draft_challenge")
+			lobby = discord.utils.get(ctx.message.server.channels, name="monthly_mayhem")
 			await self.bot.send_message(lobby, ctx.message.author.mention +" finished the draft '"+draftobj.name+"'("+draftid+")")
 			print("## The draft '"+draftobj.name+"' has been finished")
 
@@ -944,7 +945,7 @@ class Drafting():
 
 	@commands.command(pass_context=True, hidden=True)
 	async def seasonreset(self, ctx):
-		modRole = discord.utils.get(ctx.message.server.roles, name="Mod")
+		modRole = discord.utils.get(ctx.message.server.roles, name="Admin")
 		if not modRole in ctx.message.author.roles:
 			await self.bot.say("You are not allowed to use this command!", delete_after=autodeletetime)
 			return
@@ -1049,7 +1050,7 @@ class Drafting():
 		if ctx.message.server == None:
 			await self.bot.say("You can only use this command on a server")
 			return
-		drafter = discord.utils.get(ctx.message.server.roles, name="Drafter")
+		drafter = discord.utils.get(ctx.message.server.roles, name="MM participant")
 		if drafter in ctx.message.author.roles:
 			await self.bot.say(ctx.message.author.mention +", you already have this role", delete_after=autodeletetime)
 		else:
@@ -1064,7 +1065,7 @@ class Drafting():
 		if ctx.message.server == None:
 			await self.bot.say("You can only use this command on a server")
 			return
-		drafter = discord.utils.get(ctx.message.server.roles, name="Drafter")
+		drafter = discord.utils.get(ctx.message.server.roles, name="MM participant")
 		if drafter in ctx.message.author.roles:
 			await self.bot.remove_roles(ctx.message.author, drafter)
 			await self.bot.say('Removed the role "Drafter" from '+ ctx.message.author.mention, delete_after=autodeletetime)
