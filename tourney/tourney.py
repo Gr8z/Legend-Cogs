@@ -11,63 +11,46 @@ lastTag = '0'
 creditIcon = "https://cdn.discordapp.com/avatars/112356193820758016/7bd5664d82cc7c9d2ae4704e58990da3.jpg"
 credits = "Bot by GR8 | Academy"
 
-# Return parsed profile page using BS4
-def parseURL():
-	link = 'http://statsroyale.com/tournaments/'
-	response = requests.get(link).text
-	soup = BeautifulSoup(response, 'html.parser')
-	return soup
-
 # Returns a list with tournaments
-def getTopTourney():
+def getTopTourneyNew():
 
 	global lastTag
-	tourney_list={}
-	soup = parseURL()
+	tourney = {}
 
-	for i in range(5):
-	    tourney_stats = soup.find_all('div', {'class':'challenges__rowContainer'})[i]
-	    plyr = tourney_stats.find_all('div', {'class':'challenges__row'})[2].get_text().strip()
-	    tag = tourney_stats.find_all('div', {'class':'challenges__row'})[0].get_text().strip()
+	try:
+		tourneydata = requests.get('http://statsroyale.com/tournaments?appjson=1', timeout=5).json()
+	except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
+		return None
+	except requests.exceptions.RequestException as e:
+		return None
 
-	    if '/50' in plyr:
-	    	joined = plyr.replace('/50','')
-	    	joined = int(joined)
-	    	maxplayers = 50
-	    elif '/100' in plyr:
-	    	joined = plyr.replace('/100','')
-	    	joined = int(joined)
-	    	maxplayers = 100
-	    elif '/200' in plyr:
-	    	joined = plyr.replace('/200','')
-	    	joined = int(joined)
-	    	maxplayers = 200
-	    elif '/1000' in plyr:
-	    	joined = plyr.replace('/1000','')
-	    	joined = int(joined)
-	    	maxplayers = 1000
+	numTourney = len(tourneydata['tournaments'])
 
-	    if ((maxplayers > 50) and ((joined + 4) < maxplayers) and (tag != lastTag)):
+	for x in range(0, numTourney):
 
-	    	tourney_list['tag'] = tag
-	    	lastTag = tag
+		title = tourneydata['tournaments'][x]['title']
+		totalPlayers = tourneydata['tournaments'][x]['totalPlayers']
+		maxPlayers = tourneydata['tournaments'][x]['maxPlayers']
+		full = tourneydata['tournaments'][x]['full']
+		timeLeft = tourneydata['tournaments'][x]['timeLeft']
+		hashtag = tourneydata['tournaments'][x]['hashtag']
+		cards = getCards(maxPlayers)
+		coins = getCoins(maxPlayers)
+		time = sec2tme(timeLeft)
+		players = str(totalPlayers) + "/" + str(maxPlayers)
 
-	    	title = tourney_stats.find_all('div', {'class':'challenges__row'})[1].find('span').get_text().strip()
-	    	tourney_list['title'] = title
-
-	    	players = tourney_stats.find_all('div', {'class':'challenges__row'})[2].get_text().strip()
-	    	tourney_list['players'] = players
-
-	    	time = tourney_stats.find_all('div', {'class':'challenges__row'})[3].find('div', {'class':'challenges__timeFull'}).get_text().strip()
-	    	tourney_list['time'] = time
-
-	    	gold = tourney_stats.find_all('div', {'class':'challenges__row'})[4].find('div', {'class':'challenges__goldMetric'}).find('span').get_text().strip()
-	    	tourney_list['gold'] = gold
-
-	    	cards = tourney_stats.find_all('div', {'class':'challenges__row'})[4].find_all('div', {'class':'challenges__metric'})[1].find('span').get_text().strip()
-	    	tourney_list['cards'] = cards
+		if (maxPlayers > 50) and (not full) and (timeLeft > 600) and ((totalPlayers + 4) < maxPlayers) and (hashtag != lastTag):
 			
-	    	return tourney_list
+			lastTag = hashtag
+			
+			tourney['tag'] = hashtag
+			tourney['title'] = title
+			tourney['players'] = players
+			tourney['time'] = time
+			tourney['gold'] = coins
+			tourney['cards'] = cards
+
+			return tourney
 
 	return None
 
@@ -108,7 +91,7 @@ class tournament:
     # checks for a tourney every 5 minutes
     async def checkTourney(self):
     	while self is self.bot.get_cog("tournament"):
-    		data = getTopTourney()
+    		data = getTopTourneyNew()
     		if data is not None:
 	    		embed=discord.Embed(title="New Tournament", description="We found an open tournament. You can type !tourney to search for more.", color=0x00ffff)
 		    	embed.set_thumbnail(url='https://statsroyale.com/images/tournament.png')
@@ -120,7 +103,7 @@ class tournament:
 		    	embed.set_footer(text=credits, icon_url=creditIcon)
 
 		    	await self.bot.send_message(discord.Object(id='258729887068585984'), embed=embed) # Family
-		    	#await self.bot.send_message(discord.Object(id='268744102944833536'), embed=embed) # testing
+		    	#await self.bot.send_message(discord.Object(id='363728974821457923'), embed=embed) # testing
 		    	await self.bot.send_message(discord.Object(id='345952929838006283'), embed=embed) # D82
 
 		    	await asyncio.sleep(900)
