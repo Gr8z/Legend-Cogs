@@ -4,6 +4,7 @@ from random import randint
 import requests
 from bs4 import BeautifulSoup
 import asyncio
+import random
 
 server = discord.Server
 lastTag = '0'
@@ -16,34 +17,6 @@ def parseURL():
 	response = requests.get(link).text
 	soup = BeautifulSoup(response, 'html.parser')
 	return soup
-
-# Returns a list with tournaments
-def getRandomTourney():
-
-	tourney_list={}
-	soup = parseURL()
-
-	tourney_stats = soup.find_all('div', {'class':'challenges__rowContainer'})[randint(0, 20)]
-
-	tag = tourney_stats.find_all('div', {'class':'challenges__row'})[0].get_text().strip()
-	tourney_list['tag'] = tag
-
-	title = tourney_stats.find_all('div', {'class':'challenges__row'})[1].find('span').get_text().strip()
-	tourney_list['title'] = title
-
-	players = tourney_stats.find_all('div', {'class':'challenges__row'})[2].get_text().strip()
-	tourney_list['players'] = players
-
-	time = tourney_stats.find_all('div', {'class':'challenges__row'})[3].find('div', {'class':'challenges__timeFull'}).get_text().strip()
-	tourney_list['time'] = time
-
-	gold = tourney_stats.find_all('div', {'class':'challenges__row'})[4].find('div', {'class':'challenges__goldMetric'}).find('span').get_text().strip()
-	tourney_list['gold'] = gold
-
-	cards = tourney_stats.find_all('div', {'class':'challenges__row'})[4].find_all('div', {'class':'challenges__metric'})[1].find('span').get_text().strip()
-	tourney_list['cards'] = cards
-
-	return tourney_list
 
 # Returns a list with tournaments
 def getTopTourney():
@@ -98,6 +71,33 @@ def getTopTourney():
 
 	return None
 
+# Converts maxPlayers to Cards
+def getCards(maxPlayers):
+	if maxPlayers == 50: return 25
+	if maxPlayers == 100: return 100
+	if maxPlayers == 200: return 400
+	if maxPlayers == 1000: return 2000
+
+# Converts maxPlayers to Cards
+def getCoins(maxPlayers):
+	if maxPlayers == 50: return 175
+	if maxPlayers == 100: return 700
+	if maxPlayers == 200: return 2800
+	if maxPlayers == 1000: return 14000
+
+# Converts seconds to time
+def sec2tme(sec):
+	m, s = divmod(sec, 60)
+	h, m = divmod(m, 60)
+
+	if h is 0:
+		if m is 0:
+			return "{} seconds".format(s)
+		else:
+			return "{} minutes, {} secs".format(m,s)
+	else:
+		return "{} hour, {} mins".format(h,m)
+
 class tournament:
     """tournament!"""
 
@@ -129,24 +129,45 @@ class tournament:
     @commands.command()
     async def tourney(self):
 
+    	await self.bot.type()
+
     	try:
-    		data = getRandomTourney()
-    	except(IndexError):
-    		await self.bot.say("Found nothing, please search again!")
+    		tourneydata = requests.get('http://statsroyale.com/tournaments?appjson=1', timeout=5).json()
+    	except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
+    		await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
+    		return
+    	except requests.exceptions.RequestException as e:
+    		await self.bot.say(e)
     		return
 
-    	while ((data['players'] == '50/50') or (data['players'] == '100/100') or (data['players'] == '200/200') or (data['players'] == '1000/1000')):
-    		data = getRandomTourney()
+    	numTourney = list(range(len(tourneydata['tournaments'])))
+    	random.shuffle(numTourney)
 
-    	embed=discord.Embed(title="Open Tournament", description="Here is a good one I found. You can search again if this is not what you are looking for.", color=0x00ffff)
-    	embed.set_thumbnail(url='https://statsroyale.com/images/tournament.png')
-    	embed.add_field(name="Title", value=data['title'], inline=True)
-    	embed.add_field(name="Tag", value=data['tag'], inline=True)
-    	embed.add_field(name="Players", value=data['players'], inline=True)
-    	embed.add_field(name="Ends In", value=data['time'], inline=True)
-    	embed.add_field(name="Top prize", value="<:coin:351316742569721857> " + str(data['gold']) + "     <:tournamentcards:351316762614300672> " +  str(data['cards']), inline=True)
-    	embed.set_footer(text=credits, icon_url=creditIcon)
-    	await self.bot.say(embed=embed)
+    	for x in numTourney:
+
+    		title = tourneydata['tournaments'][x]['title']
+    		length = tourneydata['tournaments'][x]['length']
+    		totalPlayers = tourneydata['tournaments'][x]['totalPlayers']
+    		maxPlayers = tourneydata['tournaments'][x]['maxPlayers']
+    		full = tourneydata['tournaments'][x]['full']
+    		timeLeft = tourneydata['tournaments'][x]['timeLeft']
+    		startTime = tourneydata['tournaments'][x]['startTime']
+    		warmup = tourneydata['tournaments'][x]['warmup']
+    		hashtag = tourneydata['tournaments'][x]['hashtag']
+    		cards = getCards(maxPlayers)
+    		coins = getCoins(maxPlayers)
+
+    		if not full and timeLeft > 600:
+    			embed=discord.Embed(title="Open Tournament", description="Here is a good one I found. You can search again if this is not what you are looking for.", color=0x00ffff)
+    			embed.set_thumbnail(url='https://statsroyale.com/images/tournament.png')
+    			embed.add_field(name="Title", value=title, inline=True)
+    			embed.add_field(name="Tag", value="#"+hashtag, inline=True)
+    			embed.add_field(name="Players", value=str(totalPlayers) + "/" + str(maxPlayers), inline=True)
+    			embed.add_field(name="Ends In", value=sec2tme(timeLeft), inline=True)
+    			embed.add_field(name="Top prize", value="<:coin:351316742569721857> " + str(cards) + "     <:tournamentcards:351316762614300672> " +  str(coins), inline=True)
+    			embed.set_footer(text=credits, icon_url=creditIcon)
+    			await self.bot.say(embed=embed)
+    			return
 
 def setup(bot):
 	n = tournament(bot)
