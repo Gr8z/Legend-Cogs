@@ -106,7 +106,7 @@ class legend:
                 return
 
         try:
-            clans = requests.get('http://api.cr-api.com/clan/{},{},{},{},{},{},{},{},{},{},{},{},{}/info'.format(self.c['d8']['tag'],self.c['esports']['tag'],self.c['babies']['tag'],self.c['squad']['tag'],self.c['d82']['tag'],self.c['prime']['tag'],self.c['legion']['tag'],self.c['reborn']['tag'],self.c['rising']['tag'],self.c['phantom']['tag'],self.c['plague']['tag'],self.c['d83']['tag'],self.c['academy']['tag']), timeout=5).json()
+            clans = requests.get('http://api.cr-api.com/clan/{},{},{},{},{},{},{},{},{},{},{},{},{}/info'.format(self.c['d8']['tag'],self.c['esports']['tag'],self.c['squad']['tag'],self.c['d82']['tag'],self.c['prime']['tag'],self.c['legion']['tag'],self.c['reborn']['tag'],self.c['rising']['tag'],self.c['phantom']['tag'],self.c['plague']['tag'],self.c['d83']['tag'],self.c['academy']['tag']), timeout=5).json()
         except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
                 await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
                 return
@@ -178,7 +178,7 @@ class legend:
             return
 
         membership = False
-        clanlist = ['d8','esports','babies','squad','d82','prime','legion','reborn','rising','phantom','plague','d83','academy']
+        clanlist = ['d8','esports','squad','d82','prime','legion','reborn','rising','phantom','plague','d83','academy']
         for x in range(0, len(clanlist)):
             if self.c[clanlist[x]]['tag'] == clantag:
                 membership = True
@@ -240,7 +240,7 @@ class legend:
             return
 
         membership = False
-        clanlist = ['d8','esports','babies','squad','d82','prime','legion','reborn','rising','phantom','plague','d83','academy']
+        clanlist = ['d8','esports','squad','d82','prime','legion','reborn','rising','phantom','plague','d83','academy']
         for x in range(0, len(clanlist)):
             if self.c[clanlist[x]]['tag'] == clantag:
                 membership = True
@@ -320,7 +320,7 @@ class legend:
             return
 
         membership = False
-        clanlist = ['d8','esports','babies','squad','d82','prime','legion','reborn','rising','phantom','plague','d83','academy']
+        clanlist = ['d8','esports','squad','d82','prime','legion','reborn','rising','phantom','plague','d83','academy']
         for x in range(0, len(clanlist)):
             if self.c[clanlist[x]]['tag'] == clantag:
                 membership = True
