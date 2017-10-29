@@ -10,6 +10,8 @@ import asyncio
 
 creditIcon = "https://cdn.discordapp.com/avatars/112356193820758016/7bd5664d82cc7c9d2ae4704e58990da3.jpg"
 credits = "Bot by GR8 | Academy"
+numClans = 12
+clanArray = ['d8','esports','squad','d82','prime','legion','reborn','rising','phantom','plague','d83','academy']
 
 rules_text = """**Here are some Legend Family Discord server rules.**\n
 • Be respectful of other members. Do not talk them down in any way.
@@ -106,7 +108,7 @@ class legend:
                 return
 
         try:
-            clans = requests.get('http://api.cr-api.com/clan/{},{},{},{},{},{},{},{},{},{},{},{},{}/info'.format(self.c['d8']['tag'],self.c['esports']['tag'],self.c['squad']['tag'],self.c['d82']['tag'],self.c['prime']['tag'],self.c['legion']['tag'],self.c['reborn']['tag'],self.c['rising']['tag'],self.c['phantom']['tag'],self.c['plague']['tag'],self.c['d83']['tag'],self.c['academy']['tag']), timeout=5).json()
+            clans = requests.get('http://api.cr-api.com/clan/{},{},{},{},{},{},{},{},{},{},{},{}/info'.format(self.c['d8']['tag'],self.c['esports']['tag'],self.c['squad']['tag'],self.c['d82']['tag'],self.c['prime']['tag'],self.c['legion']['tag'],self.c['reborn']['tag'],self.c['rising']['tag'],self.c['phantom']['tag'],self.c['plague']['tag'],self.c['d83']['tag'],self.c['academy']['tag']), timeout=5).json()
         except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
                 await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
                 return
@@ -115,7 +117,7 @@ class legend:
                 return
 
         totalMembers = 0
-        for x in range(0, 13):
+        for x in range(0, numClans):
             totalMembers += clans[x]['memberCount']
 
         embed=discord.Embed(title="LeGeND Family Clans", description="Our Family is made up of 13 clans with a total of " + str(totalMembers) + " members.", color=0xf1c747)
@@ -123,7 +125,7 @@ class legend:
         embed.set_footer(text=credits, icon_url=creditIcon)
 
         foundClan = False
-        for x in range(0, 13):
+        for x in range(0, numClans):
 
             if str(clans[x]['typeName']) == 'Invite Only':
                 title = ""
@@ -178,9 +180,9 @@ class legend:
             return
 
         membership = False
-        clanlist = ['d8','esports','squad','d82','prime','legion','reborn','rising','phantom','plague','d83','academy']
-        for x in range(0, len(clanlist)):
-            if self.c[clanlist[x]]['tag'] == clantag:
+        clanArray = ['d8','esports','squad','d82','prime','legion','reborn','rising','phantom','plague','d83','academy']
+        for x in range(0, len(clanArray)):
+            if self.c[clanArray[x]]['tag'] == clantag:
                 membership = True
                 clindex = int(x)
                 break
@@ -188,10 +190,10 @@ class legend:
         if membership:
             await self.bot.say(member.mention + " please check your DM. Sending you the invite details for " + clanname)
 
-            if self.c[clanlist[clindex]]['discord'] is None:
+            if self.c[clanArray[clindex]]['discord'] is None:
                 joinLink = "This clan does not have its own server. Please join the family server."
             else:
-                joinLink = "https://discord.gg/" + str(self.c[clanlist[clindex]]['discord'])
+                joinLink = "https://discord.gg/" + str(self.c[clanArray[clindex]]['discord'])
 
             await self.bot.send_message(member, 
                 "Hi There! Congratulations on getting accepted into our family. Now you have to carefuly read this message and follow the steps mentioned below: \n\n"+
@@ -240,9 +242,8 @@ class legend:
             return
 
         membership = False
-        clanlist = ['d8','esports','squad','d82','prime','legion','reborn','rising','phantom','plague','d83','academy']
-        for x in range(0, len(clanlist)):
-            if self.c[clanlist[x]]['tag'] == clantag:
+        for x in range(0, len(clanArray)):
+            if self.c[clanArray[x]]['tag'] == clantag:
                 membership = True
                 clindex = int(x)
                 break
@@ -254,7 +255,7 @@ class legend:
                 await self.bot.say("Cannot find IGN.")
             else:
                 try:
-                    newclanname = self.c[clanlist[clindex]]['nickname']
+                    newclanname = self.c[clanArray[clindex]]['nickname']
                     newname = ign + " | " + newclanname
                     await self.bot.change_nickname(member, newname)
                 except discord.HTTPException:
@@ -264,10 +265,10 @@ class legend:
                     mymessage += "Nickname changed to **{}**\n".format(newname)
 
 
-            role_names = [self.c[clanlist[clindex]]['role'], 'Member']
+            role_names = [self.c[clanArray[clindex]]['role'], 'Member']
             try:
                 await self._add_roles(member, role_names)
-                mymessage += "**" + self.c[clanlist[clindex]]['role'] + "** and **Member** roles added."
+                mymessage += "**" + self.c[clanArray[clindex]]['role'] + "** and **Member** roles added."
             except discord.Forbidden:
                 await self.bot.say(
                     "{} does not have permission to edit {}’s roles.".format(
@@ -320,9 +321,8 @@ class legend:
             return
 
         membership = False
-        clanlist = ['d8','esports','squad','d82','prime','legion','reborn','rising','phantom','plague','d83','academy']
-        for x in range(0, len(clanlist)):
-            if self.c[clanlist[x]]['tag'] == clantag:
+        for x in range(0, len(clanArray)):
+            if self.c[clanArray[x]]['tag'] == clantag:
                 membership = True
                 clindex = int(x)
                 break
@@ -334,7 +334,7 @@ class legend:
                 await self.bot.say("Cannot find IGN.")
             else:
                 try:
-                    newclanname = self.c[clanlist[clindex]]['nickname']
+                    newclanname = self.c[clanArray[clindex]]['nickname']
                     newname = ign + " | " + newclanname
                     await self.bot.change_nickname(member, newname)
                 except discord.HTTPException:
