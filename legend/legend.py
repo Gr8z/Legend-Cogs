@@ -7,11 +7,6 @@ from .utils.dataIO import dataIO, fileIO
 from cogs.utils import checks
 import asyncio
 
-try: # check if BeautifulSoup4 is installed
-    from bs4 import BeautifulSoup
-    soupAvailable = True
-except:
-    soupAvailable = False
 
 creditIcon = "https://cdn.discordapp.com/avatars/112356193820758016/7bd5664d82cc7c9d2ae4704e58990da3.jpg"
 credits = "Bot by GR8 | Academy"
@@ -62,36 +57,6 @@ There are 2 factors to win: convince more players to participate within your cla
 
 **3 golden Rules for clanwars:** We respect the Opponent (no BMing if you win), we play to have fun (no obligation to participate), and don't join if you think you cannot play.
 """
-
-# Refresh player battles
-def refresh(tag, element):
-    if element == 'brawl':
-        link = 'http://brawlstats.io/players/' + tag + '/refresh'
-    if element == 'band':
-        link = 'http://brawlstats.io/bands/' + tag + '/refresh'
-    return requests.get(link)
-
-# Brawl stars band info
-def getBand(tag):
-
-    refresh(tag, element='band')
-
-    link = "https://brawlstats.io/bands/"+tag
-    response = requests.get(link).text
-    soup = BeautifulSoup(response, 'html.parser')
-
-    stats = {}
-
-    trophies = soup.find_all('div', {'class':'trophies'})[0].get_text()
-    stats[u'trophies'] = trophies
-
-    required_trophies = soup.find_all('div', {'class':'trophies'})[1].get_text()
-    stats[u'required_trophies'] = required_trophies
-
-    members = soup.find('div', {'class':'board-header my-3'}).get_text().replace('Band Members (', '').replace(')','').replace('Inactive members are highlighted in red.','')
-    stats[u'members'] = members
-
-    return stats
 
 class legend:
 
@@ -190,17 +155,6 @@ class legend:
         if foundClan is False:
             embed.add_field(name="uh oh!", value="There are no clans available for you at the moment, please type !legend to see all clans.", inline=False)
 
-        await self.bot.say(embed=embed)
-
-        clantag = "PVGLJ8U"
-        clandata = getBand(clantag)
-        title = "LeGeND Bandits (#PVGLJ8U)"
-        desc = ":shield: " + str(clandata['members']) + "     :trophy: " + str(clandata['required_trophies']) + "+     :medal: " +str(clandata['trophies'])
-
-        embed=discord.Embed(title="LeGeND Family Brawl Stars", description="If you have iOS, we welcome you to join our Brawl Stars Band. Just look it up and request to join.", color=0x0080ff)
-        embed.set_thumbnail(url='https://brawlstats.io/images/bands/high/clan_badge_05_02.png')
-        embed.add_field(name=title, value=desc, inline=True)
-        embed.set_footer(text=credits, icon_url=creditIcon)
         await self.bot.say(embed=embed)
 
     @commands.command(pass_context=True, no_pm=True)    
