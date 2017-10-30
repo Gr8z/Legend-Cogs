@@ -66,7 +66,7 @@ class clashroyale:
 	    	embed.add_field(name="Level", value=profiledata.experience.level, inline=True)
 	    	embed.add_field(name="Arena", value=profiledata.arena.name, inline=True)
 	    	embed.add_field(name="Experience", value=str(profiledata.experience.xp)+"/"+str(profiledata.experience.xpRequiredForLevelUp), inline=True)
-	    	if profiledata.not_in_clan:
+	    	if not profiledata.not_in_clan:
 	    		embed.add_field(name="Clan", value=profiledata.clan.name, inline=True)
 	    		embed.add_field(name="Role", value=profiledata.clan.role, inline=True)
 	    	embed.add_field(name="Cards Found", value=str(profiledata.stats.cardsFound)+"/77", inline=True)
