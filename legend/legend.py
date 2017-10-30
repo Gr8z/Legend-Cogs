@@ -10,8 +10,8 @@ import asyncio
 
 creditIcon = "https://cdn.discordapp.com/avatars/112356193820758016/7bd5664d82cc7c9d2ae4704e58990da3.jpg"
 credits = "Bot by GR8 | Academy"
-numClans = 12
-clanArray = ['d8','esports','squad','d82','prime','legion','reborn','rising','phantom','plague','d83','academy']
+numClans = 13
+clanArray = ['d8','esports','babies','squad','d82','prime','legion','reborn','rising','phantom','plague','d83','academy']
 
 rules_text = """**Here are some Legend Family Discord server rules.**\n
 • Be respectful of other members. Do not talk them down in any way.
@@ -108,7 +108,7 @@ class legend:
                 return
 
         try:
-            clans = requests.get('http://api.cr-api.com/clan/{},{},{},{},{},{},{},{},{},{},{},{}/info'.format(self.c['d8']['tag'],self.c['esports']['tag'],self.c['squad']['tag'],self.c['d82']['tag'],self.c['prime']['tag'],self.c['legion']['tag'],self.c['reborn']['tag'],self.c['rising']['tag'],self.c['phantom']['tag'],self.c['plague']['tag'],self.c['d83']['tag'],self.c['academy']['tag']), timeout=5).json()
+            clans = requests.get('http://api.cr-api.com/clan/{},{},{},{},{},{},{},{},{},{},{},{},{}/info'.format(self.c['d8']['tag'],self.c['esports']['tag'],self.c['babies']['tag'],self.c['squad']['tag'],self.c['d82']['tag'],self.c['prime']['tag'],self.c['legion']['tag'],self.c['reborn']['tag'],self.c['rising']['tag'],self.c['phantom']['tag'],self.c['plague']['tag'],self.c['d83']['tag'],self.c['academy']['tag']), timeout=5).json()
         except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
                 await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
                 return
@@ -143,6 +143,9 @@ class legend:
             if clans[x]['tag'] == self.c['esports']['tag']:
                 title += "PB: 4300+"
                 clans[x]['maxtrophies'] = 4300
+
+            if clans[x]['tag'] == self.c['babies']['tag']:
+                clans[x]['maxtrophies'] = 5300
 
             if clans[x]['tag'] == self.c['prime']['tag']:
                 title += "Age: 21+"

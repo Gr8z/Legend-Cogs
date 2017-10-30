@@ -13,6 +13,13 @@
 		"role_id" : "305692091571503114",
 		"nickname" : "eSports"
 	},
+	"babies": {
+		"tag": "JL8G982",
+		"discord" : null,
+		"role" : "Babies",
+		"role_id" : "268690029449183232",
+		"nickname" : "Babies"
+	},
 	"squad": {
 		"tag": "80CC8",
 		"discord" : "EpbY9kn",
