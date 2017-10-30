@@ -102,9 +102,8 @@ class tournament:
 		    	embed.add_field(name="Top prize", value="<:coin:351316742569721857> " + str(data['gold']) + "     <:tournamentcards:351316762614300672> " +  str(data['cards']), inline=True)
 		    	embed.set_footer(text=credits, icon_url=creditIcon)
 
-		    	await self.bot.send_message(discord.Object(id='258729887068585984'), embed=embed) # Family
+		    	await self.bot.send_message(discord.Object(id='374597050530136064'), embed=embed) # Family
 		    	#await self.bot.send_message(discord.Object(id='363728974821457923'), embed=embed) # testing
-		    	#await self.bot.send_message(discord.Object(id='345952929838006283'), embed=embed) # D82
 
 		    	await asyncio.sleep(900)
     		await asyncio.sleep(120)
