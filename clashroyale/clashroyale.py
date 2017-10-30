@@ -13,7 +13,7 @@ import os
 import aiohttp
 from __main__ import send_cmd_help
 import asyncio
-from cr_api import AsyncClient
+from crapipy import AsyncClient
 
 BOTCOMMANDER_ROLES =  ["Bot Commander", "HUB head", "HUB manager", "HUB officer", "Clan manager", "Clan deputy manager", "Clan Deputy", "Clan Manager"];
 creditIcon = "https://cdn.discordapp.com/avatars/112356193820758016/7bd5664d82cc7c9d2ae4704e58990da3.jpg"
