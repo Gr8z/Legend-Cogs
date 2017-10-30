@@ -13,13 +13,6 @@
 		"role_id" : "305692091571503114",
 		"nickname" : "eSports"
 	},
-	"babies": {
-		"tag": "JL8G982",
-		"discord" : null,
-		"role" : "Babies",
-		"role_id" : "268690029449183232",
-		"nickname" : "Babies"
-	},
 	"squad": {
 		"tag": "80CC8",
 		"discord" : "EpbY9kn",
@@ -47,13 +40,6 @@
 		"role" : "Legion",
 		"role_id" : "268690456164958208",
 		"nickname" : "Legion"
-	},
-	"reborn": {
-		"tag": "P989PP0",
-		"discord" : "JefXYPK",
-		"role" : "Reborn",
-		"role_id" : "268690595046883331",
-		"nickname" : "Reborn"
 	},
 	"rising": {
 		"tag": "RY9QJU2",
