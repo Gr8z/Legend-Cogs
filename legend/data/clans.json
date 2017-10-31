@@ -3,77 +3,77 @@
 		"tag": "29YPJYY",
 		"discord" : null,
 		"role" : "Dragons Eight",
-		"role_id" : "278271861073117184",
+		"role_id" : "374605569681653760",
 		"nickname" : "D8"
 	},
 	"esports": {
 		"tag": "2GJYVRYQ",
 		"discord" : null,
 		"role" : "eSports",
-		"role_id" : "305692091571503114",
+		"role_id" : "374801344030179328",
 		"nickname" : "eSports"
 	},
 	"squad": {
 		"tag": "80CC8",
 		"discord" : "EpbY9kn",
 		"role" : "Squad",
-		"role_id" : "268690336518373376",
+		"role_id" : "374801642975133696",
 		"nickname" : "Squad"
 	},
 	"d82": {
 		"tag": "Y8G9C09",
 		"discord" : null,
 		"role" : "Dragons Eight II",
-		"role_id" : "278271958347415552",
+		"role_id" : "374605677282328586",
 		"nickname" : "D82"
 	},
 	"prime": {
 		"tag": "2LL8LC2R",
 		"discord" : "X4GSk4N",
 		"role" : "Prime",
-		"role_id" : "323276340763820042",
+		"role_id" : "374606031168208906",
 		"nickname" : "Prime"
 	},
 	"legion": {
 		"tag": "VJQ0GJ0",
 		"discord" : "Pdt6cNP",
 		"role" : "Legion",
-		"role_id" : "268690456164958208",
+		"role_id" : "374605824766509056",
 		"nickname" : "Legion"
 	},
 	"rising": {
 		"tag": "RY9QJU2",
 		"discord" : "EavBPsf",
 		"role" : "Rising",
-		"role_id" : "268690517846392832",
+		"role_id" : "374606248630288396",
 		"nickname" : "Rising"
 	},
 	"phantom": {
 		"tag": "2CJ88808",
 		"discord" : "khs4GxN",
 		"role" : "Phantom",
-		"role_id" : "289195139295870978",
+		"role_id" : "374605886406131715",
 		"nickname" : "Phantom"
 	},
 	"plague": {
 		"tag": "J0CQ9R9",
 		"discord" : null,
 		"role" : "White Plague",
-		"role_id" : "314089592854806528",
+		"role_id" : "374605943079698443",
 		"nickname" : "White Plague"
 	},
 	"d83": {
 		"tag": "2ULY20LU",
 		"discord" : "suEHQXq",
 		"role" : "Dragons Eight III",
-		"role_id" : "288001546409476097",
+		"role_id" : "374605763735322626",
 		"nickname" : "D83"
 	},
 	"academy": {
 		"tag": "8QRQQ8RG",
 		"discord" : "b8r86Hg",
 		"role" : "Academy",
-		"role_id" : "348124775274774548",
+		"role_id" : "374605453851623424",
 		"nickname" : "Academy"
 	}
 }
