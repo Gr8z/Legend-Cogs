@@ -158,8 +158,7 @@ class legend:
 
         await self.bot.say(embed=embed)
 
-    @commands.command(pass_context=True, no_pm=True)    
-    @checks.mod_or_permissions(manage_roles=True)
+    @commands.command(pass_context=True, no_pm=True)
     async def newmember(self, ctx, member: discord.Member):
         """Send the newcomer to the legend family server servers and welcome them."""
         try:
