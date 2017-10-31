@@ -224,9 +224,9 @@ class legend:
                     clanname + ": " + joinLink + "\n\n" +
                     "Please do not leave our main or clan servers while you are in the clan. Thank you."
                     )
+                await self.bot.say(member.mention + " please check your DM. Sending you the invite details for " + clanname)
 
-            await self.bot.say(member.mention + " please check your DM. Sending you the invite details for " + clanname)
-
+            
             await asyncio.sleep(300)
             await self.bot.send_message(member,rules_text)
 
