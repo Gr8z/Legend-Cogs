@@ -297,7 +297,7 @@ class legend:
     async def audit(self, ctx, clankey):
         """ Check to see if your clan members are setup properly in discord."""
         server = ctx.message.server
-        legendServer = ["253417044945403904"]
+        legendServer = ["374596069989810176"]
 
         if server.id not in legendServer:
             await self.bot.say("This command can only be executed in the LeGeND Family Server")
