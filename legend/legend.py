@@ -9,8 +9,8 @@ import asyncio
 
 creditIcon = "https://cdn.discordapp.com/avatars/112356193820758016/7bd5664d82cc7c9d2ae4704e58990da3.jpg"
 credits = "Bot by GR8 | Academy"
-numClans = 11
-clanArray = ['d8','esports','squad','d82','prime','legion','rising','phantom','plague','d83','academy']
+numClans = 12
+clanArray = ['d8','esports','squad','d82','prime','legion','rising','phantom','plague','d83','academy','dynasty']
 
 rules_text = """**Here are some Legend Family Discord server rules.**\n
 • Be respectful of other members. Do not talk them down in any way.
@@ -107,7 +107,7 @@ class legend:
                 return
 
         try:
-            clans = requests.get('http://api.cr-api.com/clan/{},{},{},{},{},{},{},{},{},{},{}/info'.format(self.c['d8']['tag'],self.c['esports']['tag'],self.c['squad']['tag'],self.c['d82']['tag'],self.c['prime']['tag'],self.c['legion']['tag'],self.c['rising']['tag'],self.c['phantom']['tag'],self.c['plague']['tag'],self.c['d83']['tag'],self.c['academy']['tag']), timeout=5).json()
+            clans = requests.get('http://api.cr-api.com/clan/{},{},{},{},{},{},{},{},{},{},{},{}/info'.format(self.c['d8']['tag'],self.c['esports']['tag'],self.c['squad']['tag'],self.c['d82']['tag'],self.c['prime']['tag'],self.c['legion']['tag'],self.c['rising']['tag'],self.c['phantom']['tag'],self.c['plague']['tag'],self.c['d83']['tag'],self.c['academy']['tag'],self.c['dynasty']['tag']), timeout=5).json()
         except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
                 await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
                 return
@@ -119,7 +119,7 @@ class legend:
         for x in range(0, numClans):
             totalMembers += clans[x]['memberCount']
 
-        embed=discord.Embed(title="LeGeND Family Clans", description="Our Family is made up of 11 clans with a total of " + str(totalMembers) + " members.", color=0xf1c747)
+        embed=discord.Embed(title="LeGeND Family Clans", description="Our Family is made up of " + str(numClans) + " clans with a total of " + str(totalMembers) + " members.", color=0xf1c747)
         embed.set_thumbnail(url='https://statsroyale.com/images/badges/16000002.png')
         embed.set_footer(text=credits, icon_url=creditIcon)
 

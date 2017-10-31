@@ -75,5 +75,12 @@
 		"role" : "Academy",
 		"role_id" : "374605453851623424",
 		"nickname" : "Academy"
+	},
+	"dynasty": {
+		"tag": "99R2PQVR",
+		"discord" : null,
+		"role" : "Dynasty",
+		"role_id" : "374991075921887242",
+		"nickname" : "Dynasty"
 	}
 }
