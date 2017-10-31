@@ -7,7 +7,6 @@ from .utils.dataIO import dataIO, fileIO
 from cogs.utils import checks
 import asyncio
 
-
 creditIcon = "https://cdn.discordapp.com/avatars/112356193820758016/7bd5664d82cc7c9d2ae4704e58990da3.jpg"
 credits = "Bot by GR8 | Academy"
 numClans = 11
