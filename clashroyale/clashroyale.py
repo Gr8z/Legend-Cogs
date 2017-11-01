@@ -309,7 +309,7 @@ class clashroyale:
 	    	member = ctx.message.author
 	    
 	    try:
-		    profiledata = requests.get('http://api.cr-api.com/profile/'+profiletag, timeout=5).json()
+		    profiledata = requests.get('http://api.cr-api.com/profile/'+profiletag, timeout=10).json()
 
 		    if "8CL09V0C" not in profiledata['clan']['tag']:
 		    	await self.bot.say("This feature is only available to members of LeGEnD Minis!")
