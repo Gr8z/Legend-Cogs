@@ -36,7 +36,7 @@
 	},
 	"legion": {
 		"tag": "VJQ0GJ0",
-		"discord" : "Pdt6cNP",
+		"discord" : null,
 		"role" : "Legion",
 		"role_id" : "374605824766509056",
 		"nickname" : "Legion"
@@ -64,7 +64,7 @@
 	},
 	"d83": {
 		"tag": "2ULY20LU",
-		"discord" : "suEHQXq",
+		"discord" : null,
 		"role" : "Dragons Eight III",
 		"role_id" : "374605763735322626",
 		"nickname" : "D83"
@@ -78,7 +78,7 @@
 	},
 	"dynasty": {
 		"tag": "99R2PQVR",
-		"discord" : null,
+		"discord" : "7Pq7HK6",
 		"role" : "Dynasty",
 		"role_id" : "374991075921887242",
 		"nickname" : "Dynasty"
