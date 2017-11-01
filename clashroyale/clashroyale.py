@@ -261,10 +261,10 @@ class clashroyale:
 	    try:
 	    	profiledata = await client.get_profile(profiletag)
 
-	    	self.clash.update({member.id: {'tag': profiledata.tag}})
+	    	self.clash.update({member.id: {'tag': profiletag}})
 	    	dataIO.save_json('cogs/tags.json', self.clash)
 
-	    	await self.bot.say('**' +profiledata.name + ' (#'+ profiledata.tag + ')** has been successfully saved on ' + member.mention)
+	    	await self.bot.say('**' +profiledata.name + ' (#'+ profiletag + ')** has been successfully saved on ' + member.mention)
 	    except:
 	    	await self.bot.say("We cannot find your ID in our database, please try again. Type !contact to ask for help.")
 
