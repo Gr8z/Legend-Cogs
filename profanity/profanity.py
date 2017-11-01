@@ -4,6 +4,8 @@ from .utils.dataIO import dataIO, fileIO
 import os
 import asyncio
 
+BOTCOMMANDER_ROLES =  ["Bot Commander", "Board Member", "Family Representative", "Clan Manager", "Clan Deputy", "Co-Leader"];
+
 class profanity:
     """profanity!"""
 
@@ -31,8 +33,19 @@ class profanity:
         await self.banned_words(after)
 
     async def on_message(self, message):
+
+        server = message.server
+        author = message.author
+
         if message.author.id == self.bot.user.id:
             return
+
+        botcommander_roles = [discord.utils.get(server.roles, name=r) for r in BOTCOMMANDER_ROLES]
+        botcommander_roles = set(botcommander_roles)
+        author_roles = set(author.roles)
+        if len(author_roles.intersection(botcommander_roles)):
+            return
+
         await self.banned_words(message)
 
 def check_folders():
