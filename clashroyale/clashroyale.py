@@ -15,7 +15,7 @@ from __main__ import send_cmd_help
 import asyncio
 from crapipy import AsyncClient
 
-BOTCOMMANDER_ROLES =  ["Bot Commander", "HUB head", "HUB manager", "HUB officer", "Clan manager", "Clan deputy manager", "Clan Deputy", "Clan Manager"];
+BOTCOMMANDER_ROLES =  ["Bot Commander", "Board Member", "Family Representative", "Clan Manager", "Clan Deputy", "Co-Leader"];
 creditIcon = "https://cdn.discordapp.com/avatars/112356193820758016/7bd5664d82cc7c9d2ae4704e58990da3.jpg"
 credits = "Bot by GR8 | Academy"
 
