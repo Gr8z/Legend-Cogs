@@ -8,7 +8,7 @@ import random
 
 server = discord.Server
 lastTag = '0'
-creditIcon = "https://cdn.discordapp.com/avatars/112356193820758016/7bd5664d82cc7c9d2ae4704e58990da3.jpg"
+creditIcon = "https://cdn4.iconfinder.com/data/icons/superheroes-and-supervillains/129/PUNISHER.png"
 credits = "Bot by GR8 | Academy"
 
 # Returns a list with tournaments

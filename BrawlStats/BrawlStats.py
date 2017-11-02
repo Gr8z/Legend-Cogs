@@ -14,7 +14,7 @@ import aiohttp
 from __main__ import send_cmd_help
 
 BOTCOMMANDER_ROLES =  ["Bot Commander", "HUB manager", "HUB officer", "Clan manager", "Clan deputy manager", "Clan Deputy", "Clan Manager"];
-creditIcon = "https://cdn.discordapp.com/avatars/112356193820758016/7bd5664d82cc7c9d2ae4704e58990da3.jpg"
+creditIcon = "https://cdn4.iconfinder.com/data/icons/superheroes-and-supervillains/129/PUNISHER.png"
 credits = "Bot by GR8 | Academy"
 
 headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}

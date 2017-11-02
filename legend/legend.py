@@ -7,7 +7,7 @@ from .utils.dataIO import dataIO, fileIO
 from cogs.utils import checks
 import asyncio
 
-creditIcon = "https://cdn.discordapp.com/avatars/112356193820758016/7bd5664d82cc7c9d2ae4704e58990da3.jpg"
+creditIcon = "https://cdn4.iconfinder.com/data/icons/superheroes-and-supervillains/129/PUNISHER.png"
 credits = "Bot by GR8 | Academy"
 numClans = 12
 clanArray = ['d8','esports','squad','d82','prime','legion','rising','phantom','plague','d83','academy','dynasty']

@@ -16,7 +16,7 @@ import asyncio
 from crapipy import AsyncClient
 
 BOTCOMMANDER_ROLES =  ["Bot Commander", "Board Member", "Family Representative", "Clan Manager", "Clan Deputy", "Co-Leader"];
-creditIcon = "https://cdn.discordapp.com/avatars/112356193820758016/7bd5664d82cc7c9d2ae4704e58990da3.jpg"
+creditIcon = "https://cdn4.iconfinder.com/data/icons/superheroes-and-supervillains/129/PUNISHER.png"
 credits = "Bot by GR8 | Academy"
 
 clash = os.path.join("cogs", "tags.json")
