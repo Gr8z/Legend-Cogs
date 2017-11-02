@@ -119,7 +119,7 @@ class legend:
         for x in range(0, numClans):
             totalMembers += clans[x]['memberCount']
 
-        embed=discord.Embed(title="LeGeND Family Clans", description="Our Family is made up of " + str(numClans) + " clans with a total of " + str(totalMembers) + " members.", color=0xf1c747)
+        embed=discord.Embed(title="LeGeND Family Clans", description="Our Family is made up of " + str(numClans) + " clans with a total of " + str(totalMembers) + " members. We have " + str((numClans*50)-totalMembers) + " spots left.", color=0xf1c747)
         embed.set_thumbnail(url='https://statsroyale.com/images/badges/16000002.png')
         embed.set_footer(text=credits, icon_url=creditIcon)
 
