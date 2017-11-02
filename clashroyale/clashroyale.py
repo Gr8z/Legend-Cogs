@@ -80,7 +80,7 @@ class clashroyale:
 	    	embed.add_field(name="Draws", value=profiledata.games.draws, inline=True)
 	    	embed.add_field(name="Three Crown Wins", value=profiledata.stats.threeCrownWins, inline=True)
 	    	embed.add_field(name="Total Donations", value=profiledata.stats.totalDonations, inline=True)
-	    	if profiledata.experience.level > 7:
+	    	if hasattr(profiledata.stats, 'challengeMaxWins'):
 	    		embed.add_field(name="Challenge Max Wins", value=profiledata.stats.challengeMaxWins, inline=True)
 	    		embed.add_field(name="Challenge Cards Won", value=profiledata.stats.challengeCardsWon, inline=True)
 	    	embed.add_field(name="Tournament Cards Won", value=profiledata.stats.tournamentCardsWon, inline=True)
