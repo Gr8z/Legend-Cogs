@@ -23,7 +23,7 @@ rules_text = """**Here are some Legend Family Discord server rules.**\n
 **Violation of these roles will lead to punishment including temporary guest role reduced access, temporary kick from server, or permanent kick from server, depending on the severity and/or frequency of the offense**"""
 
 commands_text =  """Here are some of the Legend Family Bot commands, you can use them in the #bot_spam channel.\n
-**!clashProfile** - to view your clash of clan stats.
+**!clashProfile** - to view your Clash Royale stats.
 **!chests** - to view your upcoming chests you will receive.
 **!clan** - view Our clan statistics and information.
 **!offers** - view your upcoming shop offers.
