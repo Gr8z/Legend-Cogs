@@ -174,9 +174,6 @@ class legend:
         except requests.exceptions.RequestException as e:
             await self.bot.say(e)
             return
-        except KeyError:
-            await self.bot.say("You must be accepted into a clan before I can give you clan roles.")
-            return
         except:
             await self.bot.say("You must assosiate a tag with this member first using ``!save clash #tag @member``")
             return
