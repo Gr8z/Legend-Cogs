@@ -2,7 +2,7 @@
 
 Made with Python and [RED](https://github.com/Cog-Creators/Red-DiscordBot).
 
-If you want to see this bot in action, join the LeGeND Family Discord at [discord.me/CRLGD](http://discord.me/LegendFamily)
+If you want to see this bot in action, join the LeGeND Family Discord at [discord.me/LegendFamily](http://discord.me/LegendFamily)
 
 ## Cogs
 
