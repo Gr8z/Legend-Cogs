@@ -69,7 +69,7 @@ class clashroyale:
 	    	if not profiledata.not_in_clan:
 	    		embed.add_field(name="Clan", value=profiledata.clan.name, inline=True)
 	    		embed.add_field(name="Role", value=profiledata.clan.role, inline=True)
-	    	embed.add_field(name="Cards Found", value=str(profiledata.stats.cardsFound)+"/77", inline=True)
+	    	embed.add_field(name="Cards Found", value=str(profiledata.stats.cardsFound)+"/78", inline=True)
 	    	embed.add_field(name="Favourite Card", value=profiledata.stats.favoriteCard, inline=True)
 	    	embed.add_field(name="Chests Opened", value=profiledata.chest_cycle.position, inline=True)
 	    	embed.add_field(name="Games Played", value=profiledata.games.total, inline=True)
