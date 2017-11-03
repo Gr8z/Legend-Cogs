@@ -161,6 +161,13 @@ class legend:
     @commands.command(pass_context=True, no_pm=True)
     async def newmember(self, ctx, member: discord.Member):
         """Setup nickname, roles and invite links for a new member"""
+        
+        server = ctx.message.server
+        legendServer = ["374596069989810176"]
+
+        if server.id not in legendServer:
+            await self.bot.say("This command can only be executed in the LeGeND Family Server")
+            return
         try:
             await self.updateClash()
             profiletag = self.clash[member.id]['tag']
@@ -226,6 +233,8 @@ class legend:
                 await self.bot.say(member.mention + " please check your DM. Sending you the invite details for " + clanname)
 
             
+            await self.bot.send_message(discord.Object(id='375839851955748874'), '**' + ign + ' (#'+ profiletag + ')** joined ' + clanname)
+
             await asyncio.sleep(300)
             await self.bot.send_message(member,rules_text)
 
