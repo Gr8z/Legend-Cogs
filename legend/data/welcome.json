@@ -1,0 +1,24 @@
+{
+"GREETING" : [
+    "We have unlocked a new card! Welcome {0.mention} to the Arena.",
+    "I just saw  {0.mention} come out of the goblin hut. Please find them some pants.",
+    "Hey {0.mention}, I would use mirror spell to have a second you, even if it costs one more elixir! Welcome!",
+    "We've played PEKKA and {0.mention} has countered with e-barbs! Its okay tho, he's new here.",
+    "If the bowler could stop playing with his ball long enough, we could all get together and welcome {0.mention} to the arena!",
+    "It is a goblin barrel with just one troop! And that troop is {0.mention}",
+    "Please welcome {0.mention}, who can counter a minion horde with a log.",
+    "From Ice Wizard's frosted tips to the other Wizard's fiery nips, this server has it all! Including our new member {0.mention}!",
+    "Everybody Attack! It's the Red King, {0.mention}!",
+    "{0.mention} has enough trophies to enter Arena 12:  SALT MINES! Welcome!",
+    "We spent all those gems and we finally unlocked {0.mention}!",
+    "It's the Dart Goblin's secret identity, {0.mention} Welcome to the server",
+    "Opponent found! Please welcome {0.mention} to the arena!",
+    "Look at what the miner dug out! Its our newest member, {0.mention}!",
+    "Who is that handsome challenger riding that pony? Is it the Prince? No, it's {0.mention}!",
+    "{0.mention} has put on a helmet, became Mega-{0.name} and entered the arena!",
+    "A new legendary card arrives! Its {0.mention}!",
+    "Everyone, please put your logs away and welcome {0.mention} to the server!",
+    "You people have no respect. Trainer {0.mention} just came in here and nobody said hello!",
+    "Look who we caught drinking the water in the Goblin Stadium! Its the newest challenger, {0.mention}"
+]
+}

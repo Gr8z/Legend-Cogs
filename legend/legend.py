@@ -6,6 +6,7 @@ import os
 from .utils.dataIO import dataIO, fileIO
 from cogs.utils import checks
 import asyncio
+from random import choice as rand_choice
 
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Academy"
@@ -22,7 +23,7 @@ rules_text = """**Here are some Legend Family Discord server rules.**\n
 • A good rule is to talk to people as if you were talking to them face to face.\n
 **Violation of these roles will lead to punishment including temporary guest role reduced access, temporary kick from server, or permanent kick from server, depending on the severity and/or frequency of the offense**"""
 
-commands_text =  """Here are some of the Legend Family Bot commands, you can use them in the #bot_spam channel.\n
+commands_text =  """Here are some of the Legend Family Bot commands, you can use them in the #bot-spam channel.\n
 **!clashProfile** - to view your Clash Royale stats.
 **!chests** - to view your upcoming chests you will receive.
 **!clan** - view Our clan statistics and information.
@@ -44,8 +45,9 @@ info_text = """You will find several channels on our Discord Server\n
 **#tourneys**: Dozens of tourney's posted everyday. 
 **#news**: important info about family.
 **#deck-recommendation**: decks discussion.
-**#offtopic**: you can chat about anything unrelated to clash royale here.
+**#off-topic**: you can chat about anything unrelated to clash royale here.
 **#bots-spam**: play bot commands, You can mute the channels you don't need in DISCORD settings.
+**#friends-forever**: Post your Clash friend invite link or add others.
 """
 cw_info = """We organize a **clanwar** every weekend, which aims to determine **which clan is the strongest**. 
 
@@ -65,6 +67,7 @@ class legend:
         self.bot = bot
         self.clash = dataIO.load_json('cogs/tags.json')
         self.c = dataIO.load_json('data/legend/clans.json')
+        self.welcome = dataIO.load_json('data/legend/welcome.json')
 
     async def updateClash(self):
         self.clash = dataIO.load_json('cogs/tags.json')
@@ -225,15 +228,21 @@ class legend:
             if self.c[clanArray[clindex]]['discord'] is not None:
                 joinLink = "https://discord.gg/" + str(self.c[clanArray[clindex]]['discord'])
                 await self.bot.send_message(member, 
-                    "Hi There! Congratulations on getting accepted into our family. Now you have to carefuly read this message and follow the steps mentioned below: \n\n"+
+                    "Hi There! Congratulations on getting accepted into our family. We have unlocked all the member channels for you in LeGeND Discord Server. Now you have to carefuly read this message and follow the steps mentioned below: \n\n"+
                     "Please click on the link below to join your clan Discord server. \n\n"+
                     clanname + ": " + joinLink + "\n\n" +
                     "Please do not leave our main or clan servers while you are in the clan. Thank you."
                     )
-                await self.bot.say(member.mention + " please check your DM. Sending you the invite details for " + clanname)
+            else:
+            	await self.bot.send_message(member, 
+                    "Hi There! Congratulations on getting accepted into our family. We have unlocked all the member channels for you in LeGeND Discord Server. \n\n"+
+                    "Please do not leave our Discord server while you are in the clan. Thank you."
+                    )
 
-            
             await self.bot.send_message(discord.Object(id='375839851955748874'), '**' + ign + ' (#'+ profiletag + ')** joined ' + clanname)
+
+            welcomeMsg = rand_choice(self.welcome["GREETING"])
+            await self.bot.send_message(discord.Object(id='374596069989810178'), welcomeMsg.format(member, server))
 
             await asyncio.sleep(300)
             await self.bot.send_message(member,rules_text)
