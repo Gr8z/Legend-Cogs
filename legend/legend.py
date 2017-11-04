@@ -122,7 +122,8 @@ class legend:
         for x in range(0, numClans):
             totalMembers += clans[x]['memberCount']
 
-        embed=discord.Embed(title="LeGeND Family Clans", description="Our Family is made up of " + str(numClans) + " clans with a total of " + str(totalMembers) + " members. We have " + str((numClans*50)-totalMembers) + " spots left.", color=0xf1c747)
+        embed=discord.Embed(title="", description="Our Family is made up of " + str(numClans) + " clans with a total of " + str(totalMembers) + " members. We have " + str((numClans*50)-totalMembers) + " spots left.", color=0xf1c747)
+        embed.set_author(name="LeGeND Family Clans", url="http://cr-api.com/clan/family/legend", icon_url="https://i.imgur.com/dtSMITE.jpg")
         embed.set_footer(text=credits, icon_url=creditIcon)
 
         foundClan = False
