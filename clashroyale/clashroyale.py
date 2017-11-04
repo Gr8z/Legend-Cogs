@@ -52,7 +52,7 @@ class clashroyale:
 	    		await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 	    		return
 
-	    	if profiledata.not_in_clan:
+	    	if profiledata.clan.badge.url is None:
 	    		clanurl = "https://i.imgur.com/4EH5hUn.png"
 	    	else:
 	    		clanurl = "http://api.cr-api.com"+profiledata.clan.badge.url
@@ -90,6 +90,7 @@ class clashroyale:
 
     	except:
     		await self.bot.say("You need to first save your profile using ``!save clash #GAMETAG``")
+    		raise
 
     @commands.command(pass_context=True)
     async def offers(self, ctx, member: discord.Member = None):
@@ -169,9 +170,13 @@ class clashroyale:
 	    	else:
 	    		chest5 = ""
 
+	    	if profiledata.clan.badge.url is None:
+	    		clanurl = "https://i.imgur.com/4EH5hUn.png"
+	    	else:
+	    		clanurl = "http://api.cr-api.com"+profiledata.clan.badge.url
 
 	    	embed=discord.Embed(title="", color=0x0080ff, description=str(position)+" Chests Opened")
-	    	embed.set_author(name=profiledata.name + " (#"+profiledata.tag+")", url='http://cr-api.com/profile/' + profiletag, icon_url="http://api.cr-api.com"+profiledata.clan.badge.url)
+	    	embed.set_author(name=profiledata.name + " (#"+profiledata.tag+")", url='http://cr-api.com/profile/' + profiletag, icon_url=clanurl)
 	    	embed.add_field(name="Upcoming Chests", value=valuechest, inline=False)
 	    	embed.add_field(name="Special Chests", value=chest1+chest2+chest3+chest4+chest5, inline=False)
 	    	embed.set_footer(text=credits, icon_url=creditIcon)
