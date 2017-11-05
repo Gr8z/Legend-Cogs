@@ -339,7 +339,7 @@ class legend:
         except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
-
+ 
         await self.updateClash()
         await self.bot.type()
         
