@@ -446,6 +446,19 @@ class legend:
 
         await self.bot.say(message)
 
+    @commands.command(pass_context=True, no_pm=True)
+    async def addrole(self, ctx, member: discord.Member = None, *, role_name: str = None):
+        """Toggle Role for members"""
+
+        role = discord.utils.get(ctx.message.server.roles, name=role_name)
+        try:
+            await self.bot.add_roles(member, role)
+        except discord.Forbidden:
+            raise
+        except discord.HTTPException:
+            raise
+        await self.bot.say("Added {} for {}".format(role.name, member.display_name))
+
 def check_folders():
     if not os.path.exists("data/legend"):
         print("Creating data/legend folder...")
