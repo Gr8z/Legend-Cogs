@@ -254,7 +254,6 @@ class legend:
             role_names = [self.c[clanArray[clindex]]['role'], 'Member']
             try:
                 await self._add_roles(member, role_names)
-                await self._remove_roles(member, ['Waiting', 'Guests'])
                 mymessage += "**" + self.c[clanArray[clindex]]['role'] + "** and **Member** roles added."
             except discord.Forbidden:
                 await self.bot.say(
@@ -284,6 +283,8 @@ class legend:
 
             welcomeMsg = rand_choice(self.welcome["GREETING"])
             await self.bot.send_message(discord.Object(id='374596069989810178'), welcomeMsg.format(member, server))
+
+            await self._remove_roles(member, ['Waiting', 'Guests'])
 
             await asyncio.sleep(300)
             await self.bot.send_message(member,rules_text)
