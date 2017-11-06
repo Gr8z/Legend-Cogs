@@ -254,6 +254,7 @@ class legend:
             role_names = [self.c[clanArray[clindex]]['role'], 'Member']
             try:
                 await self._add_roles(member, role_names)
+                await self._remove_roles(member, ['Waiting', 'Guests'])
                 mymessage += "**" + self.c[clanArray[clindex]]['role'] + "** and **Member** roles added."
             except discord.Forbidden:
                 await self.bot.say(
@@ -261,15 +262,6 @@ class legend:
                         author.display_name, member.display_name))
             except discord.HTTPException:
                 await self.bot.say("failed to add {}.").format(', '.join(role_names))
-
-            try:
-                await self._remove_roles(member, ['Waiting', 'Guests'])
-            except discord.Forbidden:
-                await self.bot.say(
-                    "{} does not have permission to edit {}’s roles.".format(
-                        author.display_name, member.display_name))
-            except discord.HTTPException:
-                await self.bot.say("failed to remove {}.").format(', '.join(role_names))
 
             await self.bot.say(mymessage)
 
