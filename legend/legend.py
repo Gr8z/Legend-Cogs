@@ -83,6 +83,17 @@ class legend:
         except discord.HTTPException:
             raise
 
+    async def _remove_roles(self, member, role_names):
+        """Remove roles"""
+        server = member.server
+        roles = [discord.utils.get(server.roles, name=role_name) for role_name in role_names]
+        try:
+            await self.bot.remove_roles(member, *roles)
+        except discord.Forbidden:
+            raise
+        except discord.HTTPException:
+            raise
+
     @commands.command(pass_context=True)
     async def legend(self, ctx, member: discord.Member = None):
         """ Show Legend clans, can also show clans based on a member's trophies"""
@@ -228,6 +239,15 @@ class legend:
             except discord.HTTPException:
                 await self.bot.say("failed to add {}.").format(', '.join(role_names))
 
+            try:
+                await self._remove_roles(member, ['Waiting', 'Guests'])
+            except discord.Forbidden:
+                await self.bot.say(
+                    "{} does not have permission to edit {}’s roles.".format(
+                        author.display_name, member.display_name))
+            except discord.HTTPException:
+                await self.bot.say("failed to remove {}.").format(', '.join(role_names))
+
             await self.bot.say(mymessage)
 
             if self.c[clanArray[clindex]]['discord'] is not None:
@@ -244,7 +264,8 @@ class legend:
                     "Please do not leave our Discord server while you are in the clan. Thank you."
                     )
 
-            await self.bot.send_message(discord.Object(id='375839851955748874'), '**' + ign + ' (#'+ profiletag + ')** joined ' + clanname)
+            roleName = discord.utils.get(server.roles, name=role_names[0])
+            await self.bot.send_message(discord.Object(id='375839851955748874'), ctx.message.author.mention + ' recruited ' + '**' + ign + ' (#'+ profiletag + ')** to ' + roleName.mention)
 
             welcomeMsg = rand_choice(self.welcome["GREETING"])
             await self.bot.send_message(discord.Object(id='374596069989810178'), welcomeMsg.format(member, server))
