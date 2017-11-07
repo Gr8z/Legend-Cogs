@@ -69,7 +69,7 @@ class legend:
     def __init__(self, bot):
         self.bot = bot
         self.clash = dataIO.load_json('cogs/tags.json')
-        self.c = dataIO.load_json('data/legend/clans.json')
+        self.c = dataIO.load_json('cogs/clans.json')
         self.welcome = dataIO.load_json('data/legend/welcome.json')
 
     async def updateClash(self):
@@ -99,9 +99,10 @@ class legend:
             pass
 
     async def _is_commander(self, member):
+        server = member.server
         botcommander_roles = [discord.utils.get(server.roles, name=r) for r in BOTCOMMANDER_ROLES]
         botcommander_roles = set(botcommander_roles)
-        author_roles = set(author.roles)
+        author_roles = set(member.roles)
         if len(author_roles.intersection(botcommander_roles)):
             return True
         else:
@@ -122,7 +123,7 @@ class legend:
                 trophies = profiledata['trophies']
                 maxtrophies = profiledata['stats']['maxTrophies']
                 maxmembers = 50
-                await self.bot.say("Hello " + member.mention + ", these are all the clans you are allowed to join, based on your trophies and max trophies.")
+                await self.bot.say("Hello " + member.mention + ", these are all the clans you are allowed to join, based on your statistics. Your current trophies are: " + str(trophies))
             except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
                 await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
                 return
@@ -153,10 +154,25 @@ class legend:
         foundClan = False
         for x in range(0, numClans):
 
-            if str(clans[x]['typeName']) == 'Invite Only':
-                title = ""
+            numWaiting = 0
+
+            for y in range(0, len(clanArray)):
+                if self.c[clanArray[y]]['tag'] == clans[x]['tag']:
+                    numWaiting = len(self.c[clanArray[y]]['waiting'])
+                    break
+
+            if numWaiting > 0:
+                title = "["+str(numWaiting)+" Waiting] "
             else:
-                title = "["+str(clans[x]['typeName'])+"] "
+                title = ""
+
+            if clans[x]['memberCount'] < 50:
+                showMembers = str(clans[x]['memberCount']) + "/50"
+            else:
+                showMembers = "**FULL**   "
+
+            if str(clans[x]['typeName']) != 'Invite Only':
+                title += "["+str(clans[x]['typeName'])+"] "
 
             title += clans[x]['name'] + " (#" + clans[x]['tag'] + ") "
 
@@ -173,10 +189,10 @@ class legend:
             if clans[x]['tag'] == self.c['prime']['tag']:
                 title += "Age: 21+"
 
-            desc = ":shield: " + str(clans[x]['memberCount']) + "/50     :trophy: " + str(clans[x]['requiredScore']) + "+     :medal: " +str(clans[x]['score'])
+            desc = ":shield: " + showMembers + "     :trophy: " + str(clans[x]['requiredScore']) + "+     :medal: " +str(clans[x]['score'])
             totalMembers += clans[x]['memberCount']
 
-            if (trophies >= clans[x]['requiredScore']) and (maxtrophies > clans[x]['maxtrophies']) and (clans[x]['memberCount'] < maxmembers):
+            if (member is None) or ((trophies >= clans[x]['requiredScore']) and (maxtrophies > clans[x]['maxtrophies']) and (clans[x]['memberCount'] < maxmembers) and (clans[x]['typeName'] != "Closed")):
                 foundClan = True
                 embed.add_field(name=title, value=desc, inline=False)
 
@@ -224,7 +240,7 @@ class legend:
         elif member.id == author.id:
             allowed = True
         else:
-            allowed = self._is_commander(author)
+            allowed = await self._is_commander(author)
 
         if not allowed:
             await self.bot.say("You dont have enough permissions to use this command on others.")
@@ -376,7 +392,7 @@ class legend:
             await self.bot.say("Please use a valid clanname : d8, esports, squad, d82, prime, legion, rising, phantom, plague, d83, academy")
             return
 
-        allowed = self._is_commander(author)
+        allowed = await self._is_commander(author)
 
         if not allowed:
             await self.bot.say("You dont have enough permissions to use Audit. Type !contact to ask for help.")
@@ -532,7 +548,7 @@ class legend:
             await self.bot.say("This command can only be executed in the LeGeND Family Server")
             return
 
-        allowed = self._is_commander(author)
+        allowed = await self._is_commander(author)
 
         if not allowed:
             await self.bot.say("You dont have enough permissions to approve a recruit. Type !contact to ask for help.")
@@ -593,6 +609,17 @@ class legend:
                 await self.bot.say("Approval failed, you don't meet the trophy requirements.")
                 return
 
+            if member.id not in self.c[clankey]['waiting']:
+                await self.bot.say("Approval failed, there is a waiting queue for this clan. Please first join the waiting list.")
+                return
+
+            if member.id != self.c[clankey]['waiting'][0]:
+                await self.bot.say("Approval failed, you are not first in queue for the waiting list on this server.")
+                return
+
+            self.c[clankey]['waiting'].pop(0)
+            dataIO.save_json('cogs/clans.json', self.c)
+
             recruitCode = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6))
 
             await self.bot.send_message(member, 
@@ -610,6 +637,124 @@ class legend:
         else:
             await self.bot.say("Approval failed, You are already a part of a clan in the family.")
 
+    @commands.command(pass_context=True, no_pm=True)
+    async def waiting(self, ctx, member: discord.Member, clankey):
+        """Add people to the waiting list for a clan"""
+        server = ctx.message.server
+        author = ctx.message.author
+        legendServer = ["374596069989810176"]
+
+        if server.id not in legendServer:
+            await self.bot.say("This command can only be executed in the LeGeND Family Server")
+            return
+
+        allowed = await self._is_commander(author)
+
+        if not allowed:
+            await self.bot.say("You dont have enough permissions to add someone to the waiting list. Type !contact to ask for help.")
+            return
+
+        clankey = clankey.lower()
+
+        try:
+            clan_tag = self.c[clankey]['tag']
+            clan_name = self.c[clankey]['name'] 
+            clan_role = self.c[clankey]['role'] 
+        except KeyError:
+            await self.bot.say("Please use a valid clanname : d8, esports, squad, d82, prime, legion, rising, phantom, plague, d83, academy")
+            return
+
+        leftClan = False # False
+        try:
+            await self.updateClash()
+            profiletag = self.clash[member.id]['tag']
+            profiledata = requests.get('http://api.cr-api.com/profile/'+profiletag, timeout=10).json()
+            clandata = requests.get('http://api.cr-api.com/clan/{}'.format(clan_tag), timeout=10).json()
+            ign = profiledata['name']
+            if profiledata['clan'] is None:
+                leftClan = True
+                clantag = ""
+                clanname = ""
+            else: 
+                clantag = profiledata['clan']['tag']
+                clanname = profiledata['clan']['name']
+        except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
+            await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
+            return
+        except requests.exceptions.RequestException as e:
+            await self.bot.say(e)
+            return
+        except:
+            await self.bot.say("You must assosiate a tag with this member first using ``!save clash #tag @member``")
+            return
+
+        membership = True
+        for x in range(0, len(clanArray)):
+            if clantag == self.c[clanArray[x]]['tag']:
+                membership = False # False
+                clindex = int(x)
+                break
+
+        if membership:
+            if not leftClan:
+                await self.bot.say("Cannot add you to the waiting list, You have not yet left your current clan.")
+                return
+
+            trophies = profiledata['trophies']
+            maxtrophies = profiledata['stats']['maxTrophies']
+
+            if (trophies < clandata['requiredScore']):
+                await self.bot.say("Cannot add you to the waiting list, you don't meet the trophy requirements.")
+                return
+
+            if member.id not in self.c[clankey]['waiting']:
+                self.c[clankey]['waiting'].append(member.id)
+                dataIO.save_json('cogs/clans.json', self.c)
+            else:
+                await self.bot.say("You are already in a waiting list for this clan.")
+                return
+
+            await self.bot.say(member.mention + " You have been added to the waiting list for **"+ clan_name + "**. We will mention you when a spot is available.")
+
+            roleName = discord.utils.get(server.roles, name=clan_role)
+            await self.bot.send_message(discord.Object(id='375839968096157697'), '**' + member.mention + '** was added to the **Waiting List** for ' + roleName.mention)
+        else:
+            await self.bot.say("Cannot add you to the waiting list, You are already a part of a clan in the family.")
+
+    @commands.command(pass_context=True, no_pm=True)
+    async def delete(self, ctx, member: discord.Member, clankey):
+        """Add people to the waiting list for a clan"""
+        server = ctx.message.server
+        author = ctx.message.author
+        legendServer = ["374596069989810176"]
+
+        if server.id not in legendServer:
+            await self.bot.say("This command can only be executed in the LeGeND Family Server")
+            return
+
+        allowed = await self._is_commander(author)
+
+        if not allowed:
+            await self.bot.say("You dont have enough permissions to delete someone to the waiting list. Type !contact to ask for help.")
+            return
+
+        clankey = clankey.lower()
+
+        try:
+            clan_tag = self.c[clankey]['tag']
+            clan_name = self.c[clankey]['name'] 
+            clan_role = self.c[clankey]['role'] 
+        except KeyError:
+            await self.bot.say("Please use a valid clanname : d8, esports, squad, d82, prime, legion, rising, phantom, plague, d83, academy")
+            return
+
+        try:
+            self.c[clankey]['waiting'].remove(member.id)
+            dataIO.save_json('cogs/clans.json', self.c)
+            await self.bot.say(member.mention + " has been removed from the waiting list for **"+ clan_name + "**.")
+        except ValueError:
+            await self.bot.say("Recruit not found in the waiting list.")
+   
 def check_folders():
     if not os.path.exists("data/legend"):
         print("Creating data/legend folder...")
@@ -620,7 +765,7 @@ def check_files():
     if not fileIO(f, "check"):
         print("Creating empty tags.json...")
         fileIO(f, "save", [])
-    f = "data/legend/clans.json"
+    f = "cogs/clans.json"
     if not fileIO(f, "check"):
         print("Creating empty clans.json...")
         fileIO(f, "save", [])
