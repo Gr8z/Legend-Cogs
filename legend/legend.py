@@ -723,7 +723,7 @@ class legend:
 
     @commands.command(pass_context=True, no_pm=True)
     async def delete(self, ctx, member: discord.Member, clankey):
-        """Add people to the waiting list for a clan"""
+        """Delete people from the waiting list for a clan"""
         server = ctx.message.server
         author = ctx.message.author
         legendServer = ["374596069989810176"]
