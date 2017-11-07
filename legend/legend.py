@@ -558,6 +558,7 @@ class legend:
             await self.updateClash()
             profiletag = self.clash[member.id]['tag']
             profiledata = requests.get('http://api.cr-api.com/profile/'+profiletag, timeout=10).json()
+            clandata = requests.get('http://api.cr-api.com/clan/{}'.format(clan_tag), timeout=10).json()
             ign = profiledata['name']
             if profiledata['clan']['tag'] is None:
                 leftClan = True
@@ -584,6 +585,17 @@ class legend:
         if membership:
             if not leftClan:
                 await self.bot.say("Approval failed, You have not yet left your current clan.")
+                return
+
+            trophies = profiledata['trophies']
+            maxtrophies = profiledata['stats']['maxTrophies']
+
+            if (clandata['memberCount'] == 50):
+                await self.bot.say("Approval failed, the clan is Full.")
+                return
+
+            if (trophies < clandata['requiredScore']):
+                await self.bot.say("Approval failed, you don't meet the trophy requirements.")
                 return
 
             recruitCode = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6))
