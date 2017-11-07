@@ -512,19 +512,6 @@ class legend:
         await self.bot.say(message)
 
     @commands.command(pass_context=True, no_pm=True)
-    async def waiting(self, ctx, member: discord.Member):
-        """Toggle waiting Role for members"""
-        server = ctx.message.server
-        role = discord.utils.get(server.roles, name="Waiting")
-        try:
-            await self.bot.add_roles(member, role)
-        except discord.Forbidden:
-            raise
-        except discord.HTTPException:
-            raise
-        await self.bot.say("{} Role Added to {}".format(role.name, member.display_name))
-
-    @commands.command(pass_context=True, no_pm=True)
     async def guest(self, ctx, member: discord.Member):
         """Toggle waiting Role for members"""
         server = ctx.message.server
