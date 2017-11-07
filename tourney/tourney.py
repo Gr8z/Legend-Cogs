@@ -5,8 +5,8 @@ import requests
 from bs4 import BeautifulSoup
 import asyncio
 import random
+import json
 
-server = discord.Server
 lastTag = '0'
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Academy"
