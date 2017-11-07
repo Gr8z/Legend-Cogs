@@ -267,13 +267,13 @@ class legend:
                     await self.bot.say(
                         "I don’t have permission to change nick for this user.")
                 else:
-                    mymessage += "Nickname changed to **{}**\n".format(newname)
+                    mymessage += "Nickname changed to ** {} **\n".format(newname)
 
 
             role_names = [self.c[clanArray[clindex]]['role'], 'Member']
             try:
                 await self._add_roles(member, role_names)
-                mymessage += "**" + self.c[clanArray[clindex]]['role'] + "** and **Member** roles added."
+                mymessage += "** " + self.c[clanArray[clindex]]['role'] + " ** and **Member** roles added."
             except discord.Forbidden:
                 await self.bot.say(
                     "{} does not have permission to edit {}’s roles.".format(
@@ -298,7 +298,7 @@ class legend:
                     )
 
             roleName = discord.utils.get(server.roles, name=role_names[0])
-            await self.bot.send_message(discord.Object(id='375839851955748874'), ctx.message.author.mention + ' recruited ' + '**' + ign + ' (#'+ profiletag + ')** to ' + roleName.mention)
+            await self.bot.send_message(discord.Object(id='375839851955748874'), ctx.message.author.mention + ' recruited ' + '** ' + ign + ' (#'+ profiletag + ')** to ' + roleName.mention)
 
             welcomeMsg = rand_choice(self.welcome["GREETING"])
             await self.bot.send_message(discord.Object(id='374596069989810178'), welcomeMsg.format(member, server))
@@ -366,7 +366,7 @@ class legend:
                 except discord.HTTPException:
                     await self.bot.say("I don’t have permission to change nick for this user.")
                 else:
-                     await self.bot.say("Nickname changed to **{}**\n".format(newname))
+                     await self.bot.say("Nickname changed to ** {} **\n".format(newname))
         else:
             await self.bot.say("You are not even in any of our clans, what are you doing here?")
 
