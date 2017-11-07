@@ -709,7 +709,7 @@ class legend:
             await self.bot.say("Cannot add you to the waiting list, You are already a part of a clan in the family.")
 
     @commands.command(pass_context=True, no_pm=True)
-    async def delete(self, ctx, member: discord.Member, clankey):
+    async def remove(self, ctx, member: discord.Member, clankey):
         """Delete people from the waiting list for a clan"""
         server = ctx.message.server
         author = ctx.message.author
