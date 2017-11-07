@@ -95,10 +95,8 @@ class legend:
         roles = [discord.utils.get(server.roles, name=role_name) for role_name in role_names]
         try:
             await self.bot.remove_roles(member, *roles)
-        except discord.Forbidden:
-            raise
-        except discord.HTTPException:
-            raise
+        except:
+            pass
 
     @commands.command(pass_context=True)
     async def legend(self, ctx, member: discord.Member = None):
