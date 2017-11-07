@@ -98,6 +98,15 @@ class legend:
         except:
             pass
 
+    async def _is_commander(self, member):
+        botcommander_roles = [discord.utils.get(server.roles, name=r) for r in BOTCOMMANDER_ROLES]
+        botcommander_roles = set(botcommander_roles)
+        author_roles = set(author.roles)
+        if len(author_roles.intersection(botcommander_roles)):
+            return True
+        else:
+            return False
+
     @commands.command(pass_context=True)
     async def legend(self, ctx, member: discord.Member = None):
         """ Show Legend clans, can also show clans based on a member's trophies"""
@@ -215,11 +224,7 @@ class legend:
         elif member.id == author.id:
             allowed = True
         else:
-            botcommander_roles = [discord.utils.get(server.roles, name=r) for r in BOTCOMMANDER_ROLES]
-            botcommander_roles = set(botcommander_roles)
-            author_roles = set(author.roles)
-            if len(author_roles.intersection(botcommander_roles)):
-                allowed = True
+            allowed = self._is_commander(author)
 
         if not allowed:
             await self.bot.say("You dont have enough permissions to use this command on others.")
@@ -371,12 +376,7 @@ class legend:
             await self.bot.say("Please use a valid clanname : d8, esports, squad, d82, prime, legion, rising, phantom, plague, d83, academy")
             return
 
-        allowed = False
-        botcommander_roles = [discord.utils.get(server.roles, name=r) for r in BOTCOMMANDER_ROLES]
-        botcommander_roles = set(botcommander_roles)
-        author_roles = set(author.roles)
-        if len(author_roles.intersection(botcommander_roles)):
-            allowed = True
+        allowed = self._is_commander(author)
 
         if not allowed:
             await self.bot.say("You dont have enough permissions to use Audit. Type !contact to ask for help.")
@@ -532,12 +532,7 @@ class legend:
             await self.bot.say("This command can only be executed in the LeGeND Family Server")
             return
 
-        allowed = False
-        botcommander_roles = [discord.utils.get(server.roles, name=r) for r in BOTCOMMANDER_ROLES]
-        botcommander_roles = set(botcommander_roles)
-        author_roles = set(author.roles)
-        if len(author_roles.intersection(botcommander_roles)):
-            allowed = True
+        allowed = self._is_commander(author)
 
         if not allowed:
             await self.bot.say("You dont have enough permissions to approve a recruit. Type !contact to ask for help.")
