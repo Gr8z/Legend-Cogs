@@ -382,7 +382,9 @@ class legend:
 
         if not allowed:
             await self.bot.say("You dont have enough permissions to use Audit. Type !contact to ask for help.")
-        return
+            return
+
+        await self.bot.type()
 
         try:
             clandata = requests.get('http://api.cr-api.com/clan/{}'.format(clan_tag), timeout=10).json()
@@ -391,8 +393,7 @@ class legend:
             return
  
         await self.updateClash()
-        await self.bot.type()
-        
+
         cr_members_name = []
         cr_members_tag = []
         cr_members_trophy = []
