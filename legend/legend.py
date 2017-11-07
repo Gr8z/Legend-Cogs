@@ -555,7 +555,7 @@ class legend:
             await self.bot.say("Please use a valid clanname : d8, esports, squad, d82, prime, legion, rising, phantom, plague, d83, academy")
             return
 
-        leftClan = True
+        leftClan = False
         try:
             await self.updateClash()
             profiletag = self.clash[member.id]['tag']
@@ -579,7 +579,7 @@ class legend:
         membership = True
         for x in range(0, len(clanArray)):
             if clantag == self.c[clanArray[x]]['tag']:
-                membership = True
+                membership = False
                 clindex = int(x)
                 break
 
@@ -601,7 +601,7 @@ class legend:
             await self.bot.say(member.mention + " has been approved for **" + clan_name + "** please check your DM for instructions on how to join.")
 
             roleName = discord.utils.get(server.roles, name=clan_role)
-            await self.bot.send_message(discord.Object(id='375839851955748874'), roleName.mention + " \nName: " + ign + "\n" + "Recruit Code: ``" + recruitCode + "")
+            await self.bot.send_message(discord.Object(id='375839851955748874'), roleName.mention + " \nName: " + ign + "\n" + "Recruit Code: ``" + recruitCode + "``")
         else:
             await self.bot.say("Approval failed, You are already a part of a clan in the family.")
 
