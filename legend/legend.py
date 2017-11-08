@@ -603,12 +603,12 @@ class legend:
                     if member.id != self.c[clankey]['waiting'][0]:
                         await self.bot.say("Approval failed, you are not first in queue for the waiting list on this server.")
                         return
+                    else:
+                        self.c[clankey]['waiting'].pop(0)
+                        dataIO.save_json('cogs/clans.json', self.c)
                 else:
                     await self.bot.say("Approval failed, there is a waiting queue for this clan. Please first join the waiting list.")
                     return
-
-            self.c[clankey]['waiting'].pop(0)
-            dataIO.save_json('cogs/clans.json', self.c)
 
             recruitCode = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6))
 
