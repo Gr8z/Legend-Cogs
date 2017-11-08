@@ -598,13 +598,14 @@ class legend:
                 await self.bot.say("Approval failed, you don't meet the trophy requirements.")
                 return
 
-            if member.id not in self.c[clankey]['waiting']:
-                await self.bot.say("Approval failed, there is a waiting queue for this clan. Please first join the waiting list.")
-                return
-
-            if member.id != self.c[clankey]['waiting'][0]:
-                await self.bot.say("Approval failed, you are not first in queue for the waiting list on this server.")
-                return
+            if len(self.c[clankey]['waiting']) > 0:
+                if member.id in self.c[clankey]['waiting']:
+                    if member.id != self.c[clankey]['waiting'][0]:
+                        await self.bot.say("Approval failed, you are not first in queue for the waiting list on this server.")
+                        return
+                else:
+                    await self.bot.say("Approval failed, there is a waiting queue for this clan. Please first join the waiting list.")
+                    return
 
             self.c[clankey]['waiting'].pop(0)
             dataIO.save_json('cogs/clans.json', self.c)
