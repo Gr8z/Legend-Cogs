@@ -558,8 +558,10 @@ class legend:
             profiledata = requests.get('http://api.cr-api.com/profile/'+profiletag, timeout=10).json()
             clandata = requests.get('http://api.cr-api.com/clan/{}'.format(clan_tag), timeout=10).json()
             ign = profiledata['name']
-            if profiledata['clan']['tag'] is None:
+            if profiledata['clan'] is None:
                 leftClan = True
+                clantag = ""
+                clanname = ""
             else: 
                 clantag = profiledata['clan']['tag']
                 clanname = profiledata['clan']['name']
