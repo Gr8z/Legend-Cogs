@@ -14,7 +14,7 @@ creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Academy"
 numClans = 12
 clanArray = ['d8','esports','squad','d82','prime','legion','rising','phantom','plague','d83','academy','dynasty']
-BOTCOMMANDER_ROLES =  ["Bot Commander", "Board Member", "Family Representative", "Clan Manager", "Clan Deputy", "Co-Leader"];
+BOTCOMMANDER_ROLES =  ["Family Representative", "Clan Manager", "Clan Deputy", "Co-Leader", "Hub Officer", "admin"];
 
 rules_text = """**Here are some Legend Family Discord server rules.**\n
 • Be respectful of other members. Do not talk them down in any way.

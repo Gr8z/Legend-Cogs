@@ -13,7 +13,7 @@ import os
 import aiohttp
 from __main__ import send_cmd_help
 
-BOTCOMMANDER_ROLES =  ["Bot Commander", "HUB manager", "HUB officer", "Clan manager", "Clan deputy manager", "Clan Deputy", "Clan Manager"];
+BOTCOMMANDER_ROLES =  ["Family Representative", "Clan Manager", "Clan Deputy", "Co-Leader", "Hub Officer", "admin"];
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Academy"
 
