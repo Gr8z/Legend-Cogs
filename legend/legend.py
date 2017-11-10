@@ -303,7 +303,7 @@ class legend:
             welcomeMsg = rand_choice(self.welcome["GREETING"])
             await self.bot.send_message(discord.Object(id='374596069989810178'), welcomeMsg.format(member, server))
 
-            await self._remove_roles(member, ['Waiting', 'Guests'])
+            await self._remove_roles(member, ['Guests'])
 
             await asyncio.sleep(300)
             await self.bot.send_message(member,rules_text)
@@ -596,6 +596,10 @@ class legend:
 
             if (trophies < clandata['requiredScore']):
                 await self.bot.say("Approval failed, you don't meet the trophy requirements.")
+                return
+
+            if (clandata['typeName'] != "Closed"):
+                await self.bot.say("Approval failed, the clan is currently closed.")
                 return
 
             if len(self.c[clankey]['waiting']) > 0:
