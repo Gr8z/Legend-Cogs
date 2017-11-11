@@ -598,7 +598,7 @@ class legend:
                 await self.bot.say("Approval failed, you don't meet the trophy requirements.")
                 return
 
-            if (clandata['typeName'] != "Closed"):
+            if (clandata['typeName'] == "Closed"):
                 await self.bot.say("Approval failed, the clan is currently closed.")
                 return
 
