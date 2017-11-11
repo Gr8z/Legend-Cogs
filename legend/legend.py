@@ -135,7 +135,8 @@ class legend:
                 return
 
         try:
-            clans = requests.get('http://api.cr-api.com/clan/{},{},{},{},{},{},{},{},{},{},{},{}/info'.format(self.c['d8']['tag'],self.c['esports']['tag'],self.c['squad']['tag'],self.c['d82']['tag'],self.c['prime']['tag'],self.c['legion']['tag'],self.c['rising']['tag'],self.c['phantom']['tag'],self.c['dynasty']['tag'],self.c['plague']['tag'],self.c['d83']['tag'],self.c['academy']['tag']), timeout=10).json()
+            clans = requests.get('http://api.cr-api.com/clan/'+','.join(self.c[clan]["tag"] for clan in self.c)+'/info', timeout=10).json()
+            clans = sorted(clans, key=lambda clanned: clanned['requiredScore'], reverse=True)
         except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
                 await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
                 return
@@ -143,9 +144,7 @@ class legend:
                 await self.bot.say(e)
                 return
 
-        totalMembers = 0
-        for x in range(0, numClans):
-            totalMembers += clans[x]['memberCount']
+        totalMembers = sum(clans[x]['memberCount'] for x in range(len(clans)))
 
         embed=discord.Embed(title="", description="Our Family is made up of " + str(numClans) + " clans with a total of " + str(totalMembers) + " members. We have " + str((numClans*50)-totalMembers) + " spots left.", color=0xf1c747)
         embed.set_author(name="LeGeND Family Clans", url="http://cr-api.com/clan/family/legend", icon_url="https://i.imgur.com/dtSMITE.jpg")

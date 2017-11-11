@@ -34,7 +34,7 @@ class clashroyale:
     	self.brawl = dataIO.load_json(brawl)
     	self.cycle = dataIO.load_json(cycle)
 
-    @commands.command(pass_context=True)
+    @commands.command(pass_context=True, aliases=['clashprofile','cprofile','cProfile'])
     async def clashProfile(self, ctx, member: discord.Member = None):
     	"""View your Clash Royale Profile Data and Statstics."""
 
