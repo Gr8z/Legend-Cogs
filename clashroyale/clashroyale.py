@@ -90,7 +90,6 @@ class clashroyale:
 
     	except:
     		await self.bot.say("You need to first save your profile using ``!save clash #GAMETAG``")
-    		raise
 
     @commands.command(pass_context=True)
     async def offers(self, ctx, member: discord.Member = None):
@@ -331,7 +330,6 @@ class clashroyale:
 		    await self.bot.say(e)
 		    return
 	    except:
-	    	raise
 	    	await self.bot.say("We cannot find your ID in our database, please try again. Type !contact to ask for help.")
 
     @save.command(pass_context=True, name="brawl")
@@ -396,28 +394,7 @@ class clashroyale:
 
 	        await self.bot.say(tagUsername + ' has been successfully saved. Now you can use ``!brawlProfile`` ``!band``')
 	    except:
-	    	raise
 	    	await self.bot.say("We cannot find your ID in our database, please try again. Type !contact to ask for help.")
-
-    @commands.command()
-    async def test(self):
-	    client = AsyncClient()
-
-	    # get player profile
-	    player = await client.get_profile('C0G20PR2')
-
-	    await self.bot.say(player.clan.badge.url)
-
-	    # get clan
-	    clan = await client.get_clan('2CCCP')
-
-	    await self.bot.say(clan.name)
-
-	    # multiple clans
-	    clans = await client.get_clans(['2CCCP', '2U2GGQJ'])
-
-	    await self.bot.say(clans[0].name)
-	    await self.bot.say(clans[1].name)
 
 def check_folders():
     if not os.path.exists("data/clashroyale"):
