@@ -789,18 +789,17 @@ class legend:
                                 clan_clanChestCrowns.append(clandata['members'][x]['clanChestCrowns'])
 
                             index = clan_tag.index(profiletag)
-                            amount = (clan_donations[index]*perDonation) + (clan_clanChestCrowns[index]*perDonation)
+                            amount = (clan_donations[index]*perDonation) + (clan_clanChestCrowns[index]*perCrown)
 
                             self.bank['374596069989810176'][banks[key]]['balance'] += amount
                             dataIO.save_json('data/economy/bank.json', self.bank)
 
                             user = discord.utils.get(ctx.message.server.members, id = banks[key])
-                            await self.bot.send_message(user,"Hello " + user.name + ", take these credits for the donations and crowns contributed to your clan this week. (+" + str(amount) + " credits!)")
+                            await self.bot.send_message(user,"Hello " + user.name + ", take these credits for the " + str(clan_donations[index]) + " donations and " + str(clan_clanChestCrowns[index]) + " crowns you contributed to your clan this week. (+" + str(amount) + " credits!)")
 
-                    except Exception as e:
-                        await self.bot.say(e)
-
-            await self.bot.say("Weekly contribution payouts have been distributed.")
+                    except:
+                        user = discord.utils.get(ctx.message.server.members, id = banks[key])
+                        await self.bot.say("Unable to send payout to " + user.name)
    
 def check_folders():
     if not os.path.exists("data/legend"):
