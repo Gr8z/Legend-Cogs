@@ -71,6 +71,7 @@ class legend:
         self.clash = dataIO.load_json('cogs/tags.json')
         self.c = dataIO.load_json('cogs/clans.json')
         self.welcome = dataIO.load_json('data/legend/welcome.json')
+        self.bank = dataIO.load_json('data/economy/bank.json')
 
     async def updateClash(self):
         self.clash = dataIO.load_json('cogs/tags.json')
@@ -747,6 +748,64 @@ class legend:
             await self.bot.say(member.mention + " has been removed from the waiting list for **"+ clan_name + "**.")
         except ValueError:
             await self.bot.say("Recruit not found in the waiting list.")
+
+    @commands.command(pass_context=True, no_pm=True)
+    async def sendpayouts(self, ctx):
+        """Payout money for clanchest and donations."""
+
+        await self.bot.say("Are you sure? Do this only once a week (yes/no)")
+        answer = await self.bot.wait_for_message(timeout=15, author=ctx.message.author)
+        if answer is None:
+            await self.bot.say("Ok then".format(ctx.prefix))
+        elif answer.content.lower().strip() == "yes":
+            server = ctx.message.server
+            author = ctx.message.author
+            perCrown = 300
+            perDonation = 15
+
+            allowed = await self._is_commander(author)
+
+            if not allowed:
+                await self.bot.say("You dont have enough permissions to add someone to the waiting list. Type !contact to ask for help.")
+                return
+
+            await self.updateClash()
+
+            banks = list(self.bank['374596069989810176'])
+            
+            for key in range(0,len(banks)):
+                if banks[key] in self.clash:
+                    try:
+                        profiletag = self.clash[banks[key]]['tag']
+                        profiledata = requests.get('http://api.cr-api.com/profile/'+profiletag, timeout=10).json()
+                        
+                        if profiledata['clan'] is None:
+                            pass
+                        else: 
+                            clantag = profiledata['clan']['tag']
+                            clandata = requests.get('http://api.cr-api.com/clan/{}'.format(clantag), timeout=10).json()
+
+                            clan_tag = []
+                            clan_donations = []
+                            clan_clanChestCrowns = []
+                            for x in range(0, len(clandata['members'])):
+                                clan_tag.append(clandata['members'][x]['tag'])
+                                clan_donations.append(clandata['members'][x]['donations'])
+                                clan_clanChestCrowns.append(clandata['members'][x]['clanChestCrowns'])
+
+                            index = clan_tag.index(profiletag)
+                            amount = (clan_donations[index]*perDonation) + (clan_clanChestCrowns[index]*perDonation)
+
+                            self.bank['374596069989810176'][banks[key]]['balance'] += amount
+                            dataIO.save_json('data/economy/bank.json', self.bank)
+
+                            user = discord.utils.get(ctx.message.server.members, id = banks[key])
+                            await self.bot.send_message(user,"Hello " + user.name + ", take these credits for the donations and crowns contributed to your clan this week. (+" + str(amount) + " credits!)")
+
+                    except Exception as e:
+                        await self.bot.say(e)
+
+            await self.bot.say("Weekly contribution payouts have been distributed.")
    
 def check_folders():
     if not os.path.exists("data/legend"):
