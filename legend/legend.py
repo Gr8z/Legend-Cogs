@@ -302,7 +302,7 @@ class legend:
             welcomeMsg = rand_choice(self.welcome["GREETING"])
             await self.bot.send_message(discord.Object(id='374596069989810178'), welcomeMsg.format(member, server))
 
-            await self._remove_roles(member, ['Guests'])
+            await self._remove_roles(member, ['Guest'])
 
             await asyncio.sleep(300)
             await self.bot.send_message(member,rules_text)
