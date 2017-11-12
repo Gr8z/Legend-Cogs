@@ -514,7 +514,7 @@ class legend:
     async def guest(self, ctx, member: discord.Member):
         """Toggle waiting Role for members"""
         server = ctx.message.server
-        role = discord.utils.get(server.roles, name="Guests")
+        role = discord.utils.get(server.roles, name="Guest")
         try:
             await self.bot.add_roles(member, role)
         except discord.Forbidden:
