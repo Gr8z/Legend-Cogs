@@ -750,6 +750,7 @@ class legend:
             await self.bot.say("Recruit not found in the waiting list.")
 
     @commands.command(pass_context=True, no_pm=True)
+    @checks.is_owner()
     async def sendpayouts(self, ctx):
         """Payout money for clanchest and donations."""
 
@@ -762,12 +763,6 @@ class legend:
             author = ctx.message.author
             perCrown = 300
             perDonation = 15
-
-            allowed = await self._is_commander(author)
-
-            if not allowed:
-                await self.bot.say("You dont have enough permissions to add someone to the waiting list. Type !contact to ask for help.")
-                return
 
             await self.updateClash()
 
