@@ -658,7 +658,6 @@ class legend:
             await self.bot.say("Please use a valid clanname : d8, esports, squad, d82, prime, legion, rising, phantom, plague, d83, academy")
             return
 
-        leftClan = False # False
         try:
             await self.updateClash()
             profiletag = self.clash[member.id]['tag']
@@ -666,7 +665,6 @@ class legend:
             clandata = requests.get('http://api.cr-api.com/clan/{}'.format(clan_tag), timeout=10).json()
             ign = profiledata['name']
             if profiledata['clan'] is None:
-                leftClan = True
                 clantag = ""
                 clanname = ""
             else: 
@@ -690,9 +688,6 @@ class legend:
                 break
 
         if membership:
-            if not leftClan:
-                await self.bot.say("Cannot add you to the waiting list, You have not yet left your current clan.")
-                return
 
             trophies = profiledata['trophies']
             maxtrophies = profiledata['stats']['maxTrophies']
