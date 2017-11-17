@@ -43,11 +43,30 @@ class clashroyale:
 
 	def __init__(self, bot):
 		self.bot = bot
+		self.path = "data/clashroyale/"
 		self.clash = dataIO.load_json(clash)
 		self.clash_mini = dataIO.load_json(clash_mini)
 		self.brawl = dataIO.load_json(brawl)
 		self.cycle = dataIO.load_json(cycle)
+		self.settings = dataIO.load_json(self.path+"settings.json")
+	
+	def save_tags(self):
+		dataIO.save_json(clash, self.clash)
 
+	def save_mini_tags(self):
+		dataIO.save_json(clash_mini, self.clash_mini)
+	
+	@commands.command(pass_context=True)
+	@checks.mod_or_permissions(administrator=True)
+	async def clashadminrole(self, ctx, role: discord.Role, *moreroles: discord.Role):
+		saveroles = [role.id]
+		for roles in moreroles:
+			saveroles += [roles.id]
+
+		self.settings[ctx.message.server.id] = saveroles
+		dataIO.save_json(self.path+"settings.json", self.settings)
+		await self.bot.say("Success")
+		
 	@commands.command(pass_context=True, aliases=['clashprofile','cprofile','cProfile'])
 	async def clashProfile(self, ctx, member: discord.Member = None):
 		"""View your Clash Royale Profile Data and Statstics."""
@@ -345,6 +364,72 @@ class clashroyale:
 			return
 		except:
 			await self.bot.say("We cannot find your ID in our database, please try again. Type !contact to ask for help.")
+			
+	async def save_engine(self, ctx, profiletag, member, is_mini):
+		server = ctx.message.server
+		author = ctx.message.author
+		client = AsyncClient()
+
+		profiletag = profiletag.strip('#').upper().replace('O', '0')
+		check = ['P', 'Y', 'L', 'Q', 'G', 'R', 'J', 'C', 'U', 'V', '0', '2', '8', '9']
+
+		if any(i not in check for i in profiletag):
+			await self.bot.say("The ID you provided has invalid characters.")
+			return
+
+		allowed = False
+		if member is None:
+			allowed = True
+		elif member.id == author.id:
+			allowed = True
+		else:
+			for role in self.settings[server.id]:
+				if role in [adminrole.id for adminrole in author.roles]:
+					allowed = True
+					break
+
+		if not allowed:
+			await self.bot.say("You dont have enough permissions to set tags for others.")
+			return
+
+		if member is None:
+			member = ctx.message.author
+
+		try:
+			profiledata = await client.get_profile(profiletag)
+
+			# self.clash.update({member.id: {'tag': profiletag}})
+		except:
+			await self.bot.say("We cannot find your ID in our database, please try again.")
+			return
+		
+		
+		if is_mini:
+			if "8CL09V0C" not in profiledata['clan']['tag']:
+				await self.bot.say("This feature is only available to members of LeGEnD Minis!")
+				return
+				
+			if not self.clash_mini[member.id]:
+				self.clash_mini[member.id] = {'tag': []}
+			
+			self.clash_mini[member.id]['tag'].append(profiletag)
+			
+			self.save_mini_tags()
+			
+			await self.bot.say('Mini player **'
+							   + profiledata.name
+							   + ' (#' + profiletag
+							   + ')** has been successfully saved on '
+							   + member.mention)
+		else:
+			self.clash[member.id] = {'tag': profiletag}
+			self.save_tags()
+
+			await self.bot.say('**'
+							   + profiledata.name
+							   + ' (#' + profiletag
+							   + ')** has been successfully saved on '
+							   + member.mention)
 
 	@save.command(pass_context=True, name="brawl")
 	async def save_brawl(self, ctx, profiletag : str, member: discord.Member = None):
