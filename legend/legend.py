@@ -743,7 +743,66 @@ class legend:
             await self.bot.say(member.mention + " has been removed from the waiting list for **"+ clan_name + "**.")
         except ValueError:
             await self.bot.say("Recruit not found in the waiting list.")
-   
+
+    @commands.command(pass_context=True, no_pm=True)
+    async def inactive(self, ctx, member: discord.Member):
+        """Use this command after kicking people from clan"""
+
+        server = ctx.message.server
+        author = ctx.message.author
+        legendServer = ["374596069989810176"]
+
+        if server.id not in legendServer:
+            await self.bot.say("This command can only be executed in the LeGeND Family Server")
+            return
+
+        allowed = await self._is_commander(author)
+
+        if not allowed:
+            await self.bot.say("You dont have enough permissions to delete someone to the waiting list. Type !contact to ask for help.")
+            return
+
+        try:
+            await self.updateClash()
+            profiletag = self.clash[member.id]['tag']
+            profiledata = requests.get('http://api.cr-api.com/profile/'+profiletag, timeout=10).json()
+            ign = profiledata['name']
+            if profiledata['clan'] is None:
+                clantag = ""
+                clanname = ""
+            else: 
+                clantag = profiledata['clan']['tag']
+                clanname = profiledata['clan']['name']
+        except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
+            await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
+            return
+        except requests.exceptions.RequestException as e:
+            await self.bot.say(e)
+            return
+        except:
+            await self.bot.say("You must assosiate a tag with this member first using ``!save clash #tag @member``")
+            return
+
+        membership = True
+        for x in range(0, len(clanArray)):
+            if clantag == self.c[clanArray[x]]['tag']:
+                membership = True # False
+                clindex = int(x)
+                break
+
+        if membership:
+            rolesToRemove = ["Member"]
+            for x in range(0,numClans):
+                rolesToRemove.append(self.c[clanArray[x]]['role'])
+
+            await self._remove_roles(member, rolesToRemove)
+
+            await self.bot.send_message(member, "Hey there, I am sorry to inform you that we have removed you from the clan for not meeting the proper activity requirements. We hope to see you back again soon when you are able to follow the clan requirements.")
+
+            await self.bot.say("Member and clan roles removed.")
+        else:
+            await self.bot.say("Error, This user is still in a clan in the family.")
+
 def check_folders():
     if not os.path.exists("data/legend"):
         print("Creating data/legend folder...")
