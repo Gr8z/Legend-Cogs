@@ -786,7 +786,7 @@ class legend:
         membership = True
         for x in range(0, len(clanArray)):
             if clantag == self.c[clanArray[x]]['tag']:
-                membership = True # False
+                membership = False # False
                 clindex = int(x)
                 break
 
