@@ -161,6 +161,7 @@ class tournament:
     			embed.set_footer(text=credits, icon_url=creditIcon)
     			await self.bot.say(embed=embed)
     			return
+
 	@tourney.command(pass_context=True, no_pm=True)
 	@checks.admin_or_permissions(administrator=True)
 	async def channel(self, ctx, channel: discord.Channel=None):
@@ -171,7 +172,8 @@ class tournament:
 		else:
 			self.settings[serverid] = channel.id
 			await self.bot.say("Tournament channel for this server set to "+channel.mention)
-		self.save_data()	
+		self.save_data()
+
 def check_folders():
 	if not os.path.exists("data/tourney"):
 		print("Creating data/tourney folder...")
