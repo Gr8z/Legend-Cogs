@@ -64,5 +64,39 @@ class shop:
                     #await self.bot.say("Unable to send payout")
                     await self.bot.say(e)
 
+    @commands.group(pass_context=True)
+    async def buy(self, ctx):
+        """Buy different items from the legend shop"""
+        author = ctx.message.author
+
+        await self.bot.type()
+
+        if ctx.invoked_subcommand is None:
+            await self.bot.send_file(ctx.message.channel, 'FIF5sug.png')
+
+    @buy.command(pass_context=True, name="1")
+    async def save_brawl(self):
+        await self.bot.say("Command not ready yet, please contact @GR8#7968 to purchase it for you.")
+
+    @buy.command(pass_context=True, name="2")
+    async def save_brawl(self):
+        await self.bot.say("Command not ready yet, please contact @GR8#7968 to purchase it for you.")
+
+    @buy.command(pass_context=True, name="3")
+    async def save_brawl(self):
+        await self.bot.say("Command not ready yet, please contact @GR8#7968 to purchase it for you.")
+
+    @buy.command(pass_context=True, name="4")
+    async def save_brawl(self):
+        await self.bot.say("Command not ready yet, please contact @GR8#7968 to purchase it for you.")
+
+    @buy.command(pass_context=True, name="5")
+    async def save_brawl(self):
+        await self.bot.say("Command not ready yet, please contact @GR8#7968 to purchase it for you.")
+        
+    @buy.command(pass_context=True, name="6")
+    async def save_brawl(self):
+        await self.bot.say("Command not ready yet, please contact @GR8#7968 to purchase it for you.")
+
 def setup(bot):
     bot.add_cog(shop(bot))
