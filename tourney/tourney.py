@@ -6,6 +6,9 @@ from bs4 import BeautifulSoup
 import asyncio
 import random
 import json
+from cogs.utils import checks
+from .utils.dataIO import dataIO
+import os
 
 lastTag = '0'
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
@@ -86,7 +89,13 @@ class tournament:
 
     def __init__(self, bot):
         self.bot = bot
-
+		self.path = 'data/tourney/settings.json'
+		self.settings = dataIO.load_json(self.path)
+		
+	def save_data(self):
+		"""Saves the json"""
+		dataIO.save_json(self.path, self.settings)
+	
 
     # checks for a tourney every 5 minutes
     async def checkTourney(self):
@@ -101,14 +110,16 @@ class tournament:
 		    	embed.add_field(name="Ends In", value=data['time'], inline=True)
 		    	embed.add_field(name="Top prize", value="<:coin:351316742569721857> " + str(data['gold']) + "     <:tournamentcards:351316762614300672> " +  str(data['cards']), inline=True)
 		    	embed.set_footer(text=credits, icon_url=creditIcon)
-
-		    	await self.bot.send_message(discord.Object(id='374597050530136064'), embed=embed) # Family
+				
+				for serverid in self.settings.keys():
+					if self.settings[serverid]:
+						await self.bot.send_message(discord.Object(id=self.settings[serverid]), embed=embed) # Family
 		    	#await self.bot.send_message(discord.Object(id='363728974821457923'), embed=embed) # testing
 
 		    	await asyncio.sleep(900)
     		await asyncio.sleep(120)
 
-    @commands.command()
+    @commands.group()
     async def tourney(self):
 
     	await self.bot.type()
@@ -150,8 +161,30 @@ class tournament:
     			embed.set_footer(text=credits, icon_url=creditIcon)
     			await self.bot.say(embed=embed)
     			return
+	@tourney.command(pass_context=True, no_pm=True)
+	@checks.admin_or_permissions(administrator=True)
+	async def channel(self, ctx, channel: discord.Channel=None):
+		serverid = ctx.message.server.id
+		if not channel:
+			self.settings[serverid] = None
+			await self.bot.say("Tournament channel for this server cleared")
+		else:
+			self.settings[serverid] = channel.id
+			await self.bot.say("Tournament channel for this server set to "+channel.mention)
+		self.save_data()	
+def check_folders():
+	if not os.path.exists("data/tourney"):
+		print("Creating data/tourney folder...")
+		os.makedirs("data/tourney")
+
+def check_files():
+	f = "data/tourney/settings.json"
+	if not dataIO.is_valid_json(f):
+	dataIO.save_json(f, {})
 
 def setup(bot):
+	check_folders()
+	check_files()
 	n = tournament(bot)
 	loop = asyncio.get_event_loop()
 	loop.create_task(n.checkTourney())
