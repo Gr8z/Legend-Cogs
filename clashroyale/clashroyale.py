@@ -13,7 +13,11 @@ import os
 import aiohttp
 from __main__ import send_cmd_help
 import asyncio
-from crapipy import AsyncClient
+try:
+	from crapipy import AsyncClient
+	apiAvailable = True
+except:
+	apiAvailable = False
 
 BOTCOMMANDER_ROLES =  ["Family Representative", "Clan Manager", "Clan Deputy", "Co-Leader", "Hub Officer", "admin"];
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
@@ -414,7 +418,8 @@ def check_files():
 def setup(bot):
 	check_folders()
 	check_files()
-	if soupAvailable:
-		bot.add_cog(clashroyale(bot))
-	else:
+	if not soupAvailable:
 		raise RuntimeError("You need to run `pip3 install beautifulsoup4`")
+	if not apiAvailable:
+		raise RuntimeError("You need to run `pip3 install crapipy`")
+	bot.add_cog(clashroyale(bot))
