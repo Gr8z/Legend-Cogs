@@ -200,9 +200,9 @@ class clashroyale:
 				newPos += 1
 				valuechest += str(self.cycle[newPos])			
 
-		chest1 = clashemoji["giant"]+" +" + str(chest_first_index(position, "<:giant:378666281412591618>")) + "  "
+		chest1 = clashemoji["giant"]+" +" + str(chest_first_index(position, "<:giant:348771194096320513>")) + "  "
 		chest2 = clashemoji["epic"]+" +" + str(profiledata.chest_cycle.epic_pos-position) + "  "
-		chest3 = clashemoji["magic"]+" +" + str(chest_first_index(position, "<:magic:378666317613498370>")) + "  "
+		chest3 = clashemoji["magic"]+" +" + str(chest_first_index(position, "<:magic:348771235968319488>")) + "  "
 		chest4 = clashemoji["super"]+" +" + str(profiledata.chest_cycle.super_magical_pos-position) + "  " 
 		if profiledata.chest_cycle.legendary_pos is not None:
 			chest5 = clashemoji["legend"]+" +" + str(profiledata.chest_cycle.legendary_pos-position)
