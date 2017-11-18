@@ -64,6 +64,16 @@ There are 2 factors to win: convince more players to participate within your cla
 **3 golden Rules for clanwars:** We respect the Opponent (no BMing if you win), we play to have fun (no obligation to participate), and don't join if you think you cannot play.
 """
 
+coaching_info = """If you are looking to climb in your trophies and get better at the game, we have coaches at Legend Academy that can help you get to the top! Come join the Academy server and start a session with a dedicated coach now at https://discord.gg/b8r86Hg
+"""
+
+social_info = """Stay Social! Come and follow us on these platforms to stay up to date on the latest news and announcements.
+
+https://twitter.com/TheLegendClans
+https://www.facebook.com/LegendClans
+https://www.instagram.com/legendclans
+"""
+
 class legend:
 
     def __init__(self, bot):
@@ -316,6 +326,12 @@ class legend:
 
             await asyncio.sleep(300)
             await self.bot.send_message(member,cw_info)
+
+            await asyncio.sleep(300)
+            await self.bot.send_message(member,coaching_info)
+
+            await asyncio.sleep(300)
+            await self.bot.send_message(member,social_info)
         else:
             await self.bot.say("You must be accepted into a clan before I can give you clan roles.")
 
