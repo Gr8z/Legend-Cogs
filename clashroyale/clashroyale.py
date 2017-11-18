@@ -290,7 +290,9 @@ class clashroyale:
 		server = ctx.message.server
 		author = ctx.message.author
 		
+		allowed = False
 		if member is None:
+			member = ctx.message.author
 			allowed = True
 		elif member.id == author.id:
 			allowed = True
@@ -323,6 +325,7 @@ class clashroyale:
 
 		allowed = False
 		if member is None:
+			member = ctx.message.author
 			allowed = True
 		elif member.id == author.id:
 			allowed = True
@@ -335,9 +338,6 @@ class clashroyale:
 		if not allowed:
 			await self.bot.say("You dont have enough permissions to set tags for others.")
 			return
-
-		if member is None:
-			member = ctx.message.author
 
 		try:
 			profiledata = await client.get_profile(profiletag)
@@ -448,16 +448,21 @@ def check_folders():
 	if not os.path.exists("data/clashroyale"):
 		print("Creating data/clashroyale folder...")
 		os.makedirs("data/clashroyale")
+		
+	if not os.path.exists("data/BrawlStats"):
+		print("Creating data/BrawlStats folder...")
+		os.makedirs("data/BrawlStats")
 
 def check_files():
 	f = "cogs/tags.json"
 	if not fileIO(f, "check"):
 		print("Creating empty tags.json...")
-		fileIO(f, "save", [])
+		fileIO(f, "save", {})
+
 	f = "cogs/mini_tags.json"
 	if not fileIO(f, "check"):
 		print("Creating empty mini_tags.json...")
-		fileIO(f, "save", [])
+		fileIO(f, "save", {})
 		
 	f = "data/clashroyale/tags.json"
 	if not dataIO.is_valid_json(f):
@@ -467,11 +472,11 @@ def check_files():
 	if not dataIO.is_valid_json(f):
 		dataIO.save_json(f, {})
 
-	f = "data/legend/settings.json"
+	f = "data/clashroyale/settings.json"
 	if not dataIO.is_valid_json(f):
 		dataIO.save_json(f, {})
-	
-	f = "data/legend/settings.json"
+		
+	f = "data/BrawlStats/tags.json"
 	if not dataIO.is_valid_json(f):
 		dataIO.save_json(f, {})
 		
