@@ -641,7 +641,7 @@ class legend:
                 "If you do not see a 'request to join' button, make sure you leave your current clan and check the trophy requirements. \n\n" + 
                 "**IMPORTANT**: Once your clan leader has accepted your request, let a staff member in discord know that you have been accepted. They will then unlock all the member channels for you."
                 )
-            await self.bot.say(member.mention + " has been approved for **" + clan_name + "** please check your DM for instructions on how to join.")
+            await self.bot.say(member.mention + " has been approved for **" + clan_name + "**. Please check your DM for instructions on how to join.")
 
             roleName = discord.utils.get(server.roles, name=clan_role)
             await self.bot.send_message(discord.Object(id='375839851955748874'), roleName.mention + " \nName: " + ign + "\n" + "Recruit Code: ``" + recruitCode + "``")
