@@ -35,6 +35,7 @@ commands_text =  """Here are some of the Legend Family Bot commands, you can use
 **!payday** - receive your 300 credits every 30 minutes.
 **!heist** - Play a heist with a crew in #heist channel.
 **!slot** - Play the slot machine.
+**!buy** - Take a look at what you can purchase with your credits.
 **!profile** - view your server profile.
 **!deck** - make and save your deck.
 **!legend** - to see status of all Legend Family clans.
