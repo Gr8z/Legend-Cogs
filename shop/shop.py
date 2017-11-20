@@ -15,6 +15,76 @@ class shop:
     async def updateClash(self):
         self.clash = dataIO.load_json('cogs/tags.json')
 
+    async def _add_roles(self, member, role_names):
+        """Add roles"""
+        server = member.server
+        roles = [discord.utils.get(server.roles, name=role_name) for role_name in role_names]
+        try:
+            await self.bot.add_roles(member, *roles)
+        except discord.Forbidden:
+            raise
+        except discord.HTTPException:
+            raise
+
+    async def _remove_roles(self, member, role_names):
+        """Remove roles"""
+        server = member.server
+        roles = [discord.utils.get(server.roles, name=role_name) for role_name in role_names]
+        try:
+            await self.bot.remove_roles(member, *roles)
+        except:
+            pass
+
+    async def _is_member(self, member):
+        server = member.server
+        botcommander_roles = [discord.utils.get(server.roles, name=r) for r in ["Member"]]
+        botcommander_roles = set(botcommander_roles)
+        author_roles = set(member.roles)
+        if len(author_roles.intersection(botcommander_roles)):
+            return True
+        else:
+            return False
+            
+    async def _is_rare(self, member):
+        server = member.server
+        botcommander_roles = [discord.utils.get(server.roles, name=r) for r in ["Rare™"]]
+        botcommander_roles = set(botcommander_roles)
+        author_roles = set(member.roles)
+        if len(author_roles.intersection(botcommander_roles)):
+            return True
+        else:
+            return False
+            
+    async def _is_epic(self, member):
+        server = member.server
+        botcommander_roles = [discord.utils.get(server.roles, name=r) for r in ["Epic™"]]
+        botcommander_roles = set(botcommander_roles)
+        author_roles = set(member.roles)
+        if len(author_roles.intersection(botcommander_roles)):
+            return True
+        else:
+            return False
+
+    async def _is_legendary(self, member):
+        server = member.server
+        botcommander_roles = [discord.utils.get(server.roles, name=r) for r in ["LeGeNDary™"]]
+        botcommander_roles = set(botcommander_roles)
+        author_roles = set(member.roles)
+        if len(author_roles.intersection(botcommander_roles)):
+            return True
+        else:
+            return False
+
+    def bank_check(self, user, amount):
+        bank = self.bot.get_cog('Economy').bank
+        if bank.account_exists(user):
+            if bank.can_spend(user, amount):
+                return True
+            else:
+                return False
+        else:
+            return False
+
     @commands.command(pass_context=True, no_pm=True)
     @checks.is_owner()
     async def sendpayouts(self, ctx):
@@ -75,28 +145,165 @@ class shop:
             await self.bot.send_file(ctx.message.channel, 'FIF5sug.png')
 
     @buy.command(pass_context=True, name="1")
-    async def save_brawl(self):
+    async def buy_1(self):
+
+
+        server = ctx.message.server
+        author = ctx.message.author
+        legendServer = ["374596069989810176"]
+
+        if server.id not in legendServer:
+            await self.bot.say("This command can only be executed in the LeGeND Family Server")
+            return
+
+        allowed = await self._is_member(author)
+
+        if not allowed:
+            await self.bot.say("You cannot use the store, you must be a member of the family. Type !contact to ask for help.")
+            return
+
         await self.bot.say("Command not ready yet, please contact @GR8#7968 to purchase it for you.")
 
     @buy.command(pass_context=True, name="2")
-    async def save_brawl(self):
+    async def buy_2(self):
+
+
+        server = ctx.message.server
+        author = ctx.message.author
+        legendServer = ["374596069989810176"]
+
+        if server.id not in legendServer:
+            await self.bot.say("This command can only be executed in the LeGeND Family Server")
+            return
+
+        allowed = await self._is_member(author)
+
+        if not allowed:
+            await self.bot.say("You cannot use the store, you must be a member of the family. Type !contact to ask for help.")
+            return
+
         await self.bot.say("Command not ready yet, please contact @GR8#7968 to purchase it for you.")
 
     @buy.command(pass_context=True, name="3")
-    async def save_brawl(self):
+    async def buy_3(self):
+
+        server = ctx.message.server
+        author = ctx.message.author
+        legendServer = ["374596069989810176"]
+
+        if server.id not in legendServer:
+            await self.bot.say("This command can only be executed in the LeGeND Family Server")
+            return
+
+        allowed = await self._is_member(author)
+
+        if not allowed:
+            await self.bot.say("You cannot use the store, you must be a member of the family. Type !contact to ask for help.")
+            return
+
         await self.bot.say("Command not ready yet, please contact @GR8#7968 to purchase it for you.")
 
     @buy.command(pass_context=True, name="4")
-    async def save_brawl(self):
-        await self.bot.say("Command not ready yet, please contact @GR8#7968 to purchase it for you.")
+    async def buy_4(self , ctx):
+        """ Buy Rare Role from the shop """
+        server = ctx.message.server
+        author = ctx.message.author
+        legendServer = ["374596069989810176"]
+
+        if server.id not in legendServer:
+            await self.bot.say("This command can only be executed in the LeGeND Family Server")
+            return
+
+        allowed = await self._is_member(author)
+
+        if not allowed:
+            await self.bot.say("You cannot use the store, you must be a member of the family. Type !contact to ask for help.")
+            return
+
+        rare = await self._is_rare(author)
+        epic = await self._is_epic(author)
+        legendary = await self._is_legendary(author)
+
+        if rare or epic or legendary:
+            await self.bot.say("You are already have a special role. Type !contact to ask for help.")
+            return
+
+        if self.bank_check(author, 50000):
+            await self._add_roles(author,["Rare™"])
+            await self.bot.say("Congratulations, you are now a **Rare™**")
+        else:
+            await self.bot.say("You do not have enough credits to buy this role. Type !contact to ask for help.")
 
     @buy.command(pass_context=True, name="5")
-    async def save_brawl(self):
-        await self.bot.say("Command not ready yet, please contact @GR8#7968 to purchase it for you.")
+    async def buy_5(self , ctx):
+        """ Buy Epic Role from the shop """
+        server = ctx.message.server
+        author = ctx.message.author
+        legendServer = ["374596069989810176"]
+
+        if server.id not in legendServer:
+            await self.bot.say("This command can only be executed in the LeGeND Family Server")
+            return
+
+        allowed = await self._is_member(author)
+
+        if not allowed:
+            await self.bot.say("You cannot use the store, you must be a member of the family. Type !contact to ask for help.")
+            return
+
+        rare = await self._is_rare(author)
+        epic = await self._is_epic(author)
+        legendary = await self._is_legendary(author)
+
+        if not rare:
+            await self.bot.say("You need to have **Rare™** to buy this role. Type !contact to ask for help.")
+            return    
+
+        if epic or legendary:
+            await self.bot.say("You are already have a special role. Type !contact to ask for help.")
+            return
+
+        if self.bank_check(author, 100000):
+            await self._add_roles(author,["Epic™"])
+            await self.bot.say("Congratulations, you are now a **Epic™**")
+        else:
+            await self.bot.say("You do not have enough credits to buy this role. Type !contact to ask for help.")
         
     @buy.command(pass_context=True, name="6")
-    async def save_brawl(self):
-        await self.bot.say("Command not ready yet, please contact @GR8#7968 to purchase it for you.")
+    async def buy_6(self , ctx):
+        """ Buy Legendary Role from the shop """
+
+        server = ctx.message.server
+        author = ctx.message.author
+        legendServer = ["374596069989810176"]
+
+        if server.id not in legendServer:
+            await self.bot.say("This command can only be executed in the LeGeND Family Server")
+            return
+
+        allowed = await self._is_member(author)
+
+        if not allowed:
+            await self.bot.say("You cannot use the store, you must be a member of the family. Type !contact to ask for help.")
+            return
+
+        rare = await self._is_rare(author)
+        epic = await self._is_epic(author)
+        legendary = await self._is_legendary(author)
+
+        if not epic:
+            await self.bot.say("You need to have **Epic™** to buy this role. Type !contact to ask for help.")
+            return    
+
+        if legendary:
+            await self.bot.say("You are already have a special role. Type !contact to ask for help.")
+            return
+
+        if self.bank_check(author, 250000):
+            await self._add_roles(author,["LeGeNDary™"])
+            await self.bot.say("Congratulations, you are now a **LeGeNDary™**")
+        else:
+            await self.bot.say("You do not have enough credits to buy this role. Type !contact to ask for help.")
 
 def setup(bot):
     bot.add_cog(shop(bot))
