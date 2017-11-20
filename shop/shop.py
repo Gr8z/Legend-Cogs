@@ -145,7 +145,7 @@ class shop:
             await self.bot.send_file(ctx.message.channel, 'FIF5sug.png')
 
     @buy.command(pass_context=True, name="1")
-    async def buy_1(self):
+    async def buy_1(self, ctx):
 
 
         server = ctx.message.server
@@ -165,7 +165,7 @@ class shop:
         await self.bot.say("Command not ready yet, please contact @GR8#7968 to purchase it for you.")
 
     @buy.command(pass_context=True, name="2")
-    async def buy_2(self):
+    async def buy_2(self, ctx):
 
 
         server = ctx.message.server
@@ -185,7 +185,7 @@ class shop:
         await self.bot.say("Command not ready yet, please contact @GR8#7968 to purchase it for you.")
 
     @buy.command(pass_context=True, name="3")
-    async def buy_3(self):
+    async def buy_3(self, ctx):
 
         server = ctx.message.server
         author = ctx.message.author
