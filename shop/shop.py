@@ -37,7 +37,7 @@ class shop:
 
     async def _is_member(self, member):
         server = member.server
-        botcommander_roles = [discord.utils.get(server.roles, name=r) for r in ["Member"]]
+        botcommander_roles = [discord.utils.get(server.roles, name=r) for r in ["Member", "Family Representative", "Clan Manager", "Clan Deputy", "Co-Leader", "Hub Officer", "admin"]]
         botcommander_roles = set(botcommander_roles)
         author_roles = set(member.roles)
         if len(author_roles.intersection(botcommander_roles)):
