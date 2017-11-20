@@ -231,7 +231,7 @@ class shop:
         if self.bank_check(author, 50000):
             bank = self.bot.get_cog('Economy').bank
             pay = bank.get_balance(author) + 50000
-            bank.set_credits(user, pay)
+            bank.set_credits(author, pay)
             await self._add_roles(author,["Rare™"])
             await self.bot.say("Congratulations, you are now a **Rare™**")
         else:
@@ -269,7 +269,7 @@ class shop:
         if self.bank_check(author, 100000):
             bank = self.bot.get_cog('Economy').bank
             pay = bank.get_balance(author) + 100000
-            bank.set_credits(user, pay)
+            bank.set_credits(author, pay)
             await self._add_roles(author,["Epic™"])
             await self.bot.say("Congratulations, you are now a **Epic™**")
         else:
@@ -308,7 +308,7 @@ class shop:
         if self.bank_check(author, 250000):
             bank = self.bot.get_cog('Economy').bank
             pay = bank.get_balance(author) + 250000
-            bank.set_credits(user, pay)
+            bank.set_credits(author, pay)
             await self._add_roles(author,["LeGeNDary™"])
             await self.bot.say("Congratulations, you are now a **LeGeNDary™**")
         else:
