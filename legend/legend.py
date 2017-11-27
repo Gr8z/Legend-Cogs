@@ -533,6 +533,14 @@ class legend:
     async def guest(self, ctx, member: discord.Member):
         """Toggle waiting Role for members"""
         server = ctx.message.server
+        author = ctx.message.author
+        
+        allowed = await self._is_commander(author)
+
+        if not allowed:
+            await self.bot.say("You dont have enough permissions to assign guest role. Type !contact to ask for help.")
+            return
+
         role = discord.utils.get(server.roles, name="Guest")
         try:
             await self.bot.add_roles(member, role)
