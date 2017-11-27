@@ -70,7 +70,7 @@ class clashroyale:
 	    		embed.add_field(name="Clan", value=profiledata.clan.name, inline=True)
 	    		embed.add_field(name="Role", value=profiledata.clan.role, inline=True)
 	    	embed.add_field(name="Cards Found", value=str(profiledata.stats.cardsFound)+"/78", inline=True)
-	    	embed.add_field(name="Favourite Card", value=profiledata.stats.favoriteCard, inline=True)
+	    	embed.add_field(name="Favourite Card", value=profiledata.stats.replace('_', ' ').capitalize(), inline=True)
 	    	embed.add_field(name="Chests Opened", value=profiledata.chest_cycle.position, inline=True)
 	    	embed.add_field(name="Games Played", value=profiledata.games.total, inline=True)
 	    	embed.add_field(name="Tournament Games Played", value=profiledata.games.tournamentGames, inline=True)
