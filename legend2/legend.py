@@ -61,9 +61,9 @@ class legend:
     async def registerclan(self, ctx, clankey, ctag, role: discord.Role, nickname):
         
         toregister = {
-		"tag": ctag,
-		"role_id" : role.id,
-		"nickname" : nickname
+        "tag": ctag,
+        "role_id" : role.id,
+        "nickname" : nickname
         }
         
         self.c[clankey] = toregister
