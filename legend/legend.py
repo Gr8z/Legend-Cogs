@@ -87,7 +87,11 @@ class legend:
 
     async def updateClash(self):
         self.clash = dataIO.load_json('cogs/tags.json')
-
+        
+    def save_data(self):
+        """Saves the json"""
+        dataIO.save_json('data/legend/clans.json', self.c)
+        
     async def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
        return ''.join(random.choice(chars) for _ in range(size))
 
@@ -107,6 +111,29 @@ class legend:
         server = member.server
         roles = [discord.utils.get(server.roles, name=role_name) for role_name in role_names]
         try:
+    @commands.command(pass_context=True)
+    @checks.mod_or_permissions(administrator=True)
+    async def registerclan(self, ctx, clankey, ctag, role: discord.Role, nickname):
+        
+        toregister = {
+        "tag": ctag,
+        "role_id" : role.id,
+        "nickname" : nickname
+        }
+        
+        self.c[clankey] = toregister
+        self.save_data()
+        await self.bot.say("Success")
+        
+    @commands.command(pass_context=True)
+    @checks.mod_or_permissions(administrator=True)
+    async def deleteclan(self, ctx, clankey):
+    
+        if self.c.pop(clankey, None):
+            self.save_data()
+            await self.bot.say("Success")
+            return
+        await self.bot.say("Failed")         
             await self.bot.remove_roles(member, *roles)
         except:
             pass
