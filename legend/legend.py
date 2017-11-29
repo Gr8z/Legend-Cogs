@@ -285,7 +285,7 @@ class legend:
             role_names = [self.c[clanArray[clindex]]['role'], 'Member']
             try:
                 await self._add_roles(member, role_names)
-                mymessage += "** " + self.c[clanArray[clindex]]['role'] + " ** and **Member** roles added."
+                mymessage += "**" + self.c[clanArray[clindex]]['role'] + " ** and **Member** roles added."
             except discord.Forbidden:
                 await self.bot.say(
                     "{} does not have permission to edit {}’s roles.".format(
