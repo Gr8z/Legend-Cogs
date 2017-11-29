@@ -3,6 +3,7 @@ from discord.ext import commands
 import requests
 from .utils.dataIO import dataIO, fileIO
 from cogs.utils import checks
+import asyncio
 
 class shop:
     """Legend Family Shop for credits"""
@@ -270,8 +271,9 @@ class shop:
             bank = self.bot.get_cog('Economy').bank
             pay = bank.get_balance(author) - 100000
             bank.set_credits(author, pay)
-            await self._add_roles(author,["Epic™"])
             await self._remove_roles(author,["Rare™"])
+            await asyncio.sleep(3)
+            await self._add_roles(author,["Epic™"])
             await self.bot.say("Congratulations, you are now a **Epic™**")
         else:
             await self.bot.say("You do not have enough credits to buy this role. Type !contact to ask for help.")
@@ -310,8 +312,9 @@ class shop:
             bank = self.bot.get_cog('Economy').bank
             pay = bank.get_balance(author) - 250000
             bank.set_credits(author, pay)
-            await self._add_roles(author,["LeGeNDary™"])
             await self._remove_roles(author,["Epic™"])
+            await asyncio.sleep(3)
+            await self._add_roles(author,["LeGeNDary™"])
             await self.bot.say("Congratulations, you are now a **LeGeNDary™**")
         else:
             await self.bot.say("You do not have enough credits to buy this role. Type !contact to ask for help.")

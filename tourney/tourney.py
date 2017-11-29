@@ -112,7 +112,7 @@ class tournament:
 				embed.add_field(name="Tag", value=data['tag'], inline=True)
 				embed.add_field(name="Players", value=data['players'], inline=True)
 				embed.add_field(name="Ends In", value=data['time'], inline=True)
-				embed.add_field(name="Top prize", value="<:coin:351316742569721857> " + str(data['gold']) + "     <:tournamentcards:351316762614300672> " +  str(data['cards']), inline=True)
+				embed.add_field(name="Top prize", value="<:coin:380832316932489268> " + str(data['gold']) + "     <:tournamentcards:380832770454192140> " +  str(data['cards']), inline=True)
 				embed.set_footer(text=credits, icon_url=creditIcon)
 				
 				for serverid in self.settings.keys():
@@ -161,7 +161,7 @@ class tournament:
 				embed.add_field(name="Tag", value="#"+hashtag, inline=True)
 				embed.add_field(name="Players", value=str(totalPlayers) + "/" + str(maxPlayers), inline=True)
 				embed.add_field(name="Ends In", value=sec2tme(timeLeft), inline=True)
-				embed.add_field(name="Top prize", value="<:coin:351316742569721857> " + str(cards) + "     <:tournamentcards:351316762614300672> " +  str(coins), inline=True)
+				embed.add_field(name="Top prize", value="<:coin:380832316932489268> " + str(cards) + "     <:tournamentcards:380832770454192140> " +  str(coins), inline=True)
 				embed.set_footer(text=credits, icon_url=creditIcon)
 				await self.bot.say(embed=embed)
 				return

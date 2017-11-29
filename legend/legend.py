@@ -204,7 +204,7 @@ class legend:
             desc = ":shield: " + showMembers + "     :trophy: " + str(clans[x]['requiredScore']) + "+     :medal: " +str(clans[x]['score'])
             totalMembers += clans[x]['memberCount']
 
-            if (member is None) or ((trophies >= clans[x]['requiredScore']) and (maxtrophies > clans[x]['maxtrophies']) and (clans[x]['memberCount'] < maxmembers) and (clans[x]['typeName'] != "Closed")):
+            if (member is None) or ((trophies >= clans[x]['requiredScore']) and (maxtrophies > clans[x]['maxtrophies'])):
                 foundClan = True
                 embed.add_field(name=title, value=desc, inline=False)
 
@@ -285,7 +285,7 @@ class legend:
             role_names = [self.c[clanArray[clindex]]['role'], 'Member']
             try:
                 await self._add_roles(member, role_names)
-                mymessage += "** " + self.c[clanArray[clindex]]['role'] + " ** and **Member** roles added."
+                mymessage += "**" + self.c[clanArray[clindex]]['role'] + " ** and **Member** roles added."
             except discord.Forbidden:
                 await self.bot.say(
                     "{} does not have permission to edit {}’s roles.".format(
@@ -310,7 +310,7 @@ class legend:
                     )
 
             roleName = discord.utils.get(server.roles, name=role_names[0])
-            await self.bot.send_message(discord.Object(id='375839851955748874'), ctx.message.author.mention + ' recruited ' + '** ' + ign + ' (#'+ profiletag + ')** to ' + roleName.mention)
+            await self.bot.send_message(discord.Object(id='375839851955748874'), '**' + ctx.message.author.name + '** recruited ' + '** ' + ign + ' (#'+ profiletag + ')** to ' + roleName.mention)
 
             welcomeMsg = rand_choice(self.welcome["GREETING"])
             await self.bot.send_message(discord.Object(id='374596069989810178'), welcomeMsg.format(member, server))
@@ -533,6 +533,14 @@ class legend:
     async def guest(self, ctx, member: discord.Member):
         """Toggle waiting Role for members"""
         server = ctx.message.server
+        author = ctx.message.author
+        
+        allowed = await self._is_commander(author)
+
+        if not allowed:
+            await self.bot.say("You dont have enough permissions to assign guest role. Type !contact to ask for help.")
+            return
+
         role = discord.utils.get(server.roles, name="Guest")
         try:
             await self.bot.add_roles(member, role)
@@ -626,6 +634,13 @@ class legend:
                         await self.bot.say("Approval failed, you are not first in queue for the waiting list on this server.")
                         return
                     else:
+                        role = discord.utils.get(server.roles, name="Waiting")
+                        try:
+                            await self.bot.remove_roles(member, role)
+                        except discord.Forbidden:
+                            raise
+                        except discord.HTTPException:
+                            raise
                         self.c[clankey]['waiting'].pop(0)
                         dataIO.save_json('cogs/clans.json', self.c)
                 else:
@@ -721,6 +736,13 @@ class legend:
                 await self.bot.say("You are already in a waiting list for this clan.")
                 return
 
+            role = discord.utils.get(server.roles, name="Waiting")
+            try:
+                await self.bot.add_roles(member, role)
+            except discord.Forbidden:
+                raise
+            except discord.HTTPException:
+                raise
             await self.bot.say(member.mention + " You have been added to the waiting list for **"+ clan_name + "**. We will mention you when a spot is available.")
 
             roleName = discord.utils.get(server.roles, name=clan_role)
@@ -758,6 +780,14 @@ class legend:
         try:
             self.c[clankey]['waiting'].remove(member.id)
             dataIO.save_json('cogs/clans.json', self.c)
+
+            role = discord.utils.get(server.roles, name="Waiting")
+            try:
+                await self.bot.remove_roles(member, role)
+            except discord.Forbidden:
+                raise
+            except discord.HTTPException:
+                raise
             await self.bot.say(member.mention + " has been removed from the waiting list for **"+ clan_name + "**.")
         except ValueError:
             await self.bot.say("Recruit not found in the waiting list.")
