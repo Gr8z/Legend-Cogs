@@ -304,7 +304,7 @@ class legend:
                     "Please do not leave our main or clan servers while you are in the clan. Thank you."
                     )
             else:
-            	await self.bot.send_message(member, 
+                await self.bot.send_message(member, 
                     "Hi There! Congratulations on getting accepted into our family. We have unlocked all the member channels for you in LeGeND Discord Server. \n\n"+
                     "Please do not leave our Discord server while you are in the clan. Thank you."
                     )
