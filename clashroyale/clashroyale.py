@@ -108,7 +108,7 @@ class clashroyale:
 	    		await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 	    		return
 
-	    	offersdesc = "<:epicopen:359759279621668866> " + str(profiledata.shop_offers.epic) + " Days   <:legendaryopen:359759298013691905> " + str(profiledata.shop_offers.legendary) + " Days   <:shopoffer:359759315503939584> " + str(profiledata.shop_offers.arena) + " Days"
+	    	offersdesc = "<:epicopen:380832590254571521> " + str(profiledata.shop_offers.epic) + " Days   <:legendopen:380832387195469826> " + str(profiledata.shop_offers.legendary) + " Days   <:shopoffer:380832689076305924> " + str(profiledata.shop_offers.arena) + " Days"
 
 	    	embed=discord.Embed(title="", description="", color=0x0080ff)
 	    	embed.set_author(name=profiledata.name + " (#"+profiledata.tag+")", icon_url="http://api.cr-api.com"+profiledata.clan.badge.url)
@@ -160,12 +160,12 @@ class clashroyale:
 	    			newPos += 1
 	    			valuechest += str(self.cycle[newPos])	    	
 
-	    	chest1 = "<:giant:348771194096320513> +" + str(chest_first_index(position, "<:giant:348771194096320513>")) + "  "
-	    	chest2 = "<:epic:348771172894113792> +" + str(profiledata.chest_cycle.epic_pos-position) + "  "
-	    	chest3 = "<:magic:348771235968319488> +" + str(chest_first_index(position, "<:magic:348771235968319488>")) + "  "
-	    	chest4 = "<:super:348771259976253442> +" + str(profiledata.chest_cycle.super_magical_pos-position) + "  " 
+	    	chest1 = "<:giant:380832560504373249> +" + str(chest_first_index(position, "<:giant:380832560504373249>")) + "  "
+	    	chest2 = "<:epic:380832620059033610> +" + str(profiledata.chest_cycle.epic_pos-position) + "  "
+	    	chest3 = "<:magic:380832656704798731> +" + str(chest_first_index(position, "<:magic:380832656704798731>")) + "  "
+	    	chest4 = "<:super:380832745305276416> +" + str(profiledata.chest_cycle.super_magical_pos-position) + "  " 
 	    	if profiledata.chest_cycle.legendary_pos is not None:
-	    		chest5 = "<:legendary:348771222558998528> +" + str(profiledata.chest_cycle.legendary_pos-position)
+	    		chest5 = "<:legend:380832458482122752> +" + str(profiledata.chest_cycle.legendary_pos-position)
 	    	else:
 	    		chest5 = ""
 
