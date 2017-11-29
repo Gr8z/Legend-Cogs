@@ -90,7 +90,7 @@ class legend:
         
     def save_data(self):
         """Saves the json"""
-        dataIO.save_json('data/legend/clans.json', self.c)
+        dataIO.save_json('cogs/clans.json', self.c)
         
     async def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
        return ''.join(random.choice(chars) for _ in range(size))
