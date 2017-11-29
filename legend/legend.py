@@ -888,11 +888,12 @@ def check_files():
     f = "cogs/tags.json"
     if not fileIO(f, "check"):
         print("Creating empty tags.json...")
-        fileIO(f, "save", [])
+        dataIO.save_json(f, {})
+
     f = "cogs/clans.json"
     if not fileIO(f, "check"):
         print("Creating empty clans.json...")
-        fileIO(f, "save", [])
+        dataIO.save_json(f, {})
 
 def setup(bot):
     check_folders()
