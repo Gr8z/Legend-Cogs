@@ -111,6 +111,10 @@ class legend:
         server = member.server
         roles = [discord.utils.get(server.roles, name=role_name) for role_name in role_names]
         try:
+            await self.bot.remove_roles(member, *roles)
+        except:
+            pass
+
     @commands.command(pass_context=True)
     @checks.mod_or_permissions(administrator=True)
     async def registerclan(self, ctx, clankey, ctag, role: discord.Role, nickname):
@@ -134,9 +138,6 @@ class legend:
             await self.bot.say("Success")
             return
         await self.bot.say("Failed")         
-            await self.bot.remove_roles(member, *roles)
-        except:
-            pass
 
     async def _is_commander(self, member):
         server = member.server
