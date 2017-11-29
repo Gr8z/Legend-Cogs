@@ -634,6 +634,13 @@ class legend:
                         await self.bot.say("Approval failed, you are not first in queue for the waiting list on this server.")
                         return
                     else:
+                        role = discord.utils.get(server.roles, name="Waiting")
+                        try:
+                            await self.bot.remove_roles(member, role)
+                        except discord.Forbidden:
+                            raise
+                        except discord.HTTPException:
+                            raise
                         self.c[clankey]['waiting'].pop(0)
                         dataIO.save_json('cogs/clans.json', self.c)
                 else:
@@ -729,6 +736,13 @@ class legend:
                 await self.bot.say("You are already in a waiting list for this clan.")
                 return
 
+            role = discord.utils.get(server.roles, name="Waiting")
+            try:
+                await self.bot.add_roles(member, role)
+            except discord.Forbidden:
+                raise
+            except discord.HTTPException:
+                raise
             await self.bot.say(member.mention + " You have been added to the waiting list for **"+ clan_name + "**. We will mention you when a spot is available.")
 
             roleName = discord.utils.get(server.roles, name=clan_role)
@@ -766,6 +780,14 @@ class legend:
         try:
             self.c[clankey]['waiting'].remove(member.id)
             dataIO.save_json('cogs/clans.json', self.c)
+
+            role = discord.utils.get(server.roles, name="Waiting")
+            try:
+                await self.bot.remove_roles(member, role)
+            except discord.Forbidden:
+                raise
+            except discord.HTTPException:
+                raise
             await self.bot.say(member.mention + " has been removed from the waiting list for **"+ clan_name + "**.")
         except ValueError:
             await self.bot.say("Recruit not found in the waiting list.")
