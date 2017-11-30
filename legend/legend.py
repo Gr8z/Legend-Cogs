@@ -398,6 +398,11 @@ class legend:
 
             await self.bot.say(mymessage)
 
+            welcomeMsg = rand_choice(self.welcome["GREETING"])
+            await self.bot.send_message(discord.Object(id='374596069989810178'), welcomeMsg.format(member, server))
+
+            await self._remove_roles(member, ['Guest'])
+
             if self.c[savekey]['discord'] is not None:
                 joinLink = "https://discord.gg/" + str(self.c[savekey]['discord'])
                 await self.bot.send_message(member, 
@@ -414,11 +419,6 @@ class legend:
 
             roleName = discord.utils.get(server.roles, name=role_names[0])
             await self.bot.send_message(discord.Object(id='375839851955748874'), '**' + ctx.message.author.name + '** recruited ' + '** ' + ign + ' (#'+ profiletag + ')** to ' + roleName.mention)
-
-            welcomeMsg = rand_choice(self.welcome["GREETING"])
-            await self.bot.send_message(discord.Object(id='374596069989810178'), welcomeMsg.format(member, server))
-
-            await self._remove_roles(member, ['Guest'])
 
             await asyncio.sleep(300)
             await self.bot.send_message(member,rules_text)
