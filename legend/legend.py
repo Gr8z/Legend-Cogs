@@ -297,7 +297,7 @@ class legend:
                 # title += "Age: 21+"
             
             if bonustitle is not None:
-                title += clans[x]['bonustitle']
+                title += bonustitle
 
             desc = ":shield: " + showMembers + "     :trophy: " + str(clans[x]['requiredScore']) + "+     :medal: " +str(clans[x]['score'])
             totalMembers += clans[x]['memberCount']
