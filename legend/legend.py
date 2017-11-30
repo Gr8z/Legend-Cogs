@@ -95,10 +95,10 @@ class legend:
     async def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
        return ''.join(random.choice(chars) for _ in range(size))
     
-    async def clanArray(self):
+    def clanArray(self):
         return self.c.keys()
     
-    async def numClans(self):
+    def numClans(self):
         return len(self.c.keys())
     
     async def _add_roles(self, member, role_names):
