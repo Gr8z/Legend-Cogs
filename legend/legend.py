@@ -125,7 +125,7 @@ class legend:
     @clans.command(pass_context=True, name="register")
     @checks.mod_or_permissions(administrator=True)
     async def clans_register(self, ctx, clankey, ctag, role: discord.Role, nickname):
-        
+        """Register a clan for tracking"""
         toregister = {
         "tag": ctag,
         "role_id" : role.id,
@@ -140,7 +140,7 @@ class legend:
     @clans.command(pass_context=True, name="delete")
     @checks.mod_or_permissions(administrator=True)
     async def clans_delete(self, ctx, clankey):
-    
+        """Remove a clan from tracking"""
         if self.c.pop(clankey, None):
             self.save_data()
             await self.bot.say("Success")
@@ -150,6 +150,14 @@ class legend:
     @clans.command(pass_context=True, name="pb")
     @checks.mod_or_permissions(administrator=True)
     async def clans_pb(self, ctx, clankey, pb: int):
+        """Set a Personal Best requirement for a clan"""
+        try:
+            self.c[clankey]['maxtrophies'] = pb
+        except KeyError:
+            await self.bot.say("Please use a valid clanname : "+",".join(key for key in self.c.keys()))
+            return 
+            
+        await self.bot.say("Success")
 
     async def _is_commander(self, member):
         server = member.server
