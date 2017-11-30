@@ -165,7 +165,7 @@ class legend:
         try:
             self.c[clankey]['personalbest'] = pb
         except KeyError:
-            await self.bot.say("Please use a valid clanname : "+",".join(key for key in self.c.keys()))
+            await self.bot.say("Please use a valid clanname : "+", ".join(key for key in self.c.keys()))
             return 
         
         self.save_data()        
@@ -507,7 +507,7 @@ class legend:
             clan_name = self.c[clankey]['name'] 
             clan_role_id = self.c[clankey]['role_id']
         except KeyError:
-            await self.bot.say("Please use a valid clanname : d8, esports, squad, d82, prime, legion, rising, phantom, plague, d83, academy")
+            await self.bot.say("Please use a valid clanname : "+", ".join(key for key in self.c.keys()))
             return
 
         allowed = await self._is_commander(author)
@@ -674,7 +674,7 @@ class legend:
             clan_name = self.c[clankey]['name'] 
             clan_role = self.c[clankey]['role'] 
         except KeyError:
-            await self.bot.say("Please use a valid clanname : d8, esports, squad, d82, prime, legion, rising, phantom, plague, d83, academy")
+            await self.bot.say("Please use a valid clanname : "+", ".join(key for key in self.c.keys()))
             return
 
         leftClan = False
@@ -789,7 +789,7 @@ class legend:
             clan_name = self.c[clankey]['name'] 
             clan_role = self.c[clankey]['role'] 
         except KeyError:
-            await self.bot.say("Please use a valid clanname : d8, esports, squad, d82, prime, legion, rising, phantom, plague, d83, academy")
+            await self.bot.say("Please use a valid clanname : "+", ".join(key for key in self.c.keys()))
             return
 
         try:
@@ -876,7 +876,7 @@ class legend:
             clan_name = self.c[clankey]['name'] 
             clan_role = self.c[clankey]['role'] 
         except KeyError:
-            await self.bot.say("Please use a valid clanname : d8, esports, squad, d82, prime, legion, rising, phantom, plague, d83, academy")
+            await self.bot.say("Please use a valid clanname : "+", ".join(key for key in self.c.keys()))
             return
 
         try:
