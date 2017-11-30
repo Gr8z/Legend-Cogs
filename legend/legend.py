@@ -114,30 +114,42 @@ class legend:
             await self.bot.remove_roles(member, *roles)
         except:
             pass
-
-    @commands.command(pass_context=True)
+    
+    @commands.group(pass_context=True)
     @checks.mod_or_permissions(administrator=True)
-    async def registerclan(self, ctx, clankey, ctag, role: discord.Role, nickname):
+    async def clans(self, ctx):
+        """Base command for managing clash royale clans. [p]help clans for details"""
+        if ctx.invoked_subcommand is None:
+            await self.bot.send_cmd_help(ctx)
+
+    @clans.command(pass_context=True, name="register")
+    @checks.mod_or_permissions(administrator=True)
+    async def clans_register(self, ctx, clankey, ctag, role: discord.Role, nickname):
         
         toregister = {
         "tag": ctag,
         "role_id" : role.id,
-        "nickname" : nickname
+        "nickname" : nickname,
+        "maxtrophies": 0
         }
         
         self.c[clankey] = toregister
         self.save_data()
         await self.bot.say("Success")
         
-    @commands.command(pass_context=True)
+    @clans.command(pass_context=True, name="delete")
     @checks.mod_or_permissions(administrator=True)
-    async def deleteclan(self, ctx, clankey):
+    async def clans_delete(self, ctx, clankey):
     
         if self.c.pop(clankey, None):
             self.save_data()
             await self.bot.say("Success")
             return
-        await self.bot.say("Failed")         
+        await self.bot.say("Failed")
+    
+    @clans.command(pass_context=True, name="pb")
+    @checks.mod_or_permissions(administrator=True)
+    async def clans_pb(self, ctx, clankey, pb: int):
 
     async def _is_commander(self, member):
         server = member.server
@@ -177,14 +189,14 @@ class legend:
 
         try:
             clans = requests.get('http://api.cr-api.com/clan/'+','.join(self.c[clan]["tag"] for clan in self.c)+'/info', timeout=10).json()
-            clans = sorted(clans, key=lambda clanned: clanned['requiredScore'], reverse=True)
         except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
                 await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
                 return
         except requests.exceptions.RequestException as e:
                 await self.bot.say(e)
                 return
-
+                
+        clans = sorted(clans, key=lambda clanned: clanned['requiredScore'], reverse=True)
         totalMembers = sum(clans[x]['memberCount'] for x in range(len(clans)))
 
         embed=discord.Embed(title="", description="Our Family is made up of " + str(numClans) + " clans with a total of " + str(totalMembers) + " members. We have " + str((numClans*50)-totalMembers) + " spots left.", color=0xf1c747)
