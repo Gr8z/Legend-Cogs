@@ -174,10 +174,10 @@ class legend:
     
     @clans.command(pass_context=True, name="bonus")
     @checks.mod_or_permissions(administrator=True)
-    async def clans_bonus(self, ctx, clankey, **bonus):
+    async def clans_bonus(self, ctx, clankey, *bonus):
         """Add bonus information to title of clan (i.e. Age: 21+)"""
         try:
-            self.c[clankey]['bonustitle'] = bonus
+            self.c[clankey]['bonustitle'] = " ".join(bonus)
         except KeyError:
             await self.bot.say("Please use a valid clanname : "+",".join(key for key in self.c.keys()))
             return 
@@ -969,8 +969,21 @@ def check_files():
     if not fileIO(f, "check"):
         print("Creating empty clans.json...")
         dataIO.save_json(f, {})
+        
+def check_clans():
+    c = dataIO.load_json('cogs/clans.json')
+    for clankey in c.keys():
+        if 'waiting' not in c[clankey]:
+            c[clankey]['waiting'] = []
+        if 'bonustitle' not in c[clankey]:
+            c[clankey]['bonustitle'] = ""
+        if 'personalbest' not in c[clankey]:
+            c[clankey]['personalbest'] = 0
+    
+    dataIO.save_json('cogs/clans.json', c)
 
 def setup(bot):
     check_folders()
     check_files()
+    check_clans()
     bot.add_cog(legend(bot))
