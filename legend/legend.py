@@ -134,7 +134,7 @@ class legend:
         """Register a clan for tracking"""
         toregister = {
             'tag': ctag,
-            'role': rold.name,
+            'role': role.name,
             'role_id': role.id,
             'name': nickname,   # Not good, will fix later
             'nickname' : nickname,
