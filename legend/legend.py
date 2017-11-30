@@ -258,6 +258,7 @@ class legend:
             for clankey in self.clanArray():
                 if self.c[clankey]['tag'] == clans[x]['tag']:
                     numWaiting = len(self.c[clankey]['waiting'])
+                    maxtrophies = self.c[clankey]['maxtrophies']
                     break
 
             if numWaiting > 0:
@@ -285,7 +286,7 @@ class legend:
                 # title += "PB: 4300+"
                 # clans[x]['maxtrophies'] = 4300
             
-            if clans[x]['maxtrophies'] > 0:
+            if maxtrophies > 0:
                 title += "PB: "+str(clans[x]['maxtrophies'])+"+  "
             
             # if clans[x]['tag'] == self.c['prime']['tag']:
