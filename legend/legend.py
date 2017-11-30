@@ -74,6 +74,9 @@ social_info = """Stay Social! Come and follow us on these platforms to stay up t
 https://twitter.com/TheLegendClans
 https://www.facebook.com/LegendClans
 https://www.instagram.com/legendclans
+
+Visit our website to see live clan statistics:
+https://legendclans.com
 """
 
 class legend:
