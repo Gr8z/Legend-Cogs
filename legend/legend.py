@@ -139,7 +139,7 @@ class legend:
             'name': nickname,   # Not good, will fix later
             'nickname' : nickname,
             'waiting': [],
-            'maxtrophies': 0,
+            'personalbest': 0,
             'bonustitle': "",
             'discord': None
             }
@@ -163,7 +163,7 @@ class legend:
     async def clans_pb(self, ctx, clankey, pb: int):
         """Set a Personal Best requirement for a clan"""
         try:
-            self.c[clankey]['maxtrophies'] = pb
+            self.c[clankey]['personalbest'] = pb
         except KeyError:
             await self.bot.say("Please use a valid clanname : "+",".join(key for key in self.c.keys()))
             return 
@@ -254,11 +254,14 @@ class legend:
         for x in range(0, len(clans)):
 
             numWaiting = 0
+            personalbest = 0
+            bonustitle = None
             
             for clankey in self.clanArray():
                 if self.c[clankey]['tag'] == clans[x]['tag']:
                     numWaiting = len(self.c[clankey]['waiting'])
-                    maxtrophies = self.c[clankey]['maxtrophies']
+                    personalbest = self.c[clankey]['personalbest']
+                    bonustitle = self.c[clankey]['bonustitle']
                     break
 
             if numWaiting > 0:
@@ -286,13 +289,14 @@ class legend:
                 # title += "PB: 4300+"
                 # clans[x]['maxtrophies'] = 4300
             
-            if maxtrophies > 0:
-                title += "PB: "+str(clans[x]['maxtrophies'])+"+  "
+            if personalbest > 0:
+                title += "PB: "+str(personalbest)+"+  "
+                clans[x]['maxtrophies'] = personalbest
             
             # if clans[x]['tag'] == self.c['prime']['tag']:
                 # title += "Age: 21+"
             
-            if clans[x]['bonustitle'] is not None:
+            if bonustitle is not None:
                 title += clans[x]['bonustitle']
 
             desc = ":shield: " + showMembers + "     :trophy: " + str(clans[x]['requiredScore']) + "+     :medal: " +str(clans[x]['score'])
