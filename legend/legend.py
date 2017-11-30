@@ -12,8 +12,8 @@ import string
 
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Academy"
-numClans = 12
-clanArray = ['d8','esports','squad','d82','prime','legion','rising','phantom','plague','d83','academy','dynasty']
+# numClans = 12
+# clanArray = ['d8','esports','squad','d82','prime','legion','rising','phantom','plague','d83','academy','dynasty']
 BOTCOMMANDER_ROLES =  ["Family Representative", "Clan Manager", "Clan Deputy", "Co-Leader", "Hub Officer", "admin"];
 
 rules_text = """**Here are some Legend Family Discord server rules.**\n
@@ -94,7 +94,13 @@ class legend:
         
     async def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
        return ''.join(random.choice(chars) for _ in range(size))
-
+    
+    async def clanArray(self):
+        return self.c.keys()
+    
+    async def numClans(self):
+        return len(self.c.keys())
+    
     async def _add_roles(self, member, role_names):
         """Add roles"""
         server = member.server
@@ -127,11 +133,16 @@ class legend:
     async def clans_register(self, ctx, clankey, ctag, role: discord.Role, nickname):
         """Register a clan for tracking"""
         toregister = {
-        "tag": ctag,
-        "role_id" : role.id,
-        "nickname" : nickname,
-        "maxtrophies": 0
-        }
+            'tag': ctag,
+            'role': 
+            'role_id': role.id,
+            'name': nickname,
+            'nickname' : nickname,
+            'waiting': [],
+            'maxtrophies': 0,
+            'bonustitle': "",
+            'discord': None
+            }
         
         self.c[clankey] = toregister
         self.save_data()
@@ -156,7 +167,35 @@ class legend:
         except KeyError:
             await self.bot.say("Please use a valid clanname : "+",".join(key for key in self.c.keys()))
             return 
-            
+        
+        self.save_data()        
+        await self.bot.say("Success")
+    
+    
+    @clans.command(pass_context=True, name="bonus")
+    @checks.mod_or_permissions(administrator=True)
+    async def clans_bonus(self, ctx, clankey, **bonus):
+        """Add bonus information to title of clan (i.e. Age: 21+)"""
+        try:
+            self.c[clankey]['bonustitle'] = bonus
+        except KeyError:
+            await self.bot.say("Please use a valid clanname : "+",".join(key for key in self.c.keys()))
+            return 
+        
+        self.save_data()
+        await self.bot.say("Success")
+    
+    @clans.command(pass_context=True, name="discord")
+    @checks.mod_or_permissions(administrator=True)
+    async def clans_discord(self, ctx, clankey, discordinv):
+        """Add discord invite link"""
+        try:
+            self.c[clankey]['discord'] = discordinv
+        except KeyError:
+            await self.bot.say("Please use a valid clanname : "+",".join(key for key in self.c.keys()))
+            return 
+        
+        self.save_data()
         await self.bot.say("Success")
 
     async def _is_commander(self, member):
@@ -207,18 +246,18 @@ class legend:
         clans = sorted(clans, key=lambda clanned: clanned['requiredScore'], reverse=True)
         totalMembers = sum(clans[x]['memberCount'] for x in range(len(clans)))
 
-        embed=discord.Embed(title="", description="Our Family is made up of " + str(numClans) + " clans with a total of " + str(totalMembers) + " members. We have " + str((numClans*50)-totalMembers) + " spots left.", color=0xf1c747)
+        embed=discord.Embed(title="", description="Our Family is made up of " + str(self.numClans()) + " clans with a total of " + str(totalMembers) + " members. We have " + str((self.numClans()*50)-totalMembers) + " spots left.", color=0xf1c747)
         embed.set_author(name="LeGeND Family Clans", url="http://cr-api.com/clan/family/legend", icon_url="https://i.imgur.com/dtSMITE.jpg")
         embed.set_footer(text=credits, icon_url=creditIcon)
 
         foundClan = False
-        for x in range(0, numClans):
+        for x in range(0, len(clans)):
 
             numWaiting = 0
-
-            for y in range(0, len(clanArray)):
-                if self.c[clanArray[y]]['tag'] == clans[x]['tag']:
-                    numWaiting = len(self.c[clanArray[y]]['waiting'])
+            
+            for clankey in self.clanArray():
+                if self.c[clankey]['tag'] == clans[x]['tag']:
+                    numWaiting = len(self.c[clankey]['waiting'])
                     break
 
             if numWaiting > 0:
@@ -236,18 +275,24 @@ class legend:
 
             title += clans[x]['name'] + " (#" + clans[x]['tag'] + ") "
 
-            clans[x]['maxtrophies'] = 0
+            # clans[x]['maxtrophies'] = 0
 
-            if clans[x]['tag'] == self.c['d8']['tag']:
-                title += "PB: 4600+"
-                clans[x]['maxtrophies'] = 4600
+            # if clans[x]['tag'] == self.c['d8']['tag']:
+                # title += "PB: 4600+"
+                # clans[x]['maxtrophies'] = 4600
 
-            if clans[x]['tag'] == self.c['esports']['tag']:
-                title += "PB: 4300+"
-                clans[x]['maxtrophies'] = 4300
-
-            if clans[x]['tag'] == self.c['prime']['tag']:
-                title += "Age: 21+"
+            # if clans[x]['tag'] == self.c['esports']['tag']:
+                # title += "PB: 4300+"
+                # clans[x]['maxtrophies'] = 4300
+            
+            if clans[x]['maxtrophies'] > 0:
+                title += "PB: "+str(clans[x]['maxtrophies'])+"+  "
+            
+            # if clans[x]['tag'] == self.c['prime']['tag']:
+                # title += "Age: 21+"
+            
+            if clans[x]['bonustitle'] is not None:
+                title += clans[x]['bonustitle']
 
             desc = ":shield: " + showMembers + "     :trophy: " + str(clans[x]['requiredScore']) + "+     :medal: " +str(clans[x]['score'])
             totalMembers += clans[x]['memberCount']
@@ -307,10 +352,11 @@ class legend:
             return
 
         membership = False
-        for x in range(0, len(clanArray)):
-            if self.c[clanArray[x]]['tag'] == clantag:
+        for clankey in self.clanArray():
+            if self.c[clankey]['tag'] == clantag:
                 membership = True
-                clindex = int(x)
+                savekey = clankey
+                # clindex = int(x)
                 break
 
         if membership:
@@ -320,7 +366,7 @@ class legend:
                 await self.bot.say("Cannot find IGN.")
             else:
                 try:
-                    newclanname = self.c[clanArray[clindex]]['nickname']
+                    newclanname = self.c[savekey]['nickname']
                     newname = ign + " | " + newclanname
                     await self.bot.change_nickname(member, newname)
                 except discord.HTTPException:
@@ -330,10 +376,10 @@ class legend:
                     mymessage += "Nickname changed to ** {} **\n".format(newname)
 
 
-            role_names = [self.c[clanArray[clindex]]['role'], 'Member']
+            role_names = [self.c[savekey]['role'], 'Member']
             try:
                 await self._add_roles(member, role_names)
-                mymessage += "**" + self.c[clanArray[clindex]]['role'] + " ** and **Member** roles added."
+                mymessage += "**" + self.c[savekey]['role'] + " ** and **Member** roles added."
             except discord.Forbidden:
                 await self.bot.say(
                     "{} does not have permission to edit {}’s roles.".format(
@@ -343,8 +389,8 @@ class legend:
 
             await self.bot.say(mymessage)
 
-            if self.c[clanArray[clindex]]['discord'] is not None:
-                joinLink = "https://discord.gg/" + str(self.c[clanArray[clindex]]['discord'])
+            if self.c[savekey]['discord'] is not None:
+                joinLink = "https://discord.gg/" + str(self.c[savekey]['discord'])
                 await self.bot.send_message(member, 
                     "Hi There! Congratulations on getting accepted into our family. We have unlocked all the member channels for you in LeGeND Discord Server. Now you have to carefuly read this message and follow the steps mentioned below: \n\n"+
                     "Please click on the link below to join your clan Discord server. \n\n"+
@@ -413,10 +459,11 @@ class legend:
             return
 
         membership = False
-        for x in range(0, len(clanArray)):
-            if self.c[clanArray[x]]['tag'] == clantag:
+        for clankey in self.clanArray():
+            if self.c[clankey]['tag'] == clantag:
                 membership = True
-                clindex = int(x)
+                savekey = clankey
+                # clindex = int(x)
                 break
 
         if membership:
@@ -426,7 +473,7 @@ class legend:
                 await self.bot.say("Cannot find IGN.")
             else:
                 try:
-                    newclanname = self.c[clanArray[clindex]]['nickname']
+                    newclanname = self.c[savekey]['nickname']
                     newname = ign + " | " + newclanname
                     await self.bot.change_nickname(member, newname)
                 except discord.HTTPException:
@@ -650,10 +697,11 @@ class legend:
             return
 
         membership = True
-        for x in range(0, len(clanArray)):
-            if clantag == self.c[clanArray[x]]['tag']:
+        for clankey in self.clanArray():
+            if self.c[clankey]['tag'] == clantag:
                 membership = False
-                clindex = int(x)
+                savekey = clankey
+                # clindex = int(x)
                 break
 
         if membership:
@@ -762,10 +810,11 @@ class legend:
             return
 
         membership = True
-        for x in range(0, len(clanArray)):
-            if clantag == self.c[clanArray[x]]['tag']:
+        for clankey in self.clanArray():
+            if self.c[clankey]['tag'] == clantag:
                 membership = False # False
-                clindex = int(x)
+                savekey = clankey
+                # clindex = int(x)
                 break
 
         if membership:
@@ -880,16 +929,17 @@ class legend:
             return
 
         membership = True
-        for x in range(0, len(clanArray)):
-            if clantag == self.c[clanArray[x]]['tag']:
+        for clankey in self.clanArray():
+            if self.c[clankey]['tag'] == clantag:
                 membership = False # False
-                clindex = int(x)
+                savekey = clankey
+                # clindex = int(x)
                 break
 
         if membership:
             rolesToRemove = ["Member"]
-            for x in range(0,numClans):
-                rolesToRemove.append(self.c[clanArray[x]]['role'])
+            for x in range(0,self.numClans()):
+                rolesToRemove.append(self.c[savekey]['role'])
 
             await self._remove_roles(member, rolesToRemove)
 
