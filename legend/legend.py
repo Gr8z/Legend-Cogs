@@ -65,7 +65,7 @@ There are 2 factors to win: convince more players to participate within your cla
 **3 golden Rules for clanwars:** We respect the Opponent (no BMing if you win), we play to have fun (no obligation to participate), and don't join if you think you cannot play.
 """
 
-coaching_info = """If you are looking to climb in your trophies and get better at the game, we have coaches at Legend Academy that can help you get to the top! Come join the Academy server and start a session with a dedicated coach now at https://discord.gg/b8r86Hg
+coaching_info = """If you are looking to climb in your trophies and get better at the game, we have coaches at Legend Academy that can help you get to the top! Come join the Academy server and start a session with a dedicated coach now at https://discord.gg/eDzUwvx
 """
 
 social_info = """Stay Social! Come and follow us on these platforms to stay up to date on the latest news and announcements.
@@ -693,7 +693,6 @@ class legend:
             if self.c[clankey]['tag'] == clantag:
                 membership = False
                 savekey = clankey
-                # clindex = int(x)
                 break
 
         if membership:
