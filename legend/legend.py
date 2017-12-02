@@ -802,10 +802,10 @@ class legend:
             return
 
         membership = True
-        for clankey in self.clanArray():
-            if self.c[clankey]['tag'] == clantag:
+        for clanKey in self.clanArray():
+            if self.c[clanKey]['tag'] == clantag:
                 membership = False # False
-                savekey = clankey
+                savekey = clanKey
                 break
 
         if membership:
