@@ -929,7 +929,7 @@ class legend:
         if membership:
             rolesToRemove = ["Member"]
             for x in range(0,self.numClans()):
-                rolesToRemove.append(self.c[savekey]['role'])
+                rolesToRemove.append(self.c[clankey]['role'])
 
             await self._remove_roles(member, rolesToRemove)
 
