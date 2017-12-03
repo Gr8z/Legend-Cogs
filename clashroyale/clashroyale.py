@@ -400,6 +400,9 @@ def check_folders():
     if not os.path.exists("data/clashroyale"):
         print("Creating data/clashroyale folder...")
         os.makedirs("data/clashroyale")
+    if not os.path.exists("data/BrawlStats"):
+        print("Creating data/BrawlStats folder...")
+        os.makedirs("data/BrawlStats")
 
 def check_files():
     f = "cogs/tags.json"
@@ -409,6 +412,10 @@ def check_files():
     f = "cogs/mini_tags.json"
     if not fileIO(f, "check"):
         print("Creating empty mini_tags.json...")
+        fileIO(f, "save", [])
+    f = "data/BrawlStats/tags.json"
+    if not fileIO(f, "check"):
+        print("Creating empty tags.json...")
         fileIO(f, "save", [])
 
 def setup(bot):
