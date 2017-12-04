@@ -880,6 +880,23 @@ class legend:
         except ValueError:
             await self.bot.say("Recruit not found in the waiting list.")
 
+    @commands.command(pass_context=True)
+    async def waitinglist(self, ctx):
+        """Show status of the waiting list."""
+        message = ""
+        
+        await self.bot.type()
+        
+        for clan in self.c:
+            if self.c[clan]["waiting"]:
+                message += "\n**" + self.c[clan]["name"] + "**\n"
+
+                for index, userID in enumerate(self.c[clan]["waiting"]):
+                    user = discord.utils.get(ctx.message.server.members, id = userID)
+                    message += str(index+1) + ". " + user.name + "\n"
+
+        await self.bot.say(message)
+
     @commands.command(pass_context=True, no_pm=True)
     async def inactive(self, ctx, member: discord.Member):
         """Use this command after kicking people from clan"""
