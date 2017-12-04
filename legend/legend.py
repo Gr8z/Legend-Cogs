@@ -833,8 +833,8 @@ class legend:
                 raise
             await self.bot.say(member.mention + " You have been added to the waiting list for **"+ clan_name + "**. We will mention you when a spot is available.")
 
-            roleName = discord.utils.get(server.roles, name=clan_role)
-            await self.bot.send_message(discord.Object(id='375839968096157697'), '**' + member.mention + '** was added to the **Waiting List** for ' + roleName.mention)
+            #roleName = discord.utils.get(server.roles, name=clan_role)
+            #await self.bot.send_message(discord.Object(id='375839968096157697'), '**' + member.mention + '** was added to the **Waiting List** for ' + roleName.mention)
         else:
             await self.bot.say("Cannot add you to the waiting list, You are already a part of a clan in the family.")
 
@@ -886,7 +886,7 @@ class legend:
         message = ""
         
         await self.bot.type()
-        
+
         for clan in self.c:
             if self.c[clan]["waiting"]:
                 message += "\n**" + self.c[clan]["name"] + "**\n"
