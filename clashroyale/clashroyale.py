@@ -215,7 +215,7 @@ class clashroyale:
 
     	await self.bot.type()
 
-    	url = 'http://api.cr-api.com/profile/CRRYRPCC'
+    	url = 'http://api.cr-api.com/profile'
     	try :
     	    response = urllib2.urlopen( url )
     	except urllib2.HTTPError as e:
