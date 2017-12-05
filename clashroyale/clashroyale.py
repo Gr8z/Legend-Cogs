@@ -211,20 +211,22 @@ class clashroyale:
     async def api(self):
     	"""Ping the CR API  """
 
-    	socket.setdefaulttimeout( 23 )  # timeout in seconds
+    	socket.setdefaulttimeout( 10 )  # timeout in seconds
 
     	await self.bot.type()
 
-    	url = 'http://api.cr-api.com/profile'
+    	url = 'http://api.cr-api.com/profile/CRRYRPCC'
     	try :
-    	    response = urllib2.urlopen( url )
+    	    req = urllib2.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+    	    response = urllib2.urlopen(req).read()
+    	except socket.timeout as e:
+    	    await self.bot.say('We failed to reach the server. Reason: ' + str(e))
     	except urllib2.HTTPError as e:
-    	    await self.bot.say('The server couldn\'t fulfill the request. Reason:' + str(e.code))
+    	    await self.bot.say('The server couldn\'t fulfill the request. Reason: ' + str(e.code))
     	except urllib2.URLError as e:
-    	    await self.bot.say('We failed to reach a server. Reason:' + str(e.reason))
+    	    await self.bot.say('We failed to reach the server. Reason: ' + str(e.reason))
     	else :
-    	    html = response.read()
-    	    await self.bot.say('got response!')
+    	    await self.bot.say('API is working!')
 
     @commands.group(pass_context=True)
     async def save(self, ctx):
