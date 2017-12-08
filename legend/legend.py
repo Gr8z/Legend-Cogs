@@ -881,7 +881,7 @@ class legend:
         except ValueError:
             await self.bot.say("Recruit not found in the waiting list.")
 
-    @commands.command(pass_context=True)
+    @commands.command(pass_context=True, aliases=["waitlist","wait"])
     async def waitinglist(self, ctx):
         """Show status of the waiting list."""
         message = ""
