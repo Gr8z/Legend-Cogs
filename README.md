@@ -12,6 +12,7 @@ If you want to see this bot in action, join the LeGeND Family Discord at [discor
  * **legend** - Management system for Legend Clan Family. Used for recruits.
  * **profanity** - filter and delete message that contain bad words.
  * **tourney** - Clash Royale open tournament finder.
+ * **shop** - reward people for donations and crowns in credits.
 
 ## Installation
 
