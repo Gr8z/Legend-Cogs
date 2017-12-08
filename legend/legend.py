@@ -73,8 +73,6 @@ While we have a clan called LeGeND Esports!, the team operates separately from t
 
 But please remember that this is a more professional setting than the rest of the family and poor behaviour will not be tolerated. 
 
-When you first enter the server please let a manager know. They will give you a role on the server and explain ranked matches to you. After that you may began battling the other players when you are available to play. You will have to play 5 ranked matches before becoming officially part of the team. 
-
 Please note that if you just lurk in the server and not participate for a long period of time you will be kicked off the server.
 
 https://discord.gg/CN47Tkx
