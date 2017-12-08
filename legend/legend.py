@@ -706,6 +706,10 @@ class legend:
                 await self.bot.say("Approval failed, the clan is currently closed.")
                 return
 
+            if not leftClan:
+                await self.bot.say("Approval failed, You have not yet left your current clan.")
+                return
+
             if len(self.c[clankey]['waiting']) > 0:
                 if member.id in self.c[clankey]['waiting']:
                     if member.id != self.c[clankey]['waiting'][0]:
@@ -725,10 +729,6 @@ class legend:
                 else:
                     await self.bot.say("Approval failed, there is a waiting queue for this clan. Please first join the waiting list.")
                     return
-
-            if not leftClan:
-                await self.bot.say("Approval failed, You have not yet left your current clan.")
-                return
 
             recruitCode = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6))
 
