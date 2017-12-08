@@ -894,9 +894,16 @@ class legend:
 
                 for index, userID in enumerate(self.c[clan]["waiting"]):
                     user = discord.utils.get(ctx.message.server.members, id = userID)
-                    message += str(index+1) + ". " + user.name + "\n"
-
-        await self.bot.say(message)
+                    try:
+                        message += str(index+1) + ". " + user.name + "\n"
+                    except AttributeError:
+                        self.c[clan]['waiting'].remove(userID)
+                        dataIO.save_json('cogs/clans.json', self.c)
+                        message += str(index+1) + ". " + "*user not found*" + "\n"
+        if not message:
+            await self.bot.say("The waiting list is empty")
+        else:
+            await self.bot.say(message)
 
     @commands.command(pass_context=True, no_pm=True)
     async def inactive(self, ctx, member: discord.Member):
