@@ -65,6 +65,21 @@ There are 2 factors to win: convince more players to participate within your cla
 **3 golden Rules for clanwars:** We respect the Opponent (no BMing if you win), we play to have fun (no obligation to participate), and don't join if you think you cannot play.
 """
 
+esports_info = """The LeGeND Esports Team is recruiting all active and aspiring players!
+
+With the goal of encouraging competitive play in the family, there is a monthly ranked season system on the Esports Team Server where players compete to play on LeGeND Esports A Team and B team to represent the family in various North American events. Our strongest players will compete side by side with the very best in leagues such as CCTS, CPL, and even RPL!
+
+While we have a clan called LeGeND Esports!, the team operates separately from the clan, and sends members from any family clan to events.
+
+But please remember that this is a more professional setting than the rest of the family and poor behaviour will not be tolerated. 
+
+When you first enter the server please let a manager know. They will give you a role on the server and explain ranked matches to you. After that you may began battling the other players when you are available to play. You will have to play 5 ranked matches before becoming officially part of the team. 
+
+Please note that if you just lurk in the server and not participate for a long period of time you will be kicked off the server.
+
+https://discord.gg/CN47Tkx
+"""
+
 social_info = """Stay Social! Come and follow us on these platforms to stay up to date on the latest news and announcements.
 
 https://twitter.com/TheLegendClans
@@ -412,6 +427,9 @@ class legend:
 
             await asyncio.sleep(300)
             await self.bot.send_message(member,cw_info)
+
+            await asyncio.sleep(300)
+            await self.bot.send_message(member,esports_info)
 
             await asyncio.sleep(300)
             await self.bot.send_message(member,social_info)
