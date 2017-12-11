@@ -19,7 +19,7 @@ import urllib.request  as urllib2
 
 BOTCOMMANDER_ROLES =  ["Family Representative", "Clan Manager", "Clan Deputy", "Co-Leader", "Hub Officer", "admin"];
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
-credits = "Bot by GR8 | Academy"
+credits = "Bot by GR8 | Titan"
 
 clash = os.path.join("cogs", "tags.json")
 clash_mini = os.path.join("cogs", "mini_tags.json")

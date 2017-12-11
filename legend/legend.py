@@ -11,7 +11,7 @@ from random import choice as rand_choice
 import string
 
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
-credits = "Bot by GR8 | Academy"
+credits = "Bot by GR8 | Titan"
 BOTCOMMANDER_ROLES =  ["Family Representative", "Clan Manager", "Clan Deputy", "Co-Leader", "Hub Officer", "admin"];
 
 rules_text = """**Here are some Legend Family Discord server rules.**\n

@@ -16,7 +16,7 @@ import os
 
 lastTag = '0'
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
-credits = "Bot by GR8 | Academy"
+credits = "Bot by GR8 | Titan"
 
 # Returns a list with tournaments
 def getTopTourneyNew():
