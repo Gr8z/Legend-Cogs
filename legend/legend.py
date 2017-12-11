@@ -321,6 +321,12 @@ class legend:
         if server.id not in legendServer:
             await self.bot.say("This command can only be executed in the LeGeND Family Server")
             return
+
+        role = discord.utils.get(server.roles, id="374603334385926156")
+        if role in member.roles:
+            await self.bot.say("Error, " + member.mention + " is not a new member.")
+            return
+
         try:
             await self.updateClash()
             profiletag = self.clash[member.id]['tag']
