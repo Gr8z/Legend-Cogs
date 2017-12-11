@@ -333,7 +333,7 @@ class legend:
             return
 
         isMember = await self._is_member(member)
-        if not isMember:
+        if isMember:
             await self.bot.say("Error, " + member.mention + " is not a new member.")
             return
 
