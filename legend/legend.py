@@ -220,6 +220,16 @@ class legend:
         else:
             return False
 
+    async def _is_member(self, member):
+        server = member.server
+        botcommander_roles = [discord.utils.get(server.roles, name=r) for r in ["Member", "Family Representative", "Clan Manager", "Clan Deputy", "Co-Leader", "Hub Officer", "admin"]]
+        botcommander_roles = set(botcommander_roles)
+        author_roles = set(member.roles)
+        if len(author_roles.intersection(botcommander_roles)):
+            return True
+        else:
+            return False
+
     @commands.command(pass_context=True)
     async def legend(self, ctx, member: discord.Member = None):
         """ Show Legend clans, can also show clans based on a member's trophies"""
@@ -322,8 +332,8 @@ class legend:
             await self.bot.say("This command can only be executed in the LeGeND Family Server")
             return
 
-        role = discord.utils.get(server.roles, id="374603334385926156")
-        if role in member.roles:
+        isMember = await self._is_member(member)
+        if not isMember:
             await self.bot.say("Error, " + member.mention + " is not a new member.")
             return
 
