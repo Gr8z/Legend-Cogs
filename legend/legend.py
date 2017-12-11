@@ -46,7 +46,7 @@ commands_text =  """Here are some of the Legend Family Bot commands, you can use
 
 info_text = """You will find several channels on our Discord Server\n
 **#global-chat**: to discuss about the game.
-**#tourneys**: Dozens of tourney's posted everyday. 
+**#tourneys**: Dozens of tournaments posted everyday. 
 **#news**: important info about family.
 **#deck-recommendation**: decks discussion.
 **#off-topic**: you can chat about anything unrelated to clash royale here.
