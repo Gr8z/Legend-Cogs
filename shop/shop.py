@@ -11,10 +11,11 @@ class shop:
     def __init__(self, bot):
         self.bot = bot
         self.banks = dataIO.load_json('data/economy/bank.json')
-        self.clash = dataIO.load_json('cogs/tags.json')
+        self.tags = dataIO.load_json('cogs/tags.json')
+        self.clans = dataIO.load_json('cogs/clans.json')
 
     async def updateClash(self):
-        self.clash = dataIO.load_json('cogs/tags.json')
+        self.tags = dataIO.load_json('cogs/tags.json')
 
     async def _add_roles(self, member, role_names):
         """Add roles"""
@@ -100,40 +101,35 @@ class shop:
 
         bank = self.bot.get_cog('Economy').bank
         banks = list(self.banks['374596069989810176'])
-            
-        for key in range(0,len(banks)):
-            if banks[key] in self.clash:
-                try:
-                    profiletag = self.clash[banks[key]]['tag']
-                    profiledata = requests.get('http://api.cr-api.com/profile/'+profiletag, timeout=10).json()
-                      
-                    if profiledata['clan'] is None:
-                        pass
-                    else: 
-                        clantag = profiledata['clan']['tag']
-                        clandata = requests.get('http://api.cr-api.com/clan/{}'.format(clantag), timeout=10).json()
 
-                        clan_tag = []
-                        clan_donations = []
-                        clan_clanChestCrowns = []
-                        for x in range(0, len(clandata['members'])):
-                            clan_tag.append(clandata['members'][x]['tag'])
-                            clan_donations.append(clandata['members'][x]['donations'])
-                            clan_clanChestCrowns.append(clandata['members'][x]['clanChestCrowns'])
+        try:
+            clans = requests.get('http://api.cr-api.com/clan/'+','.join(self.clans[clan]["tag"] for clan in self.clans), timeout=10).json()
+        except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
+            await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
+            return
+        except requests.exceptions.RequestException as e:
+            await self.bot.say(e)
+            return
+        
+        for x in range(0, len(clans)):
+            for y in range(0, len(clans[x]['members'])):
 
-                        index = clan_tag.index(profiletag)
-                        amount = (clan_donations[index]*perDonation) + (clan_clanChestCrowns[index]*perCrown)
+                clan_tag = clans[x]['members'][y]['tag']
+                clan_donations = clans[x]['members'][y]['donations']
+                clan_clanChestCrowns = clans[x]['members'][y]['clanChestCrowns']
 
-                        user = discord.utils.get(ctx.message.server.members, id = banks[key])
+                for key in range(0,len(banks)):
+                    if clan_tag == self.tags[banks[key]]['tag']:
 
-                        pay = bank.get_balance(user) + amount
-                        bank.set_credits(user, pay)
+                        try:
+                            amount = (clan_donations*perDonation) + (clan_clanChestCrowns*perCrown)
+                            user = discord.utils.get(ctx.message.server.members, id = banks[key])
+                            pay = bank.get_balance(user) + amount
+                            bank.set_credits(user, pay)
 
-                        await self.bot.send_message(user,"Hello " + user.name + ", take these credits for the " + str(clan_donations[index]) + " donations and " + str(clan_clanChestCrowns[index]) + " crowns you contributed to your clan this week. (+" + str(amount) + " credits!)")
-
-                except Exception as e:
-                    #await self.bot.say("Unable to send payout")
-                    await self.bot.say(e)
+                            await self.bot.send_message(user,"Hello " + user.name + ", take these credits for the " + str(clan_donations[index]) + " donations and " + str(clan_clanChestCrowns[index]) + " crowns you contributed to your clan this week. (+" + str(amount) + " credits!)")
+                        except Exception as e:
+                            await self.bot.say(e)
 
     @commands.group(pass_context=True)
     async def buy(self, ctx):
