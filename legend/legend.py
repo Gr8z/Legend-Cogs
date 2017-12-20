@@ -9,6 +9,7 @@ import asyncio
 import random
 from random import choice as rand_choice
 import string
+import datetime
 
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
@@ -989,6 +990,11 @@ class legend:
             await self.bot.say("Member and clan roles removed.")
         else:
             await self.bot.say("Error, This user is still in a clan in the family.")
+
+    @commands.command()
+    async def gmt(self):
+        """Get the currect GMT time"""
+        await self.bot.say(datetime.datetime.now(datetime.timezone.utc).strftime("%H:%M GMT"))
 
 def check_folders():
     if not os.path.exists("data/legend"):
