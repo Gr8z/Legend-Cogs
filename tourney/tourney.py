@@ -31,7 +31,7 @@ def getTopTourneyNew():
 	}
 
 	try:
-		tourneydata = requests.get('http://statsroyale.com/tournaments?appjson=1', timeout=5, headers=headers).json()
+		tourneydata = requests.get('http://statsroyale.com/tournaments?appjson=1', timeout=5, headers=headers, proxies=dict(http="69.39.224.129:80",)).json()
 	except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
 		return None
 	except requests.exceptions.RequestException as e:
@@ -140,7 +140,7 @@ class tournament:
 		}
 
 		try:
-			tourneydata = requests.get('http://statsroyale.com/tournaments?appjson=1', timeout=5, headers=headers).json()
+			tourneydata = requests.get('http://statsroyale.com/tournaments?appjson=1', timeout=5, headers=headers, proxies=dict(http="69.39.224.129:80",)).json()
 		except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
 			await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 			return
