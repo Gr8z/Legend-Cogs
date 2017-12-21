@@ -271,6 +271,7 @@ class legend:
     async def legend(self, ctx, member: discord.Member = None):
         """ Show Legend clans, can also show clans based on a member's trophies"""
 
+        author = ctx.message.author
         allowed = await self._is_commander(author)
 
         if not allowed:
