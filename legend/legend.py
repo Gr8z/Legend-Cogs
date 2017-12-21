@@ -1006,14 +1006,14 @@ class legend:
         try:
             await self.updateClash()
             profiletag = self.clash[member.id]['tag']
-            profiledata = requests.get('http://api.cr-api.com/profile/'+profiletag, timeout=10).json()
+            profiledata = await self.getProfile(profiletag)
             ign = profiledata['name']
             if profiledata['clan'] is None:
                 clantag = ""
                 clanname = ""
             else: 
-                clantag = profiledata['clan']['tag']
-                clanname = profiledata['clan']['name']
+                clantag = profiledata['profile']['alliance']['hashtag']
+                clanname = profiledata['profile']['alliance']['name']
         except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
