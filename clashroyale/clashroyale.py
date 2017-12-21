@@ -17,6 +17,9 @@ from crapipy import AsyncClient
 import socket
 import urllib.request  as urllib2
 from fake_useragent import UserAgent
+import requests_cache
+
+requests_cache.install_cache('statsroyale_cache', backend='sqlite', expire_after=300)
 
 BOTCOMMANDER_ROLES =  ["Family Representative", "Clan Manager", "Clan Deputy", "Co-Leader", "Hub Officer", "admin"];
 creditIcon = "https://i.imgur.com/TP8GXZb.png"

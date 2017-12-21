@@ -4,6 +4,11 @@ import requests
 from .utils.dataIO import dataIO, fileIO
 from cogs.utils import checks
 import asyncio
+from fake_useragent import UserAgent
+import requests_cache
+import json
+
+requests_cache.install_cache('statsroyale_cache', backend='sqlite', expire_after=300)
 
 class shop:
     """Legend Family Shop for credits"""
@@ -77,6 +82,19 @@ class shop:
         else:
             return False
 
+    async def _is_payday(self, member):
+        server = member.server
+        botcommander_roles = [discord.utils.get(server.roles, name=r) for r in ["Pro Payday"]]
+        botcommander_roles = set(botcommander_roles)
+        author_roles = set(member.roles)
+        if len(author_roles.intersection(botcommander_roles)):
+            return True
+        else:
+            return False
+
+    def numClans(self):
+        return len(self.clans.keys())
+
     def bank_check(self, user, amount):
         bank = self.bot.get_cog('Economy').bank
         if bank.account_exists(user):
@@ -86,6 +104,22 @@ class shop:
                 return False
         else:
             return False
+
+    async def getClan(self, clantag):
+        ua = UserAgent()
+        headers = {
+            "User-Agent": ua.random
+        }
+
+        try:
+            response = requests.get('http://statsroyale.com/clan/'+clantag+'?appjson=1', timeout=5, headers=headers, proxies=dict(http="69.39.224.129:80",))
+            if not response.from_cache:
+                await self.bot.send_message(discord.Object(id=393081792824999939), "!clan "+ clantag)
+            return response.json()
+        except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
+            return None
+        except requests.exceptions.RequestException as e:
+            return None
 
     @commands.command(pass_context=True, no_pm=True)
     @checks.is_owner()
@@ -103,7 +137,14 @@ class shop:
         banks = list(self.banks['374596069989810176'])
 
         try:
-            clans = requests.get('http://api.cr-api.com/clan/'+','.join(self.clans[clan]["tag"] for clan in self.clans), timeout=10).json()
+            clans = [None] * self.numClans()
+            index = 0
+            msg = await self.bot.say("Please wait, Fetching clan data...")
+            for clan in self.clans:
+                listClans = await self.getClan(self.clans[clan]["tag"])
+                clans[index] = listClans
+                index += 1
+                await self.bot.edit_message(msg, "Please wait, Fetching clan data ("+str(index)+"/13)")
         except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
@@ -112,11 +153,11 @@ class shop:
             return
         
         for x in range(0, len(clans)):
-            for y in range(0, len(clans[x]['members'])):
+            for y in range(0, len(clans[x]['alliance']['members'])):
 
-                clan_tag = clans[x]['members'][y]['tag']
-                clan_donations = clans[x]['members'][y]['donations']
-                clan_clanChestCrowns = clans[x]['members'][y]['clanChestCrowns']
+                clan_tag = clans[x]['alliance']['members'][y]['hashtag']
+                clan_donations = clans[x]['alliance']['members'][y]['donations']
+                clan_clanChestCrowns = clans[x]['alliance']['members'][y]['clanChestCrowns']
 
                 for key in range(0,len(banks)):
                     if clan_tag == self.tags[banks[key]]['tag']:
@@ -127,9 +168,12 @@ class shop:
                             pay = bank.get_balance(user) + amount
                             bank.set_credits(user, pay)
 
-                            await self.bot.send_message(user,"Hello " + user.name + ", take these credits for the " + str(clan_donations[index]) + " donations and " + str(clan_clanChestCrowns[index]) + " crowns you contributed to your clan this week. (+" + str(amount) + " credits!)")
+                            await self.bot.say(user.name + " - Success")
+
+                            await self.bot.send_message(user,"Hello " + user.name + ", take these credits for the " + str(clan_donations) + " donations and " + str(clan_clanChestCrowns) + " crowns you contributed to your clan this week. (+" + str(amount) + " credits!)")
                         except Exception as e:
                             await self.bot.say(e)
+                            raise
 
     @commands.group(pass_context=True)
     async def buy(self, ctx):
@@ -159,7 +203,7 @@ class shop:
             await self.bot.say("You cannot use the store, you must be a member of the family. Type !contact to ask for help.")
             return
 
-        await self.bot.say("Command not ready yet, please contact @GR8#7968 to purchase it for you.")
+        await self.bot.say("please contact @GR8#7968 or rakerran#7837 to purchase it for you.")
 
     @buy.command(pass_context=True, name="2")
     async def buy_2(self, ctx):
@@ -179,7 +223,7 @@ class shop:
             await self.bot.say("You cannot use the store, you must be a member of the family. Type !contact to ask for help.")
             return
 
-        await self.bot.say("Command not ready yet, please contact @GR8#7968 to purchase it for you.")
+        await self.bot.say("please contact @GR8#7968 or rakerran#7837 to purchase it for you.")
 
     @buy.command(pass_context=True, name="3")
     async def buy_3(self, ctx):
@@ -198,10 +242,42 @@ class shop:
             await self.bot.say("You cannot use the store, you must be a member of the family. Type !contact to ask for help.")
             return
 
-        await self.bot.say("Command not ready yet, please contact @GR8#7968 to purchase it for you.")
+        await self.bot.say("please contact @GR8#7968 or rakerran#7837 to purchase it for you.")
 
     @buy.command(pass_context=True, name="4")
     async def buy_4(self , ctx):
+        """ Buy Payday Pro from the shop """
+        server = ctx.message.server
+        author = ctx.message.author
+        legendServer = ["374596069989810176"]
+
+        if server.id not in legendServer:
+            await self.bot.say("This command can only be executed in the LeGeND Family Server")
+            return
+
+        allowed = await self._is_member(author)
+
+        if not allowed:
+            await self.bot.say("You cannot use the store, you must be a member of the family. Type !contact to ask for help.")
+            return
+
+        payday = await self._is_payday(author)
+
+        if payday:
+            await self.bot.say("You already have Pro Payday. Type !contact to ask for help.")
+            return
+
+        if self.bank_check(author, 500000):
+            bank = self.bot.get_cog('Economy').bank
+            pay = bank.get_balance(author) - 500000
+            bank.set_credits(author, pay)
+            await self._add_roles(author,["Pro Payday"])
+            await self.bot.say("Congratulations, now you can get !payday every 10 minutes.")
+        else:
+            await self.bot.say("You do not have enough credits to buy this item. Type !contact to ask for help.")
+
+    @buy.command(pass_context=True, name="5")
+    async def buy_5(self , ctx):
         """ Buy Rare Role from the shop """
         server = ctx.message.server
         author = ctx.message.author
@@ -222,20 +298,20 @@ class shop:
         legendary = await self._is_legendary(author)
 
         if rare or epic or legendary:
-            await self.bot.say("You are already have a special role. Type !contact to ask for help.")
+            await self.bot.say("You already have a special role. Type !contact to ask for help.")
             return
 
-        if self.bank_check(author, 50000):
+        if self.bank_check(author, 100000):
             bank = self.bot.get_cog('Economy').bank
-            pay = bank.get_balance(author) - 50000
+            pay = bank.get_balance(author) - 100000
             bank.set_credits(author, pay)
             await self._add_roles(author,["Rare™"])
             await self.bot.say("Congratulations, you are now a **Rare™**")
         else:
             await self.bot.say("You do not have enough credits to buy this role. Type !contact to ask for help.")
 
-    @buy.command(pass_context=True, name="5")
-    async def buy_5(self , ctx):
+    @buy.command(pass_context=True, name="6")
+    async def buy_6(self , ctx):
         """ Buy Epic Role from the shop """
         server = ctx.message.server
         author = ctx.message.author
@@ -260,12 +336,12 @@ class shop:
             return    
 
         if epic or legendary:
-            await self.bot.say("You are already have a special role. Type !contact to ask for help.")
+            await self.bot.say("You already have a special role. Type !contact to ask for help.")
             return
 
-        if self.bank_check(author, 100000):
+        if self.bank_check(author, 250000):
             bank = self.bot.get_cog('Economy').bank
-            pay = bank.get_balance(author) - 100000
+            pay = bank.get_balance(author) - 250000
             bank.set_credits(author, pay)
             await self._remove_roles(author,["Rare™"])
             await asyncio.sleep(3)
@@ -274,8 +350,8 @@ class shop:
         else:
             await self.bot.say("You do not have enough credits to buy this role. Type !contact to ask for help.")
         
-    @buy.command(pass_context=True, name="6")
-    async def buy_6(self , ctx):
+    @buy.command(pass_context=True, name="7")
+    async def buy_7(self , ctx):
         """ Buy Legendary Role from the shop """
 
         server = ctx.message.server
@@ -304,9 +380,9 @@ class shop:
             await self.bot.say("You are already have a special role. Type !contact to ask for help.")
             return
 
-        if self.bank_check(author, 250000):
+        if self.bank_check(author, 750000):
             bank = self.bot.get_cog('Economy').bank
-            pay = bank.get_balance(author) - 250000
+            pay = bank.get_balance(author) - 750000
             bank.set_credits(author, pay)
             await self._remove_roles(author,["Epic™"])
             await asyncio.sleep(3)
@@ -314,6 +390,26 @@ class shop:
             await self.bot.say("Congratulations, you are now a **LeGeNDary™**")
         else:
             await self.bot.say("You do not have enough credits to buy this role. Type !contact to ask for help.")
+
+    @buy.command(pass_context=True, name="8")
+    async def buy_8(self, ctx):
+
+
+        server = ctx.message.server
+        author = ctx.message.author
+        legendServer = ["374596069989810176"]
+
+        if server.id not in legendServer:
+            await self.bot.say("This command can only be executed in the LeGeND Family Server")
+            return
+
+        allowed = await self._is_member(author)
+
+        if not allowed:
+            await self.bot.say("You cannot use the store, you must be a member of the family. Type !contact to ask for help.")
+            return
+
+        await self.bot.say("please contact @GR8#7968 or rakerran#7837 to purchase it for you.")
 
 def setup(bot):
     bot.add_cog(shop(bot))
