@@ -19,6 +19,13 @@
     "A new legendary card arrives! Its {0.mention}!",
     "Everyone, please put your logs away and welcome {0.mention} to the server!",
     "You people have no respect. Trainer {0.mention} just came in here and nobody said hello!",
-    "Look who we caught drinking the water in the Goblin Stadium! Its the newest challenger, {0.mention}"
+    "Look who we caught drinking the water in the Goblin Stadium! Its the newest challenger, {0.mention}",
+    "Could someone please show {0.mention} their room in the King's Tower? They just arrived by a Baby Dragon.",
+    "Welcome {0.mention}, the Master builder!",
+    "Who controls the Zappies? It's our newest member {0.mention}",
+    "Looks like our Tornado just pulled {0.mention} into our King Tower! Welcome!",
+    "Watch out {0.mention} just stunned us with a zap.",
+    "Hi {0.mention}, welcome to The LeGeNDary arena! Get it? LeGeND...ary ! No? Okay sorry :(",
+    "Even Ice Wizard's mustache isn't as hot as {0.mention}"
 ]
 }
