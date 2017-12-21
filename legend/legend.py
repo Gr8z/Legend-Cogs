@@ -349,7 +349,7 @@ class legend:
             else:
                 showMembers = "**FULL**   "
 
-            if str(clans[x]['alliance']['typeName']) == 3:
+            if str(clans[x]['alliance']['type']) == 3:
                 title += "[Closed] "
 
             title += clans[x]['alliance']['header']['name'] + " (#" + clans[x]['alliance']['hashtag'] + ") "
