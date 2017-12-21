@@ -220,44 +220,22 @@ class clashroyale:
     @commands.command(pass_context=True)
     async def clan(self, ctx, clantag):
     	"""View Clash Royale Clan statistics and information """
-    	client = AsyncClient()
     	try:
-    		clandata = await client.get_clan(clantag)
+    		clandata = await self.getClan(clantag)
     	except:
     		await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
     		return
 
-    	embed=discord.Embed(title=clandata.name + " (#" + clantag + ")", description=clandata.description, color=0x0080ff)
-    	embed.set_thumbnail(url='http://api.cr-api.com'+ str(clandata.badge.url))
-    	embed.add_field(name="Members", value=str(clandata.memberCount)+"/50", inline=True)
-    	embed.add_field(name="Donations", value=clandata.donations, inline=True)
-    	embed.add_field(name="Score", value=clandata.score, inline=True)
-    	embed.add_field(name="Required Trophies", value=clandata.requiredScore, inline=True)
-    	embed.add_field(name="Status", value=clandata.typeName, inline=True)
-    	embed.add_field(name="Country", value=clandata.region.name, inline=True)
+    	embed=discord.Embed(title=clandata['alliance']['header']['name'] + " (#" + clantag + ")", description=clandata['alliance']['description'], color=0x0080ff)
+    	embed.set_thumbnail(url='https://statsroyale.com/images/badges/16000002.png')
+    	embed.add_field(name="Members", value=str(clandata['alliance']['header']['numberOfMembers'])+"/50", inline=True)
+    	embed.add_field(name="Donations", value=str(clandata['alliance']['header']['donations']), inline=True)
+    	embed.add_field(name="Score", value=str(clandata['alliance']['header']['score']), inline=True)
+    	embed.add_field(name="Required Trophies", value=str(clandata['alliance']['header']['requiredScore']), inline=True)
+    	embed.add_field(name="Status", value=str(clandata['alliance']['header']['type']), inline=True)
+    	embed.add_field(name="Country", value=str(clandata['alliance']['header']['region']), inline=True)
     	embed.set_footer(text=credits, icon_url=creditIcon)
     	await self.bot.say(embed=embed)
-
-    @commands.command()
-    async def api(self):
-    	"""Ping the CR API  """
-
-    	socket.setdefaulttimeout( 10 )  # timeout in seconds
-
-    	await self.bot.type()
-
-    	url = 'http://api.cr-api.com/profile/CRRYRPCC'
-    	try :
-    	    req = urllib2.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-    	    response = urllib2.urlopen(req).read()
-    	except socket.timeout as e:
-    	    await self.bot.say('We failed to reach the server. Reason: ' + str(e))
-    	except urllib2.HTTPError as e:
-    	    await self.bot.say('The server couldn\'t fulfill the request. Reason: ' + str(e.code))
-    	except urllib2.URLError as e:
-    	    await self.bot.say('We failed to reach the server. Reason: ' + str(e.reason))
-    	else :
-    	    await self.bot.say('API is working!')
 
     @commands.group(pass_context=True)
     async def save(self, ctx):
