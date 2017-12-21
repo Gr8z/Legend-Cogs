@@ -10,6 +10,10 @@ import random
 from random import choice as rand_choice
 import string
 import datetime
+from fake_useragent import UserAgent
+import requests_cache
+
+requests_cache.install_cache('statsroyale_cache', backend='sqlite', expire_after=300)
 
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
@@ -133,6 +137,38 @@ class legend:
             await self.bot.remove_roles(member, *roles)
         except:
             pass
+
+    async def getProfile(self, profiletag):
+        ua = UserAgent()
+        headers = {
+            "User-Agent": ua.random
+        }
+
+        try:
+            await self.bot.send_message(discord.Object(id=393081792824999939), "!profile "+ profiletag)
+            await asyncio.sleep(1)
+            response = requests.get('http://statsroyale.com/profile/'+profiletag+'?appjson=1', timeout=5, headers=headers, proxies=dict(http="69.39.224.129:80",))
+            return response.json()
+        except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
+            return None
+        except requests.exceptions.RequestException as e:
+            return None
+
+    async def getClan(self, clantag):
+        ua = UserAgent()
+        headers = {
+            "User-Agent": ua.random
+        }
+
+        try:
+            response = requests.get('http://statsroyale.com/clan/'+clantag+'?appjson=1', timeout=5, headers=headers, proxies=dict(http="69.39.224.129:80",))
+            if not response.from_cache:
+                await self.bot.send_message(discord.Object(id=393081792824999939), "!clan "+ clantag)
+            return response.json()
+        except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
+            return None
+        except requests.exceptions.RequestException as e:
+            return None
     
     @commands.group(pass_context=True)
     @checks.mod_or_permissions(administrator=True)
@@ -242,9 +278,9 @@ class legend:
             try:
                 await self.updateClash()
                 profiletag = self.clash[member.id]['tag']
-                profiledata = requests.get('http://api.cr-api.com/profile/'+profiletag, timeout=10).json()
-                trophies = profiledata['trophies']
-                maxtrophies = profiledata['stats']['maxTrophies']
+                profiledata = await self.getProfile(profiletag)
+                trophies = profiledata['profile']['trophies']
+                maxtrophies = profiledata['profile']['maxscore']
                 maxmembers = 50
                 await self.bot.say("Hello " + member.mention + ", these are all the clans you are allowed to join, based on your statistics. Your current trophies are: " + str(trophies))
             except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
@@ -254,20 +290,28 @@ class legend:
                 await self.bot.say(e)
                 return
             except:
+                raise
                 await self.bot.say("You must assosiate a tag with this member first using ``!save clash #tag @member``")
                 return
 
         try:
-            clans = requests.get('http://api.cr-api.com/clan/'+','.join(self.c[clan]["tag"] for clan in self.c)+'/info', timeout=10).json()
+            clans = [None] * self.numClans()
+            index = 0
+            msg = await self.bot.say("Please wait, Fetching clan data...")
+            for clan in self.c:
+                listClans = await self.getClan(self.c[clan]["tag"])
+                clans[index] = listClans
+                index += 1
+                await self.bot.edit_message(msg, "Please wait, Fetching clan data ("+str(index)+"/13)")
         except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
                 await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
                 return
         except requests.exceptions.RequestException as e:
                 await self.bot.say(e)
                 return
-                
-        clans = sorted(clans, key=lambda clanned: clanned['requiredScore'], reverse=True)
-        totalMembers = sum(clans[x]['memberCount'] for x in range(len(clans)))
+         
+        clans = sorted(clans, key=lambda clanned: clanned['alliance']['header']['requiredScore'], reverse=True)
+        totalMembers = sum(clans[x]['alliance']['header']['numberOfMembers'] for x in range(len(clans)))
 
         embed=discord.Embed(title="", description="Our Family is made up of " + str(self.numClans()) + " clans with a total of " + str(totalMembers) + " members. We have " + str((self.numClans()*50)-totalMembers) + " spots left.", color=0xf1c747)
         embed.set_author(name="LeGeND Family Clans", url="http://cr-api.com/clan/family/legend", icon_url="https://i.imgur.com/dtSMITE.jpg")
@@ -281,7 +325,7 @@ class legend:
             bonustitle = None
             
             for clankey in self.clanArray():
-                if self.c[clankey]['tag'] == clans[x]['tag']:
+                if self.c[clankey]['tag'] == clans[x]['alliance']['hashtag']:
                     numWaiting = len(self.c[clankey]['waiting'])
                     personalbest = self.c[clankey]['personalbest']
                     bonustitle = self.c[clankey]['bonustitle']
@@ -292,15 +336,15 @@ class legend:
             else:
                 title = ""
 
-            if clans[x]['memberCount'] < 50:
-                showMembers = str(clans[x]['memberCount']) + "/50"
+            if clans[x]['alliance']['header']['numberOfMembers'] < 50:
+                showMembers = str(clans[x]['alliance']['header']['numberOfMembers']) + "/50"
             else:
                 showMembers = "**FULL**   "
 
-            if str(clans[x]['typeName']) != 'Invite Only':
-                title += "["+str(clans[x]['typeName'])+"] "
+            #if str(clans[x]['typeName']) != 'Invite Only':
+            #    title += "["+str(clans[x]['typeName'])+"] "
 
-            title += clans[x]['name'] + " (#" + clans[x]['tag'] + ") "
+            title += clans[x]['alliance']['header']['name'] + " (#" + clans[x]['alliance']['hashtag'] + ") "
             
             if personalbest > 0:
                 title += "PB: "+str(personalbest)+"+  "
@@ -309,10 +353,10 @@ class legend:
             if bonustitle is not None:
                 title += bonustitle
 
-            desc = ":shield: " + showMembers + "     :trophy: " + str(clans[x]['requiredScore']) + "+     :medal: " +str(clans[x]['score'])
-            totalMembers += clans[x]['memberCount']
+            desc = ":shield: " + showMembers + "     :trophy: " + str(clans[x]['alliance']['header']['requiredScore']) + "+     :medal: " +str(clans[x]['alliance']['header']['score'])
+            totalMembers += clans[x]['alliance']['header']['numberOfMembers']
 
-            if (member is None) or ((trophies >= clans[x]['requiredScore']) and (maxtrophies > personalbest)):
+            if (member is None) or ((trophies >= clans[x]['alliance']['header']['requiredScore']) and (maxtrophies > personalbest)):
                 foundClan = True
                 embed.add_field(name=title, value=desc, inline=False)
 
