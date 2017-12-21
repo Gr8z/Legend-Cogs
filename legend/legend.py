@@ -13,7 +13,6 @@ import datetime
 from fake_useragent import UserAgent
 import requests_cache
 
-
 requests_cache.install_cache('statsroyale_cache', backend='sqlite', expire_after=300)
 
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
