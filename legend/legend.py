@@ -270,6 +270,13 @@ class legend:
     @commands.command(pass_context=True)
     async def legend(self, ctx, member: discord.Member = None):
         """ Show Legend clans, can also show clans based on a member's trophies"""
+
+        allowed = await self._is_commander(author)
+
+        if not allowed:
+            await self.bot.say("You dont have enough permissions to approve a recruit. Type !contact to ask for help.")
+            return
+
         if member is None:
             trophies = 9999
             maxtrophies = 9999
