@@ -128,9 +128,7 @@ class shop:
 
         server = ctx.message.server
         author = ctx.message.author
-        perCrown = 300
-        perDonation = 15
-
+        
         await self.updateClash()
 
         bank = self.bot.get_cog('Economy').bank
@@ -163,8 +161,28 @@ class shop:
                     if clan_tag == self.tags[banks[key]]['tag']:
 
                         try:
-                            amount = (clan_donations*perDonation) + (clan_clanChestCrowns*perCrown)
                             user = discord.utils.get(ctx.message.server.members, id = banks[key])
+
+                            rare = await self._is_rare(user)
+                            epic = await self._is_epic(user)
+                            legendary = await self._is_legendary(user)
+
+                            perCrown = 300
+                            perDonation = 15
+
+                            if rare:
+                                perCrown *= 1.2
+                                perDonation *= 1.2
+
+                            if epic:
+                                perCrown *= 1.35
+                                perDonation *= 1.35
+
+                            if legendary:
+                                perCrown *= 1.5
+                                perDonation *= 1.5
+
+                            amount = (clan_donations*perDonation) + (clan_clanChestCrowns*perCrown)
                             pay = bank.get_balance(user) + amount
                             bank.set_credits(user, pay)
 
