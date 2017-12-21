@@ -83,6 +83,14 @@ Please note that if you just lurk in the server and not participate for a long p
 https://discord.gg/CN47Tkx
 """
 
+coc_bs = """We also play **Clash of Clans** and **Brawl Stars**, we would like to invite to you join them if you play either of these supercell games.
+
+• Clash of Clans - **LeGeND Raiders!** - https://discord.gg/BG7wMFw
+• Brawl Stars - **LeGeND Bandits!** - https://discord.gg/brVC4Cz
+
+You can send a request to join with the message "from LEGEND". Join the discord server when you are accepted.
+"""
+
 social_info = """Stay Social! Come and follow us on these platforms to stay up to date on the latest news and announcements.
 
 https://twitter.com/TheLegendClans
@@ -499,6 +507,9 @@ class legend:
 
             await asyncio.sleep(300)
             await self.bot.send_message(member,esports_info)
+
+            await asyncio.sleep(300)
+            await self.bot.send_message(member,coc_bs)
 
             await asyncio.sleep(300)
             await self.bot.send_message(member,social_info)
