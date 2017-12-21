@@ -588,7 +588,7 @@ class legend:
         await self.bot.type()
 
         try:
-            clandata = requests.get('http://api.cr-api.com/clan/{}'.format(clan_tag), timeout=10).json()
+            clandata = await self.getClan(clan_tag)
         except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
@@ -598,10 +598,10 @@ class legend:
         cr_members_name = []
         cr_members_tag = []
         cr_members_trophy = []
-        for x in range(0, len(clandata['members'])):
-            cr_members_name.append(clandata['members'][x]['name'])
-            cr_members_tag.append(clandata['members'][x]['tag'])
-            cr_members_trophy.append(clandata['members'][x]['trophies'])
+        for x in range(0, len(clandata['alliance']['members'])):
+            cr_members_name.append(clandata['alliance']['members'][x]['name'])
+            cr_members_tag.append(clandata['alliance']['members'][x]['hashtag'])
+            cr_members_trophy.append(clandata['alliance']['members'][x]['score'])
 
         role = discord.utils.get(server.roles, id=clan_role_id)
         d_members = [m for m in server.members if role in m.roles]
@@ -639,7 +639,7 @@ class legend:
                 cr_members_with_no_player_tag.append(cr_members_name[index])
                 continue
 
-        clanReq = clandata['requiredScore']
+        clanReq = clandata['alliance']['header']['requiredScore']
         for index, player_trophy in enumerate(cr_members_trophy):
             if player_trophy < clanReq:
                 cr_members_with_less_trophies.append(cr_members_name[index])
