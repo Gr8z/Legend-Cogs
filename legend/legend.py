@@ -147,7 +147,9 @@ class legend:
 
         try:
             await self.bot.send_message(discord.Object(id=393081792824999939), "!profile "+ profiletag)
-            await asyncio.sleep(1)
+
+            statsroyale = await self.bot.wait_for_message(timeout=5, author=discord.Object(id=345270428245164032))
+
             response = requests.get('http://statsroyale.com/profile/'+profiletag+'?appjson=1', timeout=5, headers=headers, proxies=dict(http="69.39.224.129:80",))
             return response.json()
         except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
