@@ -349,7 +349,7 @@ class legend:
             else:
                 showMembers = "**FULL**   "
 
-            if str(clans[x]['alliance']['type']) == 3:
+            if str(clans[x]['alliance']['header']['type']) == 3:
                 title += "[Closed] "
 
             title += clans[x]['alliance']['header']['name'] + " (#" + clans[x]['alliance']['hashtag'] + ") "
@@ -787,7 +787,7 @@ class legend:
                 await self.bot.say("Approval failed, you don't meet the trophy requirements.")
                 return
 
-            if (clandata['alliance']['type'] == 3):
+            if (clandata['alliance']['header']['type'] == 3):
                 await self.bot.say("Approval failed, the clan is currently closed.")
                 return
 
