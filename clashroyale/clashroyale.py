@@ -16,10 +16,9 @@ import asyncio
 from crapipy import AsyncClient
 import socket
 import urllib.request  as urllib2
-from fake_useragent import UserAgent
 import requests_cache
 
-requests_cache.install_cache('statsroyale_cache', backend='sqlite', expire_after=300)
+requests_cache.install_cache('statsroyale_cache', backend='sqlite', expire_after=60)
 
 BOTCOMMANDER_ROLES =  ["Family Representative", "Clan Manager", "Clan Deputy", "Co-Leader", "Hub Officer", "admin"];
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
@@ -28,7 +27,6 @@ credits = "Bot by GR8 | Titan"
 clash = os.path.join("cogs", "tags.json")
 clash_mini = os.path.join("cogs", "mini_tags.json")
 brawl = os.path.join("data", "BrawlStats", "tags.json")
-cycle = os.path.join("data", "clashroyale", "chests.json")
 
 class clashroyale:
     """Live statistics for Clash Royale"""
@@ -38,43 +36,11 @@ class clashroyale:
     	self.clash = dataIO.load_json(clash)
     	self.clash_mini = dataIO.load_json(clash_mini)
     	self.brawl = dataIO.load_json(brawl)
-    	self.cycle = dataIO.load_json(cycle)
-
-    async def getProfile(self, profiletag):
-        ua = UserAgent()
-        headers = {
-            "User-Agent": ua.random
-        }
-
-        try:
-            await self.bot.send_message(discord.Object(id=393081792824999939), "!profile "+ profiletag)
-            await asyncio.sleep(1)
-            return requests.get('http://statsroyale.com/profile/'+profiletag+'?appjson=1', timeout=5, headers=headers, proxies=dict(http="69.39.224.129:80",)).json()
-        except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
-            return None
-        except requests.exceptions.RequestException as e:
-            return None
-
-    async def getClan(self, clantag):
-        ua = UserAgent()
-        headers = {
-            "User-Agent": ua.random
-        }
-
-        try:
-            await self.bot.send_message(discord.Object(id=393081792824999939), "!clan "+ clantag)
-            await asyncio.sleep(1)
-            return requests.get('http://statsroyale.com/clan/'+clantag+'?appjson=1', timeout=5, headers=headers, proxies=dict(http="69.39.224.129:80",)).json()
-        except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
-            return None
-        except requests.exceptions.RequestException as e:
-            return None
 
     @commands.command(pass_context=True, aliases=['clashprofile','cprofile','cProfile'])
     async def clashProfile(self, ctx, member: discord.Member = None):
     	"""View your Clash Royale Profile Data and Statstics."""
 
-    	client = AsyncClient()
     	try :
 
 	    	if member is None:
@@ -83,43 +49,38 @@ class clashroyale:
 	    	profiletag = self.clash[member.id]['tag']
 
 	    	try:
-	    		profiledata = await client.get_profile(profiletag)
+	    		profiledata = requests.get('http://collab.cr-api.com/player/'+profiletag, timeout=10).json()
 	    	except:
 	    		await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 	    		return
 
-	    	if profiledata.clan.badge.url is None:
+	    	if profiledata['clan'] is None:
 	    		clanurl = "https://i.imgur.com/4EH5hUn.png"
 	    	else:
-	    		clanurl = "http://api.cr-api.com"+profiledata.clan.badge.url
+	    		clanurl = "http://statsroyale.com/images/badges/"+str(profiledata['clan']['badge'])+".png"
 
 	    	embed=discord.Embed(title="", color=0x0080ff)
-	    	embed.set_author(name=profiledata.name + " (#"+profiledata.tag+")", icon_url=clanurl)
-	    	embed.set_thumbnail(url="http://api.cr-api.com" + profiledata.arena.imageURL)
-	    	embed.add_field(name="Trophies", value=profiledata.trophies, inline=True)
-	    	embed.add_field(name="Legendary Trophies", value=profiledata.legendaryTrophies, inline=True)
-	    	embed.add_field(name="Highest Trophies", value=profiledata.stats.maxTrophies, inline=True)
-	    	embed.add_field(name="Level", value=profiledata.experience.level, inline=True)
-	    	embed.add_field(name="Arena", value=profiledata.arena.name, inline=True)
-	    	embed.add_field(name="Experience", value=str(profiledata.experience.xp)+"/"+str(profiledata.experience.xpRequiredForLevelUp), inline=True)
-	    	if not profiledata.not_in_clan:
-	    		embed.add_field(name="Clan", value=profiledata.clan.name, inline=True)
-	    		embed.add_field(name="Role", value=profiledata.clan.role, inline=True)
-	    	embed.add_field(name="Cards Found", value=str(profiledata.stats.cardsFound)+"/78", inline=True)
-	    	embed.add_field(name="Favourite Card", value=profiledata.stats.favoriteCard.replace('_', ' ').capitalize(), inline=True)
-	    	embed.add_field(name="Chests Opened", value=profiledata.chest_cycle.position, inline=True)
-	    	embed.add_field(name="Games Played", value=profiledata.games.total, inline=True)
-	    	embed.add_field(name="Tournament Games Played", value=profiledata.games.tournamentGames, inline=True)
-	    	embed.add_field(name="Win Streak", value=str(max(0,profiledata.games.currentWinStreak))+" Wins", inline=True)
-	    	embed.add_field(name="Wins", value=profiledata.games.wins, inline=True)
-	    	embed.add_field(name="Losses", value=profiledata.games.losses, inline=True)
-	    	embed.add_field(name="Draws", value=profiledata.games.draws, inline=True)
-	    	embed.add_field(name="Three Crown Wins", value=profiledata.stats.threeCrownWins, inline=True)
-	    	embed.add_field(name="Total Donations", value=profiledata.stats.totalDonations, inline=True)
-	    	if hasattr(profiledata.stats, 'challengeMaxWins'):
-	    		embed.add_field(name="Challenge Max Wins", value=profiledata.stats.challengeMaxWins, inline=True)
-	    		embed.add_field(name="Challenge Cards Won", value=profiledata.stats.challengeCardsWon, inline=True)
-	    	embed.add_field(name="Tournament Cards Won", value=profiledata.stats.tournamentCardsWon, inline=True)
+	    	embed.set_author(name=profiledata['name'] + " (#"+profiledata['tag']+")", icon_url=clanurl)
+	    	embed.set_thumbnail(url="https://statsroyale.com/images/leagues/league-1.png") #TODO
+	    	embed.add_field(name="Trophies", value=profiledata['trophies'], inline=True)
+	    	embed.add_field(name="Highest Trophies", value=profiledata['stats']['maxTrophies'], inline=True)
+	    	embed.add_field(name="Level", value=profiledata['stats']['level'], inline=True)
+	    	embed.add_field(name="Arena", value=profiledata['arena']['name'], inline=True)
+	    	if profiledata['clan'] is not None:
+	    		embed.add_field(name="Clan", value=profiledata['clan']['name'], inline=True)
+	    		embed.add_field(name="Role", value=profiledata['clan']['role'], inline=True)
+	    	embed.add_field(name="Cards Found", value=str(profiledata['stats']['cardsFound'])+"/81", inline=True)
+	    	embed.add_field(name="Favourite Card", value=profiledata['stats']['favoriteCard']['name'], inline=True)
+	    	embed.add_field(name="Games Played", value=profiledata['games']['total'], inline=True)
+	    	embed.add_field(name="Tournament Games Played", value=profiledata['games']['tournamentGames'], inline=True)
+	    	embed.add_field(name="Wins", value=profiledata['games']['wins'], inline=True)
+	    	embed.add_field(name="Losses", value=profiledata['games']['losses'], inline=True)
+	    	embed.add_field(name="Draws", value=profiledata['games']['draws'], inline=True)
+	    	embed.add_field(name="Three Crown Wins", value=profiledata['stats']['threeCrownWins'], inline=True)
+	    	embed.add_field(name="Total Donations", value=profiledata['stats']['totalDonations'], inline=True)
+	    	embed.add_field(name="Challenge Max Wins", value=profiledata['stats']['challengeMaxWins'], inline=True)
+	    	embed.add_field(name="Challenge Cards Won", value=profiledata['stats']['challengeCardsWon'], inline=True)
+	    	embed.add_field(name="Tournament Cards Won", value=profiledata['stats']['tournamentCardsWon'], inline=True)
 	    	embed.set_footer(text=credits, icon_url=creditIcon)
 
     		await self.bot.say(embed=embed)
@@ -128,38 +89,9 @@ class clashroyale:
     		await self.bot.say("You need to first save your profile using ``!save clash #GAMETAG``")
 
     @commands.command(pass_context=True)
-    async def offers(self, ctx, member: discord.Member = None):
-    	"""View your Clash Royale upcomming offers"""
-
-    	client = AsyncClient()
-    	try :
-	    	if member is None:
-	    		member = ctx.message.author
-
-	    	profiletag = self.clash[member.id]['tag']
-
-	    	try:
-	    		profiledata = await client.get_profile(profiletag)
-	    	except:
-	    		await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
-	    		return
-
-	    	offersdesc = "<:epicopen:380832590254571521> " + str(profiledata.shop_offers.epic) + " Days   <:legendopen:380832387195469826> " + str(profiledata.shop_offers.legendary) + " Days   <:shopoffer:380832689076305924> " + str(profiledata.shop_offers.arena) + " Days"
-
-	    	embed=discord.Embed(title="", description="", color=0x0080ff)
-	    	embed.set_author(name=profiledata.name + " (#"+profiledata.tag+")", icon_url="http://api.cr-api.com"+profiledata.clan.badge.url)
-	    	embed.add_field(name="Upcoming Shop Offers", value=offersdesc, inline=True)
-	    	embed.set_footer(text=credits, icon_url=creditIcon)	    	
-
-	    	await self.bot.say(embed=embed)
-
-    	except:
-    		await self.bot.say("You need to first save your profile using ``!save clash #GAMETAG``")
-
-    @commands.command(pass_context=True)
     async def chests(self, ctx, member: discord.Member = None):
 	    """View your upcoming chest cycle for Clash Royale."""
-	    client = AsyncClient()
+
 	    try:
 	    	if member is None:
 	    		member = ctx.message.author
@@ -167,76 +99,52 @@ class clashroyale:
 	    	profiletag = self.clash[member.id]['tag']
 
 	    	try:
-	    		profiledata = await client.get_profile(profiletag)
+	    		profiledata = requests.get('http://collab.cr-api.com/player/'+profiletag, timeout=10).json()
 	    	except:
 	    		await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 	    		return
 
-	    	valuechest = ""
+	    	valuechestText = ' '.join(profiledata['chestCycle']['upcoming']).replace('silver', '<:silver:385784583343439882>').replace('gold', '<:gold:385784630227369985>').replace('giant', '<:giant:380832560504373249>').replace('epic', '<:epic:380832620059033610>').replace('super magical', '<:super:380832745305276416>').replace('magical', '<:magic:380832656704798731>').replace('legendary', '<:legend:380832458482122752>')
 
-	    	def chest_first_index(position, key):
-	    	    """First index of chest by key."""
-	    	    if self.cycle is not None:
-	    	        if pos is not None:
-	    	            start_pos = position % len(self.cycle)
-	    	            chests = self.cycle[start_pos:]
-	    	            chests.extend(self.cycle)
-	    	            return chests.index(key)+1
-	    	    return None
+	    	chest1 = "<:giant:380832560504373249> +" + str(profiledata['chestCycle']['giant']+1) + "  "
+	    	chest2 = "<:epic:380832620059033610> +" + str(profiledata['chestCycle']['epic']+1) + "  "
+	    	chest3 = "<:magic:380832656704798731> +" + str(profiledata['chestCycle']['magical']+1) + "  "
+	    	chest4 = "<:super:380832745305276416> +" + str(profiledata['chestCycle']['superMagical']+1) + "  "
+	    	chest5 = "<:legend:380832458482122752> +" + str(profiledata['chestCycle']['legendary']+1) + "  "
 
-	    	position = profiledata.chest_cycle.position
-	    	index = position % len(self.cycle)
-
-	    	for x in range(0,10):
-	    		pos = index + x
-	    		newPos = -1
-	    		if pos < (len(self.cycle)-1):
-	    			valuechest += str(self.cycle[pos])
-	    		else:
-	    			newPos += 1
-	    			valuechest += str(self.cycle[newPos])	    	
-
-	    	chest1 = "<:giant:380832560504373249> +" + str(chest_first_index(position, "<:giant:380832560504373249>")) + "  "
-	    	chest2 = "<:epic:380832620059033610> +" + str(profiledata.chest_cycle.epic_pos-position) + "  "
-	    	chest3 = "<:magic:380832656704798731> +" + str(chest_first_index(position, "<:magic:380832656704798731>")) + "  "
-	    	chest4 = "<:super:380832745305276416> +" + str(profiledata.chest_cycle.super_magical_pos-position) + "  " 
-	    	if profiledata.chest_cycle.legendary_pos is not None:
-	    		chest5 = "<:legend:380832458482122752> +" + str(profiledata.chest_cycle.legendary_pos-position)
-	    	else:
-	    		chest5 = ""
-
-	    	if profiledata.clan.badge.url is None:
+	    	if profiledata['clan'] is None:
 	    		clanurl = "https://i.imgur.com/4EH5hUn.png"
 	    	else:
-	    		clanurl = "http://api.cr-api.com"+profiledata.clan.badge.url
+	    		clanurl = "http://statsroyale.com/images/badges/"+str(profiledata['clan']['badge'])+".png"
 
-	    	embed=discord.Embed(title="", color=0x0080ff, description=str(position)+" Chests Opened")
-	    	embed.set_author(name=profiledata.name + " (#"+profiledata.tag+")", url='http://cr-api.com/profile/' + profiletag, icon_url=clanurl)
-	    	embed.add_field(name="Upcoming Chests", value=valuechest, inline=False)
+	    	embed=discord.Embed(title="", color=0x0080ff, description="Your Upcoming chests.")
+	    	embed.set_author(name=profiledata['name'] + " (#"+profiledata['tag']+")", icon_url=clanurl)
+	    	embed.add_field(name="Upcoming Chests", value=valuechestText, inline=False)
 	    	embed.add_field(name="Special Chests", value=chest1+chest2+chest3+chest4+chest5, inline=False)
 	    	embed.set_footer(text=credits, icon_url=creditIcon)
 	    	await self.bot.say(embed=embed)
 
 	    except:
+	    	raise
 	    	await self.bot.say("You need to first save your profile using ``!save clash #GAMETAG``")
 
     @commands.command(pass_context=True)
     async def clan(self, ctx, clantag):
     	"""View Clash Royale Clan statistics and information """
     	try:
-    		clandata = await self.getClan(clantag)
+    		clandata = requests.get('http://collab.cr-api.com/clan/'+clantag, timeout=10).json()
     	except:
     		await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
     		return
 
-    	embed=discord.Embed(title=clandata['alliance']['header']['name'] + " (#" + clantag + ")", description=clandata['alliance']['description'], color=0x0080ff)
-    	embed.set_thumbnail(url='https://statsroyale.com/images/badges/16000002.png')
-    	embed.add_field(name="Members", value=str(clandata['alliance']['header']['numberOfMembers'])+"/50", inline=True)
-    	embed.add_field(name="Donations", value=str(clandata['alliance']['header']['donations']), inline=True)
-    	embed.add_field(name="Score", value=str(clandata['alliance']['header']['score']), inline=True)
-    	embed.add_field(name="Required Trophies", value=str(clandata['alliance']['header']['requiredScore']), inline=True)
-    	embed.add_field(name="Status", value=str(clandata['alliance']['header']['type']), inline=True)
-    	embed.add_field(name="Country", value=str(clandata['alliance']['header']['region']), inline=True)
+    	embed=discord.Embed(title=clandata['name'] + " (#" + clandata['tag'] + ")", description=clandata['description'], color=0x0080ff)
+    	embed.set_thumbnail(url="http://statsroyale.com/images/badges/"+str(clandata['badge'])+".png")
+    	embed.add_field(name="Members", value=str(clandata['memberCount'])+"/50", inline=True)
+    	embed.add_field(name="Donations", value=str(clandata['donations']), inline=True)
+    	embed.add_field(name="Score", value=str(clandata['score']), inline=True)
+    	embed.add_field(name="Required Trophies", value=str(clandata['requiredScore']), inline=True)
+    	embed.add_field(name="Status", value=str(clandata['type']), inline=True)
+    	embed.add_field(name="Country", value=str(clandata['location']['name']), inline=True)
     	embed.set_footer(text=credits, icon_url=creditIcon)
     	await self.bot.say(embed=embed)
 
@@ -297,12 +205,12 @@ class clashroyale:
 	    	member = ctx.message.author
 
 	    try:
-	    	profiledata = await self.getProfile(profiletag)
+	    	profiledata = requests.get('http://collab.cr-api.com/player/'+profiletag, timeout=10).json()
 
 	    	self.clash.update({member.id: {'tag': profiletag}})
 	    	dataIO.save_json('cogs/tags.json', self.clash)
 
-	    	await self.bot.say('**' +profiledata['profile']['name'] + ' (#'+ profiletag + ')** has been successfully saved on ' + member.mention)
+	    	await self.bot.say('**' +profiledata['name'] + ' (#'+ profiletag + ')** has been successfully saved on ' + member.mention)
 	    except:
 	    	await self.bot.say("We cannot find your ID in our database, please try again. Type !contact to ask for help.")
 
