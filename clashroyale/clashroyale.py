@@ -125,7 +125,6 @@ class clashroyale:
 	    	await self.bot.say(embed=embed)
 
 	    except:
-	    	raise
 	    	await self.bot.say("You need to first save your profile using ``!save clash #GAMETAG``")
 
     @commands.command(pass_context=True)
