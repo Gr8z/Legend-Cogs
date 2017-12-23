@@ -270,14 +270,7 @@ class legend:
                 return
 
         try:
-            clans = [None] * self.numClans()
-            index = 0
-            msg = await self.bot.say("Please wait, Fetching clan data...")
-            for clan in self.c:
-                listClans = requests.get('http://collab.cr-api.com/clan/'+self.c[clan]["tag"], timeout=10).json()
-                clans[index] = listClans
-                index += 1
-                await self.bot.edit_message(msg, "Please wait, Fetching clan data ("+str(index)+"/13)")
+            clans = requests.get('http://api.cr-api.com/clan/'+','.join(self.c[clan]["tag"] for clan in self.c), timeout=10).json()
         except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
                 await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
                 return
