@@ -309,7 +309,7 @@ class legend:
             else:
                 showMembers = "**FULL**   "
 
-            if str(clans[x]['type']) != 'inviteOnly':
+            if str(clans[x]['type']) != 'invite only':
                 title += "["+str(clans[x]['type']).capitalize()+"] "
 
             title += clans[x]['name'] + " (#" + clans[x]['tag'] + ") "
