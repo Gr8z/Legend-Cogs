@@ -931,7 +931,7 @@ class legend:
         if server.id not in legendServer:
             await self.bot.say("This command can only be executed in the LeGeND Family Server")
             return
-            
+
         await self.bot.type()
 
         embed=discord.Embed(title="", description="", color=0x0080ff)
@@ -947,7 +947,7 @@ class legend:
                         self.c[clan]['waiting'].remove(userID)
                         dataIO.save_json('cogs/clans.json', self.c)
                         message += str(index+1) + ". " + "*user not found*" + "\n"
-                embed.add_field(name=self.c[clan]["name"], value=message, inline=True)
+                embed.add_field(name=self.c[clan]["name"], value=message, inline=False)
         
         if not message:
             await self.bot.say("The waiting list is empty")
