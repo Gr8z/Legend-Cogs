@@ -10,9 +10,6 @@ import random
 from random import choice as rand_choice
 import string
 import datetime
-import requests_cache
-
-requests_cache.install_cache('statsroyale_cache', backend='sqlite', expire_after=60)
 
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
