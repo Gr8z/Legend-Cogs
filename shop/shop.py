@@ -5,6 +5,7 @@ from .utils.dataIO import dataIO, fileIO
 from cogs.utils import checks
 import asyncio
 import json
+import math
 
 class shop:
     """Legend Family Shop for credits"""
@@ -147,7 +148,7 @@ class shop:
                                     perCrown *= 1.5
                                     perDonation *= 1.5
 
-                                amount = (clan_donations*perDonation) + (clan_clanChestCrowns*perCrown)
+                                amount = math.ceil((clan_donations*perDonation) + (clan_clanChestCrowns*perCrown))
                                 pay = bank.get_balance(user) + amount
                                 bank.set_credits(user, pay)
 
