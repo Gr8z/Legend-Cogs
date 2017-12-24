@@ -934,7 +934,9 @@ class legend:
 
         await self.bot.type()
 
-        embed=discord.Embed(title="", description="", color=0x0080ff)
+        
+        totalMembers = sum(clans[x]['memberCount'] for x in range(len(clans)))
+        embed=discord.Embed(title="", description="Our Family is made up of " + str(self.numClans()) + " clans with a total of " + str(totalMembers) + " members. We have " + str((self.numClans()*50)-totalMembers) + " spots left.", color=0x0080ff)
 
         for indexC, clan in enumerate(self.c):
             if self.c[clan]["waiting"]:
