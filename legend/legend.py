@@ -918,11 +918,20 @@ class legend:
         except ValueError:
             await self.bot.say("Recruit not found in the waiting list.")
 
-    @commands.command(pass_context=True, aliases=["waitlist","wait"])
+    @commands.command(pass_context=True, no_pm=True, aliases=["waitlist","wait"])
     async def waitinglist(self, ctx):
         """Show status of the waiting list."""
+
         message = ""
-        
+
+        server = ctx.message.server
+        author = ctx.message.author
+        legendServer = ["374596069989810176"]
+
+        if server.id not in legendServer:
+            await self.bot.say("This command can only be executed in the LeGeND Family Server")
+            return
+            
         await self.bot.type()
 
         embed=discord.Embed(title="", description="", color=0x0080ff)
