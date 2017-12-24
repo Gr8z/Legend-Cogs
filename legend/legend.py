@@ -322,7 +322,7 @@ class legend:
             desc = ":shield: " + showMembers + "     :trophy: " + str(clans[x]['requiredScore']) + "+     :medal: " +str(clans[x]['score'])
             totalMembers += clans[x]['memberCount']
 
-            if (member is None) or ((trophies >= clans[x]['requiredScore']) and (maxtrophies > personalbest)):
+            if (member is None) or ((clans[x]['requiredScore'] <= trophies) and (maxtrophies > personalbest) and (trophies - clans[x]['requiredScore'] < 1500)):
                 foundClan = True
                 embed.add_field(name=title, value=desc, inline=False)
 
