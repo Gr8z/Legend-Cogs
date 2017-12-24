@@ -873,9 +873,6 @@ class legend:
             except discord.HTTPException:
                 raise
             await self.bot.say(member.mention + " You have been added to the waiting list for **"+ clan_name + "**. We will mention you when a spot is available.")
-
-            #roleName = discord.utils.get(server.roles, name=clan_role)
-            #await self.bot.send_message(discord.Object(id='375839968096157697'), '**' + member.mention + '** was added to the **Waiting List** for ' + roleName.mention)
         else:
             await self.bot.say("Cannot add you to the waiting list, You are already a part of a clan in the family.")
 
@@ -928,10 +925,11 @@ class legend:
         
         await self.bot.type()
 
-        for clan in self.c:
-            if self.c[clan]["waiting"]:
-                message += "\n**" + self.c[clan]["name"] + "**\n"
+        embed=discord.Embed(title="", description="", color=0x0080ff)
 
+        for indexC, clan in enumerate(self.c):
+            if self.c[clan]["waiting"]:
+                message = ""
                 for index, userID in enumerate(self.c[clan]["waiting"]):
                     user = discord.utils.get(ctx.message.server.members, id = userID)
                     try:
@@ -940,10 +938,14 @@ class legend:
                         self.c[clan]['waiting'].remove(userID)
                         dataIO.save_json('cogs/clans.json', self.c)
                         message += str(index+1) + ". " + "*user not found*" + "\n"
+                embed.add_field(name=self.c[clan]["name"], value=message, inline=True)
+        
         if not message:
             await self.bot.say("The waiting list is empty")
         else:
-            await self.bot.say(message)
+            embed.set_author(name="LeGeND Family Waiting List", icon_url="https://i.imgur.com/dtSMITE.jpg")
+            embed.set_footer(text=credits, icon_url=creditIcon)
+            await self.bot.say(embed=embed)
 
     @commands.command(pass_context=True, no_pm=True)
     async def inactive(self, ctx, member: discord.Member):
