@@ -4,11 +4,7 @@ import requests
 from .utils.dataIO import dataIO, fileIO
 from cogs.utils import checks
 import asyncio
-from fake_useragent import UserAgent
-import requests_cache
 import json
-
-requests_cache.install_cache('statsroyale_cache', backend='sqlite', expire_after=300)
 
 class shop:
     """Legend Family Shop for credits"""
@@ -18,6 +14,7 @@ class shop:
         self.banks = dataIO.load_json('data/economy/bank.json')
         self.tags = dataIO.load_json('cogs/tags.json')
         self.clans = dataIO.load_json('cogs/clans.json')
+        self.auth = dataIO.load_json('cogs/auth.json')
 
     async def updateClash(self):
         self.tags = dataIO.load_json('cogs/tags.json')
@@ -95,33 +92,6 @@ class shop:
     def numClans(self):
         return len(self.clans.keys())
 
-    def bank_check(self, user, amount):
-        bank = self.bot.get_cog('Economy').bank
-        if bank.account_exists(user):
-            if bank.can_spend(user, amount):
-                return True
-            else:
-                return False
-        else:
-            return False
-
-    async def getClan(self, clantag):
-        ua = UserAgent()
-        headers = {
-            "User-Agent": ua.random
-        }
-
-        try:
-            await self.bot.send_message(discord.Object(id=393081792824999939), "!clan "+ clantag)
-            statsroyale = await self.bot.wait_for_message(timeout=5, author=discord.Object(id=345270428245164032))
-            
-            response = requests.get('http://statsroyale.com/clan/'+clantag+'?appjson=1', timeout=5, headers=headers, proxies=dict(http="69.39.224.129:80",))
-            return response.json()
-        except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
-            return None
-        except requests.exceptions.RequestException as e:
-            return None
-
     @commands.command(pass_context=True, no_pm=True)
     @checks.is_owner()
     async def sendpayouts(self, ctx):
@@ -136,14 +106,7 @@ class shop:
         banks = list(self.banks['374596069989810176'])
 
         try:
-            clans = [None] * self.numClans()
-            index = 0
-            msg = await self.bot.say("Please wait, Fetching clan data...")
-            for clan in self.clans:
-                listClans = await self.getClan(self.clans[clan]["tag"])
-                clans[index] = listClans
-                index += 1
-                await self.bot.edit_message(msg, "Please wait, Fetching clan data ("+str(index)+"/13)")
+            clans = requests.get('http://collab.cr-api.com/clan/'+','.join(self.c[clan]["tag"] for clan in self.c)+'?auth='+self.auth['token'], timeout=10).json()
         except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
@@ -152,11 +115,11 @@ class shop:
             return
         
         for x in range(0, len(clans)):
-            for y in range(0, len(clans[x]['alliance']['members'])):
+            for y in range(0, len(clans[x]['members'])):
 
-                clan_tag = clans[x]['alliance']['members'][y]['hashtag']
-                clan_donations = clans[x]['alliance']['members'][y]['donations']
-                clan_clanChestCrowns = clans[x]['alliance']['members'][y]['clanChestCrowns']
+                clan_tag = clans[x]['members'][y]['tag']
+                clan_donations = clans[x]['members'][y]['donations']
+                clan_clanChestCrowns = clans[x]['members'][y]['clanChestCrowns']
 
                 for key in range(0,len(banks)):
                     if clan_tag == self.tags[banks[key]]['tag']:
