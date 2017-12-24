@@ -122,39 +122,42 @@ class shop:
                 clan_clanChestCrowns = clans[x]['members'][y]['clanChestCrowns']
 
                 for key in range(0,len(banks)):
-                    if clan_tag == self.tags[banks[key]]['tag']:
+                    try:
+                        if clan_tag == self.tags[banks[key]]['tag']:
 
-                        try:
-                            user = discord.utils.get(ctx.message.server.members, id = banks[key])
+                            try:
+                                user = discord.utils.get(ctx.message.server.members, id = banks[key])
 
-                            rare = await self._is_rare(user)
-                            epic = await self._is_epic(user)
-                            legendary = await self._is_legendary(user)
+                                rare = await self._is_rare(user)
+                                epic = await self._is_epic(user)
+                                legendary = await self._is_legendary(user)
 
-                            perCrown = 300
-                            perDonation = 15
+                                perCrown = 300
+                                perDonation = 15
 
-                            if rare:
-                                perCrown *= 1.2
-                                perDonation *= 1.2
+                                if rare:
+                                    perCrown *= 1.2
+                                    perDonation *= 1.2
 
-                            if epic:
-                                perCrown *= 1.35
-                                perDonation *= 1.35
+                                if epic:
+                                    perCrown *= 1.35
+                                    perDonation *= 1.35
 
-                            if legendary:
-                                perCrown *= 1.5
-                                perDonation *= 1.5
+                                if legendary:
+                                    perCrown *= 1.5
+                                    perDonation *= 1.5
 
-                            amount = (clan_donations*perDonation) + (clan_clanChestCrowns*perCrown)
-                            pay = bank.get_balance(user) + amount
-                            bank.set_credits(user, pay)
+                                amount = (clan_donations*perDonation) + (clan_clanChestCrowns*perCrown)
+                                pay = bank.get_balance(user) + amount
+                                bank.set_credits(user, pay)
 
-                            await self.bot.say(user.name + " - Success")
+                                await self.bot.say(user.name + " - Success")
 
-                            await self.bot.send_message(user,"Hello " + user.name + ", take these credits for the " + str(clan_donations) + " donations and " + str(clan_clanChestCrowns) + " crowns you contributed to your clan this week. (+" + str(amount) + " credits!)")
-                        except Exception as e:
-                            await self.bot.say(e)
+                                await self.bot.send_message(user,"Hello " + user.name + ", take these credits for the " + str(clan_donations) + " donations and " + str(clan_clanChestCrowns) + " crowns you contributed to your clan this week. (+" + str(amount) + " credits!)")
+                            except Exception as e:
+                                await self.bot.say(e)
+                    except:
+                        pass
 
     @commands.group(pass_context=True)
     async def buy(self, ctx):
