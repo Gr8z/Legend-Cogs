@@ -153,7 +153,7 @@ class shop:
 
                                 await self.bot.say(user.name + " - Success")
 
-                                await self.bot.send_message(user,"**Merry Chritmas** " + user.name + ", and take these credits for the " + str(clan_donations) + " donations and " + str(clan_clanChestCrowns) + " crowns you contributed to your clan this week. (+" + str(amount) + " credits!)")
+                                await self.bot.send_message(user,"Hello " + user.name + ", take these credits for the " + str(clan_donations) + " donations and " + str(clan_clanChestCrowns) + " crowns you contributed to your clan this week. (+" + str(amount) + " credits!)")
                             except Exception as e:
                                 await self.bot.say(e)
                     except:
