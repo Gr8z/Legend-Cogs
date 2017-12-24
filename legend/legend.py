@@ -106,6 +106,7 @@ class legend:
         self.bot = bot
         self.clash = dataIO.load_json('cogs/tags.json')
         self.c = dataIO.load_json('cogs/clans.json')
+        self.auth = dataIO.load_json('cogs/auth.json')
         self.welcome = dataIO.load_json('data/legend/welcome.json')
         self.bank = dataIO.load_json('data/economy/bank.json')
 
@@ -254,7 +255,7 @@ class legend:
             try:
                 await self.updateClash()
                 profiletag = self.clash[member.id]['tag']
-                profiledata = requests.get('http://collab.cr-api.com/player/'+profiletag, timeout=10).json()
+                profiledata = requests.get('http://collab.cr-api.com/player/{}?auth={}'.format(profiletag, self.auth['token']), timeout=10).json()
                 trophies = profiledata['trophies']
                 maxtrophies = profiledata['stats']['maxTrophies']
                 maxmembers = 50
@@ -270,7 +271,7 @@ class legend:
                 return
 
         try:
-            clans = requests.get('http://collab.cr-api.com/clan/'+','.join(self.c[clan]["tag"] for clan in self.c), timeout=10).json()
+            clans = requests.get('http://collab.cr-api.com/clan/'+','.join(self.c[clan]["tag"] for clan in self.c)+'?auth='+self.auth['token'], timeout=10).json()
         except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
                 await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
                 return
@@ -353,7 +354,7 @@ class legend:
         try:
             await self.updateClash()
             profiletag = self.clash[member.id]['tag']
-            profiledata = requests.get('http://collab.cr-api.com/player/'+profiletag, timeout=10).json()
+            profiledata = requests.get('http://collab.cr-api.com/player/{}?auth={}'.format(profiletag, self.auth['token']), timeout=10).json()
             if profiledata['clan']['tag'] is None:
                 clantag = ""
                 clanname = ""
@@ -479,7 +480,7 @@ class legend:
         try:
             await self.updateClash()
             profiletag = self.clash[member.id]['tag']
-            profiledata = requests.get('http://collab.cr-api.com/player/'+profiletag, timeout=10).json()
+            profiledata = requests.get('http://collab.cr-api.com/player/{}?auth={}'.format(profiletag, self.auth['token']), timeout=10).json()
             clantag = profiledata['clan']['tag']
             clanname = profiledata['clan']['name']
             ign = profiledata['name']
@@ -548,7 +549,7 @@ class legend:
         await self.bot.type()
 
         try:
-            clandata = requests.get('http://collab.cr-api.com/clan/{}'.format(clan_tag), timeout=10).json()
+            clandata = requests.get('http://collab.cr-api.com/clan/{}?auth={}'.format(clan_tag, self.auth['token']), timeout=10).json()
         except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
@@ -710,8 +711,8 @@ class legend:
         try:
             await self.updateClash()
             profiletag = self.clash[member.id]['tag']
-            profiledata = requests.get('http://collab.cr-api.com/player/'+profiletag, timeout=10).json()
-            clandata = requests.get('http://collab.cr-api.com/clan/{}'.format(clan_tag), timeout=10).json()
+            profiledata = requests.get('http://collab.cr-api.com/player/{}?auth={}'.format(profiletag, self.auth['token']), timeout=10).json()
+            clandata = requests.get('http://collab.cr-api.com/clan/{}?auth={}'.format(clan_tag, self.auth['token']), timeout=10).json()
             ign = profiledata['name']
             if profiledata['clan'] is None:
                 leftClan = True
@@ -825,8 +826,8 @@ class legend:
         try:
             await self.updateClash()
             profiletag = self.clash[member.id]['tag']
-            profiledata = requests.get('http://collab.cr-api.com/player/'+profiletag, timeout=10).json()
-            clandata = requests.get('http://collab.cr-api.com/clan/{}'.format(clan_tag), timeout=10).json()
+            profiledata = requests.get('http://collab.cr-api.com/player/{}?auth={}'.format(profiletag, self.auth['token']), timeout=10).json()
+            clandata = requests.get('http://collab.cr-api.com/clan/{}?auth={}'.format(clan_tag, self.auth['token']), timeout=10).json()
             ign = profiledata['name']
             if profiledata['clan'] is None:
                 clantag = ""
@@ -968,7 +969,7 @@ class legend:
         try:
             await self.updateClash()
             profiletag = self.clash[member.id]['tag']
-            profiledata = requests.get('http://collab.cr-api.com/player/'+profiletag, timeout=10).json()
+            profiledata = requests.get('http://collab.cr-api.com/player/{}?auth={}'.format(profiletag, self.auth['token']), timeout=10).json()
             ign = profiledata['name']
             if profiledata['clan'] is None:
                 clantag = ""
@@ -1027,6 +1028,11 @@ def check_files():
     if not fileIO(f, "check"):
         print("Creating empty clans.json...")
         dataIO.save_json(f, {})
+
+    f = "cogs/auth.json"
+    if not fileIO(f, "check"):
+        print("Creating empty auth.json...")
+        dataIO.save_json(f, {})
         
 def check_clans():
     c = dataIO.load_json('cogs/clans.json')
@@ -1036,12 +1042,18 @@ def check_clans():
         if 'bonustitle' not in c[clankey]:
             c[clankey]['bonustitle'] = ""
         if 'personalbest' not in c[clankey]:
-            c[clankey]['personalbest'] = 0
-    
+            c[clankey]['personalbest'] = 0        
     dataIO.save_json('cogs/clans.json', c)
 
+def check_auth():
+    c = dataIO.load_json('cogs/auth.json')
+    if 'token' not in c:
+        c['token'] = ""
+    dataIO.save_json('cogs/auth.json', c)
+    
 def setup(bot):
     check_folders()
     check_files()
     check_clans()
+    check_auth()
     bot.add_cog(legend(bot))

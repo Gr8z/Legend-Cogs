@@ -12,8 +12,6 @@ import requests
 import os
 import aiohttp
 from __main__ import send_cmd_help
-import asyncio
-from crapipy import AsyncClient
 import socket
 import urllib.request  as urllib2
 import requests_cache
@@ -27,6 +25,7 @@ credits = "Bot by GR8 | Titan"
 clash = os.path.join("cogs", "tags.json")
 clash_mini = os.path.join("cogs", "mini_tags.json")
 brawl = os.path.join("data", "BrawlStats", "tags.json")
+auth = os.path.join("cogs", "auth.json")
 
 class clashroyale:
     """Live statistics for Clash Royale"""
@@ -36,6 +35,7 @@ class clashroyale:
     	self.clash = dataIO.load_json(clash)
     	self.clash_mini = dataIO.load_json(clash_mini)
     	self.brawl = dataIO.load_json(brawl)
+    	self.auth = dataIO.load_json(auth)
 
     @commands.command(pass_context=True, aliases=['clashprofile','cprofile','cProfile'])
     async def clashProfile(self, ctx, member: discord.Member = None):
@@ -49,7 +49,7 @@ class clashroyale:
 	    	profiletag = self.clash[member.id]['tag']
 
 	    	try:
-	    		profiledata = requests.get('http://collab.cr-api.com/player/'+profiletag, timeout=10).json()
+	    		profiledata = requests.get('http://collab.cr-api.com/player/{}?auth={}'.format(profiletag, self.auth['token']), timeout=10).json()
 	    	except:
 	    		await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 	    		return
@@ -99,7 +99,7 @@ class clashroyale:
 	    	profiletag = self.clash[member.id]['tag']
 
 	    	try:
-	    		profiledata = requests.get('http://collab.cr-api.com/player/'+profiletag, timeout=10).json()
+	    		profiledata = requests.get('http://collab.cr-api.com/player/{}?auth={}'.format(profiletag, self.auth['token']), timeout=10).json()
 	    	except:
 	    		await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 	    		return
@@ -131,7 +131,7 @@ class clashroyale:
     async def clan(self, ctx, clantag):
     	"""View Clash Royale Clan statistics and information """
     	try:
-    		clandata = requests.get('http://collab.cr-api.com/clan/'+clantag, timeout=10).json()
+    		clandata = requests.get('http://collab.cr-api.com/clan/{}?auth={}'.format(clan_tag, self.auth['token']), timeout=10).json()
     	except:
     		await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
     		return
@@ -204,7 +204,7 @@ class clashroyale:
 	    	member = ctx.message.author
 
 	    try:
-	    	profiledata = requests.get('http://collab.cr-api.com/player/'+profiletag, timeout=10).json()
+	    	profiledata = requests.get('http://collab.cr-api.com/player/{}?auth={}'.format(profiletag, self.auth['token']), timeout=10).json()
 
 	    	self.clash.update({member.id: {'tag': profiletag}})
 	    	dataIO.save_json('cogs/tags.json', self.clash)
@@ -254,7 +254,7 @@ class clashroyale:
 	    	member = ctx.message.author
 	    
 	    try:
-		    profiledata = requests.get('http://api.cr-api.com/profile/'+profiletag, timeout=10).json()
+		    profiledata = requests.get('http://collab.cr-api.com/player/{}?auth={}'.format(profiletag, self.auth['token']), timeout=10).json()
 
 		    if "8CL09V0C" not in profiledata['clan']['tag']:
 		    	await self.bot.say("This feature is only available to members of LeGEnD Minis!")
@@ -358,10 +358,21 @@ def check_files():
     if not fileIO(f, "check"):
         print("Creating empty tags.json...")
         fileIO(f, "save", [])
+    f = "cogs/auth.json"
+    if not fileIO(f, "check"):
+        print("Creating empty auth.json...")
+        dataIO.save_json(f, {})
+
+def check_auth():
+    c = dataIO.load_json('cogs/auth.json')
+    if 'token' not in c:
+        c['token'] = ""
+    dataIO.save_json('cogs/auth.json', c)
 
 def setup(bot):
 	check_folders()
 	check_files()
+	check_auth()
 	if soupAvailable:
 		bot.add_cog(clashroyale(bot))
 	else:
