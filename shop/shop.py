@@ -107,7 +107,7 @@ class shop:
         banks = list(self.banks['374596069989810176'])
 
         try:
-            clans = requests.get('http://collab.cr-api.com/clan/'+','.join(self.clans[clan]["tag"] for clan in self.clans)+'?auth='+self.auth['token'], timeout=10).json()
+            clans = requests.get('http://api.cr-api.com/clan/'+','.join(self.clans[clan]["tag"] for clan in self.clans)+'?auth='+self.auth['token'], timeout=10).json()
         except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
