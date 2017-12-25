@@ -37,6 +37,9 @@ class clashroyale:
     	self.brawl = dataIO.load_json(brawl)
     	self.auth = dataIO.load_json(auth)
 
+    def getAuth(self):
+        return {"auth" : self.auth['token']}
+        
     @commands.command(pass_context=True, aliases=['clashprofile','cprofile','cProfile'])
     async def clashProfile(self, ctx, member: discord.Member = None):
     	"""View your Clash Royale Profile Data and Statstics."""
@@ -49,7 +52,7 @@ class clashroyale:
 	    	profiletag = self.clash[member.id]['tag']
 
 	    	try:
-	    		profiledata = requests.get('http://api.cr-api.com/player/{}?auth={}'.format(profiletag, self.auth['token']), timeout=10).json()
+	    		profiledata = requests.get('http://api.cr-api.com/player/{}'.format(profiletag), headers=self.getAuth(), timeout=10).json()
 	    	except:
 	    		await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 	    		return
@@ -99,7 +102,7 @@ class clashroyale:
 	    	profiletag = self.clash[member.id]['tag']
 
 	    	try:
-	    		profiledata = requests.get('http://api.cr-api.com/player/{}?auth={}'.format(profiletag, self.auth['token']), timeout=10).json()
+	    		profiledata = requests.get('http://api.cr-api.com/player/{}'.format(profiletag), headers=self.getAuth(), timeout=10).json()
 	    	except:
 	    		await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 	    		return
@@ -131,7 +134,7 @@ class clashroyale:
     async def clan(self, ctx, clantag):
     	"""View Clash Royale Clan statistics and information """
     	try:
-    		clandata = requests.get('http://api.cr-api.com/clan/{}?auth={}'.format(clan_tag, self.auth['token']), timeout=10).json()
+    		clandata = requests.get('http://api.cr-api.com/clan/{}'.format(clan_tag), headers=self.getAuth(), timeout=10).json()
     	except:
     		await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
     		return
@@ -204,7 +207,7 @@ class clashroyale:
 	    	member = ctx.message.author
 
 	    try:
-	    	profiledata = requests.get('http://api.cr-api.com/player/{}?auth={}'.format(profiletag, self.auth['token']), timeout=10).json()
+	    	profiledata = requests.get('http://api.cr-api.com/player/{}'.format(profiletag), headers=self.getAuth(), timeout=10).json()
 
 	    	self.clash.update({member.id: {'tag': profiletag}})
 	    	dataIO.save_json('cogs/tags.json', self.clash)
@@ -254,7 +257,7 @@ class clashroyale:
 	    	member = ctx.message.author
 	    
 	    try:
-		    profiledata = requests.get('http://api.cr-api.com/player/{}?auth={}'.format(profiletag, self.auth['token']), timeout=10).json()
+		    profiledata = requests.get('http://api.cr-api.com/player/{}'.format(profiletag), headers=self.getAuth(), timeout=10).json()
 
 		    if "8CL09V0C" not in profiledata['clan']['tag']:
 		    	await self.bot.say("This feature is only available to members of LeGEnD Minis!")

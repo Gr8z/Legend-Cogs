@@ -17,6 +17,9 @@ class shop:
         self.clans = dataIO.load_json('cogs/clans.json')
         self.auth = dataIO.load_json('cogs/auth.json')
 
+    def getAuth(self):
+        return {"auth" : self.auth['token']}
+
     async def updateClash(self):
         self.tags = dataIO.load_json('cogs/tags.json')
 
@@ -107,7 +110,7 @@ class shop:
         banks = list(self.banks['374596069989810176'])
 
         try:
-            clans = requests.get('http://api.cr-api.com/clan/'+','.join(self.clans[clan]["tag"] for clan in self.clans)+'?auth='+self.auth['token'], timeout=10).json()
+            clans = requests.get('http://api.cr-api.com/clan/'+','.join(self.clans[clan]["tag"] for clan in self.clans), headers=self.getAuth(), timeout=10).json()
         except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
