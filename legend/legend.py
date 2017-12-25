@@ -254,6 +254,7 @@ class legend:
         else:
             try:
                 await self.updateClash()
+                await self.bot.type()
                 profiletag = self.clash[member.id]['tag']
                 profiledata = requests.get('http://api.cr-api.com/player/{}'.format(profiletag), headers=self.getAuth(), timeout=10).json()
                 trophies = profiledata['trophies']
@@ -271,6 +272,7 @@ class legend:
                 return
 
         try:
+            await self.bot.type()
             clans = requests.get('http://api.cr-api.com/clan/'+','.join(self.c[clan]["tag"] for clan in self.c), headers=self.getAuth(), timeout=10).json()
         except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
                 await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
@@ -353,6 +355,7 @@ class legend:
 
         try:
             await self.updateClash()
+            await self.bot.type()
             profiletag = self.clash[member.id]['tag']
             profiledata = requests.get('http://api.cr-api.com/player/{}'.format(profiletag), headers=self.getAuth(), timeout=10).json()
             if profiledata['clan']['tag'] is None:
@@ -479,6 +482,7 @@ class legend:
 
         try:
             await self.updateClash()
+            await self.bot.type()
             profiletag = self.clash[member.id]['tag']
             profiledata = requests.get('http://api.cr-api.com/player/{}'.format(profiletag), headers=self.getAuth(), timeout=10).json()
             clantag = profiledata['clan']['tag']
@@ -710,6 +714,7 @@ class legend:
         leftClan = False
         try:
             await self.updateClash()
+            await self.bot.type()
             profiletag = self.clash[member.id]['tag']
             profiledata = requests.get('http://api.cr-api.com/player/{}'.format(profiletag), headers=self.getAuth(), timeout=10).json()
             clandata = requests.get('http://api.cr-api.com/clan/{}'.format(clan_tag), headers=self.getAuth(), timeout=10).json()
@@ -825,6 +830,7 @@ class legend:
 
         try:
             await self.updateClash()
+            await self.bot.type()
             profiletag = self.clash[member.id]['tag']
             profiledata = requests.get('http://api.cr-api.com/player/{}'.format(profiletag), headers=self.getAuth(), timeout=10).json()
             clandata = requests.get('http://api.cr-api.com/clan/{}'.format(clan_tag), headers=self.getAuth(), timeout=10).json()
@@ -979,6 +985,7 @@ class legend:
 
         try:
             await self.updateClash()
+            await self.bot.type()
             profiletag = self.clash[member.id]['tag']
             profiledata = requests.get('http://api.cr-api.com/player/{}'.format(profiletag), headers=self.getAuth(), timeout=10).json()
             ign = profiledata['name']

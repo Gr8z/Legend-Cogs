@@ -39,7 +39,7 @@ class clashroyale:
 
     def getAuth(self):
         return {"auth" : self.auth['token']}
-        
+
     @commands.command(pass_context=True, aliases=['clashprofile','cprofile','cProfile'])
     async def clashProfile(self, ctx, member: discord.Member = None):
     	"""View your Clash Royale Profile Data and Statstics."""
@@ -51,6 +51,8 @@ class clashroyale:
 
 	    	profiletag = self.clash[member.id]['tag']
 
+	    	await self.bot.type()
+
 	    	try:
 	    		profiledata = requests.get('http://api.cr-api.com/player/{}'.format(profiletag), headers=self.getAuth(), timeout=10).json()
 	    	except:
@@ -60,7 +62,7 @@ class clashroyale:
 	    	if profiledata['clan'] is None:
 	    		clanurl = "https://i.imgur.com/4EH5hUn.png"
 	    	else:
-	    		clanurl = "http://statsroyale.com/images/badges/"+str(profiledata['clan']['badge'])+".png"
+	    		clanurl = profiledata['clan']['badge']['image']
 
 	    	embed=discord.Embed(title="", color=0x0080ff)
 	    	embed.set_author(name=profiledata['name'] + " (#"+profiledata['tag']+")", icon_url=clanurl)
@@ -71,7 +73,7 @@ class clashroyale:
 	    	embed.add_field(name="Arena", value=profiledata['arena']['name'], inline=True)
 	    	if profiledata['clan'] is not None:
 	    		embed.add_field(name="Clan", value=profiledata['clan']['name'], inline=True)
-	    		embed.add_field(name="Role", value=profiledata['clan']['role'], inline=True)
+	    		embed.add_field(name="Role", value=profiledata['clan']['role'].capitalize(), inline=True)
 	    	embed.add_field(name="Cards Found", value=str(profiledata['stats']['cardsFound'])+"/81", inline=True)
 	    	embed.add_field(name="Favourite Card", value=profiledata['stats']['favoriteCard']['name'], inline=True)
 	    	embed.add_field(name="Games Played", value=profiledata['games']['total'], inline=True)
@@ -100,6 +102,8 @@ class clashroyale:
 	    		member = ctx.message.author
 
 	    	profiletag = self.clash[member.id]['tag']
+
+	    	await self.bot.type()
 
 	    	try:
 	    		profiledata = requests.get('http://api.cr-api.com/player/{}'.format(profiletag), headers=self.getAuth(), timeout=10).json()
@@ -133,19 +137,22 @@ class clashroyale:
     @commands.command(pass_context=True)
     async def clan(self, ctx, clantag):
     	"""View Clash Royale Clan statistics and information """
+
+    	await self.bot.type()
+
     	try:
-    		clandata = requests.get('http://api.cr-api.com/clan/{}'.format(clan_tag), headers=self.getAuth(), timeout=10).json()
+    		clandata = requests.get('http://api.cr-api.com/clan/{}'.format(clantag), headers=self.getAuth(), timeout=10).json()
     	except:
     		await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
     		return
 
     	embed=discord.Embed(title=clandata['name'] + " (#" + clandata['tag'] + ")", description=clandata['description'], color=0x0080ff)
-    	embed.set_thumbnail(url="http://statsroyale.com/images/badges/"+str(clandata['badge'])+".png")
+    	embed.set_thumbnail(url=clandata['badge']['image'])
     	embed.add_field(name="Members", value=str(clandata['memberCount'])+"/50", inline=True)
     	embed.add_field(name="Donations", value=str(clandata['donations']), inline=True)
     	embed.add_field(name="Score", value=str(clandata['score']), inline=True)
     	embed.add_field(name="Required Trophies", value=str(clandata['requiredScore']), inline=True)
-    	embed.add_field(name="Status", value=str(clandata['type']), inline=True)
+    	embed.add_field(name="Status", value=str(clandata['type'].capitalize()), inline=True)
     	embed.add_field(name="Country", value=str(clandata['location']['name']), inline=True)
     	embed.set_footer(text=credits, icon_url=creditIcon)
     	await self.bot.say(embed=embed)
@@ -202,6 +209,8 @@ class clashroyale:
 	    if not allowed:
 	    	await self.bot.say("You dont have enough permissions to set tags for others. Type !contact to ask for help.")
 	    	return
+
+	    await self.bot.type()
 
 	    if member is None:
 	    	member = ctx.message.author
@@ -373,7 +382,7 @@ def check_auth():
     dataIO.save_json('cogs/auth.json', c)
 
 def setup(bot):
-	check_folders()
+	#check_folders()
 	check_files()
 	check_auth()
 	if soupAvailable:
