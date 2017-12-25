@@ -304,9 +304,9 @@ class legend:
                     break
 
             if numWaiting > 0:
-                title = emoji + " ["+str(numWaiting)+" Waiting] "
+                title = "["+str(numWaiting)+" Waiting] "
             else:
-                title = emoji + " "
+                title = ""
 
             if clans[x]['memberCount'] < 50:
                 showMembers = str(clans[x]['memberCount']) + "/50"
@@ -325,7 +325,7 @@ class legend:
             if bonustitle is not None:
                 title += bonustitle
 
-            desc = ":shield: " + showMembers + "     :trophy: " + str(clans[x]['requiredScore']) + "+     :medal: " +str(clans[x]['score'])
+            desc = emoji + " " + showMembers + "     :trophy: " + str(clans[x]['requiredScore']) + "+     :medal: " +str(clans[x]['score'])
             totalMembers += clans[x]['memberCount']
 
             if (member is None) or ((clans[x]['requiredScore'] <= trophies) and (maxtrophies > personalbest) and (trophies - clans[x]['requiredScore'] < 1500)):
