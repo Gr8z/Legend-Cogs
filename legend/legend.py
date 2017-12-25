@@ -306,7 +306,7 @@ class legend:
             if numWaiting > 0:
                 title = emoji + " ["+str(numWaiting)+" Waiting] "
             else:
-                title = emoji
+                title = emoji + " "
 
             if clans[x]['memberCount'] < 50:
                 showMembers = str(clans[x]['memberCount']) + "/50"
