@@ -300,12 +300,13 @@ class legend:
                     numWaiting = len(self.c[clankey]['waiting'])
                     personalbest = self.c[clankey]['personalbest']
                     bonustitle = self.c[clankey]['bonustitle']
+                    emoji = self.c[clankey]['emoji']
                     break
 
             if numWaiting > 0:
-                title = "["+str(numWaiting)+" Waiting] "
+                title = emoji + " ["+str(numWaiting)+" Waiting] "
             else:
-                title = ""
+                title = emoji
 
             if clans[x]['memberCount'] < 50:
                 showMembers = str(clans[x]['memberCount']) + "/50"
