@@ -96,6 +96,16 @@ class shop:
     def numClans(self):
         return len(self.clans.keys())
 
+    def bank_check(self, user, amount):
+        bank = self.bot.get_cog('Economy').bank
+        if bank.account_exists(user):
+            if bank.can_spend(user, amount):
+                return True
+            else:
+                return False
+        else:
+            return False
+
     @commands.command(pass_context=True, no_pm=True)
     @checks.is_owner()
     async def sendpayouts(self, ctx):
