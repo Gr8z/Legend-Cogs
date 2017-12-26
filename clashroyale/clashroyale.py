@@ -122,7 +122,7 @@ class clashroyale:
 	    	if profiledata['clan'] is None:
 	    		clanurl = "https://i.imgur.com/4EH5hUn.png"
 	    	else:
-	    		clanurl = "http://statsroyale.com/images/badges/"+str(profiledata['clan']['badge'])+".png"
+	    		clanurl = profiledata['clan']['badge']['image']
 
 	    	embed=discord.Embed(title="", color=0x0080ff, description="Your Upcoming chests.")
 	    	embed.set_author(name=profiledata['name'] + " (#"+profiledata['tag']+")", icon_url=clanurl)
