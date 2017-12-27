@@ -19,6 +19,8 @@ lastTag = '0'
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
 
+proxies_list = ['195.162.4.111:3239','94.249.160.49:2179','173.211.31.3:3133','45.43.218.82:3212','45.43.219.185:3315','172.82.173.100:3230','172.82.177.111:5241','64.44.18.31:3161','107.175.43.100:3230','93.127.128.41:3171']
+
 # Returns a list with tournaments
 def getTopTourneyNew():
 
@@ -30,8 +32,12 @@ def getTopTourneyNew():
 	    "User-Agent": ua.random
 	}
 
+	proxies = {
+    	'http': random.choice(proxies_list)
+	}
+
 	try:
-		tourneydata = requests.get('http://statsroyale.com/tournaments?appjson=1', timeout=5, headers=headers, proxies=dict(http="69.39.224.129:80",)).json()
+		tourneydata = requests.get('http://statsroyale.com/tournaments?appjson=1', timeout=5, headers=headers, proxies=proxies).json()
 	except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
 		return None
 	except requests.exceptions.RequestException as e:
@@ -138,9 +144,12 @@ class tournament:
 		headers = {
 		    "User-Agent": ua.random
 		}
+		proxies = {
+	    	'http': random.choice(proxies_list)
+		}
 
 		try:
-			tourneydata = requests.get('http://statsroyale.com/tournaments?appjson=1', timeout=5, headers=headers, proxies=dict(http="69.39.224.129:80",)).json()
+			tourneydata = requests.get('http://statsroyale.com/tournaments?appjson=1', timeout=5, headers=headers, proxies=proxies).json()
 		except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
 			await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 			return
