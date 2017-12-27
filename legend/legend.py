@@ -933,6 +933,8 @@ class legend:
         """Show status of the waiting list."""
 
         message = ""
+        counterClans = 0
+        counterPlayers = 0
 
         server = ctx.message.server
         author = ctx.message.author
@@ -948,11 +950,13 @@ class legend:
 
         for indexC, clan in enumerate(self.c):
             if self.c[clan]["waiting"]:
+                counterClans += 1
                 message = ""
                 for index, userID in enumerate(self.c[clan]["waiting"]):
                     user = discord.utils.get(ctx.message.server.members, id = userID)
                     try:
                         message += str(index+1) + ". " + user.name + "\n"
+                        counterPlayers += 1
                     except AttributeError:
                         self.c[clan]['waiting'].remove(userID)
                         dataIO.save_json('cogs/clans.json', self.c)
@@ -962,6 +966,7 @@ class legend:
         if not message:
             await self.bot.say("The waiting list is empty")
         else:
+            embed.description = "We have " + str(counterPlayers) + " people waiting in " + str(counterClans) + " clans."
             embed.set_author(name="LeGeND Family Waiting List", icon_url="https://i.imgur.com/dtSMITE.jpg")
             embed.set_footer(text=credits, icon_url=creditIcon)
             await self.bot.say(embed=embed)
