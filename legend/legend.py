@@ -660,6 +660,12 @@ class legend:
         message = "```py\n"
         for x in range(0, number):
             message += str(x + 1).zfill(2) + ".  [" + str(players['data'][x]['score']) + "]  " + players['data'][x]['name'] + " (" + players['data'][x]['clan_name'] + ") " + "\n"
+            if x == 40:
+                message += "```"
+                await self.bot.say(message)
+                message = "```py\n"
+
+
         message += "```"
 
         await self.bot.say(message)
