@@ -646,7 +646,7 @@ class legend:
     async def topmembers(self, number=10):
         """Show Top Legend Family Members"""
 
-        if number > 50:
+        if number > 100:
             await self.bot.say("Sorry! the number must be below 50.")
             return
 
