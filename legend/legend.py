@@ -613,27 +613,27 @@ class legend:
         message = ""
 
         if cr_members_with_no_player_tag:
-            message += "\n\n:warning: Players in **" + clan_name + "**, but have **NO** tags saved or have **NOT** joined discord: ```• "
+            message += "\n\n:warning: **("+str(len(cr_members_with_no_player_tag))+")** Players in **" + clan_name + "**, but have **NO** tags saved or have **NOT** joined discord: ```• "
             message += "\n• ".join(cr_members_with_no_player_tag)
             message += "```"
 
         if d_members_with_no_player_tag:
-            message += "\n\n:warning: Players with **" + clan_name + "** role, but have **NO** tags saved: ```• "
+            message += "\n\n:warning: **("+str(len(d_members_with_no_player_tag))+")** Players with **" + clan_name + "** role, but have **NO** tags saved: ```• "
             message += "\n• ".join(d_members_with_no_player_tag)
             message += "```"
 
         if d_members_not_in_clan:
-            message += "\n\n:warning: Players with **" + clan_name + "** role, but have **NOT** joined the clan: ```• "
+            message += "\n\n:warning: **("+str(len(d_members_not_in_clan))+")** Players with **" + clan_name + "** role, but have **NOT** joined the clan: ```• "
             message += "\n• ".join(d_members_not_in_clan)
             message += "```"
 
         if d_members_without_role:
-            message += "\n\n:warning: Players in **" + clan_name + "**, but **DO NOT** have the clan role: ```• "
+            message += "\n\n:warning: **("+str(len(d_members_without_role))+")** Players in **" + clan_name + "**, but **DO NOT** have the clan role: ```• "
             message += "\n• ".join(d_members_without_role)
             message += "```"
 
         if cr_members_with_less_trophies:
-            message += "\n\n:warning: Players in **" + clan_name + "**, but **DO NOT** meet the trophy requirements: ```• "
+            message += "\n\n:warning: **("+str(len(cr_members_with_less_trophies))+")** Players in **" + clan_name + "**, but **DO NOT** meet the trophy requirements: ```• "
             message += "\n• ".join(cr_members_with_less_trophies)
             message += "```"
 
