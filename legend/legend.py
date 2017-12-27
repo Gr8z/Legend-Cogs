@@ -665,7 +665,6 @@ class legend:
                 await self.bot.say(message)
                 message = "```py\n"
 
-
         message += "```"
 
         await self.bot.say(message)
@@ -972,7 +971,7 @@ class legend:
         if not message:
             await self.bot.say("The waiting list is empty")
         else:
-            embed.description = "We have " + str(counterPlayers) + " people waiting in " + str(counterClans) + " clans."
+            embed.description = "We have " + str(counterPlayers) + " people waiting for " + str(counterClans) + " clans."
             embed.set_author(name="LeGeND Family Waiting List", icon_url="https://i.imgur.com/dtSMITE.jpg")
             embed.set_footer(text=credits, icon_url=creditIcon)
             await self.bot.say(embed=embed)
