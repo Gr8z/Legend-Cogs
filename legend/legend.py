@@ -400,6 +400,10 @@ class legend:
 
         if membership:
 
+            if member.id in self.c[savekey]['waiting']:
+                self.c[savekey]['waiting'].remove(member.id)
+                dataIO.save_json('cogs/clans.json', self.c)
+
             mymessage = ""
             if ign is None:
                 await self.bot.say("Cannot find IGN.")
