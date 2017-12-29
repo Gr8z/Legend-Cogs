@@ -2,11 +2,6 @@ import discord
 from discord.ext import commands
 from random import randint
 import requests
-try: # check if BeautifulSoup4 is installed
-	from bs4 import BeautifulSoup
-	soupAvailable = True
-except:
-	soupAvailable = False
 import asyncio
 import random
 import json
@@ -228,8 +223,6 @@ def check_files():
 def setup(bot):
 	check_folders()
 	check_files()
-	if not soupAvailable:
-		raise RuntimeError("You need to run `pip3 install beautifulsoup4`")
 	n = tournament(bot)
 	loop = asyncio.get_event_loop()
 	loop.create_task(n.checkTourney())
