@@ -111,7 +111,16 @@ class tournament:
 	def save_data(self):
 		"""Saves the json"""
 		dataIO.save_json(self.path, self.settings)
-	
+
+	async def _is_member(self, member):
+        server = member.server
+        botcommander_roles = [discord.utils.get(server.roles, name=r) for r in ["Member", "Family Representative", "Clan Manager", "Clan Deputy", "Co-Leader", "Hub Officer", "admin", "Guest"]]
+        botcommander_roles = set(botcommander_roles)
+        author_roles = set(member.roles)
+        if len(author_roles.intersection(botcommander_roles)):
+            return True
+        else:
+            return False
 
 	# checks for a tourney every 5 minutes
 	async def checkTourney(self):
@@ -139,6 +148,11 @@ class tournament:
 	async def tourney(self):
 
 		await self.bot.type()
+
+		isMember = await self._is_member(member)
+        if not isMember:
+            await self.bot.say("Error, this command is only available for Legend Members and Guests.")
+            return
 
 		ua = UserAgent()
 		headers = {
