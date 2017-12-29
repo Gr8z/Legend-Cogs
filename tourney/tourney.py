@@ -150,9 +150,9 @@ class tournament:
 		await self.bot.type()
 
 		isMember = await self._is_member(member)
-        if not isMember:
-            await self.bot.say("Error, this command is only available for Legend Members and Guests.")
-            return
+		if not isMember:
+		    await self.bot.say("Error, this command is only available for Legend Members and Guests.")
+		    return
 
 		ua = UserAgent()
 		headers = {
