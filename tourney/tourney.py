@@ -112,15 +112,15 @@ class tournament:
 		"""Saves the json"""
 		dataIO.save_json(self.path, self.settings)
 
-	async def _is_member(self, member):
-        server = member.server
-        botcommander_roles = [discord.utils.get(server.roles, name=r) for r in ["Member", "Family Representative", "Clan Manager", "Clan Deputy", "Co-Leader", "Hub Officer", "admin", "Guest"]]
-        botcommander_roles = set(botcommander_roles)
-        author_roles = set(member.roles)
-        if len(author_roles.intersection(botcommander_roles)):
-            return True
-        else:
-            return False
+	async def _is_allowed(self, member):
+		server = member.server
+		botcommander_roles = [discord.utils.get(server.roles, name=r) for r in ["Member", "Family Representative", "Clan Manager", "Clan Deputy", "Co-Leader", "Hub Officer", "admin", "Guest"]]
+		botcommander_roles = set(botcommander_roles)
+		author_roles = set(member.roles)
+		if len(author_roles.intersection(botcommander_roles)):
+		    return True
+		else:
+		    return False
 
 	# checks for a tourney every 5 minutes
 	async def checkTourney(self):
@@ -144,13 +144,16 @@ class tournament:
 				await asyncio.sleep(900)
 			await asyncio.sleep(120)
 
-	@commands.group()
-	async def tourney(self):
+	@commands.group(pass_context=True, no_pm=True)
+	async def tourney(self, ctx):
+		"""Check an open tournament in clash royale instantly"""
 
-		await self.bot.type()
+		author = ctx.message.author
 
-		isMember = await self._is_member(member)
-		if not isMember:
+		self.bot.type()
+
+		allowed = await self._is_allowed(author)
+		if not allowed:
 		    await self.bot.say("Error, this command is only available for Legend Members and Guests.")
 		    return
 
