@@ -142,20 +142,21 @@ class clashroyale:
 
     	try:
     		clandata = requests.get('http://api.cr-api.com/clan/{}'.format(clantag), headers=self.getAuth(), timeout=10).json()
+
+	    	embed=discord.Embed(title=clandata['name'] + " (#" + clandata['tag'] + ")", description=clandata['description'], color=0x0080ff)
+	    	embed.set_thumbnail(url=clandata['badge']['image'])
+	    	embed.add_field(name="Members", value=str(clandata['memberCount'])+"/50", inline=True)
+	    	embed.add_field(name="Donations", value=str(clandata['donations']), inline=True)
+	    	embed.add_field(name="Score", value=str(clandata['score']), inline=True)
+	    	embed.add_field(name="Required Trophies", value=str(clandata['requiredScore']), inline=True)
+	    	embed.add_field(name="Status", value=str(clandata['type'].capitalize()), inline=True)
+	    	embed.add_field(name="Country", value=str(clandata['location']['name']), inline=True)
+	    	embed.set_footer(text=credits, icon_url=creditIcon)
+	    	await self.bot.say(embed=embed)
+    	
     	except:
     		await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
     		return
-
-    	embed=discord.Embed(title=clandata['name'] + " (#" + clandata['tag'] + ")", description=clandata['description'], color=0x0080ff)
-    	embed.set_thumbnail(url=clandata['badge']['image'])
-    	embed.add_field(name="Members", value=str(clandata['memberCount'])+"/50", inline=True)
-    	embed.add_field(name="Donations", value=str(clandata['donations']), inline=True)
-    	embed.add_field(name="Score", value=str(clandata['score']), inline=True)
-    	embed.add_field(name="Required Trophies", value=str(clandata['requiredScore']), inline=True)
-    	embed.add_field(name="Status", value=str(clandata['type'].capitalize()), inline=True)
-    	embed.add_field(name="Country", value=str(clandata['location']['name']), inline=True)
-    	embed.set_footer(text=credits, icon_url=creditIcon)
-    	await self.bot.say(embed=embed)
 
     @commands.group(pass_context=True)
     async def save(self, ctx):

@@ -168,6 +168,8 @@ class legend:
             'bonustitle': "",
             'discord': None
             }
+
+        clankey = clankey.lower()
         
         self.c[clankey] = toregister
         self.save_data()
@@ -177,6 +179,7 @@ class legend:
     @checks.mod_or_permissions(administrator=True)
     async def clans_delete(self, ctx, clankey):
         """Remove a clan from tracking"""
+        clankey = clankey.lower()
         if self.c.pop(clankey, None):
             self.save_data()
             await self.bot.say("Success")
@@ -187,6 +190,7 @@ class legend:
     @checks.mod_or_permissions(administrator=True)
     async def clans_pb(self, ctx, clankey, pb: int):
         """Set a Personal Best requirement for a clan"""
+        clankey = clankey.lower()
         try:
             self.c[clankey]['personalbest'] = pb
         except KeyError:
@@ -200,6 +204,7 @@ class legend:
     @checks.mod_or_permissions(administrator=True)
     async def clans_toggle(self, ctx, clankey):
         """Toggles visibility of clans in !legend"""
+        clankey = clankey.lower()
         try:
             self.c[clankey]['hide'] = not self.c[clankey]['hide']
         except KeyError:
@@ -208,15 +213,16 @@ class legend:
         
         self.save_data()
         if self.c[clankey]['hide'] == True:
-            await self.bot.say("Sucess, Clan is now hidden")
+            await self.bot.say("Success, Clan is now hidden")
         else:
-            await self.bot.say("Sucess, Clan is now visible")
+            await self.bot.say("Success, Clan is now visible")
     
     
     @clans.command(pass_context=True, name="bonus")
     @checks.mod_or_permissions(administrator=True)
     async def clans_bonus(self, ctx, clankey, *bonus):
         """Add bonus information to title of clan (i.e. Age: 21+)"""
+        clankey = clankey.lower()
         try:
             self.c[clankey]['bonustitle'] = " ".join(bonus)
         except KeyError:
@@ -230,6 +236,7 @@ class legend:
     @checks.mod_or_permissions(administrator=True)
     async def clans_discord(self, ctx, clankey, discordinv):
         """Add discord invite link"""
+        clankey = clankey.lower()
         try:
             self.c[clankey]['discord'] = discordinv
         except KeyError:
