@@ -391,8 +391,13 @@ class legend:
             clan_tag = self.c[clankey]['tag']
             clan_name = self.c[clankey]['name'] 
             clan_role = self.c[clankey]['role'] 
+            clan_hidden = self.c[clankey]['hide'] 
         except KeyError:
             await self.bot.say("Please use a valid clanname : "+", ".join(key for key in self.c.keys()))
+            return
+
+        if clan_hidden:
+            await self.bot.say("Approval failed, this clan is hidden. Type !contact to ask for help.")
             return
 
         leftClan = False
@@ -649,8 +654,13 @@ class legend:
             clan_tag = self.c[clankey]['tag']
             clan_name = self.c[clankey]['name'] 
             clan_role = self.c[clankey]['role'] 
+            clan_hidden = self.c[clankey]['hide'] 
         except KeyError:
             await self.bot.say("Please use a valid clanname : "+", ".join(key for key in self.c.keys()))
+            return
+
+        if clan_hidden:
+            await self.bot.say("Cannot add you to the waiting list, this clan is hidden. Type !contact to ask for help.")
             return
 
         try:
