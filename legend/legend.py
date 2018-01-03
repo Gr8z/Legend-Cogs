@@ -357,10 +357,9 @@ class legend:
 
             desc = emoji + " " + showMembers + "     :trophy: " + str(clans[x]['requiredScore']) + "+     :medal: " +str(clans[x]['score'])
 
-            if (member is None) or ((clans[x]['requiredScore'] <= trophies) and (maxtrophies > personalbest) and (trophies - clans[x]['requiredScore'] < 1500)):
-                if hide is False:
-                    foundClan = True
-                    embed.add_field(name=title, value=desc, inline=False)
+            if (member is None) or ((clans[x]['requiredScore'] <= trophies) and (maxtrophies > personalbest) and (trophies - clans[x]['requiredScore'] < 1500) and (hide is False)):
+                foundClan = True
+                embed.add_field(name=title, value=desc, inline=False)
 
         if foundClan is False:
             embed.add_field(name="uh oh!", value="There are no clans available for you at the moment, please type !legend to see all clans.", inline=False)
