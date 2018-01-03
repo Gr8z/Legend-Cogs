@@ -195,9 +195,6 @@ class clashroyale:
 		try:
 			tourneydata = requests.get('http://api.cr-api.com/tournaments/{}'.format(tag), headers=self.getAuth(), timeout=10).json()
 
-			startTime = self.sec2tme(tourneydata['startTime'] - int(time.time()))
-			endTime = self.sec2tme(tourneydata['endTime'] - int(time.time()))
-
 			maxCapacity = tourneydata['maxCapacity']
 			cards = self.getCards(maxCapacity)
 			coins = self.getCoins(maxCapacity)
@@ -215,6 +212,10 @@ class clashroyale:
 					return
 
 			if tourneydata['status'] != "ended":
+				
+				startTime = self.sec2tme(tourneydata['startTime'] - int(time.time()))
+				endTime = self.sec2tme(tourneydata['endTime'] - int(time.time()))
+
 				embed.add_field(name="Starts In", value=startTime, inline=True)
 				embed.add_field(name="Ends In", value=endTime, inline=True)
 
