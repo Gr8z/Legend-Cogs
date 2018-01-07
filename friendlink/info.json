@@ -5,6 +5,6 @@
     "SHORT" : "Convert Clash Royale Friend Links to Beautiful Embeds",
     "DESCRIPTION" : "Uses Regex to find friend links and converts them to Embeds.",
     "TAGS" : ["clashroyale", "friendlink","links", "regex"],
-    "REQUIREMENTS" : ["re","urlparse","json","requests"],
+    "REQUIREMENTS" : ["re","json","requests"],
     "HIDDEN" : false
 }
