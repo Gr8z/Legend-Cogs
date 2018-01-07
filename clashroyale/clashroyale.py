@@ -231,8 +231,7 @@ class clashroyale:
 			await self.bot.say(embed=embed)
 
 		except:
-	   		await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
-	   		raise
+	   		await self.bot.say("Error: Tournament not found. Please try again later!")
 
 	@commands.group(pass_context=True)
 	async def save(self, ctx):
