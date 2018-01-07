@@ -265,9 +265,9 @@ class shop:
             await self.bot.say("You already have Pro Payday. Type !contact to ask for help.")
             return
 
-        if self.bank_check(author, 300000):
+        if self.bank_check(author, 160000):
             bank = self.bot.get_cog('Economy').bank
-            pay = bank.get_balance(author) - 300000
+            pay = bank.get_balance(author) - 160000
             bank.set_credits(author, pay)
             await self._add_roles(author,["Pro Payday"])
             await self.bot.say("Congratulations, now you can get !payday every 10 minutes.")
