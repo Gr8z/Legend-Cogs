@@ -117,6 +117,7 @@ class shop:
         await self.updateClash()
 
         bank = self.bot.get_cog('Economy').bank
+        #banks = list(self.banks['363728974821457921']) # Test Server
         banks = list(self.banks['374596069989810176'])
 
         try:
@@ -148,26 +149,35 @@ class shop:
 
                                 perCrown = 300
                                 perDonation = 15
+                                BonusMult = 1
 
                                 if rare:
-                                    perCrown *= 1.2
-                                    perDonation *= 1.2
+                                    BonusMult = 1.2
+                                    perCrown *= BonusMult
+                                    perDonation *= BonusMult
 
                                 if epic:
-                                    perCrown *= 1.35
-                                    perDonation *= 1.35
+                                    BonusMult = 1.35
+                                    perCrown *= BonusMult
+                                    perDonation *= BonusMult
 
                                 if legendary:
-                                    perCrown *= 1.5
-                                    perDonation *= 1.5
+                                    BonusMult = 1.5
+                                    perCrown *= BonusMult
+                                    perDonation *= BonusMult
 
                                 amount = math.ceil((clan_donations*perDonation) + (clan_clanChestCrowns*perCrown))
-                                pay = bank.get_balance(user) + amount
+                                #pay = bank.get_balance(user) + amount #BRING THIS BACK
+                                pay = math.ceil(bank.get_balance(user) + amount)
                                 bank.set_credits(user, pay)
+                                perc = str(math.ceil((BonusMult-1)*100))
 
                                 await self.bot.say(user.name + " - Success")
 
-                                await self.bot.send_message(user,"Hello " + user.name + ", take these credits for the " + str(clan_donations) + " donations and " + str(clan_clanChestCrowns) + " crowns you contributed to your clan this week. (+" + str(amount) + " credits!)")
+                                if BonusMult > 1:
+                                    await self.bot.send_message(user,"Hello " + user.name + ", take these credits*("+ perc +"% Bonus)* for the **" + str(clan_donations) + "** donations and **" + str(clan_clanChestCrowns) + "** crowns you contributed to your clan this week. (+" + str(amount) + " credits!)")
+                                else:
+                                    await self.bot.send_message(user,"Hello " + user.name + ", take these credits for the **" + str(clan_donations) + "** donations and **" + str(clan_clanChestCrowns) + "** crowns you contributed to your clan this week. (+" + str(amount) + " credits!)")                                    
                             except Exception as e:
                                 await self.bot.say(e)
                     except:
