@@ -182,6 +182,83 @@ class shop:
                     except:
                         pass
 
+    @commands.command(pass_context=True, no_pm=True)
+    @checks.is_owner()
+    async def sendcwpayouts(self, ctx, tag):
+        """Payout money for clanwar trophies."""
+
+        server = ctx.message.server
+        author = ctx.message.author
+        
+        await self.updateClash()
+
+        bank = self.bot.get_cog('Economy').bank
+        #banks = list(self.banks['363728974821457921']) # Test Server
+        banks = list(self.banks['374596069989810176'])
+
+        tag = tag.strip('#').upper().replace('O', '0')
+        check = ['P', 'Y', 'L', 'Q', 'G', 'R', 'J', 'C', 'U', 'V', '0', '2', '8', '9']
+
+        if any(i not in check for i in tag):
+            await self.bot.say("The ID you provided has invalid characters. Please try again. Type !contact to ask for help.")
+            return
+
+        try:
+            tourney = requests.get('http://api.cr-api.com/tournaments/'+tag, headers=self.getAuth(), timeout=10).json()
+        except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
+            await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
+            return
+        except requests.exceptions.RequestException as e:
+            await self.bot.say(e)
+            return
+        
+        for y in range(0, len(tourney['members'])):
+
+            tourney_tag = tourney['members'][y]['tag']
+            tourney_score = tourney['members'][y]['score']
+
+            for key in range(0,len(banks)):
+                try:
+                    if tourney_tag == self.tags[banks[key]]['tag']:
+
+                        try:
+                            user = discord.utils.get(ctx.message.server.members, id = banks[key])
+
+                            rare = await self._is_rare(user)
+                            epic = await self._is_epic(user)
+                            legendary = await self._is_legendary(user)
+
+                            perTrophy = 100
+                            BonusMult = 1
+
+                            if rare:
+                                BonusMult = 1.2
+                                perTrophy *= BonusMult
+
+                            if epic:
+                                BonusMult = 1.35
+                                perTrophy *= BonusMult
+
+                            if legendary:
+                                BonusMult = 1.5
+                                perTrophy *= BonusMult
+
+                            amount = math.ceil(tourney_score*perTrophy)
+                            pay = bank.get_balance(user) + amount
+                            bank.set_credits(user, pay)
+                            perc = str(math.ceil((BonusMult-1)*100))
+
+                            await self.bot.say(user.name + " - Success")
+
+                            if BonusMult > 1:
+                                await self.bot.send_message(user,"Hello {}, take these credits*({}% Bonus)* for the **{}** trophies you contributed to your clan in **{}**. (+{} credits!)".format(user.name, perc, str(tourney_score), tourney['name'], str(amount) ))
+                            else:
+                                await self.bot.send_message(user,"Hello {}, take these credits for the **{}** trophies you contributed to your clan in **{}**. (+{} credits!)".format(user.name, str(tourney_score), tourney['name'], str(amount) ))
+                        except Exception as e:
+                            await self.bot.say(e)
+                except:
+                    pass
+
     @commands.group(pass_context=True)
     async def buy(self, ctx):
         """Buy different items from the legend shop"""
