@@ -138,7 +138,7 @@ class shop:
 
                 for key in range(0,len(banks)):
                     try:
-                        if clan_tag == self.tags[banks[key]]['tag']:
+                        if ((clan_clanChestCrowns+clan_donations) > 0) and (clan_tag == self.tags[banks[key]]['tag']):
 
                             try:
                                 user = discord.utils.get(ctx.message.server.members, id = banks[key])
@@ -219,7 +219,7 @@ class shop:
 
             for key in range(0,len(banks)):
                 try:
-                    if tourney_tag == self.tags[banks[key]]['tag']:
+                    if (tourney_score > 0) and (tourney_tag == self.tags[banks[key]]['tag']):
 
                         try:
                             user = discord.utils.get(ctx.message.server.members, id = banks[key])
