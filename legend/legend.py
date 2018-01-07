@@ -146,6 +146,7 @@ class legend:
         roles = [discord.utils.get(server.roles, name=role_name) for role_name in role_names]
         try:
             await self.bot.remove_roles(member, *roles)
+            await asyncio.sleep(3)
         except:
             pass
     
