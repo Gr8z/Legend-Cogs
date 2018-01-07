@@ -186,7 +186,7 @@ class clashroyale:
 			await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 			return
 
-	@commands.command(pass_context=True, aliases=['clanwar'])
+	@commands.command(pass_context=True, aliases=['cw'])
 	async def tournament(self, ctx, tag, password = None):
 		"""View Clash Royale Tournament Information """
 
