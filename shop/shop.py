@@ -167,8 +167,7 @@ class shop:
                                     perDonation *= BonusMult
 
                                 amount = math.ceil((clan_donations*perDonation) + (clan_clanChestCrowns*perCrown))
-                                #pay = bank.get_balance(user) + amount #BRING THIS BACK
-                                pay = math.ceil(bank.get_balance(user) + amount)
+                                pay = bank.get_balance(user) + amount
                                 bank.set_credits(user, pay)
                                 perc = str(math.ceil((BonusMult-1)*100))
 
