@@ -13,6 +13,7 @@ If you want to see this bot in action, join the LeGeND Family Discord at [discor
  * **profanity** - filter and delete message that contain bad words.
  * **tourney** - Clash Royale open tournament finder.
  * **shop** - reward people for donations and crowns in credits.
+ * **friendlink** - Convert Clash Royale Friend Links to Beautiful Embeds.
 
 ## Installation
 
@@ -34,3 +35,4 @@ To install a cog on your bot instance:
 * [RED](https://github.com/Cog-Creators/Red-DiscordBot)
 * [CR-API](https://github.com/cr-api/cr-api)
 * [Bobloy](https://github.com/bobloy)
+* [Karthik Suresh](https://github.com/karthiks2601)
