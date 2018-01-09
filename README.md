@@ -34,3 +34,4 @@ To install a cog on your bot instance:
 * [RED](https://github.com/Cog-Creators/Red-DiscordBot)
 * [CR-API](https://github.com/cr-api/cr-api)
 * [Bobloy](https://github.com/bobloy)
+* [Karthik Suresh](https://github.com/karthiks2601)
