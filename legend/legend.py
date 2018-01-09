@@ -454,9 +454,9 @@ class legend:
                 "Congratulations, You have been approved to join **"+ clan_name + " (#" + clan_tag + ")**. Please follow the instructions below on how to join: \n\n" +
                 "Your Recruit Code is: ``" + recruitCode + "`` \n\n"+
                 "All you have to do is search the clan name in Clash Royale, request to join and enter your recruit code in the request message.\n\n" +
-                "That's it! Now wait for your the clan leader to accept. \n\n" +
+                "That's it! Now wait for your clan leadership to accept you. \n\n" +
                 "If you do not see a 'request to join' button, make sure you leave your current clan and check the trophy requirements. \n\n" + 
-                "**IMPORTANT**: Once your clan leader has accepted your request, let a staff member in discord know that you have been accepted. They will then unlock all the member channels for you."
+                "**IMPORTANT**: Once your clan leadership has accepted your request, let a staff member in discord know that you have been accepted. They will then unlock all the member channels for you."
                 )
             await self.bot.say(member.mention + " has been approved for **" + clan_name + "**. Please check your DM for instructions on how to join.")
 
