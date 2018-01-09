@@ -487,7 +487,7 @@ class legend:
             await self.bot.type()
             profiletag = self.clash[member.id]['tag']
             profiledata = requests.get('http://api.cr-api.com/player/{}'.format(profiletag), headers=self.getAuth(), timeout=10).json()
-            if profiledata['clan']['tag'] is None:
+            if profiledata['clan'] is None:
                 clantag = ""
                 clanname = ""
             else: 
