@@ -204,24 +204,6 @@ class legend:
         self.save_data()        
         await self.bot.say("Success")
 
-    @clans.command(pass_context=True, name="toggle")
-    @checks.mod_or_permissions(administrator=True)
-    async def clans_toggle(self, ctx, clankey):
-        """Toggles visibility of clans in !legend"""
-        clankey = clankey.lower()
-        try:
-            self.c[clankey]['hide'] = not self.c[clankey]['hide']
-        except KeyError:
-            await self.bot.say("Please use a valid clanname : "+", ".join(key for key in self.c.keys()))
-            return 
-        
-        self.save_data()
-        if self.c[clankey]['hide'] == True:
-            await self.bot.say("Success, Clan is now hidden")
-        else:
-            await self.bot.say("Success, Clan is now visible")
-    
-    
     @clans.command(pass_context=True, name="bonus")
     @checks.mod_or_permissions(administrator=True)
     async def clans_bonus(self, ctx, clankey, *bonus):
@@ -321,13 +303,11 @@ class legend:
             numWaiting = 0
             personalbest = 0
             bonustitle = None
-            hide = False
             
             for clankey in self.clanArray():
                 if self.c[clankey]['tag'] == clans[x]['tag']:
                     numWaiting = len(self.c[clankey]['waiting'])
                     personalbest = self.c[clankey]['personalbest']
-                    hide = self.c[clankey]['hide']
                     bonustitle = self.c[clankey]['bonustitle']
                     emoji = self.c[clankey]['emoji']
                     totalWaiting += numWaiting
@@ -358,7 +338,7 @@ class legend:
 
             desc = emoji + " " + showMembers + "     :trophy: " + str(clans[x]['requiredScore']) + "+     :medal: " +str(clans[x]['score'])
 
-            if (member is None) or ((clans[x]['requiredScore'] <= trophies) and (maxtrophies > personalbest) and (trophies - clans[x]['requiredScore'] < 1500) and (hide is False)):
+            if (member is None) or ((clans[x]['requiredScore'] <= trophies) and (maxtrophies > personalbest) and (trophies - clans[x]['requiredScore'] < 1500)):
                 foundClan = True
                 embed.add_field(name=title, value=desc, inline=False)
 
@@ -391,13 +371,8 @@ class legend:
             clan_tag = self.c[clankey]['tag']
             clan_name = self.c[clankey]['name'] 
             clan_role = self.c[clankey]['role'] 
-            clan_hidden = self.c[clankey]['hide'] 
         except KeyError:
             await self.bot.say("Please use a valid clanname : "+", ".join(key for key in self.c.keys()))
-            return
-
-        if clan_hidden:
-            await self.bot.say("Approval failed, this clan is hidden. Type !contact to ask for help.")
             return
 
         leftClan = False
@@ -653,14 +628,9 @@ class legend:
         try:
             clan_tag = self.c[clankey]['tag']
             clan_name = self.c[clankey]['name'] 
-            clan_role = self.c[clankey]['role'] 
-            clan_hidden = self.c[clankey]['hide'] 
+            clan_role = self.c[clankey]['role']
         except KeyError:
             await self.bot.say("Please use a valid clanname : "+", ".join(key for key in self.c.keys()))
-            return
-
-        if clan_hidden:
-            await self.bot.say("Cannot add you to the waiting list, this clan is hidden. Type !contact to ask for help.")
             return
 
         try:
@@ -1136,8 +1106,6 @@ def check_clans():
             c[clankey]['bonustitle'] = ""
         if 'personalbest' not in c[clankey]:
             c[clankey]['personalbest'] = 0   
-        if 'hide' not in c[clankey]:
-            c[clankey]['hide'] = False      
     dataIO.save_json('cogs/clans.json', c)
 
 def check_auth():
