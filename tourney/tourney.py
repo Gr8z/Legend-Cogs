@@ -70,7 +70,7 @@ class tournament:
 		    return False
 
 	# Returns a list with tournaments
-	def getTopTourneyNew():
+	def getTopTourneyNew(self):
 
 		global lastTag
 		tourney = {}
