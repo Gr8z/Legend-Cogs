@@ -96,11 +96,13 @@ class tournament:
 		for x in range(0, numTourney):
 
 			hashtag = tourneydata['tournaments'][x]['hashtag']
+			isClosed = True
 
 			try:
 				tourneydataAPI = requests.get('http://api.cr-api.com/tournaments/{}'.format(hashtag), headers=self.getAuth(), timeout=10).json()
 				totalPlayers = tourneydataAPI['capacity']
 				full = tourneydataAPI['capacity'] == tourneydataAPI['maxCapacity']
+				isClosed = tourneydataAPI['type'] == 'open'
 			except :
 				totalPlayers = tourneydata['tournaments'][x]['totalPlayers']
 				full = tourneydata['tournaments'][x]['full']
@@ -113,7 +115,7 @@ class tournament:
 			time = sec2tme(timeLeft)
 			players = str(totalPlayers) + "/" + str(maxPlayers)
 
-			if (maxPlayers > 50) and (not full) and (timeLeft > 600) and ((totalPlayers + 4) < maxPlayers) and (hashtag != lastTag):
+			if (maxPlayers > 50) and (not full) and (timeLeft > 600) and ((totalPlayers + 4) < maxPlayers) and (hashtag != lastTag) and isClosed:
 				
 				lastTag = hashtag
 				
@@ -187,11 +189,13 @@ class tournament:
 		for x in numTourney:
 
 			hashtag = tourneydata['tournaments'][x]['hashtag']
+			isClosed = True
 
 			try:
 				tourneydataAPI = requests.get('http://api.cr-api.com/tournaments/{}'.format(hashtag), headers=self.getAuth(), timeout=10).json()
 				totalPlayers = tourneydataAPI['capacity']
 				full = tourneydataAPI['capacity'] == tourneydataAPI['maxCapacity']
+				isClosed = tourneydataAPI['type'] == 'open'
 			except :
 				totalPlayers = tourneydata['tournaments'][x]['totalPlayers']
 				full = tourneydata['tournaments'][x]['full']
@@ -205,7 +209,7 @@ class tournament:
 			cards = getCards(maxPlayers)
 			coins = getCoins(maxPlayers)
 
-			if not full and timeLeft > 600:
+			if not full and timeLeft > 600 and isClosed:
 				embed=discord.Embed(title="Open Tournament", description="Here is a good one I found. You can search again if this is not what you are looking for.", color=0x00ffff)
 				embed.set_thumbnail(url='https://statsroyale.com/images/tournament.png')
 				embed.add_field(name="Title", value=title, inline=True)
