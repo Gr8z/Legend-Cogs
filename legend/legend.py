@@ -371,6 +371,7 @@ class legend:
             clan_tag = self.c[clankey]['tag']
             clan_name = self.c[clankey]['name'] 
             clan_role = self.c[clankey]['role'] 
+            clan_pb = self.c[clankey]['personalbest'] 
         except KeyError:
             await self.bot.say("Please use a valid clanname : "+", ".join(key for key in self.c.keys()))
             return
@@ -416,7 +417,7 @@ class legend:
                 await self.bot.say("Approval failed, the clan is Full.")
                 return
 
-            if (trophies < clandata['requiredScore']):
+            if ((trophies < clandata['requiredScore']) and (trophies < clan_pb)):
                 await self.bot.say("Approval failed, you don't meet the trophy requirements.")
                 return
 
@@ -629,6 +630,7 @@ class legend:
             clan_tag = self.c[clankey]['tag']
             clan_name = self.c[clankey]['name'] 
             clan_role = self.c[clankey]['role']
+            clan_pb = self.c[clankey]['personalbest'] 
         except KeyError:
             await self.bot.say("Please use a valid clanname : "+", ".join(key for key in self.c.keys()))
             return
@@ -668,7 +670,7 @@ class legend:
             trophies = profiledata['trophies']
             maxtrophies = profiledata['stats']['maxTrophies']
 
-            if (trophies < clandata['requiredScore']):
+            if ((trophies < clandata['requiredScore']) and (trophies < clan_pb)):
                 await self.bot.say("Cannot add you to the waiting list, you don't meet the trophy requirements.")
                 return
 
