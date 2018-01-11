@@ -68,7 +68,7 @@ class clashroyale:
 		else:
 			return "{} hour, {} mins".format(h,m)
 
-	@commands.command(pass_context=True, aliases=['clashprofile','cprofile','cProfile'])
+	@commands.command(pass_context=True, aliases=['clashprofile'])
 	async def clashProfile(self, ctx, member: discord.Member = None):
 		"""View your Clash Royale Profile Data and Statstics."""
 
