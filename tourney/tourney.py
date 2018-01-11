@@ -102,10 +102,14 @@ class tournament:
 		self.bot = bot
 		self.path = 'data/tourney/settings.json'
 		self.settings = dataIO.load_json(self.path)
+		self.auth = dataIO.load_json('cogs/auth.json')
 		
 	def save_data(self):
 		"""Saves the json"""
 		dataIO.save_json(self.path, self.settings)
+
+	def getAuth(self):
+		return {"auth" : self.auth['token']}
 
 	async def _is_allowed(self, member):
 		server = member.server
@@ -163,6 +167,7 @@ class tournament:
 		try:
 			tourneydata = requests.get('http://statsroyale.com/tournaments?appjson=1', timeout=5, headers=headers, proxies=proxies).json()
 		except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
+			raise
 			await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 			return
 		except requests.exceptions.RequestException as e:
@@ -174,15 +179,22 @@ class tournament:
 
 		for x in numTourney:
 
+			hashtag = tourneydata['tournaments'][x]['hashtag']
+
+			try:
+				tourneydata = requests.get('http://api.cr-api.com/tournaments/{}'.format(hashtag), headers=self.getAuth(), timeout=10).json()
+				totalPlayers = tourneydata['capacity']
+				full = tourneydata['capacity'] == tourneydata['maxCapacity']
+			except :
+				totalPlayers = tourneydata['tournaments'][x]['totalPlayers']
+				full = tourneydata['tournaments'][x]['full']
+
 			title = tourneydata['tournaments'][x]['title']
 			length = tourneydata['tournaments'][x]['length']
-			totalPlayers = tourneydata['tournaments'][x]['totalPlayers']
 			maxPlayers = tourneydata['tournaments'][x]['maxPlayers']
-			full = tourneydata['tournaments'][x]['full']
 			timeLeft = tourneydata['tournaments'][x]['timeLeft']
 			startTime = tourneydata['tournaments'][x]['startTime']
 			warmup = tourneydata['tournaments'][x]['warmup']
-			hashtag = tourneydata['tournaments'][x]['hashtag']
 			cards = getCards(maxPlayers)
 			coins = getCoins(maxPlayers)
 
