@@ -182,9 +182,9 @@ class tournament:
 			hashtag = tourneydata['tournaments'][x]['hashtag']
 
 			try:
-				tourneydata = requests.get('http://api.cr-api.com/tournaments/{}'.format(hashtag), headers=self.getAuth(), timeout=10).json()
-				totalPlayers = tourneydata['capacity']
-				full = tourneydata['capacity'] == tourneydata['maxCapacity']
+				tourneydataAPI = requests.get('http://api.cr-api.com/tournaments/{}'.format(hashtag), headers=self.getAuth(), timeout=10).json()
+				totalPlayers = tourneydataAPI['capacity']
+				full = tourneydataAPI['capacity'] == tourneydataAPI['maxCapacity']
 			except :
 				totalPlayers = tourneydata['tournaments'][x]['totalPlayers']
 				full = tourneydata['tournaments'][x]['full']
