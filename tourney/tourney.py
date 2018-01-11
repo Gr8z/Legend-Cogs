@@ -42,10 +42,16 @@ def getTopTourneyNew():
 
 	for x in range(0, numTourney):
 
+		try:
+			tourneydataAPI = requests.get('http://api.cr-api.com/tournaments/{}'.format(hashtag), headers=self.getAuth(), timeout=10).json()
+			totalPlayers = tourneydataAPI['capacity']
+			full = tourneydataAPI['capacity'] == tourneydataAPI['maxCapacity']
+		except :
+			totalPlayers = tourneydata['tournaments'][x]['totalPlayers']
+			full = tourneydata['tournaments'][x]['full']
+
 		title = tourneydata['tournaments'][x]['title']
-		totalPlayers = tourneydata['tournaments'][x]['totalPlayers']
 		maxPlayers = tourneydata['tournaments'][x]['maxPlayers']
-		full = tourneydata['tournaments'][x]['full']
 		timeLeft = tourneydata['tournaments'][x]['timeLeft']
 		hashtag = tourneydata['tournaments'][x]['hashtag']
 		cards = getCards(maxPlayers)
