@@ -173,6 +173,8 @@ class tournament:
 	    	'http': random.choice(proxies_list)
 		}
 
+		await self.bot.type()
+
 		try:
 			tourneydata = requests.get('http://statsroyale.com/tournaments?appjson=1', timeout=5, headers=headers, proxies=proxies).json()
 		except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
