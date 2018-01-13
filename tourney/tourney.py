@@ -96,18 +96,9 @@ class tournament:
 		for x in range(0, numTourney):
 
 			hashtag = tourneydata['tournaments'][x]['hashtag']
-			isClosed = True
-
-			try:
-				tourneydataAPI = requests.get('http://api.cr-api.com/tournaments/{}'.format(hashtag), headers=self.getAuth(), timeout=10).json()
-				totalPlayers = tourneydataAPI['capacity']
-				full = tourneydataAPI['capacity'] == tourneydataAPI['maxCapacity']
-				isClosed = tourneydataAPI['type'] == 'open'
-			except :
-				totalPlayers = tourneydata['tournaments'][x]['totalPlayers']
-				full = tourneydata['tournaments'][x]['full']
-
 			title = tourneydata['tournaments'][x]['title']
+			totalPlayers = tourneydata['tournaments'][x]['totalPlayers']
+			full = tourneydata['tournaments'][x]['full']
 			maxPlayers = tourneydata['tournaments'][x]['maxPlayers']
 			timeLeft = tourneydata['tournaments'][x]['timeLeft']
 			cards = getCards(maxPlayers)
@@ -115,9 +106,20 @@ class tournament:
 			time = sec2tme(timeLeft)
 			players = str(totalPlayers) + "/" + str(maxPlayers)
 
-			if (maxPlayers > 50) and (not full) and (timeLeft > 600) and ((totalPlayers + 4) < maxPlayers) and (hashtag != lastTag) and isClosed:
-				
+			if (maxPlayers > 50) and (not full) and (timeLeft > 600) and ((totalPlayers + 4) < maxPlayers) and (hashtag != lastTag):
+
 				lastTag = hashtag
+
+				try:
+					tourneydataAPI = requests.get('http://api.cr-api.com/tournaments/{}'.format(hashtag), headers=self.getAuth(), timeout=10).json()
+					totalPlayers = tourneydataAPI['capacity']
+					full = tourneydataAPI['capacity'] == tourneydataAPI['maxCapacity']
+					isClosed = tourneydataAPI['type'] == 'open'
+
+					if (full) or ((totalPlayers + 4) > maxPlayers) or (not isClosed):
+						return None
+				except :
+					pass
 				
 				tourney['tag'] = hashtag
 				tourney['title'] = title
@@ -173,8 +175,6 @@ class tournament:
 	    	'http': random.choice(proxies_list)
 		}
 
-		await self.bot.type()
-
 		try:
 			tourneydata = requests.get('http://statsroyale.com/tournaments?appjson=1', timeout=5, headers=headers, proxies=proxies).json()
 		except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
@@ -189,28 +189,19 @@ class tournament:
 
 		for x in numTourney:
 
-			hashtag = tourneydata['tournaments'][x]['hashtag']
-			isClosed = True
-
-			try:
-				tourneydataAPI = requests.get('http://api.cr-api.com/tournaments/{}'.format(hashtag), headers=self.getAuth(), timeout=10).json()
-				totalPlayers = tourneydataAPI['capacity']
-				full = tourneydataAPI['capacity'] == tourneydataAPI['maxCapacity']
-				isClosed = tourneydataAPI['type'] == 'open'
-			except :
-				totalPlayers = tourneydata['tournaments'][x]['totalPlayers']
-				full = tourneydata['tournaments'][x]['full']
-
 			title = tourneydata['tournaments'][x]['title']
 			length = tourneydata['tournaments'][x]['length']
+			totalPlayers = tourneydata['tournaments'][x]['totalPlayers']
 			maxPlayers = tourneydata['tournaments'][x]['maxPlayers']
+			full = tourneydata['tournaments'][x]['full']
 			timeLeft = tourneydata['tournaments'][x]['timeLeft']
 			startTime = tourneydata['tournaments'][x]['startTime']
 			warmup = tourneydata['tournaments'][x]['warmup']
+			hashtag = tourneydata['tournaments'][x]['hashtag']
 			cards = getCards(maxPlayers)
 			coins = getCoins(maxPlayers)
 
-			if not full and timeLeft > 600 and isClosed:
+			if not full and timeLeft > 600:
 				embed=discord.Embed(title="Open Tournament", description="Here is a good one I found. You can search again if this is not what you are looking for.", color=0x00ffff)
 				embed.set_thumbnail(url='https://statsroyale.com/images/tournament.png')
 				embed.add_field(name="Title", value=title, inline=True)
