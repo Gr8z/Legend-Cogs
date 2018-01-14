@@ -290,7 +290,7 @@ class legend:
                 await self.bot.say(e)
                 return
                 
-        clans = sorted(clans, key=lambda clanned: clanned['requiredScore'], reverse=True)
+        clans = sorted(clans, key=lambda clanned: (clanned['requiredScore'], clanned['score']), reverse=True)
        
         embed=discord.Embed(color=0xFAA61A)
         embed.set_author(name="LeGeND Family Clans", url="http://cr-api.com/clan/family/legend", icon_url="https://i.imgur.com/dtSMITE.jpg")
