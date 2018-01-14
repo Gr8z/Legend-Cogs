@@ -919,7 +919,7 @@ class legend:
         cr_clanSettings = []
         cr_clanSettings.append(clandata['badge']['id'] == 16000002)
         cr_clanSettings.append(clandata['location']['name'] == "International")
-        cr_clanSettings.append("LeGeND Family🔥13 Clans🔥LegendClans.com🔥Daily Tourneys🔥Weekly Clanwar🔥discord.me/legendfamily🔥" in clandata['description'])
+        cr_clanSettings.append("LeGeND Family🔥14 Clans🔥LegendClans.com🔥Daily Tourneys🔥Weekly Clanwar🔥discord.me/legendfamily🔥" in clandata['description'])
         cr_clanSettings.append(clandata['type'] != "closed")
 
         message = ""
