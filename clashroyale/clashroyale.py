@@ -295,7 +295,7 @@ class clashroyale:
 			for key, value in self.clash.items():
 				if profiletag == self.clash[key]['tag']:
 					user = discord.utils.get(ctx.message.server.members, id = key)
-					await self.bot.say("Error, This Player ID is already linked with **" + user.name + "**")
+					await self.bot.say("Error, This Player ID is already linked with **" + user.display_name + "**")
 					return
 
 			self.clash.update({member.id: {'tag': profiletag}})

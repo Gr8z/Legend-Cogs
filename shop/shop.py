@@ -171,7 +171,7 @@ class shop:
                                 bank.set_credits(user, pay)
                                 perc = str(math.ceil((BonusMult-1)*100))
 
-                                await self.bot.say(user.name + " - Success")
+                                await self.bot.say(user.display_name + " - Success")
 
                                 if BonusMult > 1:
                                     await self.bot.send_message(user,"Hello " + user.name + ", take these credits*("+ perc +"% Bonus)* for the **" + str(clan_donations) + "** donations and **" + str(clan_clanChestCrowns) + "** crowns you contributed to your clan this week. (+" + str(amount) + " credits!)")

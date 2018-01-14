@@ -15,7 +15,7 @@
     "Opponent found! Please welcome {0.mention} to the arena!",
     "Look at what the miner dug out! Its our newest member, {0.mention}!",
     "Who is that handsome challenger riding that pony? Is it the Prince? No, it's {0.mention}!",
-    "{0.mention} has put on a helmet, became Mega-{0.name} and entered the arena!",
+    "{0.mention} has put on a helmet, became Mega-{0.display_name} and entered the arena!",
     "A new legendary card arrives! Its {0.mention}!",
     "Everyone, please put your logs away and welcome {0.mention} to the server!",
     "You people have no respect. Trainer {0.mention} just came in here and nobody said hello!",
