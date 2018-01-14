@@ -265,7 +265,7 @@ class clashroyale:
 		check = ['P', 'Y', 'L', 'Q', 'G', 'R', 'J', 'C', 'U', 'V', '0', '2', '8', '9']
 
 		if any(i not in check for i in profiletag):
-			await self.bot.say("The ID you provided has invalid characters. Please try again. Type !contact to ask for help.")
+			await self.bot.say("The ID you provided has invalid characters. Please try again.")
 			return
 
 		allowed = False
@@ -281,7 +281,7 @@ class clashroyale:
 				allowed = True
 
 		if not allowed:
-			await self.bot.say("You dont have enough permissions to set tags for others. Type !contact to ask for help.")
+			await self.bot.say("You dont have enough permissions to set tags for others.")
 			return
 
 		await self.bot.type()
@@ -303,7 +303,7 @@ class clashroyale:
 
 			await self.bot.say('**' +profiledata['name'] + ' (#'+ profiletag + ')** has been successfully saved on ' + member.mention)
 		except:
-			await self.bot.say("We cannot find your ID in our database, please try again. Type !contact to ask for help.")
+			await self.bot.say("We cannot find your ID in our database, please try again.")
 
 	@save.command(pass_context=True, name="brawl")
 	async def save_brawl(self, ctx, profiletag : str, member: discord.Member = None):
@@ -322,7 +322,7 @@ class clashroyale:
 		check = ['P', 'Y', 'L', 'Q', 'G', 'R', 'J', 'C', 'U', 'V', '0', '2', '8', '9']
 
 		if any(i not in check for i in profiletag):
-			await self.bot.say("The ID you provided has invalid characters. Please try again. Type !contact to ask for help.")
+			await self.bot.say("The ID you provided has invalid characters. Please try again.")
 			return
 
 		allowed = False
@@ -367,7 +367,7 @@ class clashroyale:
 
 			await self.bot.say(tagUsername + ' has been successfully saved. Now you can use ``!brawlProfile`` ``!band``')
 		except:
-			await self.bot.say("We cannot find your ID in our database, please try again. Type !contact to ask for help.")
+			await self.bot.say("We cannot find your ID in our database, please try again.")
 
 def check_folders():
 	if not os.path.exists("data/clashroyale"):

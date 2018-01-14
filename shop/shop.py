@@ -200,7 +200,7 @@ class shop:
         check = ['P', 'Y', 'L', 'Q', 'G', 'R', 'J', 'C', 'U', 'V', '0', '2', '8', '9']
 
         if any(i not in check for i in tag):
-            await self.bot.say("The ID you provided has invalid characters. Please try again. Type !contact to ask for help.")
+            await self.bot.say("The ID you provided has invalid characters. Please try again.")
             return
 
         try:
@@ -284,7 +284,7 @@ class shop:
         allowed = await self._is_member(author)
 
         if not allowed:
-            await self.bot.say("You cannot use the store, you must be a member of the family. Type !contact to ask for help.")
+            await self.bot.say("You cannot use the store, you must be a member of the family.")
             return
 
         await self.bot.say("please contact @GR8#7968 or rakerran#7837 to purchase it for you.")
@@ -304,7 +304,7 @@ class shop:
         allowed = await self._is_member(author)
 
         if not allowed:
-            await self.bot.say("You cannot use the store, you must be a member of the family. Type !contact to ask for help.")
+            await self.bot.say("You cannot use the store, you must be a member of the family.")
             return
 
         await self.bot.say("please contact @GR8#7968 or rakerran#7837 to purchase it for you.")
@@ -323,7 +323,7 @@ class shop:
         allowed = await self._is_member(author)
 
         if not allowed:
-            await self.bot.say("You cannot use the store, you must be a member of the family. Type !contact to ask for help.")
+            await self.bot.say("You cannot use the store, you must be a member of the family.")
             return
 
         await self.bot.say("please contact @GR8#7968 or rakerran#7837 to purchase it for you.")
@@ -342,13 +342,13 @@ class shop:
         allowed = await self._is_member(author)
 
         if not allowed:
-            await self.bot.say("You cannot use the store, you must be a member of the family. Type !contact to ask for help.")
+            await self.bot.say("You cannot use the store, you must be a member of the family.")
             return
 
         payday = await self._is_payday(author)
 
         if payday:
-            await self.bot.say("You already have Pro Payday. Type !contact to ask for help.")
+            await self.bot.say("You already have Pro Payday.")
             return
 
         if self.bank_check(author, 160000):
@@ -358,7 +358,7 @@ class shop:
             await self._add_roles(author,["Pro Payday"])
             await self.bot.say("Congratulations, now you can get !payday every 10 minutes.")
         else:
-            await self.bot.say("You do not have enough credits to buy this item. Type !contact to ask for help.")
+            await self.bot.say("You do not have enough credits to buy this item.")
 
     @buy.command(pass_context=True, name="5")
     async def buy_5(self , ctx):
@@ -374,7 +374,7 @@ class shop:
         allowed = await self._is_member(author)
 
         if not allowed:
-            await self.bot.say("You cannot use the store, you must be a member of the family. Type !contact to ask for help.")
+            await self.bot.say("You cannot use the store, you must be a member of the family.")
             return
 
         rare = await self._is_rare(author)
@@ -382,7 +382,7 @@ class shop:
         legendary = await self._is_legendary(author)
 
         if rare or epic or legendary:
-            await self.bot.say("You already have a special role. Type !contact to ask for help.")
+            await self.bot.say("You already have a special role.")
             return
 
         if self.bank_check(author, 100000):
@@ -392,7 +392,7 @@ class shop:
             await self._add_roles(author,["Rare™"])
             await self.bot.say("Congratulations, you are now a **Rare™**")
         else:
-            await self.bot.say("You do not have enough credits to buy this role. Type !contact to ask for help.")
+            await self.bot.say("You do not have enough credits to buy this role.")
 
     @buy.command(pass_context=True, name="6")
     async def buy_6(self , ctx):
@@ -408,7 +408,7 @@ class shop:
         allowed = await self._is_member(author)
 
         if not allowed:
-            await self.bot.say("You cannot use the store, you must be a member of the family. Type !contact to ask for help.")
+            await self.bot.say("You cannot use the store, you must be a member of the family.")
             return
 
         rare = await self._is_rare(author)
@@ -416,11 +416,11 @@ class shop:
         legendary = await self._is_legendary(author)
 
         if not rare:
-            await self.bot.say("You need to have **Rare™** to buy this role. Type !contact to ask for help.")
+            await self.bot.say("You need to have **Rare™** to buy this role.")
             return    
 
         if epic or legendary:
-            await self.bot.say("You already have a special role. Type !contact to ask for help.")
+            await self.bot.say("You already have a special role.")
             return
 
         if self.bank_check(author, 250000):
@@ -432,7 +432,7 @@ class shop:
             await self._add_roles(author,["Epic™"])
             await self.bot.say("Congratulations, you are now a **Epic™**")
         else:
-            await self.bot.say("You do not have enough credits to buy this role. Type !contact to ask for help.")
+            await self.bot.say("You do not have enough credits to buy this role.")
         
     @buy.command(pass_context=True, name="7")
     async def buy_7(self , ctx):
@@ -449,7 +449,7 @@ class shop:
         allowed = await self._is_member(author)
 
         if not allowed:
-            await self.bot.say("You cannot use the store, you must be a member of the family. Type !contact to ask for help.")
+            await self.bot.say("You cannot use the store, you must be a member of the family.")
             return
 
         rare = await self._is_rare(author)
@@ -457,11 +457,11 @@ class shop:
         legendary = await self._is_legendary(author)
 
         if not epic:
-            await self.bot.say("You need to have **Epic™** to buy this role. Type !contact to ask for help.")
+            await self.bot.say("You need to have **Epic™** to buy this role.")
             return    
 
         if legendary:
-            await self.bot.say("You are already have a special role. Type !contact to ask for help.")
+            await self.bot.say("You are already have a special role.")
             return
 
         if self.bank_check(author, 750000):
@@ -473,7 +473,7 @@ class shop:
             await self._add_roles(author,["LeGeNDary™"])
             await self.bot.say("Congratulations, you are now a **LeGeNDary™**")
         else:
-            await self.bot.say("You do not have enough credits to buy this role. Type !contact to ask for help.")
+            await self.bot.say("You do not have enough credits to buy this role.")
 
     @buy.command(pass_context=True, name="8")
     async def buy_8(self, ctx):
@@ -490,7 +490,7 @@ class shop:
         allowed = await self._is_member(author)
 
         if not allowed:
-            await self.bot.say("You cannot use the store, you must be a member of the family. Type !contact to ask for help.")
+            await self.bot.say("You cannot use the store, you must be a member of the family.")
             return
 
         await self.bot.say("please contact @GR8#7968 or rakerran#7837 to purchase it for you.")

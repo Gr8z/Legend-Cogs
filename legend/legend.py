@@ -362,7 +362,7 @@ class legend:
         allowed = await self._is_commander(author)
 
         if not allowed:
-            await self.bot.say("You dont have enough permissions to approve a recruit. Type !contact to ask for help.")
+            await self.bot.say("You dont have enough permissions to approve a recruit.")
             return
 
         clankey = clankey.lower()
@@ -621,7 +621,7 @@ class legend:
         allowed = await self._is_commander(author)
 
         if not allowed:
-            await self.bot.say("You dont have enough permissions to add someone to the waiting list. Type !contact to ask for help.")
+            await self.bot.say("You dont have enough permissions to add someone to the waiting list.")
             return
 
         clankey = clankey.lower()
@@ -706,7 +706,7 @@ class legend:
         allowed = await self._is_commander(author)
 
         if not allowed:
-            await self.bot.say("You dont have enough permissions to delete someone to the waiting list. Type !contact to ask for help.")
+            await self.bot.say("You dont have enough permissions to delete someone to the waiting list.")
             return
 
         clankey = clankey.lower()
@@ -854,7 +854,7 @@ class legend:
         allowed = await self._is_commander(author)
 
         if not allowed:
-            await self.bot.say("You dont have enough permissions to use Audit. Type !contact to ask for help.")
+            await self.bot.say("You dont have enough permissions to use Audit.")
             return
 
         await self.bot.type()
@@ -1000,7 +1000,7 @@ class legend:
         allowed = await self._is_commander(author)
 
         if not allowed:
-            await self.bot.say("You dont have enough permissions to assign guest role. Type !contact to ask for help.")
+            await self.bot.say("You dont have enough permissions to assign guest role.")
             return
 
         role = discord.utils.get(server.roles, name="Guest")
@@ -1027,7 +1027,7 @@ class legend:
         allowed = await self._is_commander(author)
 
         if not allowed:
-            await self.bot.say("You dont have enough permissions to delete someone to the waiting list. Type !contact to ask for help.")
+            await self.bot.say("You dont have enough permissions to delete someone to the waiting list.")
             return
 
         try:
