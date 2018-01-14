@@ -292,6 +292,12 @@ class clashroyale:
 		try:
 			profiledata = requests.get('http://api.cr-api.com/player/{}'.format(profiletag), headers=self.getAuth(), timeout=10).json()
 
+			for key, value in self.clash.items():
+				if profiletag == self.clash[key]['tag']:
+					user = discord.utils.get(ctx.message.server.members, id = key)
+					await self.bot.say("Error, This Player ID is already linked with **" + user.name + "**")
+					return
+
 			self.clash.update({member.id: {'tag': profiletag}})
 			dataIO.save_json('cogs/tags.json', self.clash)
 
