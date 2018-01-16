@@ -61,6 +61,10 @@ Score is calculated in a way that allows every participant to contribute to help
 
 There are 2 factors to win: convince more players to participate within your clan and earn more tournament trophies. Both are **equally important**. We publish tourneys and passwords at same time, so we give equal chances to each clan and player. 
 
+Every Sunday, there will be a **special Gizer clanwar** where various clans outside and inside the family will join a tournament and the top clan will recieve $5 from Gizer. 
+
+Each and every participant will recieve discord credits for getting trophies for their clan. The more trophies you can collect, the more credits you will get. Credits can used in LeGeND shop to buy various items.
+
 **All clans** will be closed/full to avoid any leaks, nobody will be allowed to join.
 
 **3 golden Rules for clanwars:** We respect the Opponent (no BMing if you win), we play to have fun (no obligation to participate), and don't join if you think you cannot play.
