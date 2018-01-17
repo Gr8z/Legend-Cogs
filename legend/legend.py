@@ -421,7 +421,7 @@ class legend:
                 await self.bot.say("Approval failed, the clan is Full.")
                 return
 
-            if ((trophies < clandata['requiredScore']) and (trophies < clan_pb)):
+            if ((trophies < clandata['requiredScore']) and (maxtrophies < clan_pb)):
                 await self.bot.say("Approval failed, you don't meet the trophy requirements.")
                 return
 
@@ -629,6 +629,7 @@ class legend:
             return
 
         clankey = clankey.lower()
+        offline = False
 
         try:
             clan_tag = self.c[clankey]['tag']
@@ -653,8 +654,8 @@ class legend:
                 clantag = profiledata['clan']['tag']
                 clanname = profiledata['clan']['name']
         except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
-            await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
-            return
+            await self.bot.say("Warning: cannot reach Clash Royale Servers. Using offline waiting list.")
+            offline = True
         except requests.exceptions.RequestException as e:
             await self.bot.say(e)
             return
@@ -663,20 +664,23 @@ class legend:
             return
 
         membership = True
-        for clanKey in self.clanArray():
-            if self.c[clanKey]['tag'] == clantag:
-                membership = False # False
-                savekey = clanKey
-                break
+
+        if not offline:
+            for clanKey in self.clanArray():
+                if self.c[clanKey]['tag'] == clantag:
+                    membership = False # False
+                    savekey = clanKey
+                    break
 
         if membership:
 
-            trophies = profiledata['trophies']
-            maxtrophies = profiledata['stats']['maxTrophies']
+            if not offline:
+                trophies = profiledata['trophies']
+                maxtrophies = profiledata['stats']['maxTrophies']
 
-            if ((trophies < clandata['requiredScore']) and (trophies < clan_pb)):
-                await self.bot.say("Cannot add you to the waiting list, you don't meet the trophy requirements.")
-                return
+                if ((trophies < clandata['requiredScore']) and (maxtrophies < clan_pb)):
+                    await self.bot.say("Cannot add you to the waiting list, you don't meet the trophy requirements.")
+                    return
 
             if member.id not in self.c[clankey]['waiting']:
                 self.c[clankey]['waiting'].append(member.id)
