@@ -1,0 +1,10 @@
+{
+    "AUTHOR" : "GR8",
+    "INSTALL_MSG" : "Clan Chest Tracker added, if there are any issues, please mention them on https://github.com/Gr8z/LeGeND-Bot",
+    "NAME" : "friendlink",
+    "SHORT" : "Track and display which clans completed clan chest first",
+    "DESCRIPTION" : "Track and display which clans completed clan chest first. Run the command on a cronjob every week.",
+    "TAGS" : ["clashroyale", "clanchest", "leaderboard"],
+    "REQUIREMENTS" : ["json","requests"],
+    "HIDDEN" : false
+}

@@ -14,6 +14,7 @@ If you want to see this bot in action, join the LeGeND Family Discord at [discor
  * **tourney** - Clash Royale open tournament finder.
  * **shop** - reward people for donations and crowns in credits.
  * **friendlink** - Convert Clash Royale Friend Links to Beautiful Embeds.
+ * **clanchest** - Clan Chest Leaderboard for a clan family.
 
 ## Installation
 
