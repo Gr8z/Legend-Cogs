@@ -42,7 +42,8 @@ commands_text =  """Here are some of the Legend Family Bot commands, you can use
 **!rep @user** - give reputation points to users.
 **!remindme** - Use this command to make the bot remind you of something in the future.
 **!trivia** - start a trivia of your choice. Bot will ask you questions, you will get points of answering them.
-**!queue** -  Listen to songs, type with command with the song name inside a voice channel. (!skip, !pause, !resume, !playlist).\n
+**!play** -  Listen to songs, type with command with the song name inside a voice channel. (!skip, !pause, !resume, !playlist).\n
+**!invite** -  Get the invite link for the server to share with your friends.\n
 **You can type !help here to see the full commands list**"""
 
 info_text = """You will find several channels on our Discord Server\n
