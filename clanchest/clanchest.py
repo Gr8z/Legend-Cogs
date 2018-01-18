@@ -64,7 +64,7 @@ class clanchest:
                 print(e)
                 pass
 
-            await asyncio.sleep(15)
+            await asyncio.sleep(600)
 
     async def printChest(self, ctx, currDate):
         
