@@ -9,6 +9,7 @@ from cogs.utils import checks
 from .utils.dataIO import dataIO
 import os
 from fake_useragent import UserAgent
+from datetime import date, datetime
 
 lastTag = '0'
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
@@ -82,38 +83,61 @@ class tournament:
 		else:
 			return False
 	
-	async def _get_tourney(self, minPlayers):
-		proxies = {
-			'http': random.choice(proxies_list)
-		}
-
+	def _get_proxy(self):
+		return ""  # For now
+	
+	async def _fetch_tourney(self):
+		"""Fetch tournament data. Run sparingly"""
+		url = "{}".format('http://statsroyale.com/tournaments?appjson=1')
+		
+		if proxies_list:
+			randproxy = "http://"+random.choice(proxies_list)
+		else:
+			randproxy = self._get_proxy()
+		
 		try:
-			tourneydata = requests.get('http://statsroyale.com/tournaments?appjson=1', timeout=5, headers=headers, proxies=proxies).json()
-		except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
-			await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
+			async with aiohttp.ClientSession() as session:
+				async with session.get(url, timeout=30, proxy=randproxy) as resp:
+					print(resp)
+					data = await resp.json()
+		except json.decoder.JSONDecodeError:
+			print(resp)
+			raise
+		except asyncio.TimeoutError:
+			print(resp)
+			raise
+
+		return data
+	
+	async def _update_cache(self):
+		try:
+			newdata = await self._fetch_tourney()
+		except:  # On error: Don't retry, but don't mark cache as updated
 			return
-		except requests.exceptions.RequestException as e:
-			await self.bot.say(e)
-			return
-
-		numTourney = list(range(len(tourneydata['tournaments'])))
-		random.shuffle(numTourney)
-
-		for x in numTourney:
-
-			title = tourneydata['tournaments'][x]['title']
-			length = tourneydata['tournaments'][x]['length']
-			totalPlayers = tourneydata['tournaments'][x]['totalPlayers']
-			maxPlayers = tourneydata['tournaments'][x]['maxPlayers']
-			full = tourneydata['tournaments'][x]['full']
-			timeLeft = tourneydata['tournaments'][x]['timeLeft']
-			startTime = tourneydata['tournaments'][x]['startTime']
-			warmup = tourneydata['tournaments'][x]['warmup']
-			hashtag = tourneydata['tournaments'][x]['hashtag']
-			cards = getCards(maxPlayers)
-			coins = getCoins(maxPlayers)
-
-			if not full and timeLeft > 600:
+		
+		if not newdata['success']:
+			return # On error: Don't retry, but don't mark cache as updated
+		
+		newdata = newdata['tournaments']
+		
+		for tourney in newdata:
+			if tourney["hashtag"] not in self.tourneyCache:
+				tourney[""]
+				self.tourneyCache[tourney["hashtag"]] = 
+		
+		
+		
+		self.cacheUpdated=True
+	
+	async def _get_tourney(self, minPlayers):
+		if not self.cacheUpdated:
+			await self._update_cache()
+		
+		tourneydata = [t1 for t1 in self.tourneyCache 
+						if not t1['full'] and t1['timeLeft'] >600 and t1['maxPlayers']>=minPlayers]
+		
+		return random.choice(tourneydata)
+		
 			
 	# Returns a list with tournaments
 	def getTopTourneyNew(self):
