@@ -9,7 +9,7 @@ from cogs.utils import checks
 from .utils.dataIO import dataIO
 import os
 from fake_useragent import UserAgent
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 
 lastTag = '0'
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
@@ -55,6 +55,17 @@ def sec2tme(sec):
 	else:
 		return "{} hour, {} mins".format(h,m)
 
+def time_str(obj):
+    """JSON serializer for datetiem and back"""
+
+	fmt = '%Y%m%d%H%M%S' # ex. 20110104172008 -> Jan. 04, 2011 5:20:08pm 
+
+    if isinstance(obj, (datetime, date)):
+        return obj.strftime(fmt)
+	else:
+		return datetime.datetime.strptime(now_str, fmt)
+
+
 class tournament:
 	"""tournament!"""
 
@@ -69,6 +80,10 @@ class tournament:
 	def save_data(self):
 		"""Saves the json"""
 		dataIO.save_json(self.path, self.settings)
+	
+	def save_cache(self):
+		"""Saves the cache json"""
+		dataIO.save_json(self.cachepath, self.tourneyCache)
 
 	def getAuth(self):
 		return {"auth" : self.auth['token']}
@@ -84,7 +99,7 @@ class tournament:
 			return False
 	
 	def _get_proxy(self):
-		return ""  # For now
+		return "http://52.168.49.33"  # For now
 	
 	async def _fetch_tourney(self):
 		"""Fetch tournament data. Run sparingly"""
@@ -98,7 +113,6 @@ class tournament:
 		try:
 			async with aiohttp.ClientSession() as session:
 				async with session.get(url, timeout=30, proxy=randproxy) as resp:
-					print(resp)
 					data = await resp.json()
 		except json.decoder.JSONDecodeError:
 			print(resp)
@@ -106,8 +120,13 @@ class tournament:
 		except asyncio.TimeoutError:
 			print(resp)
 			raise
-
-		return data
+		except:
+			print(resp)
+			raise
+		else:
+			return data
+		
+		return None
 	
 	async def _update_cache(self):
 		try:
@@ -122,12 +141,18 @@ class tournament:
 		
 		for tourney in newdata:
 			if tourney["hashtag"] not in self.tourneyCache:
-				tourney[""]
-				self.tourneyCache[tourney["hashtag"]] = 
+				timeLeft = timedelta(seconds=tourney['timeLeft'])
+				endtime = datetime.utcnow() + timeLeft
+				tourney["endtime"] = time_str(endtime)
+				self.tourneyCache[tourney["hashtag"]] = tourney
+			else:
+				tourney["endtime"] = self.tourneyCache[tourney["hashtag"]]["endtime"]  # Keep endtime
+				self.tourneyCache[tourney["hashtag"]] = tourney
 		
-		
-		
+		self.save_cache()
 		self.cacheUpdated=True
+		
+		
 	
 	async def _get_tourney(self, minPlayers):
 		if not self.cacheUpdated:
