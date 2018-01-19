@@ -235,6 +235,16 @@ class tournament:
 			self.settings[serverid] = channel.id
 			await self.bot.say("Tournament channel for this server set to "+channel.mention)
 		self.save_data()
+		
+	def _get_embed(self, aTourney):
+		embed=discord.Embed(title="Open Tournament", color=randint(0, 0xffffff))
+		embed.set_thumbnail(url='https://statsroyale.com/images/tournament.png')
+		embed.add_field(name="Title", value=title, inline=True)
+		embed.add_field(name="Tag", value="#"+hashtag, inline=True)
+		embed.add_field(name="Players", value=str(totalPlayers) + "/" + str(maxPlayers), inline=True)
+		embed.add_field(name="Ends In", value=sec2tme(timeLeft), inline=True)
+		embed.add_field(name="Top prize", value="<:coin:380832316932489268> " + str(cards) + "     <:tournamentcards:380832770454192140> " +  str(coins), inline=True)
+		embed.set_footer(text=credits, icon_url=creditIcon)
 
 def check_folders():
 	if not os.path.exists("data/tourney"):
