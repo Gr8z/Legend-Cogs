@@ -76,9 +76,9 @@ class tournament:
 		botcommander_roles = set(botcommander_roles)
 		author_roles = set(member.roles)
 		if len(author_roles.intersection(botcommander_roles)):
-		    return True
+			return True
 		else:
-		    return False
+			return False
 
 	# Returns a list with tournaments
 	def getTopTourneyNew(self):
@@ -88,11 +88,11 @@ class tournament:
 
 		ua = UserAgent()
 		headers = {
-		    "User-Agent": ua.random
+			"User-Agent": ua.random
 		}
 
 		proxies = {
-	    	'http': random.choice(proxies_list)
+			'http': random.choice(proxies_list)
 		}
 
 		try:
@@ -175,15 +175,15 @@ class tournament:
 
 		allowed = await self._is_allowed(author)
 		if not allowed:
-		    await self.bot.say("Error, this command is only available for Legend Members and Guests.")
-		    return
+			await self.bot.say("Error, this command is only available for Legend Members and Guests.")
+			return
 
 		ua = UserAgent()
 		headers = {
-		    "User-Agent": ua.random
+			"User-Agent": ua.random
 		}
 		proxies = {
-	    	'http': random.choice(proxies_list)
+			'http': random.choice(proxies_list)
 		}
 
 		try:
