@@ -175,7 +175,7 @@ class clashroyale:
 			embed.add_field(name="Donations", value=str(clandata['donations']), inline=True)
 			embed.add_field(name="Score", value=str(clandata['score']), inline=True)
 			embed.add_field(name="Required Trophies", value=str(clandata['requiredScore']), inline=True)
-			embed.add_field(name="Status", value=str(clandata['type'].capitalize()), inline=True)
+			embed.add_field(name="Status", value=str(clandata['type'].title()), inline=True)
 			embed.add_field(name="Country", value=str(clandata['location']['name']), inline=True)
 			embed.set_footer(text=credits, icon_url=creditIcon)
 			await self.bot.say(embed=embed)
@@ -205,7 +205,7 @@ class clashroyale:
 			embed=discord.Embed(title=tourneydata['name']+" (#"+tourneydata['tag']+")", description=desc, color=0x00ffff)
 			embed.set_thumbnail(url='https://statsroyale.com/images/tournament.png')
 			embed.add_field(name="Players", value=str(tourneydata['capacity']) + "/" + str(maxCapacity), inline=True)
-			embed.add_field(name="Status", value=tourneydata['status'].capitalize(), inline=True)
+			embed.add_field(name="Status", value=tourneydata['status'].title(), inline=True)
 
 			if tourneydata['type'] == "passwordProtected":
 				if password is not None:
