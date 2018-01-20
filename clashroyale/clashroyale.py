@@ -224,7 +224,7 @@ class clashroyale:
 
 
 			embed.add_field(name="Hosted By", value=tourneydata['creator']['name'], inline=True)
-			embed.add_field(name="Top prize", value="<:coin:380832316932489268> " + str(cards) + "	 <:tournamentcards:380832770454192140> " +  str(coins), inline=True)
+			embed.add_field(name="Top prize", value="<:tournamentcards:380832770454192140> " + str(cards) + "	 <:coin:380832316932489268> " +  str(coins), inline=True)
 			embed.set_footer(text=credits, icon_url=creditIcon)
 			await self.bot.say(embed=embed)
 
