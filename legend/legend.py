@@ -584,7 +584,7 @@ class legend:
                     )
 
             roleName = discord.utils.get(server.roles, name=role_names[0])
-            await self.bot.send_message(discord.Object(id='375839851955748874'), '**' + ctx.message.author.display_name + '** recruited ' + '** ' + ign + ' (#'+ profiletag + ')** to ' + roleName.mention)
+            await self.bot.send_message(discord.Object(id='375839851955748874'), '**' + ctx.message.author.display_name + '** recruited ' + '**' + ign + ' (#'+ profiletag + ')** to ' + roleName.mention)
 
             await asyncio.sleep(300)
             await self.bot.send_message(member,rules_text)
