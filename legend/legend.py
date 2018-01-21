@@ -1086,6 +1086,88 @@ class legend:
         """Get the currect GMT time"""
         await self.bot.say(datetime.datetime.now(datetime.timezone.utc).strftime("%H:%M GMT"))
 
+    @commands.command(pass_context=True, no_pm=True)
+    async def mm5(self, ctx):   
+        """ Enter the Qualifier stage for Monthly Mayhem 5"""
+
+        server = ctx.message.server
+        member = ctx.message.author
+        channel = ctx.message.channel
+        legendServer = ["393045385662431251"]
+
+        if server.id not in legendServer:
+            await self.bot.say("This command can only be executed in the Titan Monthly Mayhem Server: https://discord.gg/ZmeubX7")
+            return
+
+        if channel.name != "bot-spam":
+            await self.bot.say("You cannot run this command in this channel. Please run this command at #bot-spam")
+            return
+
+        try:
+            await self.updateClash()
+            await self.bot.type()
+            profiletag = self.clash[member.id]['tag']
+            profiledata = requests.get('http://api.cr-api.com/player/{}?exclude=games,currentDeck,cards,battles,achievements'.format(profiletag), headers=self.getAuth(), timeout=10).json()
+            clantag = profiledata['clan']['tag']
+            clanname = profiledata['clan']['name']
+            ign = profiledata['name']
+        except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
+            await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
+            return
+        except requests.exceptions.RequestException as e:
+            await self.bot.say(e)
+            return
+        except:
+            await self.bot.say("You must assosiate a tag with this member first using ``!save clash #tag @member``")
+            return
+
+        membership = False
+        for clankey in self.clanArray():
+            if self.c[clankey]['tag'] == clantag:
+                membership = True
+                savekey = clankey
+                break
+
+        if membership:
+
+            if profiledata['stats']['level'] < 8:
+                await self.bot.say("You cannot join the Qualifier Stage as you are not yet level 8 in Clash Royale.")
+
+            await self.bot.say("Have you read and understood how the Monthly Mayhem 4 Qualifier will work and have read and noted the dates and times of the Qualifier tournaments? (Yes/No)")
+            answer = await self.bot.wait_for_message(timeout=30, author=ctx.message.author)
+            if answer is None:
+                await self.bot.say('Ok then, I guess its time to read the announcement again.')
+                return
+            elif "yes" not in answer.content.lower():
+                await self.bot.say('Registration failed.')
+                return
+    
+            mymessage = ""
+            if ign is None:
+                await self.bot.say("Cannot find IGN.")
+            else:
+                try:
+                    newclanname = self.c[savekey]['nickname']
+                    newname = ign + " | " + newclanname
+                    await self.bot.change_nickname(member, newname)
+                except discord.HTTPException:
+                    await self.bot.say("I don’t have permission to change nick for this user.")
+                    return
+                else:
+                    await self.bot.say("Welcome to Monthly Mayhem 5. Nickname changed to ** {} **\n".format(newname))
+
+            role = discord.utils.get(server.roles, name="MM5")
+            try:
+                await self.bot.add_roles(member, role)
+            except discord.Forbidden:
+                raise
+            except discord.HTTPException:
+                raise
+            await self.bot.say("{} Role Added to {}".format(role.name, member.display_name))
+
+        else:
+            await self.bot.say("You are not even in any of our clans, what are you doing here?")
+
 
 def check_folders():
     if not os.path.exists("data/legend"):

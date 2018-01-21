@@ -14,10 +14,7 @@ import aiohttp
 from __main__ import send_cmd_help
 import socket
 import urllib.request  as urllib2
-import requests_cache
 import time
-
-requests_cache.install_cache('statsroyale_cache', backend='sqlite', expire_after=60)
 
 BOTCOMMANDER_ROLES =  ["Family Representative", "Clan Manager", "Clan Deputy", "Co-Leader", "Hub Officer", "admin"];
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
