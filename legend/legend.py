@@ -522,7 +522,7 @@ class legend:
         if not allowed:
             await self.bot.say("You dont have enough permissions to use this command on others.")
             return
-
+            
         membership = False
         for clankey in self.clanArray():
             if self.c[clankey]['tag'] == clantag:
@@ -978,7 +978,7 @@ class legend:
         """Show Top Legend Family Members"""
 
         if number > 100:
-            await self.bot.say("Sorry! the number must be below 50.")
+            await self.bot.say("Sorry! the number must be below 100.")
             return
 
         await self.bot.say("**LeGeND Family Top Players**")
