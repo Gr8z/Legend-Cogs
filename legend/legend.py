@@ -548,7 +548,7 @@ class legend:
                     await self.bot.say(
                         "I don’t have permission to change nick for this user.")
                 else:
-                    mymessage += "Nickname changed to ** {} **\n".format(newname)
+                    mymessage += "Nickname changed to **{}**\n".format(newname)
 
 
             role_names = [self.c[savekey]['role'], 'Member']
