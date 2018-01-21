@@ -1136,10 +1136,10 @@ class legend:
             await self.bot.say(member.mention + " Have you read and understood how the Monthly Mayhem 4 Qualifier will work and have read and noted the dates and times of the Qualifier tournaments? (Yes/No)")
             answer = await self.bot.wait_for_message(timeout=30, author=ctx.message.author)
             if answer is None:
-                await self.bot.say(member.mention + 'Ok then, I guess its time to read the announcement again.')
+                await self.bot.say(member.mention + ' Ok then, I guess its time to read the announcement again.')
                 return
             elif "yes" not in answer.content.lower():
-                await self.bot.say(member.mention + 'Registration failed.')
+                await self.bot.say(member.mention + ' Registration failed.')
                 return
     
             mymessage = ""
