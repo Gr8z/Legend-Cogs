@@ -258,6 +258,15 @@ class tournament:
 			await self.bot.say("Tournament channel for this server set to "+channel.mention)
 		self.save_data()
 		
+	@commands.command(pass_context=True, no_pm=True)
+	@checks.admin_or_permissions(administrator=True)
+	async def tourneywipe(self, ctx, channel: discord.Channel=None):
+		
+		self.settings = {}
+		await self.bot.say("Tournament channel for all servers cleared")
+
+		self.save_data()
+		
 	async def _get_embed(self, aTourney):
 		"""Builds embed for tourney
 		Uses cr-api.com if available"""
