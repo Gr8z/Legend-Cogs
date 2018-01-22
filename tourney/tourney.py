@@ -75,7 +75,7 @@ class tournament:
 		self.bot = bot
 		self.path = 'data/tourney/settings.json'
 		self.cachepath = 'data/tourney/tourneycache.json'
-		self.settings = dataIO.load_json(self.path)]
+		self.settings = dataIO.load_json(self.path)
 		self.tourneyCache = dataIO.load_json(self.cachepath)
 		self.auth = dataIO.load_json('cogs/auth.json')
 		self.cacheUpdated = False
