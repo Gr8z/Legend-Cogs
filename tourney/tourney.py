@@ -216,10 +216,9 @@ class tournament:
 			await self.bot.say("Error, this command is only available for Legend Members and Guests.")
 			return
 		
-		
 		tourney = await self._get_tourney(minPlayers)
 		
-		if tourneydata:
+		if tourney:
 			embed = self._get_embed(tourney)
 			await self.bot.say(embed=embed)
 		else:
