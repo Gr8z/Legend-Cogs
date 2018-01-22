@@ -169,7 +169,7 @@ class tournament:
 
 		now = datetime.utcnow()
 		
-		tourneydata = [t1 for t1 in self.tourneyCache 
+		tourneydata = [t1 for tkey, t1 in self.tourneyCache.iteritems()
 						if not t1['full'] and time_str(t1['endtime'], False) - now >= timedelta(seconds=600) and t1['maxPlayers']>=minPlayers]
 		
 		if not tourneydata:
@@ -179,7 +179,7 @@ class tournament:
 
 	async def _topTourney(self, newdata):
 		now = datetime.utcnow()
-		tourneydata = [t1 for t1 in newdata
+		tourneydata = [t1 for tkey, t1 in self.newdata.iteritems()
 						if not t1['full'] and time_str(t1['endtime'], False) - now >= timedelta(seconds=600) and t1['maxPlayers']>50]
 		
 		for data in tourneydata:
@@ -191,7 +191,7 @@ class tournament:
 			#await self.bot.send_message(discord.Object(id='363728974821457923'), embed=embed) # testing
 
 
-	@commands.group(pass_context=True, no_pm=True)
+	@commands.command(pass_context=True, no_pm=True)
 	async def tourney(self, ctx, minPlayers: int=0):
 		"""Check an open tournament in clash royale instantly"""
 
@@ -213,9 +213,9 @@ class tournament:
 		else:
 			await self.bot.say("No tourney found")
 
-	@tourney.command(pass_context=True, no_pm=True)
+	@commands.command(pass_context=True, no_pm=True)
 	@checks.admin_or_permissions(administrator=True)
-	async def channel(self, ctx, channel: discord.Channel=None):
+	async def tourneychannel(self, ctx, channel: discord.Channel=None):
 		serverid = ctx.message.server.id
 		if not channel:
 			self.settings[serverid] = None
