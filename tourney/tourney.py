@@ -172,6 +172,8 @@ class tournament:
 		tourneydata = [t1 for t1 in self.tourneyCache 
 						if not t1['full'] and time_str(t1['endtime'], False) - now >= timedelta(seconds=600) and t1['maxPlayers']>=minPlayers]
 		
+		if not tourneydata:
+			return None
 		return random.choice(tourneydata)
 
 
@@ -203,10 +205,12 @@ class tournament:
 		
 		
 		tourneydata = await self._get_tourney(minPlayers)
-
-		embed = self._get_embed(tourneydata['tournaments'][x])
-		await self.bot.say(embed=embed)
-		return
+		
+		if tourneydata:
+			embed = self._get_embed(tourneydata['tournaments'][x])
+			await self.bot.say(embed=embed)
+		else:
+			await self.bot.say("No tourney found")
 
 	@tourney.command(pass_context=True, no_pm=True)
 	@checks.admin_or_permissions(administrator=True)
