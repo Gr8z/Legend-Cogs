@@ -207,7 +207,7 @@ class tournament:
 						if not t1['full'] and time_str(t1['endtime'], False) - now >= timedelta(seconds=600) and t1['maxPlayers']>50]
 		
 		for data in tourneydata:
-			embed = self._get_embed(data)
+			embed = await self._get_embed(data)
 				
 			for serverid in self.settings.keys():
 				if self.settings[serverid]:
@@ -241,7 +241,7 @@ class tournament:
 		tourney = await self._get_tourney(minPlayers)
 		
 		if tourney:
-			embed = self._get_embed(tourney)
+			embed = await self._get_embed(tourney)
 			await self.bot.say(embed=embed)
 		else:
 			await self.bot.say("No tourney found")
@@ -258,7 +258,7 @@ class tournament:
 			await self.bot.say("Tournament channel for this server set to "+channel.mention)
 		self.save_data()
 		
-	def _get_embed(self, aTourney):
+	async def _get_embed(self, aTourney):
 		"""Builds embed for tourney
 		Uses cr-api.com if available"""
 		
