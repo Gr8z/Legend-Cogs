@@ -130,12 +130,7 @@ class tournament:
 		return await self._gather_proxy(url)
 	
 	async def _gather_proxy(self, url):
-		host, port = '67.63.33.7', 80  # Default proxy
-		codes = [200, 301, 302]
-		broker = Broker(max_tries=1)
-		broker.serve(host=host, port=port, types=['HTTP'], limit=10, max_tries=3,
-                 prefer_connect=True, min_req_proxy=5, max_error_rate=0.5,
-                 max_resp_time=8, http_allowed_codes=codes, backlog=100)
+		host, port = "127.0.0.1", 8080
 		
 		proxy = 'http://{}:{}'.format(host, port)
 		urlOut, data = await self._fetch(url, proxy)
@@ -208,7 +203,18 @@ class tournament:
 					
 			#await self.bot.send_message(discord.Object(id='363728974821457923'), embed=embed) # testing
 
-	
+	@commands.command(pass_context=True, no_pm=True)
+	@checks.is_owner()
+	async def proxytest(self, ctx):
+		url = 'http://proxy-hunter.blogspot.com/2010/03/18-03-10-speed-l1-hunter-proxies-310.html'
+		async with aiohttp.get(url) as response:
+			tree = BeautifulSoup(await response.text(), "html.parser")
+		regex  = re.compile(r'^(\d{3}).(\d{1,3}).(\d{1,3}).(\d{1,3}):(\d{2,4})')
+		proxylist = tree.findAll(attrs = {"class":"Apple-style-span", "style": "color: black;"}, text = regex)
+		data = proxylist[0]
+		for x in data.split('\n'):
+			print(x)
+		
 	@commands.command(pass_context=True, no_pm=True)
 	@checks.is_owner()
 	async def showcache(self, ctx):
