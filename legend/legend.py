@@ -663,42 +663,30 @@ class legend:
             await self.bot.say("You must assosiate a tag with this member first using ``!save clash #tag @member``")
             return
 
-        membership = True
 
         if not offline:
-            for clanKey in self.clanArray():
-                if self.c[clanKey]['tag'] == clantag:
-                    membership = False # False
-                    savekey = clanKey
-                    break
+            trophies = profiledata['trophies']
+            maxtrophies = profiledata['stats']['maxTrophies']
 
-        if membership:
-
-            if not offline:
-                trophies = profiledata['trophies']
-                maxtrophies = profiledata['stats']['maxTrophies']
-
-                if ((trophies < clandata['requiredScore']) and (maxtrophies < clan_pb)):
-                    await self.bot.say("Cannot add you to the waiting list, you don't meet the trophy requirements.")
-                    return
-
-            if member.id not in self.c[clankey]['waiting']:
-                self.c[clankey]['waiting'].append(member.id)
-                dataIO.save_json('cogs/clans.json', self.c)
-            else:
-                await self.bot.say("You are already in a waiting list for this clan.")
+            if ((trophies < clandata['requiredScore']) and (maxtrophies < clan_pb)):
+                await self.bot.say("Cannot add you to the waiting list, you don't meet the trophy requirements.")
                 return
 
-            role = discord.utils.get(server.roles, name="Waiting")
-            try:
-                await self.bot.add_roles(member, role)
-            except discord.Forbidden:
-                raise
-            except discord.HTTPException:
-                raise
-            await self.bot.say(member.mention + " You have been added to the waiting list for **"+ clan_name + "**. We will mention you when a spot is available.")
+        if member.id not in self.c[clankey]['waiting']:
+            self.c[clankey]['waiting'].append(member.id)
+            dataIO.save_json('cogs/clans.json', self.c)
         else:
-            await self.bot.say("Cannot add you to the waiting list, You are already a part of a clan in the family.")
+            await self.bot.say("You are already in a waiting list for this clan.")
+            return
+
+        role = discord.utils.get(server.roles, name="Waiting")
+        try:
+            await self.bot.add_roles(member, role)
+        except discord.Forbidden:
+            raise
+        except discord.HTTPException:
+            raise
+        await self.bot.say(member.mention + " You have been added to the waiting list for **"+ clan_name + "**. We will mention you when a spot is available.")
 
     @commands.command(pass_context=True, no_pm=True)
     async def remove(self, ctx, member: discord.Member, clankey):
