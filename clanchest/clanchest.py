@@ -48,7 +48,7 @@ class clanchest:
                             if len(self.cc[currDate]) == 1:
                                 await self.bot.send_message(discord.Object(id='374597224283504642'), "Look out **{}** is the first one to complete the Clan Chest!".format(self.cc[currDate][0]))
 
-                        if ((len(self.cc[currDate]) == len(clans)) or ((datetime.datetime.today().weekday() == 0) and (datetime.datetime.now().time() > datetime.time(7)))):
+                        if ((len(self.cc[currDate]) > 9) or ((datetime.datetime.today().weekday() == 0) and (datetime.datetime.now().time() > datetime.time(7)))):
                             await self.printChest(ctx, currDate)
                             print("All clans have completed the chests...")
                             return
