@@ -121,7 +121,7 @@ class tournament:
 			print(resp)
 			raise
 		except asyncio.TimeoutError:
-			print(resp)
+			# print(resp) # No resp to print
 			raise
 		except:
 			print(resp)
@@ -181,7 +181,7 @@ class tournament:
 		self.save_cache()
 		self.cacheUpdated=True
 		
-		await self._topTourney(newdata)  # Posts all best tourneys
+		await self._topTourney(newdata)  # Posts all best tourneys when cache is updated
 		
 		
 	
@@ -205,6 +205,8 @@ class tournament:
 		now = datetime.utcnow()
 		tourneydata = [t1 for t1 in newdata
 						if not t1['full'] and time_str(t1['endtime'], False) - now >= timedelta(seconds=600) and t1['maxPlayers']>50]
+						
+		# Adjust parameters for what qualifies as a "top" tourney here ^^^^
 		
 		for data in tourneydata:
 			embed = await self._get_embed(data)
