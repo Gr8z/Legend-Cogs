@@ -65,7 +65,7 @@ def time_str(obj, isobj):
 	if isobj:
 		return obj.strftime(fmt)
 	else:
-		return datetime.datetime.strptime(now_str, fmt)
+		return datetime.strptime(obj, fmt)
 
 
 class tournament:
@@ -102,7 +102,7 @@ class tournament:
 			return False
 	
 	def _get_proxy(self):
-		return "http://52.168.49.33"  # For now
+		return "http://67.63.33.7"  # For now
 	
 	async def _fetch_tourney(self):
 		"""Fetch tournament data. Run sparingly"""
