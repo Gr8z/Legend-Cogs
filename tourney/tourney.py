@@ -164,12 +164,13 @@ class tournament:
 		
 	
 	async def _get_tourney(self, minPlayers):
+		"""tourneyCache is dict of tourneys with hashtag as key"""
 		if not self.cacheUpdated:	
 			await self._update_cache()
 
 		now = datetime.utcnow()
 		
-		tourneydata = [t1 for tkey, t1 in self.tourneyCache.iteritems()
+		tourneydata = [t1 for tkey, t1 in self.tourneyCache.items()
 						if not t1['full'] and time_str(t1['endtime'], False) - now >= timedelta(seconds=600) and t1['maxPlayers']>=minPlayers]
 		
 		if not tourneydata:
@@ -178,8 +179,9 @@ class tournament:
 
 
 	async def _topTourney(self, newdata):
+		"""newdata is a list of tourneys"""
 		now = datetime.utcnow()
-		tourneydata = [t1 for tkey, t1 in newdata.iteritems()
+		tourneydata = [t1 for t1 in newdata
 						if not t1['full'] and time_str(t1['endtime'], False) - now >= timedelta(seconds=600) and t1['maxPlayers']>50]
 		
 		for data in tourneydata:
@@ -215,10 +217,10 @@ class tournament:
 			return
 		
 		
-		tourneydata = await self._get_tourney(minPlayers)
+		tourney = await self._get_tourney(minPlayers)
 		
 		if tourneydata:
-			embed = self._get_embed(tourneydata['tournaments'][x])
+			embed = self._get_embed(tourney)
 			await self.bot.say(embed=embed)
 		else:
 			await self.bot.say("No tourney found")
