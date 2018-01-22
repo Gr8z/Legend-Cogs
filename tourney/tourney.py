@@ -263,7 +263,7 @@ class tournament:
 		Uses cr-api.com if available"""
 		
 		try:
-			bTourney = self._API_tourney(aTourney['hashtag'])
+			bTourney = await self._API_tourney(aTourney['hashtag'])
 		except:
 			bTourney = None
 			
