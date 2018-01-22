@@ -101,64 +101,45 @@ class tournament:
 		else:
 			return False
 	
-	async def _get_proxy(self):
-		for i in range(0,9):  # 10 attempts
-			proxy = await proxies.get()
-			if proxy: break
+	async def _fetch(url, proxy_url):
+		resp = None
+		try:
+			async with aiohttp.ClientSession() as session:
+				async with session.get(url, timeout=30, proxy=proxy_url) as resp:
+					data = await resp.json()
+		except (aiohttp.errors.ClientOSError, aiohttp.errors.ClientResponseError,
+				aiohttp.errors.ServerDisconnectedError) as e:
+			print('Error. url: %s; error: %r' % (url, e))
+		except json.decoder.JSONDecodeError:
+			print(resp)
+			raise
+		except asyncio.TimeoutError:
+			print(resp) 
+			raise
+		finally:
+			return (url, data)
 			
-		if not proxy:
-			return "http://67.63.33.7"  # For now
-		else:
-			return "http://"+proxy
-	
 	async def _fetch_tourney(self):
 		"""Fetch tournament data. Run sparingly"""
 		url = "{}".format('http://statsroyale.com/tournaments?appjson=1')
+		return await self._gather_proxy(url)
 		
-		if proxies_list:
-			randproxy = "http://"+random.choice(proxies_list)
-		else:
-			randproxy = self._get_proxy()
-		
-		try:
-			async with aiohttp.ClientSession() as session:
-				async with session.get(url, timeout=30, proxy=randproxy) as resp:
-					data = await resp.json()
-		except json.decoder.JSONDecodeError:
-			print(resp)
-			raise
-		except asyncio.TimeoutError:
-			# print(resp) # No resp to print
-			raise
-		except:
-			print(resp)
-			raise
-		else:
-			return data
-		
-		return None
-	
 	async def _API_tourney(self, hashtag):
 		"""Fetch API tourney from hashtag"""
 		url = "{}{}".format('http://api.cr-api.com/tournaments/',hashtag)
-				
-		try:
-			async with aiohttp.ClientSession(headers=self.getAuth()) as session:
-				async with session.get(url, timeout=30, proxy=randproxy) as resp:
-					data = await resp.json()
-		except json.decoder.JSONDecodeError:
-			print(resp)
-			raise
-		except asyncio.TimeoutError:
-			print(resp)
-			raise
-		except:
-			print(resp)
-			raise
-		else:
-			return data
+		return await self._gather_proxy(url)
+	
+	async def _gather_proxy(self, url):
+		host, port = '67.63.33.7', 80  # Default proxy
+		broker = Broker(max_tries=1)
+		broker.serve(host=host, port=port, types=types, limit=10, max_tries=3,
+                 prefer_connect=True, min_req_proxy=5, max_error_rate=0.5,
+                 max_resp_time=8, http_allowed_codes=codes, backlog=100)
 		
-		return None
+		proxy = 'http://{}:{}'.format(host, port)
+		urlOut, data = await self._fetch(url, proxy)
+		
+		return data
 	
 	async def _expire_cache(self):
 		await asyncio.sleep(900)
