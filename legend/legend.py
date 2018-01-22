@@ -28,7 +28,6 @@ rules_text = """**Here are some Legend Family Discord server rules.**\n
 commands_text =  """Here are some of the Legend Family Bot commands, you can use them in the #bot-spam channel.\n
 **!clashProfile** - to view your Clash Royale stats.
 **!chests** - to view your upcoming chests you will receive.
-**!offers** - view your upcoming shop offers.
 **!tourney** - to instantly recieve an open tournament that is available to join.
 **!topmembers** - shows the top ranked players in our family.
 **!payday** - receive your 300 credits every 30 minutes.
