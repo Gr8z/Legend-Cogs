@@ -131,6 +131,28 @@ class tournament:
 		
 		return None
 	
+	async def _API_tourney(self, hashtag):
+		"""Fetch API tourney from hashtag"""
+		url = "{}{}".format('http://api.cr-api.com/tournaments/',hashtag)
+				
+		try:
+			async with aiohttp.ClientSession(headers=self.getAuth()) as session:
+				async with session.get(url, timeout=30, proxy=randproxy) as resp:
+					data = await resp.json()
+		except json.decoder.JSONDecodeError:
+			print(resp)
+			raise
+		except asyncio.TimeoutError:
+			print(resp)
+			raise
+		except:
+			print(resp)
+			raise
+		else:
+			return data
+		
+		return None
+	
 	async def _expire_cache(self):
 		await asyncio.sleep(900)
 		self.cacheUpdated = False
@@ -237,14 +259,42 @@ class tournament:
 		self.save_data()
 		
 	def _get_embed(self, aTourney):
-		title = aTourney['title']
-		length = aTourney['length']
-		totalPlayers = aTourney['totalPlayers']
-		maxPlayers = aTourney['maxPlayers']
-		full = aTourney['full']
-		timeLeft = aTourney['timeLeft']
-		startTime = aTourney['startTime']
-		warmup = aTourney['warmup']
+		"""Builds embed for tourney
+		Uses cr-api.com if available"""
+		
+		try:
+			bTourney = self._API_tourney(aTourney['hashtag'])
+		except:
+			bTourney = None
+			
+		now = datetime.utcnow()
+		
+		embedtitle = "Open Tournament"
+		
+		if bTourney:
+			title = bTourney['name']
+			totalPlayers = bTourney['capacity']
+			maxPlayers = bTourney['maxCapacity']
+			full = bTourney['capacity'] >= bTourney['maxCapacity']
+			
+			if bTourney['type'] == "passwordProtected":
+				embedtitle = "Locked Tournament"
+			
+			if bTourney['status'] == "ended":
+				embedtitle = "Ended Tournament"
+			
+		else:
+			title = aTourney['title']
+			totalPlayers = aTourney['totalPlayers']
+			maxPlayers = aTourney['maxPlayers']
+			full = aTourney['full']
+			
+		timeLeft = time_str(aTourney['endtime'], False) - now
+		timeLeft = timeLeft.seconds
+		if timeLeft < 0:
+			timeLeft = 0
+			embedtitle = "Ended Tournament"
+			
 		hashtag = aTourney['hashtag']
 		cards = getCards(maxPlayers)
 		coins = getCoins(maxPlayers)
