@@ -178,6 +178,7 @@ class tournament:
 
 
 	async def _topTourney(self, newdata):
+		now = datetime.utcnow()
 		tourneydata = [t1 for t1 in newdata
 						if not t1['full'] and time_str(t1['endtime'], False) - now >= timedelta(seconds=600) and t1['maxPlayers']>=minPlayers]
 		
