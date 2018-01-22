@@ -213,7 +213,10 @@ class tournament:
 				
 			for serverid in self.settings.keys():
 				if self.settings[serverid]:
-					await self.bot.send_message(discord.Object(id=self.settings[serverid]), embed=embed) # Family
+					server = self.bot.get_server(serverid)
+					channel = server.get_channel(self.settings[serverid])
+					await self.bot.send_message(channel, embed=embed) # Family
+					
 			#await self.bot.send_message(discord.Object(id='363728974821457923'), embed=embed) # testing
 
 	
