@@ -109,7 +109,7 @@ class tournament:
 		if not proxy:
 			return "http://67.63.33.7"  # For now
 		else:
-			return proxy
+			return "http://"+proxy
 	
 	async def _fetch_tourney(self):
 		"""Fetch tournament data. Run sparingly"""
