@@ -101,8 +101,15 @@ class tournament:
 		else:
 			return False
 	
-	def _get_proxy(self):
-		return "http://67.63.33.7"  # For now
+	async def _get_proxy(self):
+		for i in range(0,9):  # 10 attempts
+			proxy = await proxies.get()
+			if proxy: break
+			
+		if not proxy:
+			return "http://67.63.33.7"  # For now
+		else:
+			return proxy
 	
 	async def _fetch_tourney(self):
 		"""Fetch tournament data. Run sparingly"""
