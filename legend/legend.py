@@ -435,20 +435,25 @@ class legend:
 
             if len(self.c[clankey]['waiting']) > 0:
                 if member.id in self.c[clankey]['waiting']:
-                    if member.id != self.c[clankey]['waiting'][0]:
-                        await self.bot.say("Approval failed, you are not first in queue for the waiting list on this server.")
-                        return
-                    else:
-                        self.c[clankey]['waiting'].pop(0)
-                        dataIO.save_json('cogs/clans.json', self.c)
-                        
-                        role = discord.utils.get(server.roles, name="Waiting")
-                        try:
-                            await self.bot.remove_roles(member, role)
-                        except discord.Forbidden:
-                            raise
-                        except discord.HTTPException:
-                            raise
+
+                    canWait = (50 - clandata['memberCount']) -1
+
+                    for x in range(0, canWait):
+                        if member.id != self.c[clankey]['waiting'][x]:
+                            if x >= canWait:
+                                await self.bot.say("Approval failed, you are not first in queue for the waiting list on this server.")
+                                return
+                    
+                    self.c[clankey]['waiting'].pop(0)
+                    dataIO.save_json('cogs/clans.json', self.c)
+                    
+                    role = discord.utils.get(server.roles, name="Waiting")
+                    try:
+                        await self.bot.remove_roles(member, role)
+                    except discord.Forbidden:
+                        raise
+                    except discord.HTTPException:
+                        raise
                 else:
                     await self.bot.say("Approval failed, there is a waiting queue for this clan. Please first join the waiting list.")
                     return
