@@ -148,7 +148,7 @@ class tournament:
 		while self is self.bot.get_cog("tournament"):
 			data = self.getTopTourneyNew()
 			if data is not None:
-				embed=discord.Embed(title="New Tournament", description="We found an open tournament. You can type !tourney to search for more.", color=0x00ffff)
+				embed=discord.Embed(title="New Tournament", description="We found an open tournament. You can type !tourney to search for more.", color=0xFAA61A)
 				embed.set_thumbnail(url='https://statsroyale.com/images/tournament.png')
 				embed.add_field(name="Title", value=data['title'], inline=True)
 				embed.add_field(name="Tag", value=data['tag'], inline=True)
@@ -213,7 +213,7 @@ class tournament:
 			coins = getCoins(maxPlayers)
 
 			if not full and timeLeft > 600:
-				embed=discord.Embed(title="Open Tournament", description="Here is a good one I found. You can search again if this is not what you are looking for.", color=0x00ffff)
+				embed=discord.Embed(title="Open Tournament", description="Here is a good one I found. You can search again if this is not what you are looking for.", color=0xFAA61A)
 				embed.set_thumbnail(url='https://statsroyale.com/images/tournament.png')
 				embed.add_field(name="Title", value=title, inline=True)
 				embed.add_field(name="Tag", value="#"+hashtag, inline=True)

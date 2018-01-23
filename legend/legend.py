@@ -753,7 +753,7 @@ class legend:
 
         await self.bot.type()
 
-        embed=discord.Embed(title="", description="", color=0x0080ff)
+        embed=discord.Embed(color=0xFAA61A)
 
         for indexC, clan in enumerate(self.c):
             if self.c[clan]["waiting"]:
