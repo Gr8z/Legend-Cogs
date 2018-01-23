@@ -7,10 +7,11 @@ import random
 import json
 from cogs.utils import checks
 from .utils.dataIO import dataIO
+
 import os
+
 from fake_useragent import UserAgent
 from datetime import date, datetime, timedelta
-from proxybroker import Broker
 
 lastTag = '0'
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
@@ -117,25 +118,31 @@ class tournament:
 			print(resp) 
 			raise
 		finally:
-			return (url, data)
+			return data
 			
 	async def _fetch_tourney(self):
 		"""Fetch tournament data. Run sparingly"""
 		url = "{}".format('http://statsroyale.com/tournaments?appjson=1')
-		return await self._gather_proxy(url)
+		proxy = await self._get_proxy()
+		data = await self._fetch(url, proxy)
+		
+		return data
 		
 	async def _API_tourney(self, hashtag):
 		"""Fetch API tourney from hashtag"""
 		url = "{}{}".format('http://api.cr-api.com/tournaments/',hashtag)
-		return await self._gather_proxy(url)
-	
-	async def _gather_proxy(self, url):
-		host, port = "127.0.0.1", 8080
-		
-		proxy = 'http://{}:{}'.format(host, port)
-		urlOut, data = await self._fetch(url, proxy)
+		proxy = await self._get_proxy()
+		data = await self._fetch(url, proxy)
 		
 		return data
+	
+	async def _get_proxy(self):
+		host = random.choice(proxies_list)
+		port = 80
+		proxy = 'http://{}:{}'.format(host, port)
+		
+		return proxy
+		
 	
 	async def _expire_cache(self):
 		await asyncio.sleep(900)
@@ -202,18 +209,6 @@ class tournament:
 					await self.bot.send_message(channel, embed=embed) # Family
 					
 			#await self.bot.send_message(discord.Object(id='363728974821457923'), embed=embed) # testing
-
-	@commands.command(pass_context=True, no_pm=True)
-	@checks.is_owner()
-	async def proxytest(self, ctx):
-		url = 'http://proxy-hunter.blogspot.com/2010/03/18-03-10-speed-l1-hunter-proxies-310.html'
-		async with aiohttp.get(url) as response:
-			tree = BeautifulSoup(await response.text(), "html.parser")
-		regex  = re.compile(r'^(\d{3}).(\d{1,3}).(\d{1,3}).(\d{1,3}):(\d{2,4})')
-		proxylist = tree.findAll(attrs = {"class":"Apple-style-span", "style": "color: black;"}, text = regex)
-		data = proxylist[0]
-		for x in data.split('\n'):
-			print(x)
 		
 	@commands.command(pass_context=True, no_pm=True)
 	@checks.is_owner()
