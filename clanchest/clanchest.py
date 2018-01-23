@@ -38,33 +38,26 @@ class clanchest:
                 clans = requests.get('http://api.cr-api.com/clan/'+','.join(self.clans[clan]["tag"] for clan in self.clans)+'?exclude=members', headers=self.getAuth(), timeout=10).json()
                         
                 for x in range(0, len(clans)):
-                    if clans[x]['clanChest']['status'] == "inactive":
-                        print("Clan chest is inactive...")
 
-                        if len(self.cc[currDate]) > 0:
+                    if clans[x]['clanChest']['status'] == "completed":
+                        if clans[x]['name'] not in self.cc[currDate]:
+                            print("Clan chest completed for a clan...")
+                            self.cc[currDate].append(clans[x]['name'])
+                            dataIO.save_json('cogs/clanchest.json', self.cc)
+
+                            if len(self.cc[currDate]) == 1:
+                                await self.bot.send_message(discord.Object(id='374597224283504642'), "Look out **{}** is the first one to complete the Clan Chest!".format(self.cc[currDate][0]))
+
+                        if ((len(self.cc[currDate]) > 9) or ((datetime.datetime.today().weekday() == 0) and (datetime.datetime.now().time() > datetime.time(7)))):
                             await self.printChest(ctx, currDate)
-
-                        return
-                    else:
-                        if clans[x]['clanChest']['status'] == "completed":
-                            if clans[x]['name'] not in self.cc[currDate]:
-                                print("Clan chest completed for a clan...")
-                                self.cc[currDate].append(clans[x]['name'])
-                                dataIO.save_json('cogs/clanchest.json', self.cc)
-
-                                if len(self.cc[currDate]) == 1:
-                                    await self.bot.send_message(discord.Object(id='374597224283504642'), "Look out **{}** is the first one to complete the Clan Chest!".format(self.cc[currDate][0]))
-
-                            if len(self.cc[currDate]) == len(clans):
-                                await self.printChest(ctx, currDate)
-                                print("All clans have completed the chests...")
-                                return
+                            print("All clans have completed the chests...")
+                            return
 
             except Exception as e:
                 print(e)
                 pass
 
-            await asyncio.sleep(15)
+            await asyncio.sleep(600)
 
     async def printChest(self, ctx, currDate):
         

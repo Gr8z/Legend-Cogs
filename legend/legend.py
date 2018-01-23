@@ -28,7 +28,6 @@ rules_text = """**Here are some Legend Family Discord server rules.**\n
 commands_text =  """Here are some of the Legend Family Bot commands, you can use them in the #bot-spam channel.\n
 **!clashProfile** - to view your Clash Royale stats.
 **!chests** - to view your upcoming chests you will receive.
-**!offers** - view your upcoming shop offers.
 **!tourney** - to instantly recieve an open tournament that is available to join.
 **!topmembers** - shows the top ranked players in our family.
 **!payday** - receive your 300 credits every 30 minutes.
@@ -42,7 +41,8 @@ commands_text =  """Here are some of the Legend Family Bot commands, you can use
 **!rep @user** - give reputation points to users.
 **!remindme** - Use this command to make the bot remind you of something in the future.
 **!trivia** - start a trivia of your choice. Bot will ask you questions, you will get points of answering them.
-**!queue** -  Listen to songs, type with command with the song name inside a voice channel. (!skip, !pause, !resume, !playlist).\n
+**!play** -  Listen to songs, type with command with the song name inside a voice channel. (!skip, !pause, !resume, !playlist).\n
+**!invite** -  Get the invite link for the server to share with your friends.\n
 **You can type !help here to see the full commands list**"""
 
 info_text = """You will find several channels on our Discord Server\n
@@ -329,7 +329,7 @@ class legend:
                 showMembers = "**FULL**   "
 
             if str(clans[x]['type']) != 'invite only':
-                title += "["+str(clans[x]['type']).capitalize()+"] "
+                title += "["+str(clans[x]['type']).title()+"] "
 
             title += clans[x]['name'] + " (#" + clans[x]['tag'] + ") "
             
@@ -435,20 +435,25 @@ class legend:
 
             if len(self.c[clankey]['waiting']) > 0:
                 if member.id in self.c[clankey]['waiting']:
-                    if member.id != self.c[clankey]['waiting'][0]:
-                        await self.bot.say("Approval failed, you are not first in queue for the waiting list on this server.")
-                        return
-                    else:
-                        self.c[clankey]['waiting'].pop(0)
-                        dataIO.save_json('cogs/clans.json', self.c)
-                        
-                        role = discord.utils.get(server.roles, name="Waiting")
-                        try:
-                            await self.bot.remove_roles(member, role)
-                        except discord.Forbidden:
-                            raise
-                        except discord.HTTPException:
-                            raise
+
+                    canWait = (50 - clandata['memberCount']) -1
+
+                    for x in range(0, canWait):
+                        if member.id != self.c[clankey]['waiting'][x]:
+                            if x >= canWait:
+                                await self.bot.say("Approval failed, you are not first in queue for the waiting list on this server.")
+                                return
+                    
+                    self.c[clankey]['waiting'].pop(0)
+                    dataIO.save_json('cogs/clans.json', self.c)
+                    
+                    role = discord.utils.get(server.roles, name="Waiting")
+                    try:
+                        await self.bot.remove_roles(member, role)
+                    except discord.Forbidden:
+                        raise
+                    except discord.HTTPException:
+                        raise
                 else:
                     await self.bot.say("Approval failed, there is a waiting queue for this clan. Please first join the waiting list.")
                     return
@@ -521,7 +526,7 @@ class legend:
         if not allowed:
             await self.bot.say("You dont have enough permissions to use this command on others.")
             return
-
+            
         membership = False
         for clankey in self.clanArray():
             if self.c[clankey]['tag'] == clantag:
@@ -547,13 +552,13 @@ class legend:
                     await self.bot.say(
                         "I don’t have permission to change nick for this user.")
                 else:
-                    mymessage += "Nickname changed to ** {} **\n".format(newname)
+                    mymessage += "Nickname changed to **{}**\n".format(newname)
 
 
             role_names = [self.c[savekey]['role'], 'Member']
             try:
                 await self._add_roles(member, role_names)
-                mymessage += "**" + self.c[savekey]['role'] + " ** and **Member** roles added."
+                mymessage += "**" + self.c[savekey]['role'] + "** and **Member** roles added."
             except discord.Forbidden:
                 await self.bot.say(
                     "{} does not have permission to edit {}’s roles.".format(
@@ -583,7 +588,7 @@ class legend:
                     )
 
             roleName = discord.utils.get(server.roles, name=role_names[0])
-            await self.bot.send_message(discord.Object(id='375839851955748874'), '**' + ctx.message.author.display_name + '** recruited ' + '** ' + ign + ' (#'+ profiletag + ')** to ' + roleName.mention)
+            await self.bot.send_message(discord.Object(id='375839851955748874'), '**' + ctx.message.author.display_name + '** recruited ' + '**' + ign + ' (#'+ profiletag + ')** to ' + roleName.mention)
 
             await asyncio.sleep(300)
             await self.bot.send_message(member,rules_text)
@@ -663,42 +668,30 @@ class legend:
             await self.bot.say("You must assosiate a tag with this member first using ``!save clash #tag @member``")
             return
 
-        membership = True
 
         if not offline:
-            for clanKey in self.clanArray():
-                if self.c[clanKey]['tag'] == clantag:
-                    membership = False # False
-                    savekey = clanKey
-                    break
+            trophies = profiledata['trophies']
+            maxtrophies = profiledata['stats']['maxTrophies']
 
-        if membership:
-
-            if not offline:
-                trophies = profiledata['trophies']
-                maxtrophies = profiledata['stats']['maxTrophies']
-
-                if ((trophies < clandata['requiredScore']) and (maxtrophies < clan_pb)):
-                    await self.bot.say("Cannot add you to the waiting list, you don't meet the trophy requirements.")
-                    return
-
-            if member.id not in self.c[clankey]['waiting']:
-                self.c[clankey]['waiting'].append(member.id)
-                dataIO.save_json('cogs/clans.json', self.c)
-            else:
-                await self.bot.say("You are already in a waiting list for this clan.")
+            if ((trophies < clandata['requiredScore']) and (maxtrophies < clan_pb)):
+                await self.bot.say("Cannot add you to the waiting list, you don't meet the trophy requirements.")
                 return
 
-            role = discord.utils.get(server.roles, name="Waiting")
-            try:
-                await self.bot.add_roles(member, role)
-            except discord.Forbidden:
-                raise
-            except discord.HTTPException:
-                raise
-            await self.bot.say(member.mention + " You have been added to the waiting list for **"+ clan_name + "**. We will mention you when a spot is available.")
+        if member.id not in self.c[clankey]['waiting']:
+            self.c[clankey]['waiting'].append(member.id)
+            dataIO.save_json('cogs/clans.json', self.c)
         else:
-            await self.bot.say("Cannot add you to the waiting list, You are already a part of a clan in the family.")
+            await self.bot.say("You are already in a waiting list for this clan.")
+            return
+
+        role = discord.utils.get(server.roles, name="Waiting")
+        try:
+            await self.bot.add_roles(member, role)
+        except discord.Forbidden:
+            raise
+        except discord.HTTPException:
+            raise
+        await self.bot.say(member.mention + " You have been added to the waiting list for **"+ clan_name + "**. We will mention you when a spot is available.")
 
     @commands.command(pass_context=True, no_pm=True)
     async def remove(self, ctx, member: discord.Member, clankey):
@@ -977,7 +970,7 @@ class legend:
         """Show Top Legend Family Members"""
 
         if number > 100:
-            await self.bot.say("Sorry! the number must be below 50.")
+            await self.bot.say("Sorry! the number must be below 100.")
             return
 
         await self.bot.say("**LeGeND Family Top Players**")
@@ -1084,6 +1077,88 @@ class legend:
     async def gmt(self):
         """Get the currect GMT time"""
         await self.bot.say(datetime.datetime.now(datetime.timezone.utc).strftime("%H:%M GMT"))
+
+    @commands.command(pass_context=True, no_pm=True)
+    async def mm5(self, ctx):   
+        """ Enter the Qualifier stage for Monthly Mayhem 5"""
+
+        server = ctx.message.server
+        member = ctx.message.author
+        channel = ctx.message.channel
+        legendServer = ["393045385662431251"]
+
+        if server.id not in legendServer:
+            await self.bot.say("This command can only be executed in the Titan Monthly Mayhem Server: https://discord.gg/ZmeubX7")
+            return
+
+        if channel.name != "bot-spam":
+            await self.bot.say("You cannot run this command in this channel. Please run this command at #bot-spam")
+            return
+
+        try:
+            await self.updateClash()
+            await self.bot.type()
+            profiletag = self.clash[member.id]['tag']
+            profiledata = requests.get('http://api.cr-api.com/player/{}?exclude=games,currentDeck,cards,battles,achievements'.format(profiletag), headers=self.getAuth(), timeout=10).json()
+            clantag = profiledata['clan']['tag']
+            clanname = profiledata['clan']['name']
+            ign = profiledata['name']
+        except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
+            await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
+            return
+        except requests.exceptions.RequestException as e:
+            await self.bot.say(e)
+            return
+        except:
+            await self.bot.say("You must assosiate a tag with this member first using ``!save clash #tag @member``")
+            return
+
+        membership = False
+        for clankey in self.clanArray():
+            if self.c[clankey]['tag'] == clantag:
+                membership = True
+                savekey = clankey
+                break
+
+        if membership:
+
+            if profiledata['stats']['level'] < 8:
+                await self.bot.say("You cannot join the Qualifier Stage as you are not yet level 8 in Clash Royale.")
+
+            await self.bot.say(member.mention + " Have you read and understood how the Monthly Mayhem 4 Qualifier will work and have read and noted the dates and times of the Qualifier tournaments? (Yes/No)")
+            answer = await self.bot.wait_for_message(timeout=30, author=ctx.message.author)
+            if answer is None:
+                await self.bot.say(member.mention + ' Ok then, I guess its time to read the announcement again.')
+                return
+            elif "yes" not in answer.content.lower():
+                await self.bot.say(member.mention + ' Registration failed.')
+                return
+    
+            mymessage = ""
+            if ign is None:
+                await self.bot.say("Cannot find IGN.")
+            else:
+                try:
+                    newclanname = self.c[savekey]['nickname']
+                    newname = ign + " | " + newclanname
+                    await self.bot.change_nickname(member, newname)
+                except discord.HTTPException:
+                    await self.bot.say("I don’t have permission to change nick for this user.")
+                    return
+                else:
+                    await self.bot.say("Welcome to Monthly Mayhem 5. Nickname changed to ** {} **\n".format(newname))
+
+            role = discord.utils.get(server.roles, name="MM5")
+            try:
+                await self.bot.add_roles(member, role)
+            except discord.Forbidden:
+                raise
+            except discord.HTTPException:
+                raise
+            await self.bot.say("{} Role Added to {}".format(role.name, member.display_name))
+
+        else:
+            await self.bot.say("You are not even in any of our clans, what are you doing here?")
 
 
 def check_folders():

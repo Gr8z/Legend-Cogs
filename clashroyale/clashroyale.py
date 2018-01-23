@@ -14,10 +14,7 @@ import aiohttp
 from __main__ import send_cmd_help
 import socket
 import urllib.request  as urllib2
-import requests_cache
 import time
-
-requests_cache.install_cache('statsroyale_cache', backend='sqlite', expire_after=60)
 
 BOTCOMMANDER_ROLES =  ["Family Representative", "Clan Manager", "Clan Deputy", "Co-Leader", "Hub Officer", "admin"];
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
@@ -175,7 +172,7 @@ class clashroyale:
 			embed.add_field(name="Donations", value=str(clandata['donations']), inline=True)
 			embed.add_field(name="Score", value=str(clandata['score']), inline=True)
 			embed.add_field(name="Required Trophies", value=str(clandata['requiredScore']), inline=True)
-			embed.add_field(name="Status", value=str(clandata['type'].capitalize()), inline=True)
+			embed.add_field(name="Status", value=str(clandata['type'].title()), inline=True)
 			embed.add_field(name="Country", value=str(clandata['location']['name']), inline=True)
 			embed.set_footer(text=credits, icon_url=creditIcon)
 			await self.bot.say(embed=embed)
@@ -205,7 +202,7 @@ class clashroyale:
 			embed=discord.Embed(title=tourneydata['name']+" (#"+tourneydata['tag']+")", description=desc, color=0x00ffff)
 			embed.set_thumbnail(url='https://statsroyale.com/images/tournament.png')
 			embed.add_field(name="Players", value=str(tourneydata['capacity']) + "/" + str(maxCapacity), inline=True)
-			embed.add_field(name="Status", value=tourneydata['status'].capitalize(), inline=True)
+			embed.add_field(name="Status", value=tourneydata['status'].title(), inline=True)
 
 			if tourneydata['type'] == "passwordProtected":
 				if password is not None:
@@ -224,7 +221,7 @@ class clashroyale:
 
 
 			embed.add_field(name="Hosted By", value=tourneydata['creator']['name'], inline=True)
-			embed.add_field(name="Top prize", value="<:coin:380832316932489268> " + str(cards) + "	 <:tournamentcards:380832770454192140> " +  str(coins), inline=True)
+			embed.add_field(name="Top prize", value="<:tournamentcards:380832770454192140> " + str(cards) + "	 <:coin:380832316932489268> " +  str(coins), inline=True)
 			embed.set_footer(text=credits, icon_url=creditIcon)
 			await self.bot.say(embed=embed)
 
