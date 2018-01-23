@@ -444,7 +444,7 @@ class legend:
                                 await self.bot.say("Approval failed, you are not first in queue for the waiting list on this server.")
                                 return
                     
-                    self.c[clankey]['waiting'].pop(0)
+                    self.c[savekey]['waiting'].remove(member.id)
                     dataIO.save_json('cogs/clans.json', self.c)
                     
                     role = discord.utils.get(server.roles, name="Waiting")
