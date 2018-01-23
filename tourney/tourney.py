@@ -102,11 +102,11 @@ class tournament:
 		else:
 			return False
 	
-	async def _fetch(url, proxy_url):
+	async def _fetch(url, proxy_url, headers):
 		resp = None
 		try:
 			async with aiohttp.ClientSession() as session:
-				async with session.get(url, timeout=30, proxy=proxy_url) as resp:
+				async with session.get(url, timeout=30, proxy=proxy_url, headers=headers) as resp:
 					data = await resp.json()
 		except (aiohttp.errors.ClientOSError, aiohttp.errors.ClientResponseError,
 				aiohttp.errors.ServerDisconnectedError) as e:
@@ -124,7 +124,7 @@ class tournament:
 		"""Fetch tournament data. Run sparingly"""
 		url = "{}".format('http://statsroyale.com/tournaments?appjson=1')
 		proxy = await self._get_proxy()
-		data = await self._fetch(url, proxy)
+		data = await self._fetch(url, proxy, {})
 		
 		return data
 		
@@ -132,7 +132,7 @@ class tournament:
 		"""Fetch API tourney from hashtag"""
 		url = "{}{}".format('http://api.cr-api.com/tournaments/',hashtag)
 		proxy = await self._get_proxy()
-		data = await self._fetch(url, proxy)
+		data = await self._fetch(url, proxy, self.getAuth())
 		
 		return data
 	
