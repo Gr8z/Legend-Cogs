@@ -109,9 +109,8 @@ class tournament:
 	async def _fetch(self, url, proxy_url, headers):
 		resp = None
 		try:
-			async with aiohttp.ClientSession() as session:
-				async with session.get(url, timeout=30, proxy=proxy_url, headers=headers) as resp:
-					data = await resp.json()
+			async with self.session.get(url, timeout=30, proxy=proxy_url, headers=headers) as resp:
+				data = await resp.json()
 		except (aiohttp.errors.ClientOSError, aiohttp.errors.ClientResponseError,
 				aiohttp.errors.ServerDisconnectedError) as e:
 			print('Error. url: %s; error: %r' % (url, e))
