@@ -149,11 +149,12 @@ class tournament:
 		return data
 	
 	async def _get_proxy(self):
-		host = random.choice(proxies_list)
-		port = 80
-		proxy = 'http://{}:{}'.format(host, port)
+		proxy = random.choice(self.proxylist)
+		host = proxy.host
+		port = proxy.port
+		proxystr = '{}:{}'.format(host, port)
 		
-		return proxy
+		return proxystr
 		
 	
 	async def _expire_cache(self):
@@ -326,14 +327,7 @@ class tournament:
 		embed.set_footer(text=credits, icon_url=creditIcon)
 		return embed
 	
-	async def _get_proxy(self):
-		proxy = random.choice(self.proxylist)
-		host = proxy.host
-		port = proxy.port
-		proxystr = '{}:{}'.format(host, port)
-		
-		return proxystr
-		
+
 	async def _proxyBroker(self):
 		await self.broker.find(types=['HTTP'], limit=10)
 		await asyncio.sleep(120)
