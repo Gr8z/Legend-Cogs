@@ -16,6 +16,8 @@ from datetime import date, datetime, timedelta
 from proxybroker import Broker
 from collections import deque
 
+import aiohttp
+
 lastTag = '0'
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
