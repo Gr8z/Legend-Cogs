@@ -93,6 +93,7 @@ class tournament:
 		self.broker = Broker(self.queue)
 		self.proxylist = deque(proxies_list,10)
 		self.session = aiohttp.ClientSession()
+		self.lasttag = ""
 		
 	def __unload(self):
 		self.session.close()	
@@ -159,7 +160,7 @@ class tournament:
 		
 		return proxystr
 		
-	
+
 	async def _expire_cache(self):
 		await asyncio.sleep(900)
 		self.cacheUpdated = False
@@ -192,23 +193,49 @@ class tournament:
 		self.cacheUpdated=True
 		
 		await self._topTourney(newdata)  # Posts all best tourneys when cache is updated
-		
-		
-	
+
+
 	async def _get_tourney(self, minPlayers):
 		"""tourneyCache is dict of tourneys with hashtag as key"""
 		if not self.cacheUpdated:	
 			await self._update_cache()
 
-		now = datetime.utcnow()
 		
-		tourneydata = [t1 for tkey, t1 in self.tourneyCache.items()
-						if not t1['full'] and time_str(t1['endtime'], False) - now >= timedelta(seconds=600) and t1['maxPlayers']>=minPlayers]
-		
-		if not tourneydata:
-			return None
-		return random.choice(tourneydata)
+		for x in range(10):  # Try 10 times or until tourney is found
+			now = datetime.utcnow()
+			
+			tourneydata = [t1 for tkey, t1 in self.tourneyCache.items()
+							if not t1['full'] and t1['maxPlayers']>=minPlayers
+							and tkey != self.lastTag]
 
+			if not tourneydata:
+				return None
+
+			aChoice = random.choice(tourneydata)
+			if time_str(aChoice['endtime'], False) - now < timedelta(seconds=600):
+				self.tourneyCache.pop(aChoice['hashtag'])
+				# Now it loops While and can't pick same tourney again
+			else:
+				bTourney = await self._checkFull(aChoice)
+				if not bTourney:
+					self.tourneyCache.pop(aChoice['hashtag'])
+					# Loop and try again
+				else:
+					self.lastTag = aChoice['hashtag']
+					return aChoice, bTourney
+		
+		return None  # Failed to get a tourney after 10 tries
+	
+	async def _checkFull(self, aTourney):
+		try:
+			bTourney = await self._API_tourney(aTourney['hashtag'])
+		except:
+			return None
+		
+		if bTourney['capacity'] == bTourney['maxCapacity']:
+			return None
+		else:
+			return bTourney
 
 	async def _topTourney(self, newdata):
 		"""newdata is a list of tourneys"""
@@ -246,6 +273,16 @@ class tournament:
 		self.tourneyCache = {}
 		self.save_cache()
 		await self.bot.say("Sucess")
+		
+	@commands.command(pass_context=True, no_pm=True)
+	@checks.is_owner()
+	async def showproxy(self, ctx):
+		"""Displays current proxies pagified"""
+
+		for page in pagify(
+			str(self.proxylist), shorten_by=50):
+			
+			await self.bot.say(page)
 			
 	@commands.command(pass_context=True, no_pm=True)
 	async def tourney(self, ctx, minPlayers: int=0):
@@ -260,10 +297,10 @@ class tournament:
 			await self.bot.say("Error, this command is only available for Legend Members and Guests.")
 			return
 		
-		tourney = await self._get_tourney(minPlayers)
+		tourney, apitourney = await self._get_tourney(minPlayers)
 		
 		if tourney:
-			embed = await self._get_embed(tourney)
+			embed = await self._get_embed(tourney, apitourney)
 			await self.bot.say(embed=embed)
 		else:
 			await self.bot.say("No tourney found")
@@ -289,14 +326,15 @@ class tournament:
 
 		self.save_data()
 		
-	async def _get_embed(self, aTourney):
+	async def _get_embed(self, aTourney, bTourney=None):
 		"""Builds embed for tourney
 		Uses cr-api.com if available"""
 		
-		try:
-			bTourney = await self._API_tourney(aTourney['hashtag'])
-		except:
-			bTourney = None
+		if not bTourney:
+			try:
+				bTourney = await self._API_tourney(aTourney['hashtag'])
+			except:
+				bTourney = None
 			
 		now = datetime.utcnow()
 		
