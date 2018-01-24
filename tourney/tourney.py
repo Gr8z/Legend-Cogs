@@ -92,7 +92,7 @@ class tournament:
 		}
 
 		proxies = {
-	    	'http': random.choice(proxies_list)
+	    	'http': await self._get_proxy()
 		}
 
 		try:
@@ -235,6 +235,14 @@ class tournament:
 			self.settings[serverid] = channel.id
 			await self.bot.say("Tournament channel for this server set to "+channel.mention)
 		self.save_data()
+		
+	
+	async def _get_proxy(self):
+		host = random.choice(proxies_list)
+		port = 80
+		proxy = 'http://{}:{}'.format(host, port)
+		
+		return proxy
 
 def check_folders():
 	if not os.path.exists("data/tourney"):
