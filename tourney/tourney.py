@@ -124,17 +124,19 @@ class tournament:
 		try:
 			async with self.session.get(url, timeout=30, proxy=proxy_url, headers=headers) as resp:
 				data = await resp.json()
-		except (aiohttp.errors.ClientOSError, aiohttp.errors.ClientResponseError,
-				aiohttp.errors.ServerDisconnectedError) as e:
-			print('Error. url: %s; error: %r' % (url, e))
 		except json.decoder.JSONDecodeError:
 			print(resp)
 			raise
 		except asyncio.TimeoutError:
 			print(resp) 
 			raise
-		finally:
+		except:
+			print(resp)
+			raise
+		else:
 			return data
+		finally:
+			return None
 			
 	async def _fetch_tourney(self):
 		"""Fetch tournament data. Run sparingly"""
