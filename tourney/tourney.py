@@ -81,6 +81,9 @@ class tournament:
 		self.auth = dataIO.load_json('cogs/auth.json')
 		self.cacheUpdated = False
 		
+	def __unload(self):
+		self.session.close()	
+	
 	def save_data(self):
 		"""Saves the json"""
 		dataIO.save_json(self.path, self.settings)
