@@ -13,22 +13,26 @@ import os
 from fake_useragent import UserAgent
 from datetime import date, datetime, timedelta
 
+from proxybroker import Broker
+from collections import deque
+
 lastTag = '0'
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
 
 proxies_list = [
-	'94.249.160.49:6998',
-	'93.127.128.41:7341',
-	'107.175.43.100:6858',
-	'64.44.18.31:3691',
-	'172.82.173.100:5218',
-	'172.82.177.111:3432',
-	'45.43.219.185:2461',
-	'45.43.218.82:3577',
-	'173.211.31.3:8053',
-	'195.162.4.111:4762'
 ]
+	# '94.249.160.49:6998',
+	# '93.127.128.41:7341',
+	# '107.175.43.100:6858',
+	# '64.44.18.31:3691',
+	# '172.82.173.100:5218',
+	# '172.82.177.111:3432',
+	# '45.43.219.185:2461',
+	# '45.43.218.82:3577',
+	# '173.211.31.3:8053',
+	# '195.162.4.111:4762'
+# ]
 
 # Converts maxPlayers to Cards
 def getCards(maxPlayers):
@@ -80,6 +84,9 @@ class tournament:
 		self.tourneyCache = dataIO.load_json(self.cachepath)
 		self.auth = dataIO.load_json('cogs/auth.json')
 		self.cacheUpdated = False
+		self.queue = asyncio.Queue(maxsize=10)
+		self.broker = Broker(self.queue)
+		self.proxylist = deque(proxies_list,10)
 		
 	def save_data(self):
 		"""Saves the json"""
@@ -313,6 +320,26 @@ class tournament:
 		embed.add_field(name="Top prize", value="<:coin:380832316932489268> " + str(cards) + "     <:tournamentcards:380832770454192140> " +  str(coins), inline=True)
 		embed.set_footer(text=credits, icon_url=creditIcon)
 		return embed
+	
+	async def _get_proxy(self):
+		proxy = random.choice(self.proxylist)
+		host = proxy.host
+		port = proxy.port
+		proxystr = '{}:{}'.format(host, port)
+		
+		return proxystr
+		
+	async def _proxyBroker(self):
+		await self.broker.find(types=['HTTP'], limit=10)
+		await asyncio.sleep(120)
+	
+	async def _brokerResult(self):
+		await asyncio.sleep(120)
+		while True:
+			proxy = await self.queue.get()
+			if proxy is None: break
+			self.proxylist.append(proxy)
+		
 		
 
 def check_folders():
@@ -335,4 +362,6 @@ def setup(bot):
 	n = tournament(bot)
 	loop = asyncio.get_event_loop()
 	loop.create_task(n._expire_cache())
+	loop.create_task(n._proxyBroker())
+	loop.create_task(n._brokerResult())
 	bot.add_cog(n)
