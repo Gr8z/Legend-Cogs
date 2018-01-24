@@ -13,7 +13,7 @@ import os
 from fake_useragent import UserAgent
 from datetime import date, datetime, timedelta
 
-from proxybroker import Broker
+from proxybroker import Broker, Proxy
 from collections import deque
 
 import aiohttp
