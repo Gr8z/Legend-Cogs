@@ -13,7 +13,7 @@ import os
 from fake_useragent import UserAgent
 from datetime import date, datetime, timedelta
 
-from proxybroker import Broker
+from proxybroker import Broker, Proxy
 from collections import deque
 
 import aiohttp
@@ -25,6 +25,7 @@ creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
 
 proxies_list = [
+	Proxy(host="67.63.33.7", port=80)
 ]
 	# '94.249.160.49:6998',
 	# '93.127.128.41:7341',
