@@ -18,6 +18,8 @@ from collections import deque
 
 import aiohttp
 
+from cogs.utils.chat_formatting import pagify
+
 lastTag = '0'
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
