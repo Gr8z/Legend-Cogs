@@ -256,7 +256,7 @@ class tournament:
 	async def _brokerResult(self):
 		await asyncio.sleep(120)
 		while True:
-			proxy = await proxies.get()
+			proxy = await self.queue.get()
 			if proxy is None: break
 			self.proxylist.append(proxy)
 		
