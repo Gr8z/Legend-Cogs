@@ -294,7 +294,7 @@ class tournament:
 			full = aTourney['full']
 			
 		timeLeft = time_str(aTourney['endtime'], False) - now
-		timeLeft = timeLeft.seconds
+		timeLeft = int(timeLeft.total_seconds()))
 		if timeLeft < 0:
 			timeLeft = 0
 			embedtitle = "Ended Tournament"
