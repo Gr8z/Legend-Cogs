@@ -250,7 +250,7 @@ class tournament:
 		return host  # Return host for now, will return proxy later
 		
 	async def _proxyBroker(self):
-		self.broker.find(types=['HTTP', 'HTTPS'], limit=10)
+		self.broker.find(types=['HTTP'], limit=10)
 		await asyncio.sleep(120)
 	
 	async def _brokerResult(self):
