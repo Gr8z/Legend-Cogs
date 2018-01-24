@@ -10,6 +10,8 @@ from .utils.dataIO import dataIO
 import os
 from fake_useragent import UserAgent
 
+from proxybroker import Broker
+
 lastTag = '0'
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
@@ -62,6 +64,9 @@ class tournament:
 		self.path = 'data/tourney/settings.json'
 		self.settings = dataIO.load_json(self.path)
 		self.auth = dataIO.load_json('cogs/auth.json')
+		self.queue = asyncio.Queue()
+		self.broker = Broker(self.queue)
+		self.proxylist = list(proxies_list)
 		
 	def save_data(self):
 		"""Saves the json"""
@@ -183,7 +188,7 @@ class tournament:
 		    "User-Agent": ua.random
 		}
 		proxies = {
-	    	'http': random.choice(proxies_list)
+	    	'http': await self._get_proxy()
 		}
 
 		try:
@@ -238,11 +243,24 @@ class tournament:
 		
 	
 	async def _get_proxy(self):
-		host = random.choice(proxies_list)
+		host = random.choice(self.proxylist)
 		port = 80
 		proxy = 'http://{}:{}'.format(host, port)
 		
-		return proxy
+		return host  # Return host for now, will return proxy later
+		
+	async def _proxyBroker(self):
+		self.broker.find(types=['HTTP', 'HTTPS'], limit=10)
+		await asyncio.sleep(120)
+	
+	async def _brokerResult(self):
+		await asyncio.sleep(120)
+		while True:
+			proxy = await proxies.get()
+			if proxy is None: break
+			self.proxylist.append(proxy)
+		
+		
 
 def check_folders():
 	if not os.path.exists("data/tourney"):
@@ -260,4 +278,6 @@ def setup(bot):
 	n = tournament(bot)
 	loop = asyncio.get_event_loop()
 	loop.create_task(n.checkTourney())
+	loop.create_task(n._proxyBroker())
+	loop.create_task(n.brokerResult())
 	bot.add_cog(n)
