@@ -87,7 +87,7 @@ class clashroyale:
 			else:
 				clanurl = profiledata['clan']['badge']['image']
 
-			embed=discord.Embed(title="", color=0x0080ff)
+			embed=discord.Embed(title="", color=0xFAA61A)
 			embed.set_author(name=profiledata['name'] + " (#"+profiledata['tag']+")", icon_url=clanurl)
 			embed.set_thumbnail(url="https://cr-api.github.io/cr-api-assets/arenas/{}.png".format(profiledata['arena']['arena'].replace(' ', '').lower()))
 			embed.add_field(name="Trophies", value=profiledata['trophies'], inline=True)
@@ -147,7 +147,7 @@ class clashroyale:
 			else:
 				clanurl = profiledata['clan']['badge']['image']
 
-			embed=discord.Embed(title="", color=0x0080ff, description="Your Upcoming chests.")
+			embed=discord.Embed(title="", color=0xFAA61A, description="Your Upcoming chests.")
 			embed.set_author(name=profiledata['name'] + " (#"+profiledata['tag']+")", icon_url=clanurl)
 			embed.add_field(name="Upcoming Chests", value=valuechestText, inline=False)
 			embed.add_field(name="Special Chests", value=chest1+chest2+chest3+chest4+chest5, inline=False)
@@ -166,7 +166,7 @@ class clashroyale:
 		try:
 			clandata = requests.get('http://api.cr-api.com/clan/{}'.format(clantag), headers=self.getAuth(), timeout=10).json()
 
-			embed=discord.Embed(title=clandata['name'] + " (#" + clandata['tag'] + ")", description=clandata['description'], color=0x0080ff)
+			embed=discord.Embed(title=clandata['name'] + " (#" + clandata['tag'] + ")", description=clandata['description'], color=0xFAA61A)
 			embed.set_thumbnail(url=clandata['badge']['image'])
 			embed.add_field(name="Members", value=str(clandata['memberCount'])+"/50", inline=True)
 			embed.add_field(name="Donations", value=str(clandata['donations']), inline=True)
@@ -199,7 +199,7 @@ class clashroyale:
 			except KeyError:
 				desc = "No description"
 
-			embed=discord.Embed(title=tourneydata['name']+" (#"+tourneydata['tag']+")", description=desc, color=0x00ffff)
+			embed=discord.Embed(title=tourneydata['name']+" (#"+tourneydata['tag']+")", description=desc, color=0xFAA61A)
 			embed.set_thumbnail(url='https://statsroyale.com/images/tournament.png')
 			embed.add_field(name="Players", value=str(tourneydata['capacity']) + "/" + str(maxCapacity), inline=True)
 			embed.add_field(name="Status", value=tourneydata['status'].title(), inline=True)

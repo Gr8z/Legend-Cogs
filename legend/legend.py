@@ -70,6 +70,19 @@ Each and every participant will recieve discord credits for getting trophies for
 **3 golden Rules for clanwars:** We respect the Opponent (no BMing if you win), we play to have fun (no obligation to participate), and don't join if you think you cannot play.
 """
 
+credits_info = """**WHAT ARE CREDITS?**
+Credits are a virtual curency in LeGeND Discord, you earn credits by playing in clanwars, donating, participating in the clan chest and playing mini games in discord. To use your credits, you can buy items using ``!buy``.
+
+• Every 30 minutes, you can get free credits by typing ``!payday`` in #bot-spam channel.
+• Every Sunday, you recieve something called a "Weekly Payout". Which converts all your week's clan donations and clan chest crowns into credits. So the more active you are in a clan, the more credits you get.
+• We have clanwars every weekend, participating in these clan wars also give you tons of credits according to your tournament trophies.
+• You can also win credits by playing #slots. Bet and win credits with your pure luck.
+• You can play games such as #heist, #race and #four-row to win credits. 
+• Last but not least, you can get easy credits by just chatting on discord. The more you chat, the more credits you accumulate.
+
+You can type ``!buy`` here to look at different ways you can spend these credits.
+"""
+
 esports_info = """The LeGeND Esports Team is recruiting all active and aspiring players!
 
 With the goal of encouraging competitive play in the family, there is a monthly ranked season system on the Esports Team Server where players compete to play on LeGeND Esports A Team and B team to represent the family in various North American events. Our strongest players will compete side by side with the very best in leagues such as CCTS, CPL, and even RPL!
@@ -150,7 +163,7 @@ class legend:
         roles = [discord.utils.get(server.roles, name=role_name) for role_name in role_names]
         try:
             await self.bot.remove_roles(member, *roles)
-            await asyncio.sleep(3)
+            #await asyncio.sleep(3)
         except:
             pass
     
@@ -444,7 +457,7 @@ class legend:
                                 await self.bot.say("Approval failed, you are not first in queue for the waiting list on this server.")
                                 return
                     
-                    self.c[clankey]['waiting'].pop(0)
+                    self.c[savekey]['waiting'].remove(member.id)
                     dataIO.save_json('cogs/clans.json', self.c)
                     
                     role = discord.utils.get(server.roles, name="Waiting")
@@ -603,6 +616,9 @@ class legend:
             await self.bot.send_message(member,cw_info)
             
             await asyncio.sleep(300)
+            await self.bot.send_message(member,credits_info)
+            
+            await asyncio.sleep(300)
             await self.bot.send_message(member,coaching_info)
 
             await asyncio.sleep(300)
@@ -707,7 +723,7 @@ class legend:
         allowed = await self._is_commander(author)
 
         if not allowed:
-            await self.bot.say("You dont have enough permissions to delete someone to the waiting list.")
+            await self.bot.say("You dont have enough permissions to delete someone from the waiting list.")
             return
 
         clankey = clankey.lower()
@@ -753,7 +769,7 @@ class legend:
 
         await self.bot.type()
 
-        embed=discord.Embed(title="", description="", color=0x0080ff)
+        embed=discord.Embed(color=0xFAA61A)
 
         for indexC, clan in enumerate(self.c):
             if self.c[clan]["waiting"]:
@@ -1028,50 +1044,18 @@ class legend:
         allowed = await self._is_commander(author)
 
         if not allowed:
-            await self.bot.say("You dont have enough permissions to delete someone to the waiting list.")
+            await self.bot.say("You dont have enough permissions to use this command.")
             return
 
-        try:
-            await self.updateClash()
-            await self.bot.type()
-            profiletag = self.clash[member.id]['tag']
-            profiledata = requests.get('http://api.cr-api.com/player/{}?exclude=games,currentDeck,cards,battles,achievements'.format(profiletag), headers=self.getAuth(), timeout=10).json()
-            ign = profiledata['name']
-            if profiledata['clan'] is None:
-                clantag = ""
-                clanname = ""
-            else: 
-                clantag = profiledata['clan']['tag']
-                clanname = profiledata['clan']['name']
-        except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
-            await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
-            return
-        except requests.exceptions.RequestException as e:
-            await self.bot.say(e)
-            return
-        except:
-            await self.bot.say("You must assosiate a tag with this member first using ``!save clash #tag @member``")
-            return
+        rolesToRemove = ["Member"]
+        for x in self.c:
+            rolesToRemove.append(self.c[x]['role'])
 
-        membership = True
-        for clankey in self.clanArray():
-            if self.c[clankey]['tag'] == clantag:
-                membership = False # False
-                savekey = clankey
-                break
+        await self._remove_roles(member, rolesToRemove)
 
-        if membership:
-            rolesToRemove = ["Member"]
-            for x in range(0,self.numClans()):
-                rolesToRemove.append(self.c[clankey]['role'])
+        await self.bot.send_message(member, "Hey there, I am sorry to inform you that we have removed you from the clan. We hope to see you back again soon when you are able to follow the clan requirements.")
 
-            await self._remove_roles(member, rolesToRemove)
-
-            await self.bot.send_message(member, "Hey there, I am sorry to inform you that we have removed you from the clan. We hope to see you back again soon when you are able to follow the clan requirements.")
-
-            await self.bot.say("Member and clan roles removed.")
-        else:
-            await self.bot.say("Error, This user is still in a clan in the family.")
+        await self.bot.say("Member and clan roles removed.")
 
     @commands.command()
     async def gmt(self):
@@ -1100,8 +1084,12 @@ class legend:
             await self.bot.type()
             profiletag = self.clash[member.id]['tag']
             profiledata = requests.get('http://api.cr-api.com/player/{}?exclude=games,currentDeck,cards,battles,achievements'.format(profiletag), headers=self.getAuth(), timeout=10).json()
-            clantag = profiledata['clan']['tag']
-            clanname = profiledata['clan']['name']
+            if profiledata['clan'] is None:
+                clantag = ""
+                clanname = ""
+            else: 
+                clantag = profiledata['clan']['tag']
+                clanname = profiledata['clan']['name']
             ign = profiledata['name']
         except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
