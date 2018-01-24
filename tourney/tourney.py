@@ -160,6 +160,8 @@ class tournament:
 	async def _expire_cache(self):
 		await asyncio.sleep(900)
 		self.cacheUpdated = False
+		if not self.cacheUpdated:
+			await self._update_cache()  # This will automatically post top tournaments
 	
 	async def _update_cache(self):
 		try:
