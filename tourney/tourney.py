@@ -158,6 +158,7 @@ class tournament:
 			return # On error: Don't retry, but don't mark cache as updated
 		
 		newdata = newdata['tournaments']
+		newdata = [tourney for tourney in newdata if not tourney['full']]
 		
 		for tourney in newdata:
 			if tourney["hashtag"] not in self.tourneyCache:
