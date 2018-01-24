@@ -18,6 +18,8 @@ from collections import deque
 
 import aiohttp
 
+from cogs.utils.chat_formatting import pagify
+
 lastTag = '0'
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
@@ -235,6 +237,14 @@ class tournament:
 			str(self.tourneyCache), shorten_by=50):
 			
 			await self.bot.say(page)
+			
+	@commands.command(pass_context=True, no_pm=True)
+	@checks.is_owner()
+	async def clearcache(self, ctx):
+		"""Clears current tourney cache"""
+		self.tourneyCache = {}
+		self.save_cache()
+		await self.bot.say("Sucess")
 			
 	@commands.command(pass_context=True, no_pm=True)
 	async def tourney(self, ctx, minPlayers: int=0):
