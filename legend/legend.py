@@ -70,6 +70,19 @@ Each and every participant will recieve discord credits for getting trophies for
 **3 golden Rules for clanwars:** We respect the Opponent (no BMing if you win), we play to have fun (no obligation to participate), and don't join if you think you cannot play.
 """
 
+credits_info = """**WHAT ARE CREDITS?**
+Credits are a virtual curency in LeGeND Discord, you earn credits by playing in clanwars, donating, participating in the clan chest and playing mini games in discord. To use your credits, you can buy items using ``!buy``.
+
+• Every 30 minutes, you can get free credits by typing ``!payday`` in #bot-spam channel.
+• Every Sunday, you recieve something called a "Weekly Payout". Which converts all your week's clan donations and clan chest crowns into credits. So the more active you are in a clan, the more credits you get.
+• We have clanwars every weekend, participating in these clan wars also give you tons of credits according to your tournament trophies.
+• You can also win credits by playing #slots. Bet and win credits with your pure luck.
+• You can play games such as #heist, #race and #four-row to win credits. 
+• Last but not least, you can get easy credits by just chatting on discord. The more you chat, the more credits you accumulate.
+
+You can type ``!buy`` here to look at different ways you can spend these credits.
+"""
+
 esports_info = """The LeGeND Esports Team is recruiting all active and aspiring players!
 
 With the goal of encouraging competitive play in the family, there is a monthly ranked season system on the Esports Team Server where players compete to play on LeGeND Esports A Team and B team to represent the family in various North American events. Our strongest players will compete side by side with the very best in leagues such as CCTS, CPL, and even RPL!
@@ -601,6 +614,9 @@ class legend:
 
             await asyncio.sleep(300)
             await self.bot.send_message(member,cw_info)
+            
+            await asyncio.sleep(300)
+            await self.bot.send_message(member,credits_info)
             
             await asyncio.sleep(300)
             await self.bot.send_message(member,coaching_info)
