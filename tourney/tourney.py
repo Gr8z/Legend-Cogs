@@ -87,7 +87,11 @@ class tournament:
 		self.queue = asyncio.Queue(maxsize=10)
 		self.broker = Broker(self.queue)
 		self.proxylist = deque(proxies_list,10)
+		self.session = aiohttp.ClientSession()
 		
+	def __unload(self):
+		self.session.close()	
+	
 	def save_data(self):
 		"""Saves the json"""
 		dataIO.save_json(self.path, self.settings)
@@ -112,9 +116,8 @@ class tournament:
 	async def _fetch(self, url, proxy_url, headers):
 		resp = None
 		try:
-			async with aiohttp.ClientSession() as session:
-				async with session.get(url, timeout=30, proxy=proxy_url, headers=headers) as resp:
-					data = await resp.json()
+			async with self.session.get(url, timeout=30, proxy=proxy_url, headers=headers) as resp:
+				data = await resp.json()
 		except (aiohttp.errors.ClientOSError, aiohttp.errors.ClientResponseError,
 				aiohttp.errors.ServerDisconnectedError) as e:
 			print('Error. url: %s; error: %r' % (url, e))
