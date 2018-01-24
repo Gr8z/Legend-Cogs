@@ -11,6 +11,7 @@ import os
 from fake_useragent import UserAgent
 
 from proxybroker import Broker
+from collections import deque
 
 lastTag = '0'
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
@@ -64,9 +65,9 @@ class tournament:
 		self.path = 'data/tourney/settings.json'
 		self.settings = dataIO.load_json(self.path)
 		self.auth = dataIO.load_json('cogs/auth.json')
-		self.queue = asyncio.Queue()
+		self.queue = asyncio.Queue(maxsize=10)
 		self.broker = Broker(self.queue)
-		self.proxylist = list(proxies_list)
+		self.proxylist = deque(proxies_list,10)
 		
 	def save_data(self):
 		"""Saves the json"""
@@ -250,7 +251,7 @@ class tournament:
 		return host  # Return host for now, will return proxy later
 		
 	async def _proxyBroker(self):
-		self.broker.find(types=['HTTP'], limit=10)
+		await self.broker.find(types=['HTTP'], limit=10)
 		await asyncio.sleep(120)
 	
 	async def _brokerResult(self):
@@ -258,6 +259,7 @@ class tournament:
 		while True:
 			proxy = await self.queue.get()
 			if proxy is None: break
+			print(dir(proxy))
 			self.proxylist.append(proxy)
 		
 		
