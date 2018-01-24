@@ -1048,7 +1048,7 @@ class legend:
             return
 
         rolesToRemove = ["Member"]
-        for x in range(0,self.numClans()):
+        for x in self.c:
             rolesToRemove.append(self.c[x]['role'])
 
         await self._remove_roles(member, rolesToRemove)
