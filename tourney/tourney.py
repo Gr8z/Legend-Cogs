@@ -80,6 +80,7 @@ class tournament:
 		self.tourneyCache = dataIO.load_json(self.cachepath)
 		self.auth = dataIO.load_json('cogs/auth.json')
 		self.cacheUpdated = False
+		self.session = aiohttp.ClientSession()
 		
 	def __unload(self):
 		self.session.close()	
