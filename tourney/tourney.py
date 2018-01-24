@@ -25,6 +25,7 @@ creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
 
 proxies_list = [
+	Proxy(host="67.63.33.7", port=80)
 ]
 	# '94.249.160.49:6998',
 	# '93.127.128.41:7341',
