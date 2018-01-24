@@ -154,7 +154,7 @@ class tournament:
 		proxy = random.choice(self.proxylist)
 		host = proxy.host
 		port = proxy.port
-		proxystr = '{}:{}'.format(host, port)
+		proxystr = 'http://{}:{}'.format(host, port)
 		
 		return proxystr
 		
