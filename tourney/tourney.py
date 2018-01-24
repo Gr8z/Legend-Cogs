@@ -18,17 +18,18 @@ creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
 
 proxies_list = [
-	'94.249.160.49:6998',
-	'93.127.128.41:7341',
-	'107.175.43.100:6858',
-	'64.44.18.31:3691',
-	'172.82.173.100:5218',
-	'172.82.177.111:3432',
-	'45.43.219.185:2461',
-	'45.43.218.82:3577',
-	'173.211.31.3:8053',
-	'195.162.4.111:4762'
 ]
+	# '94.249.160.49:6998',
+	# '93.127.128.41:7341',
+	# '107.175.43.100:6858',
+	# '64.44.18.31:3691',
+	# '172.82.173.100:5218',
+	# '172.82.177.111:3432',
+	# '45.43.219.185:2461',
+	# '45.43.218.82:3577',
+	# '173.211.31.3:8053',
+	# '195.162.4.111:4762'
+# ]
 
 # Converts maxPlayers to Cards
 def getCards(maxPlayers):
@@ -244,11 +245,12 @@ class tournament:
 		
 	
 	async def _get_proxy(self):
-		host = random.choice(self.proxylist)
-		port = 80
-		proxy = 'http://{}:{}'.format(host, port)
+		proxy = random.choice(self.proxylist)
+		host = proxy.host
+		port = proxy.port
+		proxystr = '{}:{}'.format(host, port)
 		
-		return host  # Return host for now, will return proxy later
+		return proxystr
 		
 	async def _proxyBroker(self):
 		await self.broker.find(types=['HTTP'], limit=10)
@@ -259,7 +261,6 @@ class tournament:
 		while True:
 			proxy = await self.queue.get()
 			if proxy is None: break
-			print(dir(proxy))
 			self.proxylist.append(proxy)
 		
 		
