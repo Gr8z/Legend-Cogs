@@ -13,6 +13,8 @@ import os
 from fake_useragent import UserAgent
 from datetime import date, datetime, timedelta
 
+import aiohttp
+
 lastTag = '0'
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
