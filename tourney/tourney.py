@@ -177,6 +177,7 @@ class tournament:
 		
 		if not newdata:
 			await self.bot.send_message(discord.Object(id="363728974821457923"), "StatsRoyale Failed")
+			return None 
 			
 		if not newdata['success']:
 			await self.bot.send_message(discord.Object(id="363728974821457923"), "StatsRoyale denied")
