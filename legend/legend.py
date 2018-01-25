@@ -1113,7 +1113,7 @@ class legend:
             if profiledata['stats']['level'] < 8:
                 await self.bot.say("You cannot join the Qualifier Stage as you are not yet level 8 in Clash Royale.")
 
-            await self.bot.say(member.mention + " Have you read and understood how the Monthly Mayhem 4 Qualifier will work and have read and noted the dates and times of the Qualifier tournaments? (Yes/No)")
+            await self.bot.say(member.mention + " Have you read and understood how the Monthly Mayhem 5 Qualifier will work and have read and noted the dates and times of the Qualifier tournaments? (Yes/No)")
             answer = await self.bot.wait_for_message(timeout=30, author=ctx.message.author)
             if answer is None:
                 await self.bot.say(member.mention + ' Ok then, I guess its time to read the announcement again.')
