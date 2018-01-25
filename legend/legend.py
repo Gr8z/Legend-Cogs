@@ -1091,6 +1091,10 @@ class legend:
         server = ctx.message.server
         member = ctx.message.author
         channel = ctx.message.channel
+
+        await self.bot.say("Sorry big boi, its too late to register now, see you next Month.")
+        return
+
         legendServer = ["393045385662431251"]
 
         if server.id not in legendServer:
