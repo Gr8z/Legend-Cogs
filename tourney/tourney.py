@@ -20,7 +20,7 @@ import aiohttp
 
 from cogs.utils.chat_formatting import pagify
 
-lastTag = '0'
+
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
 
@@ -93,6 +93,7 @@ class tournament:
 		self.broker = Broker(self.queue)
 		self.proxylist = deque(proxies_list,10)
 		self.session = aiohttp.ClientSession()
+		self.lastTag = '0'
 		
 	def __unload(self):
 		self.session.close()	
@@ -210,16 +211,18 @@ class tournament:
 		if not self.cacheUpdated:	
 			await self._update_cache()
 
+		if not self.tourneyCache:
+			return None, None
 		
 		for x in range(10):  # Try 10 times or until tourney is found
 			now = datetime.utcnow()
 			
 			tourneydata = [t1 for tkey, t1 in self.tourneyCache.items()
 							if not t1['full'] and t1['maxPlayers']>=minPlayers
-							and tkey != lastTag]
+							and tkey != self.lastTag]
 
 			if not tourneydata:
-				return None
+				return None, None
 
 			aChoice = random.choice(tourneydata)
 			if time_str(aChoice['endtime'], False) - now < timedelta(seconds=600):
@@ -231,7 +234,7 @@ class tournament:
 					self.tourneyCache.pop(aChoice['hashtag'])
 					# Loop and try again
 				else:
-					lastTag = aChoice['hashtag']
+					self.lastTag = aChoice['hashtag']
 					return aChoice, bTourney
 		
 		return None  # Failed to get a tourney after 10 tries
