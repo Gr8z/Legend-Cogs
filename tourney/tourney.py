@@ -389,8 +389,8 @@ class tournament:
 	
 
 	async def _proxyBroker(self):
-	types = ['HTTP']
-	countries = ['US', 'DE', 'FR']
+		types = ['HTTP']
+		countries = ['US', 'DE', 'FR']
 	
 		await self.broker.find(types=types, limit=50)
 		await asyncio.sleep(120)
