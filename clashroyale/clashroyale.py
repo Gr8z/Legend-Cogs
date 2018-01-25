@@ -157,6 +157,34 @@ class clashroyale:
 		except:
 			await self.bot.say("You need to first save your profile using ``!save clash #GAMETAG``")
 
+	@commands.command(pass_context=True, aliases=['clashdeck'])
+	async def clashDeck(self, ctx, member: discord.Member = None):
+		"""View yours or other's clash royale"""
+
+		try:
+			if member is None:
+				member = ctx.message.author
+
+			profiletag = self.clash[member.id]['tag']
+
+			await self.bot.type()
+
+			try:
+				profiledata = requests.get('http://api.cr-api.com/player/{}?keys=deckLink'.format(profiletag), headers=self.getAuth(), timeout=10).json()
+				deckLink = profiledata['deckLink']
+			except:
+				await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
+				return
+
+			message = ctx.message
+			message.content = "!deck gl " + deckLink
+			await self.bot.process_commands(message)
+
+		except:
+			raise
+			await self.bot.say("You need to first save your profile using ``!save clash #GAMETAG``")
+
+
 	@commands.command(pass_context=True)
 	async def clan(self, ctx, clantag):
 		"""View Clash Royale Clan statistics and information """
