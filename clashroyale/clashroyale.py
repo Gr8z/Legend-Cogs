@@ -159,7 +159,7 @@ class clashroyale:
 
 	@commands.command(pass_context=True, aliases=['clashdeck'])
 	async def clashDeck(self, ctx, member: discord.Member = None):
-		"""View yours or other's clash royale"""
+		"""View yours or other's clash royale Deck"""
 
 		try:
 			if member is None:
@@ -183,7 +183,6 @@ class clashroyale:
 		except:
 			raise
 			await self.bot.say("You need to first save your profile using ``!save clash #GAMETAG``")
-
 
 	@commands.command(pass_context=True)
 	async def clan(self, ctx, clantag):
