@@ -96,7 +96,7 @@ class tournament:
 		
 	def __unload(self):
 		self.session.close()	
-        self.broker.stop()
+		self.broker.stop()
 	
 	def save_data(self):
 		"""Saves the json"""
@@ -175,18 +175,18 @@ class tournament:
 		except:  # On error: Don't retry, but don't mark cache as updated
 			return None
 		
-        if not newdata:
-            await self.bot.send_message(discord.Object(id="363728974821457923"), "StatsRoyale Failed")
-            
+		if not newdata:
+			await self.bot.send_message(discord.Object(id="363728974821457923"), "StatsRoyale Failed")
+			
 		if not newdata['success']:
-            await self.bot.send_message(discord.Object(id="363728974821457923"), "StatsRoyale denied")
+			await self.bot.send_message(discord.Object(id="363728974821457923"), "StatsRoyale denied")
 			return None # On error: Don't retry, but don't mark cache as updated
 		
 		newdata = newdata['tournaments']
 		newdata = [tourney for tourney in newdata if not tourney['full']]
 		
-        if not newdata:
-            await self.bot.send_message(discord.Object(id="363728974821457923"), "No non-full tournaments found")
+		if not newdata:
+			await self.bot.send_message(discord.Object(id="363728974821457923"), "No non-full tournaments found")
 
 		for tourney in newdata:
 			if tourney["hashtag"] not in self.tourneyCache:
@@ -389,24 +389,23 @@ class tournament:
 	
 
 	async def _proxyBroker(self):
-    types = ['HTTP']
-    countries = ['US', 'DE', 'FR']
-    
+		types = ['HTTP']
+		countries = ['US', 'DE', 'FR']
+	
 		await self.broker.find(types=types, limit=50)
 		await asyncio.sleep(120)
 	
 	async def _brokerResult(self):
-        await asyncio.sleep(120)
-        anyfound = False
-        await self.bot.send_message(discord.Object(id="363728974821457923"), "Waiting on results from Proxy-Broker")
-        while True:
-            proxy = await self.queue.get()
-            if proxy is None: break
-                self.proxylist.append(proxy)
-                if not anyfound:
-                    await self.bot.send_message(discord.Object(id="363728974821457923"), "Proxies are being found: {}".format(proxy))
-                    anyfound = True
-        await asyncio.sleep(60)
+		anyfound = False
+		await self.bot.send_message(discord.Object(id="363728974821457923"), "Waiting on results from Proxy-Broker")
+		while True:
+			proxy = await self.queue.get()
+			if proxy is None: break
+			self.proxylist.append(proxy)
+			if not anyfound:
+				await self.bot.send_message(discord.Object(id="363728974821457923"), "Proxies are being found: {}".format(proxy))
+				anyfound = True
+		await asyncio.sleep(60)
 		
 		
 
