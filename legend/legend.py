@@ -443,7 +443,18 @@ class legend:
                 return
 
             if not leftClan:
-                await self.bot.say("Approval failed, You have not yet left your current clan.")
+                await self.bot.say("Approval failed, You have not yet left your current clan. Would you like me to check again in 2 minutes? (Yes/No)")
+
+                answer = await self.bot.wait_for_message(timeout=15, author=ctx.message.author)
+
+                if answer is None:
+                    return
+                elif "yes" not in answer.content.lower():
+                    return
+
+                await self.bot.say("Okay, I will retry this command in 2 minutes.")
+                await asyncio.sleep(120)
+                await self.approve(member, clankey)
                 return
 
             if len(self.c[clankey]['waiting']) > 0:
@@ -630,7 +641,18 @@ class legend:
             await asyncio.sleep(300)
             await self.bot.send_message(member,social_info)
         else:
-            await self.bot.say("You must be accepted into a clan before I can give you clan roles.")
+            await self.bot.say("You must be accepted into a clan before I can give you clan roles. Would you like me to check again in 2 minutes? (Yes/No)")
+
+            answer = await self.bot.wait_for_message(timeout=15, author=ctx.message.author)
+
+            if answer is None:
+                return
+            elif "yes" not in answer.content.lower():
+                return
+
+            await self.bot.say("Okay, I will retry this command in 2 minutes.")
+            await asyncio.sleep(120)
+            await self.newmember(member)
 
     @commands.command(pass_context=True, no_pm=True)
     async def waiting(self, ctx, member: discord.Member, clankey):
