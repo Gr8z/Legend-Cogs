@@ -443,7 +443,18 @@ class legend:
                 return
 
             if not leftClan:
-                await self.bot.say("Approval failed, You have not yet left your current clan.")
+                await self.bot.say("Approval failed, You have not yet left your current clan. Would you like me to check again in 2 minutes? (Yes/No)")
+
+                answer = await self.bot.wait_for_message(timeout=15, author=ctx.message.author)
+
+                if answer is None:
+                    return
+                elif "yes" not in answer.content.lower():
+                    return
+
+                await self.bot.say("Okay, I will retry this command in 2 minutes.")
+                await asyncio.sleep(120)
+                await self.approve(member, clankey)
                 return
 
             if len(self.c[clankey]['waiting']) > 0:
@@ -630,7 +641,18 @@ class legend:
             await asyncio.sleep(300)
             await self.bot.send_message(member,social_info)
         else:
-            await self.bot.say("You must be accepted into a clan before I can give you clan roles.")
+            await self.bot.say("You must be accepted into a clan before I can give you clan roles. Would you like me to check again in 2 minutes? (Yes/No)")
+
+            answer = await self.bot.wait_for_message(timeout=15, author=ctx.message.author)
+
+            if answer is None:
+                return
+            elif "yes" not in answer.content.lower():
+                return
+
+            await self.bot.say("Okay, I will retry this command in 2 minutes.")
+            await asyncio.sleep(120)
+            await self.newmember(member)
 
     @commands.command(pass_context=True, no_pm=True)
     async def waiting(self, ctx, member: discord.Member, clankey):
@@ -1069,6 +1091,10 @@ class legend:
         server = ctx.message.server
         member = ctx.message.author
         channel = ctx.message.channel
+
+        await self.bot.say("Sorry big boi, its too late to register now, see you next Month.")
+        return
+
         legendServer = ["393045385662431251"]
 
         if server.id not in legendServer:
@@ -1113,7 +1139,7 @@ class legend:
             if profiledata['stats']['level'] < 8:
                 await self.bot.say("You cannot join the Qualifier Stage as you are not yet level 8 in Clash Royale.")
 
-            await self.bot.say(member.mention + " Have you read and understood how the Monthly Mayhem 4 Qualifier will work and have read and noted the dates and times of the Qualifier tournaments? (Yes/No)")
+            await self.bot.say(member.mention + " Have you read and understood how the Monthly Mayhem 5 Qualifier will work and have read and noted the dates and times of the Qualifier tournaments? (Yes/No)")
             answer = await self.bot.wait_for_message(timeout=30, author=ctx.message.author)
             if answer is None:
                 await self.bot.say(member.mention + ' Ok then, I guess its time to read the announcement again.')
