@@ -186,7 +186,7 @@ class tournament:
 		newdata = [tourney for tourney in newdata if not tourney['full']]
 		
 		if not newdata:
-    		await self.bot.send_message(discord.Object(id="363728974821457923"), "No non-full tournaments found")
+			await self.bot.send_message(discord.Object(id="363728974821457923"), "No non-full tournaments found")
 
 		for tourney in newdata:
 			if tourney["hashtag"] not in self.tourneyCache:
