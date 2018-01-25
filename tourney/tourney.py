@@ -89,7 +89,7 @@ class tournament:
 		self.tourneyCache = dataIO.load_json(self.cachepath)
 		self.auth = dataIO.load_json('cogs/auth.json')
 		self.cacheUpdated = False
-		self.queue = asyncio.Queue(maxsize=10)
+		self.queue = asyncio.Queue()
 		self.broker = Broker(self.queue)
 		self.proxylist = deque(proxies_list,10)
 		self.session = aiohttp.ClientSession()
@@ -97,6 +97,7 @@ class tournament:
 		
 	def __unload(self):
 		self.session.close()	
+        self.broker.stop()
 	
 	def save_data(self):
 		"""Saves the json"""
@@ -164,7 +165,7 @@ class tournament:
 		
 
 	async def _expire_cache(self):
-		await asyncio.sleep(900)
+		await asyncio.sleep(180)
 		self.cacheUpdated = False
 		if not self.cacheUpdated:
 			await self._update_cache()  # This will automatically post top tournaments
@@ -173,14 +174,21 @@ class tournament:
 		try:
 			newdata = await self._fetch_tourney()
 		except:  # On error: Don't retry, but don't mark cache as updated
-			return
+			return None
 		
+        if not newdata:
+            await self.bot.send_message(discord.Object(id="363728974821457923"), "StatsRoyale Failed")
+            
 		if not newdata['success']:
-			return # On error: Don't retry, but don't mark cache as updated
+            await self.bot.send_message(discord.Object(id="363728974821457923"), "StatsRoyale denied")
+			return None # On error: Don't retry, but don't mark cache as updated
 		
 		newdata = newdata['tournaments']
 		newdata = [tourney for tourney in newdata if not tourney['full']]
 		
+        if not newdata:
+            await self.bot.send_message(discord.Object(id="363728974821457923"), "No non-full tournaments found")
+
 		for tourney in newdata:
 			if tourney["hashtag"] not in self.tourneyCache:
 				timeLeft = timedelta(seconds=tourney['timeLeft'])
@@ -223,7 +231,7 @@ class tournament:
 					self.tourneyCache.pop(aChoice['hashtag'])
 					# Loop and try again
 				else:
-					self.lastTag = aChoice['hashtag']
+					self.lasttag = aChoice['hashtag']
 					return aChoice, bTourney
 		
 		return None  # Failed to get a tourney after 10 tries
@@ -274,7 +282,7 @@ class tournament:
 		"""Clears current tourney cache"""
 		self.tourneyCache = {}
 		self.save_cache()
-		await self.bot.say("Sucess")
+		await self.bot.say("Success")
 		
 	@commands.command(pass_context=True, no_pm=True)
 	@checks.is_owner()
@@ -382,15 +390,24 @@ class tournament:
 	
 
 	async def _proxyBroker(self):
-		await self.broker.find(types=['HTTP'], limit=10)
+    types = ['HTTP']
+    countries = ['US', 'DE', 'FR']
+    
+		await self.broker.find(types=types, limit=50)
 		await asyncio.sleep(120)
 	
 	async def _brokerResult(self):
-		await asyncio.sleep(120)
-		while True:
-			proxy = await self.queue.get()
-			if proxy is None: break
-			self.proxylist.append(proxy)
+        await asyncio.sleep(120)
+        anyfound = False
+        await self.bot.send_message(discord.Object(id="363728974821457923"), "Waiting on results from Proxy-Broker")
+        while True:
+            proxy = await self.queue.get()
+            if proxy is None: break
+                self.proxylist.append(proxy)
+                if not anyfound:
+                    await self.bot.send_message(discord.Object(id="363728974821457923"), "Proxies are being found: {}".format(proxy))
+                    anyfound = True
+        await asyncio.sleep(60)
 		
 		
 
