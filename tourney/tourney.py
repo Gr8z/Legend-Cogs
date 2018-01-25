@@ -93,7 +93,6 @@ class tournament:
 		self.broker = Broker(self.queue)
 		self.proxylist = deque(proxies_list,10)
 		self.session = aiohttp.ClientSession()
-		self.lasttag = ""
 		
 	def __unload(self):
 		self.session.close()	
@@ -216,7 +215,7 @@ class tournament:
 			
 			tourneydata = [t1 for tkey, t1 in self.tourneyCache.items()
 							if not t1['full'] and t1['maxPlayers']>=minPlayers
-							and tkey != self.lastTag]
+							and tkey != lastTag]
 
 			if not tourneydata:
 				return None
@@ -231,7 +230,7 @@ class tournament:
 					self.tourneyCache.pop(aChoice['hashtag'])
 					# Loop and try again
 				else:
-					self.lasttag = aChoice['hashtag']
+					lastTag = aChoice['hashtag']
 					return aChoice, bTourney
 		
 		return None  # Failed to get a tourney after 10 tries
