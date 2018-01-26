@@ -37,3 +37,4 @@ To install a cog on your bot instance:
 * [CR-API](https://github.com/cr-api/cr-api)
 * [Bobloy](https://github.com/bobloy)
 * [Karthik Suresh](https://github.com/karthiks2601)
+* [milan252525](https://github.com/milan252525)
