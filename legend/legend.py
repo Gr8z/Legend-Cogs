@@ -1034,6 +1034,25 @@ class legend:
         message += "```"
 
         await self.bot.say(message)
+        
+    @commands.command()
+    async def topclans(self):
+        """Show top 10 international clans"""
+        try:
+            topclans = requests.get("http://api.cr-api.com/top/clans/_int", headers = self.getAuth(), timeout = 10).json()
+            msg = "```python\n"
+        
+            for i in range(10):
+                msg += ((str(topclans[i]["rank"]) + ".").ljust(4) + topclans[i]["name"] + "\n")        
+            for i in range(len(self.c)):
+                for j in range(11, len(topclans)):
+                    if self.c[i]["tag"] == topclans[j]["tag"]:
+                        msg += ((str(topclans[j]["rank"]) + ".").ljust(4) + topclans[j]["name"] + "\n")    
+            msg += "```"
+        
+            await self.bot.say("**Top clans in international leaderboard:**" + msg)
+        except:
+            await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 
     @commands.command(pass_context=True, no_pm=True)
     async def guest(self, ctx, member: discord.Member):
