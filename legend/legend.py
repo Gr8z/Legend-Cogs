@@ -454,7 +454,10 @@ class legend:
 
                 await self.bot.say("Okay, I will retry this command in 2 minutes.")
                 await asyncio.sleep(120)
-                await self.approve(member, clankey)
+
+                message = ctx.message
+                message.content = "!approve {} {}".format(member, clankey)
+                await self.bot.process_commands(message)
                 return
 
             if len(self.c[clankey]['waiting']) > 0:
@@ -468,7 +471,7 @@ class legend:
                                 await self.bot.say("Approval failed, you are not first in queue for the waiting list on this server.")
                                 return
                     
-                    self.c[savekey]['waiting'].remove(member.id)
+                    self.c[clankey]['waiting'].remove(member.id)
                     dataIO.save_json('cogs/clans.json', self.c)
                     
                     role = discord.utils.get(server.roles, name="Waiting")
@@ -652,7 +655,9 @@ class legend:
 
             await self.bot.say("Okay, I will retry this command in 2 minutes.")
             await asyncio.sleep(120)
-            await self.newmember(member)
+            message = ctx.message
+            message.content = "!newmember {}".format(member)
+            await self.bot.process_commands(message)
 
     @commands.command(pass_context=True, no_pm=True)
     async def waiting(self, ctx, member: discord.Member, clankey):
