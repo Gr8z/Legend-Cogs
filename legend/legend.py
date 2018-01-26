@@ -1038,19 +1038,21 @@ class legend:
     @commands.command()
     async def topclans(self):
         """Show top 10 international clans"""
+        
+        await self.bot.type()
         try:
             topclans = requests.get("http://api.cr-api.com/top/clans/_int", headers = self.getAuth(), timeout = 10).json()
             msg = "```python\n"
         
-            for i in range(10):
-                msg += ((str(topclans[i]["rank"]) + ".").ljust(4) + topclans[i]["name"] + "\n")        
-            for i in self.c:
-                for j in range(11, len(topclans)):
-                    if self.c[i]["tag"] == topclans[j]["tag"]:
-                        msg += ((str(topclans[j]["rank"]) + ".").ljust(4) + topclans[j]["name"] + "\n")    
+            for x in range(10):
+                msg += ((str(topclans[x]["rank"]) + ".").ljust(4) + topclans[x]["name"] + "\n")
+            for i in range(11, len(topclans)):
+                for j in self.c:
+                    if topclans[i]["tag"] == self.c[j]["tag"]:
+                        msg += ((str(topclans[i]["rank"]) + ".").ljust(4) + topclans[i]["name"] + "\n")    
             msg += "```"
         
-            await self.bot.say("**Top clans in international leaderboard:**" + msg)
+            await self.bot.say("**Top clans in Local International Leaderboard**" + msg)
         except:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 
