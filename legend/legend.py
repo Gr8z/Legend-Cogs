@@ -1044,7 +1044,7 @@ class legend:
         
             for i in range(10):
                 msg += ((str(topclans[i]["rank"]) + ".").ljust(4) + topclans[i]["name"] + "\n")        
-            for i in range(len(self.c)):
+            for i in self.c:
                 for j in range(11, len(topclans)):
                     if self.c[i]["tag"] == topclans[j]["tag"]:
                         msg += ((str(topclans[j]["rank"]) + ".").ljust(4) + topclans[j]["name"] + "\n")    
