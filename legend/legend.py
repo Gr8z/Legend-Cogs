@@ -890,6 +890,7 @@ class legend:
             clan_tag = self.c[clankey]['tag']
             clan_role = self.c[clankey]['role'] 
             clan_name = self.c[clankey]['name'] 
+            clan_nickname = self.c[clankey]['nickname'] 
             clan_role_id = self.c[clankey]['role_id']
         except KeyError:
             await self.bot.say("Please use a valid clanname : "+", ".join(key for key in self.c.keys()))
@@ -928,6 +929,8 @@ class legend:
         d_members_with_no_player_tag = []
         d_members_not_in_clan = []
         d_members_without_role = []
+        d_members_without_name = []
+        cr_clanSettings = []
 
         for d_member in d_members:
             try:
@@ -951,6 +954,10 @@ class legend:
 
                 if role not in dc_member.roles:
                     d_members_without_role.append(dc_member.display_name)
+
+                d_name = "{} | {}".format(cr_members_name[index], clan_nickname)
+                if dc_member.display_name != dc_member.display_name:
+                    d_members_without_name.append(dc_member.display_name)
             except AttributeError:
                 cr_members_with_no_player_tag.append(cr_members_name[index])
                 continue
@@ -960,7 +967,6 @@ class legend:
             if player_trophy < clanReq:
                 cr_members_with_less_trophies.append(cr_members_name[index])
 
-        cr_clanSettings = []
         cr_clanSettings.append(clandata['badge']['id'] == 16000002)
         cr_clanSettings.append(clandata['location']['name'] == "International")
         cr_clanSettings.append("LeGeND Family🔥14 Clans🔥LegendClans.com🔥Daily Tourneys🔥Weekly Clanwar🔥discord.me/legendfamily🔥" in clandata['description'])
@@ -996,6 +1002,11 @@ class legend:
         if d_members_without_role:
             message += "\n\n:warning: **("+str(len(d_members_without_role))+")** Players in **" + clan_name + "**, but **DO NOT** have the clan role: ```• "
             message += "\n• ".join(d_members_without_role)
+            message += "```"
+
+        if d_members_without_name:
+            message += "\n\n:warning: **("+str(len(d_members_without_name))+")** Players in **" + clan_name + "**, but **DO NOT** have the clan name in the nickname: ```• "
+            message += "\n• ".join(d_members_without_name)
             message += "```"
 
         if cr_members_with_less_trophies:
