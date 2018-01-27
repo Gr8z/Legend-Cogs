@@ -177,7 +177,8 @@ class clashroyale:
 				return
 
 			message = ctx.message
-			message.content = "!deck gl " + deckLink
+			message.content = ctx.prefix + "deck gl " + deckLink
+			message.author = member
 			await self.bot.process_commands(message)
 
 		except:
