@@ -1005,7 +1005,7 @@ class legend:
             message += "```"
 
         if d_members_without_name:
-            message += "\n\n:warning: **("+str(len(d_members_without_name))+")** Players in **" + clan_name + "**, but **DO NOT** have the clan name in the nickname: ```• "
+            message += "\n\n:warning: **("+str(len(d_members_without_name))+")** Players in **" + clan_name + "**, but have an **INCORRECT** nickname: ```• "
             message += "\n• ".join(d_members_without_name)
             message += "```"
 
