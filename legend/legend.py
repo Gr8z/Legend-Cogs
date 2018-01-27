@@ -956,7 +956,7 @@ class legend:
                     d_members_without_role.append(dc_member.display_name)
 
                 d_name = "{} | {}".format(cr_members_name[index], clan_nickname)
-                if dc_member.display_name != dc_member.display_name:
+                if dc_member.display_name != d_name:
                     d_members_without_name.append(dc_member.display_name)
             except AttributeError:
                 cr_members_with_no_player_tag.append(cr_members_name[index])
