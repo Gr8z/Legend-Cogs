@@ -10,6 +10,7 @@ import random
 from random import choice as rand_choice
 import string
 import datetime
+from collections import OrderedDict
 
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
@@ -1211,7 +1212,56 @@ class legend:
         else:
             await self.bot.say("You are not even in any of our clans, what are you doing here?")
 
+    @commands.command(pass_context=True, no_pm=True)
+    async def cwstats(self, ctx, tag):
+        """Tournament/Clanwar Statistics generator"""
 
+        server = ctx.message.server
+        author = ctx.message.author
+        
+        await self.updateClash()
+        await self.bot.type()
+
+        tag = tag.strip('#').upper().replace('O', '0')
+        check = ['P', 'Y', 'L', 'Q', 'G', 'R', 'J', 'C', 'U', 'V', '0', '2', '8', '9']
+
+        if any(i not in check for i in tag):
+            await self.bot.say("The ID you provided has invalid characters. Please try again.")
+            return
+
+        try:
+            tourney = requests.get('http://api.cr-api.com/tournaments/'+tag, headers=self.getAuth(), timeout=10).json()
+        except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
+            await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
+            return
+        except requests.exceptions.RequestException as e:
+            await self.bot.say(e)
+            return
+
+        clanwar_dict = {}
+        
+        for y in range(0, len(tourney['members'])):
+
+            tourney_tag = tourney['members'][y]['tag']
+            tourney_score = tourney['members'][y]['score']
+            tourney_clan = tourney['members'][y]['clan']['name']
+
+            if tourney_clan not in clanwar_dict:
+                clanwar_dict[tourney_clan] = {}
+                clanwar_dict[tourney_clan]['score'] = 0
+                clanwar_dict[tourney_clan]['participants'] = 0
+
+            clanwar_dict[tourney_clan]['score'] += tourney_score
+            clanwar_dict[tourney_clan]['participants'] += 1
+
+        message =  "\n**{}**```{}\t{}\t{}\n".format(tourney['name'], "CLAN".ljust(17), "SCORE".ljust(9), "PARTICIPANTS")
+        clanwar_dict = OrderedDict(sorted(clanwar_dict.items(), key=lambda x: x[1]['score'], reverse=True))
+        for x in clanwar_dict:
+            message += "{}\t{}\t{}\n".format(x.ljust(17), str(clanwar_dict[x]['score']).ljust(9), clanwar_dict[x]['participants'])
+        message += "```"   
+        await self.bot.say(message)
+
+            
 def check_folders():
     if not os.path.exists("data/legend"):
         print("Creating data/legend folder...")
