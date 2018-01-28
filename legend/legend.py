@@ -285,8 +285,9 @@ class legend:
                 profiledata = requests.get('http://api.cr-api.com/player/{}?exclude=games,currentDeck,cards,battles,achievements'.format(profiletag), headers=self.getAuth(), timeout=10).json()
                 trophies = profiledata['trophies']
                 maxtrophies = profiledata['stats']['maxTrophies']
+                ign = profiledata['name']
                 maxmembers = 50
-                await self.bot.say("Hello {}, these are all the clans you are allowed to join, based on your statistics. \nYour Trophies: {}\nYour Personal Best: {}".format(member.mention, str(trophies), str(maxtrophies)))
+                await self.bot.say("Hello {}, these are all the clans you are allowed to join, based on your statistics. \nYour Trophies: {}\nYour Personal Best: {}".format(ign, str(trophies), str(maxtrophies)))
             except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
                 await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
                 return
