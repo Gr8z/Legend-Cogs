@@ -259,6 +259,7 @@ class tournament:
 		
 	
 	async def _get_proxy(self):
+		return '127.0.0.1:8888'
 		if not self.proxylist: return None
 		proxy = self.proxylist.popleft() #Grab and pop oldest found proxy
 		host = proxy.host
@@ -267,6 +268,13 @@ class tournament:
 		
 		return proxystr
 		
+	async def _proxyServer(self):
+		types = ['HTTP']
+		codes = [200, 301, 302]
+		countries = ['US', 'DE', 'FR']
+		
+		await self.broker.serve(types=types,limit=50,http_allowed_codes=codes)	
+
 	async def _proxyBroker(self):
 		types = ['HTTP']
 		countries = ['US', 'DE', 'FR']
@@ -304,6 +312,7 @@ def setup(bot):
 	n = tournament(bot)
 	loop = asyncio.get_event_loop()
 	loop.create_task(n.checkTourney())
-	loop.create_task(n._proxyBroker())
-	loop.create_task(n._brokerResult())
+	loop.create_task(n._proxyServer())
+	# loop.create_task(n._proxyBroker())
+	# loop.create_task(n._brokerResult())
 	bot.add_cog(n)
