@@ -1021,31 +1021,190 @@ class legend:
 
         await self.bot.say(message)
 
-    @commands.command()
-    async def topmembers(self, number=10):
-        """Show Top Legend Family Members"""
-
+    @commands.group(pass_context=True)
+    async def topmembers(self, ctx):
+        """Base command for showing top members"""
+        if ctx.invoked_subcommand is None:
+            await self.bot.send_cmd_help(ctx)
+    
+    @topmembers.command(name="trophies")
+    async def topmembers_trophies(self, role : str = None):
+        """Show LeGeND Family Ladder LeaderBoard"""
+        number = 10
         if number > 100:
             await self.bot.say("Sorry! the number must be below 100.")
             return
-
-        await self.bot.say("**LeGeND Family Top Players**")
-        await self.bot.type()
-
-        allplayers = requests.get('http://cr-api.com/clan/family/legend/members/datatable', timeout=15).json()
-        players = dict(allplayers)
-        players['data'] = sorted(allplayers['data'], key=lambda x: x["family_rank_score"])
         
-        message = "```py\n"
-        for x in range(0, number):
-            message += (str(x + 1) + ".").ljust(4) + " [" + str(players['data'][x]['score']) + "]  " + players['data'][x]['name'] + " (" + players['data'][x]['clan_name'] + ") " + "\n"
-            if (x+1) % 40 == 0:
-                message += "```"
-                await self.bot.say(message)
-                message = "```py\n"
+        if role not in ["leader","coleader","elder", None]:
+            await self.bot.say("Invalid role!")
+            return
+        if role != None:
+            filterroles = True
+            await self.bot.say("**LeGeND Family Ladder LeaderBoard**" + " (" + role + "s)")
+        else:
+            await self.bot.say("**LeGeND Family Ladder LeaderBoard**")
+        await self.bot.type()
+        try:
+            allplayers = requests.get('http://cr-api.com/clan/family/legend/members/datatable', timeout=15).json()
+        except:
+            await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
+            return
+        players = dict(allplayers)
+        players['data'] = sorted(allplayers['data'], key=lambda x: x['family_rank_score'])
+        
+        if role == None:
+            message = "```\n"
+            for x in range(0, number):
+                clantag = players['data'][x]['clan_tag']
+                for i in self.c:
+                    if clantag == self.c[i]['tag']:
+                        clanname = self.c[i]['nickname']
+                message += (str(x + 1) + ".").ljust(4) + " [" + str(players['data'][x]['score']) + "]  " + players['data'][x]['name'] + " (" + clanname + ") " + "\n"
+                if (x+1) % 40 == 0:
+                    message += "```"
+                    await self.bot.say(message)
+                    message = "```\n"
+            message += "```"
+            
+        else:
+            message = "```\n"
+            amount = 0
+            for x in range(0, len(players['data'])):
+                clanrole = players['data'][x]['role_name'].replace("-", "").lower()
+                clantag = players['data'][x]['clan_tag']
+                for i in self.c:
+                    if clantag == self.c[i]['tag']:
+                        clanname = self.c[i]['nickname']
+                            
+                if role == clanrole:
+                    message += (str(amount + 1) + ".").ljust(4) + " [" + str(players['data'][x]['score']) + "]  " + players['data'][x]['name'] + " (" + clanname + ") " +  "\n"
+                    amount += 1
+                    if amount == number:
+                        break
+                    if (amount+1) % 40 == 0:
+                        message += "```"
+                        await self.bot.say(message)
+                        message = "```\n"
+            message += "```"
+        await self.bot.say(message)
+        
+    @topmembers.command(name="donations")
+    async def topmembers_donations(self, role : str = None):
+        """Show LeGeND Family Donations LeaderBoard"""
+        number = 10
+        if number > 100:
+            await self.bot.say("Sorry! the number must be below 100.")
+            return
+        
+        if role not in ["leader","coleader","elder", None]:
+            await self.bot.say("Invalid role!")
+            return
+        if role != None:
+            filterroles = True
+            await self.bot.say("**LeGeND Family Donations LeaderBoard**" + " (" + role + "s)")
+        else:
+            await self.bot.say("**LeGeND Family Donations LeaderBoard**")
+        await self.bot.type()
+        try:
+            allplayers = requests.get('http://cr-api.com/clan/family/legend/members/datatable', timeout=15).json()
+        except:
+            await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
+            return
+        players = dict(allplayers)
+        players['data'] = sorted(allplayers['data'], key=lambda x: x['family_rank_donations'])
+        
+        if role == None:
+            message = "```\n"
+            for x in range(0, number):
+                clantag = players['data'][x]['clan_tag']
+                for i in self.c:
+                    if clantag == self.c[i]['tag']:
+                        clanname = self.c[i]['nickname']
+                message += (str(x + 1) + ".").ljust(4) + (" [" + str(players['data'][x]['donations']) + "]  ").ljust(9) + players['data'][x]['name'] + " (" + clanname + ") " + "\n"
+                if (x+1) % 40 == 0:
+                    message += "```"
+                    await self.bot.say(message)
+                    message = "```\n"
+            message += "```"
+        else:
+            message = "```\n"
+            amount = 0
+            for x in range(0, len(players['data'])):
+                clanrole = players['data'][x]['role_name'].replace("-", "").lower()
+                clantag = players['data'][x]['clan_tag']
+                for i in self.c:
+                    if clantag == self.c[i]['tag']:
+                        clanname = self.c[i]['nickname']
+                            
+                if role == clanrole:
+                    message += (str(amount + 1) + ".").ljust(4) + (" [" + str(players['data'][x]['donations']) + "]  ").ljust(9) + players['data'][x]['name'] + " (" + clanname + ") " +  "\n"
+                    amount += 1
+                    if amount == number:
+                        break
+                    if (amount+1) % 40 == 0:
+                        message += "```"
+                        await self.bot.say(message)
+                        message = "```\n"
+            message += "```"  
+        await self.bot.say(message)
 
-        message += "```"
+    @topmembers.command(name="crowns")
+    async def topmembers_crowns(self, role : str = None):
+        """Show LeGeND Family Clan Chest Crowns LeaderBoard"""
+        number = 10
+        if number > 100:
+            await self.bot.say("Sorry! the number must be below 100.")
+            return
+        
+        if role not in ["leader","coleader","elder", None]:
+            await self.bot.say("Invalid role!")
+            return
+        if role != None:
+            filterroles = True
+            await self.bot.say("**LeGeND Family Clan Chest Crowns LeaderBoard**" + " (" + role + "s)")
+        else:
+            await self.bot.say("**LeGeND Family Clan Chest Crowns LeaderBoard**")
+        await self.bot.type()
+        try:
+            allplayers = requests.get('http://cr-api.com/clan/family/legend/members/datatable', timeout=15).json()
+        except:
+            await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
+            return
+        players = dict(allplayers)
+        players['data'] = sorted(allplayers['data'], key=lambda x: x['family_rank_crowns'])
 
+        if role == None:
+            message = "```\n"
+            for x in range(0, number):
+                clantag = players['data'][x]['clan_tag']
+                for i in self.c:
+                    if clantag == self.c[i]['tag']:
+                        clanname = self.c[i]['nickname']
+                message += (str(x + 1) + ".").ljust(4) + (" [" + str(players['data'][x]['clan_chest_crowns']) + "]  ").ljust(8) + players['data'][x]['name'] + " (" + clanname + ") " + "\n"
+                if (x+1) % 40 == 0:
+                    message += "```"
+                    await self.bot.say(message)
+                    message = "```\n"
+            message += "```"  
+        else:
+            message = "```\n"
+            amount = 0
+            for x in range(0, len(players['data'])):
+                clanrole = players['data'][x]['role_name'].replace("-", "").lower()
+                clantag = players['data'][x]['clan_tag']
+                for i in self.c:
+                    if clantag == self.c[i]['tag']:
+                        clanname = self.c[i]['nickname']          
+                if role == clanrole:
+                    message += (str(amount + 1) + ".").ljust(4) + (" [" + str(players['data'][x]['clan_chest_crowns']) + "]  ").ljust(8) + players['data'][x]['name'] + " (" + clanname + ") " +  "\n"
+                    amount += 1
+                    if amount == number:
+                        break
+                    if (amount+1) % 40 == 0:
+                        message += "```"
+                        await self.bot.say(message)
+                        message = "```\n"
+            message += "```" 
         await self.bot.say(message)
         
     @commands.command()
