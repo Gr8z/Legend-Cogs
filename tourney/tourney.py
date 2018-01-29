@@ -202,7 +202,9 @@ class tournament:
 		}
 
 		# try:
-		tourneydata = requests.get('http://statsroyale.com/tournaments?appjson=1', timeout=10, headers=headers, proxies=proxies).json()
+		tourneydata = requests.get('http://statsroyale.com/tournaments?appjson=1', timeout=10, headers=headers, proxies=proxies)
+		print(tourneydata)
+		tourneydata = tourneydata.json()
 		# except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
 			# await self.bot.say("Error: Cannot reach Clash Royale Servers. Please try again later.")
 			# return
