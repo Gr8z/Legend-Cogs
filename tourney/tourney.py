@@ -203,14 +203,14 @@ class tournament:
 		try:
 			tourneydata = await self._fetchTourney()
 		except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
-			await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
+			await self.bot.say("Error: Cannot reach Clash Royale Servers. Please try again later.")
 			return
 		except requests.exceptions.RequestException as e:
 			await self.bot.say(e)
 			return
 			
 		if not tourneydata:
-			await self.bot.say("Error, cog hasn't fully loaded yet. Please wait a bit then try again")
+			await self.bot.say("Error: Cog hasn't fully loaded yet. Please wait a bit then try again")
 			return None
 
 		numTourney = list(range(len(tourneydata['tournaments'])))
