@@ -249,7 +249,18 @@ class legend:
         
         self.save_data()
         await self.bot.say("Success")
+		
+	@clans.command(pass_context=True, name="family")
+    @checks.mod_or_permissions(administrator=True)
+    async def clans_family(self, ctx, url, *FamilyName):
+        """Add Clan Family name and link"""
+        
+        self.settings['url'] = url
+        self.settings['family'] = " ".join(FamilyName)
 
+        self.save_settings()
+        await self.bot.say("Success")
+		
     async def _is_commander(self, member):
         server = member.server
         botcommander_roles = [discord.utils.get(server.roles, name=r) for r in BOTCOMMANDER_ROLES]
@@ -312,7 +323,11 @@ class legend:
         clans = sorted(clans, key=lambda clanned: (clanned['requiredScore'], clanned['score']), reverse=True)
        
         embed=discord.Embed(color=0xFAA61A)
-        embed.set_author(name="LeGeND Family Clans", url="http://cr-api.com/clan/family/legend", icon_url="https://i.imgur.com/dtSMITE.jpg")
+		if "url" in self.settings and "family" in self.settings:
+            embed.set_author(name=self.settings['family'], url=self.settings['url'], icon_url="https://i.imgur.com/dtSMITE.jpg")
+        else:
+            embed.set_author(name="LeGeND Family Clans", url="http://cr-api.com/clan/family/legend", icon_url="https://i.imgur.com/dtSMITE.jpg")
+
         embed.set_footer(text=credits, icon_url=creditIcon)
 
         foundClan = False
