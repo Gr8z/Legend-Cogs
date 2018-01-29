@@ -1038,7 +1038,7 @@ class legend:
         
         message = "```py\n"
         for x in range(0, number):
-            message += str(x + 1).ljust(4) + ".  [" + str(players['data'][x]['score']) + "]  " + players['data'][x]['name'] + " (" + players['data'][x]['clan_name'] + ") " + "\n"
+            message += (str(x + 1) + ".").ljust(4) + " [" + str(players['data'][x]['score']) + "]  " + players['data'][x]['name'] + " (" + players['data'][x]['clan_name'] + ") " + "\n"
             if (x+1) % 40 == 0:
                 message += "```"
                 await self.bot.say(message)
