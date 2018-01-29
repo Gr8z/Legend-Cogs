@@ -115,7 +115,7 @@ class tournament:
 	async def getTopTourneyNew(self):
 
 		try:
-			tourneydata = await self._fetchTourney()
+			tourneydata = await _fetchTourney()
 		except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
 			return None
 		except requests.exceptions.RequestException as e:
@@ -201,7 +201,7 @@ class tournament:
 		    return
 
 		try:
-			tourneydata = await self._fetchTourney()
+			tourneydata = await _fetchTourney()
 		except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
 			await self.bot.say("Error: Cannot reach Clash Royale Servers. Please try again later.")
 			return
