@@ -91,25 +91,29 @@ class tournament:
 	
 	async def _fetchTourney(self):
 		tourney = {}
-
-		ua = UserAgent()
-		headers = {
-		    "User-Agent": ua.random
-		}
 		
-		aProxy = await self._get_proxy()
-		if not aProxy: return None
+		for i in range(100):
+			ua = UserAgent()
+			headers = {
+				"User-Agent": ua.random
+			}
+			
+			aProxy = await self._get_proxy()
+			if not aProxy: return None
+			
+			proxies = {
+				'http': aProxy
+			}
+			
+			tourneydata={}
+			try:
+				tourneydata = requests.get('http://statsroyale.com/tournaments?appjson=1', timeout=5, headers=headers, proxies=proxies).json()
+			except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
+				continue
+			else:
+				return tourneydata
 		
-		proxies = {
-	    	'http': aProxy
-		}
-		
-		tourneydata={}
-
-		tourneydata = requests.get('http://statsroyale.com/tournaments?appjson=1', timeout=5, headers=headers, proxies=proxies).json()
-		
-		
-		return tourneydata
+		return None
 		
 	# Returns a list with tournaments
 	async def getTopTourneyNew(self):
