@@ -201,14 +201,14 @@ class tournament:
 	    	'http': aProxy
 		}
 
-		try:
-			tourneydata = requests.get('http://statsroyale.com/tournaments?appjson=1', timeout=10, headers=headers, proxies=proxies).json()
-		except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
-			await self.bot.say("Error: Cannot reach Clash Royale Servers. Please try again later.")
-			return
-		except requests.exceptions.RequestException as e:
-			await self.bot.say(e)
-			return
+		# try:
+		tourneydata = requests.get('http://statsroyale.com/tournaments?appjson=1', timeout=10, headers=headers, proxies=proxies).json()
+		# except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
+			# await self.bot.say("Error: Cannot reach Clash Royale Servers. Please try again later.")
+			# return
+		# except requests.exceptions.RequestException as e:
+			# await self.bot.say(e)
+			# return
 			
 		if not tourneydata:
 			await self.bot.say("Error: Cog hasn't fully loaded yet. Please wait a bit then try again")
