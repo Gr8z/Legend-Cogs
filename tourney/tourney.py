@@ -88,8 +88,10 @@ class tournament:
 			return True
 		else:
 			return False
-	
-	async def _fetchTourney(self):
+
+	# Returns a list with tournaments
+	async def getTopTourneyNew(self):
+
 		tourney = {}
 
 		ua = UserAgent()
@@ -103,25 +105,12 @@ class tournament:
 		proxies = {
 	    	'http': aProxy
 		}
-		
-		tourneydata={}
-
-		tourneydata = requests.get('http://statsroyale.com/tournaments?appjson=1', timeout=5, headers=headers, proxies=proxies).json()
-		
-		
-		return tourneydata
-		
-	# Returns a list with tournaments
-	async def getTopTourneyNew(self):
 
 		try:
-			tourneydata = await _fetchTourney()
+			tourneydata = requests.get('http://statsroyale.com/tournaments?appjson=1', timeout=5, headers=headers, proxies=proxies).json()
 		except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
 			return None
 		except requests.exceptions.RequestException as e:
-			return None
-
-		if not tourneydata:
 			return None
 
 		numTourney = len(tourneydata['tournaments'])
@@ -187,7 +176,7 @@ class tournament:
 				await asyncio.sleep(900)
 			await asyncio.sleep(120)
 
-	@commands.command(pass_context=True, no_pm=True)
+	@commands.group(pass_context=True, no_pm=True)
 	async def tourney(self, ctx):
 		"""Check an open tournament in clash royale instantly"""
 
@@ -199,9 +188,21 @@ class tournament:
 		if not allowed:
 		    await self.bot.say("Error, this command is only available for Legend Members and Guests.")
 		    return
+		aProxy = await self._get_proxy()
+		if not aProxy:
+			await self.bot.say("Error, cog hasn't fully loaded yet. Please wait a bit then try again")
+			return
+		
+		ua = UserAgent()
+		headers = {
+		    "User-Agent": ua.random
+		}
+		proxies = {
+	    	'http': aProxy
+		}
 
 		try:
-			tourneydata = await _fetchTourney()
+			tourneydata = requests.get('http://statsroyale.com/tournaments?appjson=1', timeout=10, headers=headers, proxies=proxies).json()
 		except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
 			await self.bot.say("Error: Cannot reach Clash Royale Servers. Please try again later.")
 			return
@@ -242,12 +243,9 @@ class tournament:
 				await self.bot.say(embed=embed)
 				return
 
-	@commands.command(pass_context=True, no_pm=True)
+	@tourney.command(pass_context=True, no_pm=True)
 	@checks.admin_or_permissions(administrator=True)
-	async def tourneychannel(self, ctx, channel: discord.Channel=None):
-		"""Choose the channel for posting top tournaments
-		Pass no channel to disable"""
-		
+	async def channel(self, ctx, channel: discord.Channel=None):
 		serverid = ctx.message.server.id
 		if not channel:
 			self.settings[serverid] = None
