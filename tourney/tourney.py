@@ -98,7 +98,7 @@ class tournament:
 				"User-Agent": ua.random
 			}
 			
-			aProxy = await self._get_proxy()
+			aProxy = self._get_proxy()
 			if not aProxy: return None
 			
 			proxies = {
@@ -120,7 +120,7 @@ class tournament:
 	async def getTopTourneyNew(self):
 
 		try:
-			tourneydata = await _fetchTourney()
+			tourneydata = await self._fetchTourney()
 		except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
 			return None
 		except requests.exceptions.RequestException as e:
@@ -206,7 +206,7 @@ class tournament:
 		    return
 
 		try:
-			tourneydata = await _fetchTourney()
+			tourneydata = await self._fetchTourney()
 		except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
 			await self.bot.say("Error: Cannot reach Clash Royale Servers. Please try again later.")
 			return
@@ -263,7 +263,7 @@ class tournament:
 		self.save_data()
 		
 	
-	async def _get_proxy(self):
+	def _get_proxy(self):
 		"""Grab and pop the oldest proxy"""
 		if not self.proxylist: return None
 		proxy = self.proxylist.popleft()
@@ -273,7 +273,7 @@ class tournament:
 		
 		return proxystr
 	
-	async def _add_proxy(self, proxy):
+	def _add_proxy(self, proxy):
 		"""If a proxy worked, reward it by adding it back to the deque"""
 		self.proxylist.append(proxy)
 		
