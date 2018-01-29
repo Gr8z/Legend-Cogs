@@ -88,10 +88,8 @@ class tournament:
 			return True
 		else:
 			return False
-
-	# Returns a list with tournaments
-	async def getTopTourneyNew(self):
-
+	
+	async def _fetchTourney(self):
 		tourney = {}
 
 		ua = UserAgent()
@@ -105,12 +103,25 @@ class tournament:
 		proxies = {
 	    	'http': aProxy
 		}
+		
+		tourneydata={}
+
+		tourneydata = requests.get('http://statsroyale.com/tournaments?appjson=1', timeout=5, headers=headers, proxies=proxies).json()
+		
+		
+		return tourneydata
+		
+	# Returns a list with tournaments
+	async def getTopTourneyNew(self):
 
 		try:
-			tourneydata = requests.get('http://statsroyale.com/tournaments?appjson=1', timeout=5, headers=headers, proxies=proxies).json()
+			tourneydata = await _fetchTourney()
 		except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
 			return None
 		except requests.exceptions.RequestException as e:
+			return None
+
+		if not tourneydata:
 			return None
 
 		numTourney = len(tourneydata['tournaments'])
@@ -176,7 +187,7 @@ class tournament:
 				await asyncio.sleep(900)
 			await asyncio.sleep(120)
 
-	@commands.group(pass_context=True, no_pm=True)
+	@commands.command(pass_context=True, no_pm=True)
 	async def tourney(self, ctx):
 		"""Check an open tournament in clash royale instantly"""
 
@@ -188,27 +199,19 @@ class tournament:
 		if not allowed:
 		    await self.bot.say("Error, this command is only available for Legend Members and Guests.")
 		    return
-		aProxy = await self._get_proxy()
-		if not aProxy:
-			await self.bot.say("Error, cog hasn't fully loaded yet. Please wait a bit then try again")
-			return
-		
-		ua = UserAgent()
-		headers = {
-		    "User-Agent": ua.random
-		}
-		proxies = {
-	    	'http': aProxy
-		}
 
 		try:
-			tourneydata = requests.get('http://statsroyale.com/tournaments?appjson=1', timeout=10, headers=headers, proxies=proxies).json()
+			tourneydata = await _fetchTourney()
 		except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
 			await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 			return
 		except requests.exceptions.RequestException as e:
 			await self.bot.say(e)
 			return
+			
+		if not tourneydata:
+			await self.bot.say("Error, cog hasn't fully loaded yet. Please wait a bit then try again")
+			return None
 
 		numTourney = list(range(len(tourneydata['tournaments'])))
 		random.shuffle(numTourney)
@@ -239,9 +242,12 @@ class tournament:
 				await self.bot.say(embed=embed)
 				return
 
-	@tourney.command(pass_context=True, no_pm=True)
+	@commands.command(pass_context=True, no_pm=True)
 	@checks.admin_or_permissions(administrator=True)
-	async def channel(self, ctx, channel: discord.Channel=None):
+	async def tourneychannel(self, ctx, channel: discord.Channel=None):
+		"""Choose the channel for posting top tournaments
+		Pass no channel to disable"""
+		
 		serverid = ctx.message.server.id
 		if not channel:
 			self.settings[serverid] = None
