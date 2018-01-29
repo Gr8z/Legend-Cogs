@@ -1043,8 +1043,11 @@ class legend:
         if number > 100:
             await self.bot.say("Sorry! the number must be below 100.")
             return
-
-        await self.bot.say("**LeGeND Family Top Players**")
+        
+        if "family" in self.settings:
+            await self.bot.say("**{} Top Players**".format(self.settings['family']))
+        else:
+            await self.bot.say("**LeGeND Family Top Players**")
         await self.bot.type()
         
         if "url" in self.settings:
