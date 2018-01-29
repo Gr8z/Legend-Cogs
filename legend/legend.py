@@ -458,7 +458,7 @@ class legend:
                 await asyncio.sleep(120)
 
                 message = ctx.message
-                message.content = ctx.prefix + "approve {} {}".format(member, clankey)
+                message.content = ctx.prefix + "approve {} {}".format(member.mention, clankey)
                 await self.bot.process_commands(message)
                 return
 
@@ -658,7 +658,7 @@ class legend:
             await self.bot.say("Okay, I will retry this command in 2 minutes.")
             await asyncio.sleep(120)
             message = ctx.message
-            message.content = ctx.prefix + "newmember {}".format(member)
+            message.content = ctx.prefix + "newmember {}".format(member.mention)
             await self.bot.process_commands(message)
 
     @commands.command(pass_context=True, no_pm=True)
