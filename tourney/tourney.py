@@ -66,7 +66,7 @@ class tournament:
 		self.auth = dataIO.load_json('cogs/auth.json')
 		self.queue = asyncio.Queue()
 		self.broker = Broker(self.queue)
-		self.proxylist = deque(proxies_list,25)
+		self.proxylist = deque(proxies_list,40)
 		self.lastTag = '0'
 		
 	def __unload(self):
