@@ -281,7 +281,7 @@ class tournament:
 		types = ['HTTP']
 		countries = ['US', 'DE', 'FR']
 	
-		await self.broker.find(types=types, limit=20)
+		await self.broker.find(types=types, limit=25)
 		await asyncio.sleep(120)
 	
 	async def _brokerResult(self):
