@@ -111,6 +111,7 @@ class tournament:
 			except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
 				continue
 			else:
+				self._add_proxy(aProxy) #Reward working proxies by reusing them
 				return tourneydata
 		
 		return None
@@ -263,13 +264,18 @@ class tournament:
 		
 	
 	async def _get_proxy(self):
+		"""Grab and pop the oldest proxy"""
 		if not self.proxylist: return None
-		proxy = self.proxylist.popleft() #Grab and pop oldest found proxy
+		proxy = self.proxylist.popleft()
 		host = proxy.host
 		port = proxy.port
 		proxystr = '{}:{}'.format(host, port)
 		
 		return proxystr
+	
+	async def _add_proxy(self, proxy):
+		"""If a proxy worked, reward it by adding it back to the deque"""
+		self.proxylist.append(proxy)
 		
 	async def _proxyBroker(self):
 		types = ['HTTP']
