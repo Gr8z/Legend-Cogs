@@ -260,7 +260,7 @@ class tournament:
 	
 	async def _get_proxy(self):
 		if not self.proxylist: return None
-		proxy = random.choice(self.proxylist)
+		proxy = self.proxylist.popleft() #Grab and pop oldest found proxy
 		host = proxy.host
 		port = proxy.port
 		proxystr = '{}:{}'.format(host, port)
@@ -271,7 +271,7 @@ class tournament:
 		types = ['HTTP']
 		countries = ['US', 'DE', 'FR']
 	
-		await self.broker.find(types=types, limit=50)
+		await self.broker.find(types=types, limit=25)
 		await asyncio.sleep(120)
 	
 	async def _brokerResult(self):
