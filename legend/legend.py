@@ -124,6 +124,7 @@ class legend:
         self.bot = bot
         self.clash = dataIO.load_json('cogs/tags.json')
         self.c = dataIO.load_json('cogs/clans.json')
+        self.settings = dataIO.load_json('data/legend/settings.json')
         self.auth = dataIO.load_json('cogs/auth.json')
         self.welcome = dataIO.load_json('data/legend/welcome.json')
         self.bank = dataIO.load_json('data/economy/bank.json')
@@ -134,6 +135,10 @@ class legend:
     def save_data(self):
         """Saves the json"""
         dataIO.save_json('cogs/clans.json', self.c)
+        
+    def save_settings(self):
+        """Saves the json"""
+        dataIO.save_json('data/legend/settings.json', self.settings)
         
     async def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
        return ''.join(random.choice(chars) for _ in range(size))
@@ -260,7 +265,7 @@ class legend:
 
         self.save_settings()
         await self.bot.say("Success")
-        
+
     async def _is_commander(self, member):
         server = member.server
         botcommander_roles = [discord.utils.get(server.roles, name=r) for r in BOTCOMMANDER_ROLES]
@@ -1486,6 +1491,11 @@ def check_files():
     f = "cogs/auth.json"
     if not fileIO(f, "check"):
         print("Creating empty auth.json...")
+        dataIO.save_json(f, {})
+        
+    f = "data/legend/settings.json"
+    if not fileIO(f, "check"):
+        print("Creating empty settings.json...")
         dataIO.save_json(f, {})
         
 def check_clans():
