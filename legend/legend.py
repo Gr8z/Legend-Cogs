@@ -249,7 +249,18 @@ class legend:
         
         self.save_data()
         await self.bot.say("Success")
+        
+    @clans.command(pass_context=True, name="family")
+    @checks.mod_or_permissions(administrator=True)
+    async def clans_family(self, ctx, url, *FamilyName):
+        """Add Clan Family name and link"""
+        
+        self.settings['url'] = url
+        self.settings['family'] = " ".join(FamilyName)
 
+        self.save_settings()
+        await self.bot.say("Success")
+        
     async def _is_commander(self, member):
         server = member.server
         botcommander_roles = [discord.utils.get(server.roles, name=r) for r in BOTCOMMANDER_ROLES]
@@ -312,7 +323,11 @@ class legend:
         clans = sorted(clans, key=lambda clanned: (clanned['requiredScore'], clanned['score']), reverse=True)
        
         embed=discord.Embed(color=0xFAA61A)
-        embed.set_author(name="LeGeND Family Clans", url="http://cr-api.com/clan/family/legend", icon_url="https://i.imgur.com/dtSMITE.jpg")
+        if "url" in self.settings and "family" in self.settings:
+            embed.set_author(name=self.settings['family'], url=self.settings['url'], icon_url="https://i.imgur.com/dtSMITE.jpg")
+        else:
+            embed.set_author(name="LeGeND Family Clans", url="http://cr-api.com/clan/family/legend", icon_url="https://i.imgur.com/dtSMITE.jpg")
+
         embed.set_footer(text=credits, icon_url=creditIcon)
 
         foundClan = False
@@ -1029,26 +1044,37 @@ class legend:
     
     @topmembers.command(name="trophies")
     async def topmembers_trophies(self, role : str = None):
-        """Show LeGeND Family Ladder LeaderBoard"""
+        """Show Family Ladder LeaderBoard"""
         number = 10
         if number > 100:
             await self.bot.say("Sorry! the number must be below 100.")
             return
         
+
+        if "family" in self.settings:
+            familyname = self.settings['family']
+        else:
+            familyname = "LeGeND Family"
+
         if role not in ["leader","coleader","elder", None]:
             await self.bot.say("Invalid role!")
             return
         if role != None:
             filterroles = True
-            await self.bot.say("**LeGeND Family Ladder LeaderBoard**" + " (" + role + "s)")
+            await self.bot.say("**{0} Ladder LeaderBoard** ({1}s)".format(familyname, role))
         else:
-            await self.bot.say("**LeGeND Family Ladder LeaderBoard**")
+            await self.bot.say("**{} Ladder LeaderBoard**".format(familyname))
         await self.bot.type()
         try:
-            allplayers = requests.get('http://cr-api.com/clan/family/legend/members/datatable', timeout=15).json()
+            if "url" in self.settings:
+                familyurl = '{}/members/datatable'.format(self.settings['url'])
+                allplayers = requests.get(familyurl, timeout=15).json()
+            else:
+                allplayers = requests.get('http://cr-api.com/clan/family/legend/members/datatable', timeout=15).json()
         except:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
+
         players = dict(allplayers)
         players['data'] = sorted(allplayers['data'], key=lambda x: x['family_rank_score'])
         
@@ -1090,23 +1116,32 @@ class legend:
         
     @topmembers.command(name="donations")
     async def topmembers_donations(self, role : str = None):
-        """Show LeGeND Family Donations LeaderBoard"""
+        """Show Family Donations LeaderBoard"""
         number = 10
         if number > 100:
             await self.bot.say("Sorry! the number must be below 100.")
             return
         
+        if "family" in self.settings:
+            familyname = self.settings['family']
+        else:
+            familyname = "LeGeND Family"
+
         if role not in ["leader","coleader","elder", None]:
             await self.bot.say("Invalid role!")
             return
         if role != None:
             filterroles = True
-            await self.bot.say("**LeGeND Family Donations LeaderBoard**" + " (" + role + "s)")
+            await self.bot.say("**{0} Donations LeaderBoard** ({1}s)".format(familyname, role))
         else:
-            await self.bot.say("**LeGeND Family Donations LeaderBoard**")
+            await self.bot.say("**{0} Donations LeaderBoard**".format(familyname))
         await self.bot.type()
         try:
-            allplayers = requests.get('http://cr-api.com/clan/family/legend/members/datatable', timeout=15).json()
+            if "url" in self.settings:
+                familyurl = '{}/members/datatable'.format(self.settings['url'])
+                allplayers = requests.get(familyurl, timeout=15).json()
+            else:
+                allplayers = requests.get('http://cr-api.com/clan/family/legend/members/datatable', timeout=15).json()
         except:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
@@ -1150,7 +1185,7 @@ class legend:
 
     @topmembers.command(name="crowns")
     async def topmembers_crowns(self, role : str = None):
-        """Show LeGeND Family Clan Chest Crowns LeaderBoard"""
+        """Show Family Clan Chest Crowns LeaderBoard"""
         number = 10
         if number > 100:
             await self.bot.say("Sorry! the number must be below 100.")
@@ -1159,14 +1194,24 @@ class legend:
         if role not in ["leader","coleader","elder", None]:
             await self.bot.say("Invalid role!")
             return
+        
+        if "family" in self.settings:
+            familyname = self.settings['family']
+        else:
+            familyname = "LeGeND Family"
+           
         if role != None:
             filterroles = True
-            await self.bot.say("**LeGeND Family Clan Chest Crowns LeaderBoard**" + " (" + role + "s)")
+            await self.bot.say("**{0} Clan Chest Crowns LeaderBoard** ({1}s)".format(familyname,role))
         else:
-            await self.bot.say("**LeGeND Family Clan Chest Crowns LeaderBoard**")
+            await self.bot.say("**{0} Clan Chest Crowns LeaderBoard**".format(familyname))
         await self.bot.type()
         try:
-            allplayers = requests.get('http://cr-api.com/clan/family/legend/members/datatable', timeout=15).json()
+            if "url" in self.settings:
+                familyurl = '{}/members/datatable'.format(self.settings['url'])
+                allplayers = requests.get(familyurl, timeout=15).json()
+            else:
+                allplayers = requests.get('http://cr-api.com/clan/family/legend/members/datatable', timeout=15).json()
         except:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
