@@ -304,7 +304,7 @@ class legend:
                 maxtrophies = profiledata['stats']['maxTrophies']
                 ign = profiledata['name']
                 maxmembers = 50
-                await self.bot.say("Hello {}, these are all the clans you are allowed to join, based on your statistics. \nYour Trophies: {}\nYour Personal Best: {}".format(ign, str(trophies), str(maxtrophies)))
+                await self.bot.say("Hello **{}**, these are all the clans you are allowed to join, based on your statistics. \nYour Trophies: {}\nYour Personal Best: {}".format(ign, str(trophies), str(maxtrophies)))
             except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
                 await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
                 return
