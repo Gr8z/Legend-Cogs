@@ -278,23 +278,25 @@ class tournament:
 		self.proxylist.append(proxy)
 		
 	async def _proxyBroker(self):
-		types = ['HTTP']
-		countries = ['US', 'DE', 'FR']
-	
-		await self.broker.find(types=types, limit=25)
-		await asyncio.sleep(120)
+        while self is self.bot.get_cog("tournament"):
+            types = ['HTTP']
+            countries = ['US', 'DE', 'FR']
+        
+            await self.broker.find(types=types, limit=25)
+            await asyncio.sleep(120)
 	
 	async def _brokerResult(self):
-		anyfound = False
-		await self.bot.send_message(discord.Object(id="363728974821457923"), "Waiting on results from Proxy-Broker")
-		while True:
-			proxy = await self.queue.get()
-			if proxy is None: break
-			self.proxylist.append(proxy)
-			if not anyfound:
-				await self.bot.send_message(discord.Object(id="363728974821457923"), "Proxies are being found: {}".format(proxy))
-				anyfound = True
-		await asyncio.sleep(100)
+        while self is self.bot.get_cog("tournament"):
+            anyfound = False
+            await self.bot.send_message(discord.Object(id="363728974821457923"), "Waiting on results from Proxy-Broker")
+            while True:
+                proxy = await self.queue.get()
+                if proxy is None: break
+                self.proxylist.append(proxy)
+                if not anyfound:
+                    await self.bot.send_message(discord.Object(id="363728974821457923"), "Proxies are being found: {}".format(proxy))
+                    anyfound = True
+            await asyncio.sleep(100)
 		
 		
 
