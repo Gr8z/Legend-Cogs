@@ -241,7 +241,7 @@ class clashroyale:
 
 			if tourneydata['status'] != "ended":
 
-				if tourneydata['status'] != "Inprogress":
+				if tourneydata['status'] != "inProgress":
 					startTime = self.sec2tme((tourneydata['createTime'] + tourneydata['preparationDuration']) - int(time.time()))
 					embed.add_field(name="Starts In", value=startTime, inline=True)
 
