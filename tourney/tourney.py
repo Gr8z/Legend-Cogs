@@ -16,18 +16,18 @@ from collections import deque
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
 
-proxies_list = []
-	# Proxy(host="94.249.160.49", port=6998),
-	# Proxy(host="93.127.128.41", port=7341),
-	# Proxy(host="107.175.43.100", port=6858),
-	# Proxy(host="64.44.18.31", port=3691),
-	# Proxy(host="172.82.173.100", port=5218),
-	# Proxy(host="172.82.177.111", port=3432),
-	# Proxy(host="45.43.219.185", port=2461),
-	# Proxy(host="45.43.218.82", port=3577),
-	# Proxy(host="195.162.4.111", port=4762),
-	# Proxy(host="173.211.31.3", port=8053)
-# ]
+proxies_list = [
+	Proxy(host="94.249.160.49", port=6998),
+	Proxy(host="93.127.128.41", port=7341),
+	Proxy(host="107.175.43.100", port=6858),
+	Proxy(host="64.44.18.31", port=3691),
+	Proxy(host="172.82.173.100", port=5218),
+	Proxy(host="172.82.177.111", port=3432),
+	Proxy(host="45.43.219.185", port=2461),
+	Proxy(host="45.43.218.82", port=3577),
+	Proxy(host="195.162.4.111", port=4762),
+	Proxy(host="173.211.31.3", port=8053)
+]
 
 # Converts maxPlayers to Cards
 def getCards(maxPlayers):
