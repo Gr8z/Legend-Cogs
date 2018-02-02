@@ -242,7 +242,8 @@ class tournament:
 			cards = getCards(maxPlayers)
 			coins = getCoins(maxPlayers)
 
-			if not full and timeLeft > 600 and maxPlayers>=minPlayers:
+			if not full and timeLeft > 600 and maxPlayers>=minPlayers and hashtag != self.lastTag:
+				self.lastTag = hashtag
 				embed=discord.Embed(title="Open Tournament", description="Here is a good one I found. You can search again if this is not what you are looking for.", color=0x00FFFF)
 				embed.set_thumbnail(url='https://statsroyale.com/images/tournament.png')
 				embed.add_field(name="Title", value=title, inline=True)
