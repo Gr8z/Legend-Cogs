@@ -487,7 +487,7 @@ class legend:
 
                     canWait = (50 - clandata['memberCount']) -1
 
-                    if self.c[clankey]['waiting'].index(member.id) >= canWait:
+                    if self.c[clankey]['waiting'].index(member.id) > canWait:
                         await self.bot.say("Approval failed, you are not first in queue for the waiting list on this server.")
                         return
                     
