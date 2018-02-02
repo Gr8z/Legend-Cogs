@@ -487,11 +487,9 @@ class legend:
 
                     canWait = (50 - clandata['memberCount']) -1
 
-                    for x in range(0, len(self.c[clankey]['waiting'])):
-                        if member.id != self.c[clankey]['waiting'][x]:
-                            if x >= canWait:
-                                await self.bot.say("Approval failed, you are not first in queue for the waiting list on this server.")
-                                return
+                    if self.c[clankey]['waiting'].index(member.id) >= canWait:
+                        await self.bot.say("Approval failed, you are not first in queue for the waiting list on this server.")
+                        return
                     
                     self.c[clankey]['waiting'].remove(member.id)
                     dataIO.save_json('cogs/clans.json', self.c)
