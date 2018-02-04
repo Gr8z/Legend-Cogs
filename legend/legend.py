@@ -1053,6 +1053,7 @@ class legend:
             await self.bot.say("Sorry! the number must be below 100.")
             return
         
+        role = role.strip('s')
 
         if "family" in self.settings:
             familyname = self.settings['family']
@@ -1124,7 +1125,9 @@ class legend:
         if number > 100:
             await self.bot.say("Sorry! the number must be below 100.")
             return
-        
+
+        role = role.strip('s')
+
         if "family" in self.settings:
             familyname = self.settings['family']
         else:
@@ -1194,6 +1197,8 @@ class legend:
             await self.bot.say("Sorry! the number must be below 100.")
             return
         
+        role = role.strip('s')
+
         if role not in ["leader","coleader","elder", "member", None]:
             await self.bot.say("Invalid role!")
             return
