@@ -42,16 +42,6 @@ class shop:
             await self.bot.remove_roles(member, *roles)
         except:
             pass
-
-    async def _is_member(self, member):
-        server = member.server
-        botcommander_roles = [discord.utils.get(server.roles, name=r) for r in ["Member", "Family Representative", "Clan Manager", "Clan Deputy", "Co-Leader", "Hub Officer", "admin"]]
-        botcommander_roles = set(botcommander_roles)
-        author_roles = set(member.roles)
-        if len(author_roles.intersection(botcommander_roles)):
-            return True
-        else:
-            return False
             
     async def _is_rare(self, member):
         server = member.server
@@ -281,12 +271,6 @@ class shop:
             await self.bot.say("This command can only be executed in the LeGeND Family Server")
             return
 
-        allowed = await self._is_member(author)
-
-        if not allowed:
-            await self.bot.say("You cannot use the store, you must be a member of the family.")
-            return
-
         await self.bot.say("please contact @GR8#7968 or rakerran#7837 to purchase it for you.")
 
     @buy.command(pass_context=True, name="2")
@@ -299,12 +283,6 @@ class shop:
 
         if server.id not in legendServer:
             await self.bot.say("This command can only be executed in the LeGeND Family Server")
-            return
-
-        allowed = await self._is_member(author)
-
-        if not allowed:
-            await self.bot.say("You cannot use the store, you must be a member of the family.")
             return
 
         await self.bot.say("please contact @GR8#7968 or rakerran#7837 to purchase it for you.")
@@ -320,12 +298,6 @@ class shop:
             await self.bot.say("This command can only be executed in the LeGeND Family Server")
             return
 
-        allowed = await self._is_member(author)
-
-        if not allowed:
-            await self.bot.say("You cannot use the store, you must be a member of the family.")
-            return
-
         await self.bot.say("please contact @GR8#7968 or rakerran#7837 to purchase it for you.")
 
     @buy.command(pass_context=True, name="4")
@@ -337,12 +309,6 @@ class shop:
 
         if server.id not in legendServer:
             await self.bot.say("This command can only be executed in the LeGeND Family Server")
-            return
-
-        allowed = await self._is_member(author)
-
-        if not allowed:
-            await self.bot.say("You cannot use the store, you must be a member of the family.")
             return
 
         payday = await self._is_payday(author)
@@ -371,12 +337,6 @@ class shop:
             await self.bot.say("This command can only be executed in the LeGeND Family Server")
             return
 
-        allowed = await self._is_member(author)
-
-        if not allowed:
-            await self.bot.say("You cannot use the store, you must be a member of the family.")
-            return
-
         rare = await self._is_rare(author)
         epic = await self._is_epic(author)
         legendary = await self._is_legendary(author)
@@ -403,12 +363,6 @@ class shop:
 
         if server.id not in legendServer:
             await self.bot.say("This command can only be executed in the LeGeND Family Server")
-            return
-
-        allowed = await self._is_member(author)
-
-        if not allowed:
-            await self.bot.say("You cannot use the store, you must be a member of the family.")
             return
 
         rare = await self._is_rare(author)
@@ -446,12 +400,6 @@ class shop:
             await self.bot.say("This command can only be executed in the LeGeND Family Server")
             return
 
-        allowed = await self._is_member(author)
-
-        if not allowed:
-            await self.bot.say("You cannot use the store, you must be a member of the family.")
-            return
-
         rare = await self._is_rare(author)
         epic = await self._is_epic(author)
         legendary = await self._is_legendary(author)
@@ -485,12 +433,6 @@ class shop:
 
         if server.id not in legendServer:
             await self.bot.say("This command can only be executed in the LeGeND Family Server")
-            return
-
-        allowed = await self._is_member(author)
-
-        if not allowed:
-            await self.bot.say("You cannot use the store, you must be a member of the family.")
             return
 
         await self.bot.say("please contact @GR8#7968 or rakerran#7837 to purchase it for you.")
