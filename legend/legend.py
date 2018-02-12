@@ -843,7 +843,6 @@ class legend:
             await self.bot.say(embed=embed)
 
     @commands.command(pass_context=True, no_pm=True)
-    @checks.mod_or_permissions(manage_roles=True)   
     async def changenick(self, ctx, member: discord.Member = None):   
         """ Change nickname of a user of their IGN + Clan"""
 
@@ -851,6 +850,12 @@ class legend:
 
         if member is None:
             member = ctx.message.author
+
+        allowed = await self._is_commander(member)
+
+        if not allowed:
+            await self.bot.say("You dont have enough permissions to change your nickname.")
+            return
 
         try:
             await self.updateClash()
