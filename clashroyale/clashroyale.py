@@ -331,10 +331,9 @@ class clashroyale:
 			dataIO.save_json('cogs/tags.json', self.clash)
 
 			embed = discord.Embed(color=discord.Color.green())
-            avatar = member.avatar_url if member.avatar else member.default_avatar_url
-            embed.set_author(name='{} is now linked with **{} (#{})**'.format(member.display_name, profiledata['name'], profiletag), icon_url=avatar)
-            embed.set_footer(text=credits, icon_url=creditIcon)
-            await self.bot.say(embed=embed)
+			avatar = member.avatar_url if member.avatar else member.default_avatar_url
+			embed.set_author(name='{} (#{}) has been successfully saved.'.format(profiledata['name'], profiletag), icon_url=avatar)
+			await self.bot.say(embed=embed)
 		except:
 			await self.bot.say("We cannot find your ID in our database, please try again.")
 
