@@ -97,7 +97,7 @@ class clashroyale:
 			if profiledata['clan'] is not None:
 				embed.add_field(name="Clan", value=profiledata['clan']['name'], inline=True)
 				embed.add_field(name="Role", value=profiledata['clan']['role'].capitalize(), inline=True)
-			embed.add_field(name="Cards Found", value=str(profiledata['stats']['cardsFound'])+"/81", inline=True)
+			embed.add_field(name="Cards Found", value=str(profiledata['stats']['cardsFound'])+"/82", inline=True)
 			embed.add_field(name="Favourite Card", value=profiledata['stats']['favoriteCard']['name'], inline=True)
 			embed.add_field(name="Games Played", value=profiledata['games']['total'], inline=True)
 			embed.add_field(name="Tournament Games Played", value=profiledata['games']['tournamentGames'], inline=True)
