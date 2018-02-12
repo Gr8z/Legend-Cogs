@@ -330,7 +330,11 @@ class clashroyale:
 			self.clash.update({member.id: {'tag': profiletag}})
 			dataIO.save_json('cogs/tags.json', self.clash)
 
-			await self.bot.say('**' +profiledata['name'] + ' (#'+ profiletag + ')** has been successfully saved on ' + member.mention)
+			embed = discord.Embed(color=discord.Color.green())
+            avatar = member.avatar_url if member.avatar else member.default_avatar_url
+            embed.set_author(name='{} is now linked with **{} (#{})**'.format(member.display_name, profiledata['name'], profiletag), icon_url=avatar)
+            embed.set_footer(text=credits, icon_url=creditIcon)
+            await self.bot.say(embed=embed)
 		except:
 			await self.bot.say("We cannot find your ID in our database, please try again.")
 
