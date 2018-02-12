@@ -23,7 +23,8 @@ rules_text = """**Here are some Legend Family Discord server rules.**\n
 • No advertisement of any kind, e.g. clans, websites, discord invites.
 • Use #bot-spam for bot features, e.g. **!deck** or **!payday**
 • Respect and do not subvert moderators and managers.
-• A good rule is to talk to people as if you were talking to them face to face.\n
+• A good rule is to talk to people as if you were talking to them face to face.
+• There are more rules that vary from clan to clan. Ask your clan leader for the rules of your clan.\n
 **Violation of these roles will lead to punishment including temporary guest role reduced access, temporary kick from server, or permanent kick from server, depending on the severity and/or frequency of the offense**"""
 
 commands_text =  """Here are some of the Legend Family Bot commands, you can use them in the #bot-spam channel.\n
