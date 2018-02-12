@@ -17,12 +17,12 @@ credits = "Bot by GR8 | Titan"
 BOTCOMMANDER_ROLES =  ["Family Representative", "Clan Manager", "Clan Deputy", "Co-Leader", "Hub Officer", "admin"];
 
 rules_text = """**Here are some Legend Family Discord server rules.**\n
-• Be respectful of other members. Do not talk them down in any way.
-• Respect others' opinions. If you disagree, please do so in a constructive manner.
-• Do not spam, and avoid ever using @everyone or @here without permission from clan managers or deputies.
-• Be careful with sarcasm: sarcasm with no tone doesn't work via text.
+• Respect others' opinions. If you disagree, please do so in a constructive manner. 
+• This is an English only server, please use any other languages in a private message.
+• Do not spam, and avoid ever using @myclanname without permission from clan managers or deputies.
+• No advertisement of any kind, e.g. clans, websites, discord invites.
+• Use #bot-spam for bot features, e.g. **!deck** or **!payday**
 • Respect and do not subvert moderators and managers.
-• If you are transferring from one Legend Family clan to another, please contact your destination clan's clan leader first, and wait for the all clear from that clan leader.
 • A good rule is to talk to people as if you were talking to them face to face.\n
 **Violation of these roles will lead to punishment including temporary guest role reduced access, temporary kick from server, or permanent kick from server, depending on the severity and/or frequency of the offense**"""
 
