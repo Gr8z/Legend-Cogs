@@ -129,7 +129,7 @@ class clashroyale:
 			await self.bot.type()
 
 			try:
-				profiledata = requests.get('http://api.cr-api.com/player/{}?exclude=games,currentDeck,cards,battles,achievements'.format(profiletag), headers=self.getAuth(), timeout=10).json()
+				profiledata = requests.get('http://api.cr-api.com/player/{}?keys=chestCycle,name,tag,clan'.format(profiletag), headers=self.getAuth(), timeout=10).json()
 			except:
 				await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 				return
