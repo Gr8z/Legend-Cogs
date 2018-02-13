@@ -981,8 +981,7 @@ class legend:
                 if role not in dc_member.roles:
                     d_members_without_role.append(dc_member.display_name)
 
-                d_name = "{} | {}".format(cr_members_name[index], clan_nickname)
-                if dc_member.display_name != d_name:
+                if (cr_members_name[index] not in dc_member.display_name) or (clan_nickname not in dc_member.display_name):
                     d_members_without_name.append(dc_member.display_name)
             except AttributeError:
                 cr_members_with_no_player_tag.append(cr_members_name[index])
