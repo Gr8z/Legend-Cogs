@@ -1455,7 +1455,6 @@ class legend:
         
         for y in range(0, len(tourney['members'])):
 
-            tourney_tag = tourney['members'][y]['tag']
             tourney_score = tourney['members'][y]['score']
             tourney_clan = tourney['members'][y]['clan']['name']
 
