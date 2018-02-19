@@ -279,7 +279,7 @@ class legend:
 
     async def _is_member(self, member):
         server = member.server
-        botcommander_roles = [discord.utils.get(server.roles, name=r) for r in ["Member", "Co-Leader", "Hub Officer"]]
+        botcommander_roles = [discord.utils.get(server.roles, name=r) for r in ["Member", "Co-Leader", "Hub Officer", "Clan Deputy", "Clan Manager"]]
         botcommander_roles = set(botcommander_roles)
         author_roles = set(member.roles)
         if len(author_roles.intersection(botcommander_roles)):
