@@ -345,9 +345,9 @@ class shop:
             await self.bot.say("You already have a special role.")
             return
 
-        if self.bank_check(author, 100000):
+        if self.bank_check(author, 250000):
             bank = self.bot.get_cog('Economy').bank
-            pay = bank.get_balance(author) - 100000
+            pay = bank.get_balance(author) - 250000
             bank.set_credits(author, pay)
             await self._add_roles(author,["Rare™"])
             await self.bot.say("Congratulations, you are now a **Rare™**")
@@ -377,9 +377,9 @@ class shop:
             await self.bot.say("You already have a special role.")
             return
 
-        if self.bank_check(author, 250000):
+        if self.bank_check(author, 750000):
             bank = self.bot.get_cog('Economy').bank
-            pay = bank.get_balance(author) - 250000
+            pay = bank.get_balance(author) - 750000
             bank.set_credits(author, pay)
             await self._remove_roles(author,["Rare™"])
             await asyncio.sleep(3)
@@ -412,9 +412,9 @@ class shop:
             await self.bot.say("You are already have a special role.")
             return
 
-        if self.bank_check(author, 750000):
+        if self.bank_check(author, 1000000):
             bank = self.bot.get_cog('Economy').bank
-            pay = bank.get_balance(author) - 750000
+            pay = bank.get_balance(author) - 1000000
             bank.set_credits(author, pay)
             await self._remove_roles(author,["Epic™"])
             await asyncio.sleep(3)
@@ -422,20 +422,6 @@ class shop:
             await self.bot.say("Congratulations, you are now a **LeGeNDary™**")
         else:
             await self.bot.say("You do not have enough credits to buy this role.")
-
-    @buy.command(pass_context=True, name="8")
-    async def buy_8(self, ctx):
-
-
-        server = ctx.message.server
-        author = ctx.message.author
-        legendServer = ["374596069989810176"]
-
-        if server.id not in legendServer:
-            await self.bot.say("This command can only be executed in the LeGeND Family Server")
-            return
-
-        await self.bot.say("please contact @GR8#7968 or rakerran#7837 to purchase it for you.")
 
 def setup(bot):
     bot.add_cog(shop(bot))
