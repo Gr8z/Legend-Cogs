@@ -229,7 +229,7 @@ class clashroyale:
 
 			embed=discord.Embed(title=tourneydata['name']+" (#"+tourneydata['tag']+")", url="http://cr-api.com/tournament/"+tourneydata['tag'], description=desc, color=0xFAA61A)
 			embed.set_thumbnail(url='https://statsroyale.com/images/tournament.png')
-			embed.add_field(name="Players", value=str(tourneydata['maxCapacity']) + "/" + str(maxCapacity), inline=True)
+			embed.add_field(name="Players", value=str(tourneydata['playerCount']) + "/" + str(maxCapacity), inline=True)
 			embed.add_field(name="Status", value=tourneydata['status'].title(), inline=True)
 
 			if tourneydata['type'] == "passwordProtected":
