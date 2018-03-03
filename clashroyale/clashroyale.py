@@ -255,7 +255,6 @@ class clashroyale:
 			await self.bot.say(embed=embed)
 
 		except:
-			raise
 			await self.bot.say("Error: Tournament not found. Please try again later!")
 
 	@commands.group(pass_context=True)
