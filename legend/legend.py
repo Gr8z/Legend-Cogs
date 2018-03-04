@@ -1456,7 +1456,11 @@ class legend:
         for y in range(0, len(tourney['members'])):
 
             tourney_score = tourney['members'][y]['score']
-            tourney_clan = tourney['members'][y]['clan']['name']
+
+            if 'clan' not in tourney['members'][y]:
+                tourney_clan = "OTHERS"
+            else:
+                tourney_clan = tourney['members'][y]['clan']['name']
 
             if tourney_clan not in clanwar_dict:
                 clanwar_dict[tourney_clan] = {}
