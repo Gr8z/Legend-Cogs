@@ -506,20 +506,23 @@ class legend:
                     await self.bot.say("Approval failed, there is a waiting queue for this clan. Please first join the waiting list.")
                     return
 
-            recruitCode = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6))
+            try:
+                recruitCode = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6))
 
-            await self.bot.send_message(member, 
-                "Congratulations, You have been approved to join **"+ clan_name + " (#" + clan_tag + ")**. Please follow the instructions below on how to join: \n\n" +
-                "Your Recruit Code is: ``" + recruitCode + "`` \n\n"+
-                "All you have to do is search the clan name in Clash Royale, request to join and enter your recruit code in the request message.\n\n" +
-                "That's it! Now wait for your clan leadership to accept you. \n\n" +
-                "If you do not see a 'request to join' button, make sure you leave your current clan and check the trophy requirements. \n\n" + 
-                "**IMPORTANT**: Once your clan leadership has accepted your request, let a staff member in discord know that you have been accepted. They will then unlock all the member channels for you."
-                )
-            await self.bot.say(member.mention + " has been approved for **" + clan_name + "**. Please check your DM for instructions on how to join.")
+                await self.bot.send_message(member, 
+                    "Congratulations, You have been approved to join **"+ clan_name + " (#" + clan_tag + ")**. Please follow the instructions below on how to join: \n\n" +
+                    "Your Recruit Code is: ``" + recruitCode + "`` \n\n"+
+                    "All you have to do is search the clan name in Clash Royale, request to join and enter your recruit code in the request message.\n\n" +
+                    "That's it! Now wait for your clan leadership to accept you. \n\n" +
+                    "If you do not see a 'request to join' button, make sure you leave your current clan and check the trophy requirements. \n\n" + 
+                    "**IMPORTANT**: Once your clan leadership has accepted your request, let a staff member in discord know that you have been accepted. They will then unlock all the member channels for you."
+                    )
+                await self.bot.say(member.mention + " has been approved for **" + clan_name + "**. Please check your DM for instructions on how to join.")
 
-            roleName = discord.utils.get(server.roles, name=clan_role)
-            await self.bot.send_message(discord.Object(id='375839851955748874'), roleName.mention + " \nName: " + ign + "\n" + "Recruit Code: ``" + recruitCode + "``")
+                roleName = discord.utils.get(server.roles, name=clan_role)
+                await self.bot.send_message(discord.Object(id='375839851955748874'), roleName.mention + " \nName: " + ign + "\n" + "Recruit Code: ``" + recruitCode + "``")
+            except discord.Forbidden:
+                await self.bot.say("Approval failed, please fix your privacy settings, we are unable to send you Direct Messages.")
         else:
             await self.bot.say("Approval failed, You are already a part of a clan in the family.")
 
