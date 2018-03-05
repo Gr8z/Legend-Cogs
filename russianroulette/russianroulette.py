@@ -113,7 +113,7 @@ class Russianroulette:
                     if bet == settings["System"]["Start Bet"]:
                         self.player_add(settings, user, bet)
                         self.subtract_credits(settings, user, bet)
-                        msg = "{} has joined the roulette circle".format(user.name)
+                        msg = "{} has joined the roulette circle".format(user.display_name)
                     else:
                         start_bet = settings["System"]["Start Bet"]
                         msg = "Your bet must be  equal to {}.".format(start_bet)
@@ -124,7 +124,7 @@ class Russianroulette:
                 self.subtract_credits(settings, user, bet)
                 await self.bot.say("{} has started a game of roulette with a starting bet of "
                                    "{}\nThe game will start in 30 seconds or when 5 more "
-                                   "players join.".format(user.name, bet))
+                                   "players join.".format(user.display_name, bet))
                 await asyncio.sleep(30)
                 if len(settings["Players"].keys()) == 1:
                     await self.bot.say("Sorry I can't let you play by yourself, that's just "
@@ -177,7 +177,7 @@ class Russianroulette:
                 winner = players[0]
                 await self.bot.say("Congratulations {}, you're the only person alive. Enjoy your "
                                    "blood money...\n{} credits were deposited into {}\'s "
-                                   "account".format(winner.mention, pot, winner.name))
+                                   "account".format(winner.mention, pot, winner.display_name))
                 bank = self.bot.get_cog("Economy").bank
                 bank.deposit_credits(winner, pot)
                 break
@@ -187,7 +187,7 @@ class Russianroulette:
         chamber = 6
         await self.bot.say("*{} put one round into the six shot revolver and gave it a good spin. "
                            "With a flick of the wrist, it locks in place."
-                           "*".format(self.bot.user.name))
+                           "*".format(self.bot.user.display_name))
         await asyncio.sleep(4)
         await self.bot.say("Let's begin round {}.".format(turn))
         while chamber >= 1:
@@ -196,10 +196,10 @@ class Russianroulette:
             chance = random.randint(1, chamber)
             player = random.choice(roulette_circle)
             await self.bot.say("{} presses the revolver to their temple and slowly squeezes the "
-                               "trigger...".format(player.name))
+                               "trigger...".format(player.display_name))
             if chance == 1:
                 await asyncio.sleep(4)
-                msg = "**BOOM**\n```{} died and was removed from the group.```".format(player.name)
+                msg = "**BOOM**\n```{} died and was removed from the group.```".format(player.display_name)
                 await self.bot.say(msg)
                 msg2 = random.choice(kill_message)
                 settings["Players"].pop(player.id)
@@ -207,13 +207,13 @@ class Russianroulette:
                 player2 = random.choice(remaining)
                 death_time = strftime("%H:%M:%S", gmtime())
                 await asyncio.sleep(5)
-                await self.bot.say(msg2.format(player.name, player2.name, death_time))
+                await self.bot.say(msg2.format(player.display_name, player2.display_name, death_time))
                 await asyncio.sleep(5)
                 break
             else:
                 await asyncio.sleep(4)
                 await self.bot.say("**CLICK**\n```{} survived and passed the "
-                                   "revolver.```".format(player.name))
+                                   "revolver.```".format(player.display_name))
                 await asyncio.sleep(3)
                 roulette_circle.remove(player)
                 chamber -= 1
@@ -227,7 +227,7 @@ class Russianroulette:
 
     def player_add(self, settings, user, bet):
         settings["System"]["Pot"] += bet
-        settings["Players"][user.id] = {"Name": user.name,
+        settings["Players"][user.id] = {"Name": user.display_name,
                                         "Mention": user.mention,
                                         "Bet": bet}
 
