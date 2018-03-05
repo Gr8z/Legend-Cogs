@@ -16,6 +16,7 @@ If you want to see this bot in action, join the LeGeND Family Discord at [discor
  * **friendlink** - Convert Clash Royale Friend Links to Beautiful Embeds.
  * **clanchest** - Clan Chest Leaderboard for a clan family.
  * **heist** - Clash Royale Themed Heist cog with additional features, port from Jumper-Cogs.
+ * **russianroulette** - Russian Roullete styled game with additional features, port from Jumper-Cogs.
 
 ## Installation
 
