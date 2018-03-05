@@ -950,6 +950,15 @@ class Heist:
         elif author.id in settings["Crew"]:
             msg = "You are already in the {}.".format(t_crew)
             return "Failed", msg
+        elif not self.bank_check(settings, author):
+            msg = ("You do not have enough credits to cover the costs of "
+                   "entry. You need {} credits to participate.".format(cost))
+            return "Failed", msg
+        elif alert == "Hot":
+            msg = ("The {} are on high alert after the last target. We should "
+                   "wait for things to cool off before hitting another target.\n"
+                   "Time Remaining: {}".format(t_police, patrol_time))
+            return "Failed", msg
         elif settings["Players"][author.id]["Status"] == "Apprehended":
             bail = settings["Players"][author.id]["Bail Cost"]
             sentence_raw = settings["Players"][author.id]["Sentence"]
@@ -979,15 +988,6 @@ class Heist:
             else:
                 msg = ("You are dead. You can revive in:\n{}\nUse the command {}heist revive when "
                        "the timer has expired.".format(remaining, prefix))
-            return "Failed", msg
-        elif not self.bank_check(settings, author):
-            msg = ("You do not have enough credits to cover the costs of "
-                   "entry. You need {} credits to participate.".format(cost))
-            return "Failed", msg
-        elif alert == "Hot":
-            msg = ("The {} are on high alert after the last target. We should "
-                   "wait for things to cool off before hitting another target.\n"
-                   "Time Remaining: {}".format(t_police, patrol_time))
             return "Failed", msg
         else:
             return "Success", "Success"
