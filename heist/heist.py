@@ -461,6 +461,14 @@ class Heist:
         base_death_timer = settings["Config"]["Death Timer"]
         death_fmt = self.cooldown_calculator(death_timer, base_death_timer)
 
+        # Alert Time Remaining
+        police_time = settings["Config"]["Police Alert"]
+        alert_time = settings["Config"]["Alert Time"]
+
+        s = abs(alert_time - int(time.perf_counter()))
+        seconds = abs(s - police_time)
+        alert_fmt = self.time_format(seconds)
+
         rank = self.criminal_level(path["Criminal Level"])
 
         embed = discord.Embed(colour=0x0066FF, description=rank)
@@ -473,6 +481,7 @@ class Heist:
         embed.add_field(name=sentencing, value=jail_fmt)
         embed.add_field(name="Apprehended", value=path["Jail Counter"])
         embed.add_field(name="Death Timer", value=death_fmt)
+        embed.add_field(name="Guards Timer", value=alert_fmt)
         embed.add_field(name="Total Deaths", value=path["Deaths"])
         embed.add_field(name="Lifetime Apprehensions", value=path["Total Jail"])
         embed.set_footer(text=credits, icon_url=creditIcon)
@@ -733,8 +742,9 @@ class Heist:
 
         channel = server.get_channel("381338682298466315")
 
-        perm = discord.PermissionOverwrite(send_messages = False, read_messages = False)
-        await self.bot.edit_channel_permissions(channel, server.default_role, perm)
+        if channel is not None:
+            perm = discord.PermissionOverwrite(send_messages = False, read_messages = False)
+            await self.bot.edit_channel_permissions(channel, server.default_role, perm)
 
         await self.bot.say("Get ready! The {} is starting with {}\nThe {} has decided to "
                            "hit **{}**.".format(t_heist, start_output, t_crew, target))
@@ -753,8 +763,9 @@ class Heist:
         self.reset_heist(settings)
         self.save_system()
 
-        perm = discord.PermissionOverwrite(send_messages = None, read_messages = False)
-        await self.bot.edit_channel_permissions(channel, server.default_role, perm)
+        if channel is not None:
+            perm = discord.PermissionOverwrite(send_messages = None, read_messages = False)
+            await self.bot.edit_channel_permissions(channel, server.default_role, perm)
 
         await self.bot.say(msg)
 
