@@ -192,7 +192,6 @@ class Russianroulette:
                                    "account".format(winner.mention, pot, winner.display_name))
                 bank = self.bot.get_cog("Economy").bank
                 bank.deposit_credits(winner, pot)
-                await self.toggle_channel(server, "419164164544528394", False)
                 break
 
     async def roulette_round(self, settings, server, players, turn):
