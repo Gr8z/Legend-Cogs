@@ -850,11 +850,12 @@ class legend:
         """ Change nickname of a user of their IGN + Clan"""
 
         server = ctx.message.server
+        author = ctx.message.author
 
         if member is None:
             member = ctx.message.author
 
-        allowed = await self._is_commander(member)
+        allowed = await self._is_commander(author)
 
         if not allowed:
             await self.bot.say("You dont have enough permissions to change your nickname.")
