@@ -117,7 +117,7 @@ class Russianroulette:
                         msg = "{} has joined the roulette circle".format(user.display_name)
                     else:
                         start_bet = settings["System"]["Start Bet"]
-                        msg = "Your bet must be  equal to {}.".format(start_bet)
+                        msg = "Your bet must be equal to {}.".format(start_bet)
                 await self.bot.say(msg)
             else:
                 self.initial_set(settings, bet)
