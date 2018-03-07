@@ -4,6 +4,7 @@ import os
 import random
 import asyncio
 from time import gmtime, strftime
+import discord
 from discord.ext import commands
 from .utils.dataIO import dataIO
 from .utils import checks
@@ -123,9 +124,9 @@ class Russianroulette:
                 self.player_add(settings, user, bet)
                 self.subtract_credits(settings, user, bet)
                 await self.bot.say("{} has started a game of roulette with a starting bet of "
-                                   "{}\nThe game will start in 30 seconds or when 5 more "
+                                   "{}\nThe game will start in 60 seconds or when 5 more "
                                    "players join.".format(user.display_name, bet))
-                await asyncio.sleep(30)
+                await asyncio.sleep(60)
                 if len(settings["Players"].keys()) == 1:
                     await self.bot.say("Sorry I can't let you play by yourself, that's just "
                                        "suicide.\nTry again when you find some 'friends'.")
@@ -144,6 +145,17 @@ class Russianroulette:
                     await asyncio.sleep(5)
                     await self.roulette_game(settings, server)
                     self.reset_game(settings)
+
+    async def toggle_channel(self, server, channel, disable):
+        channel = server.get_channel(channel)
+        if channel is None:
+            return
+        if disable:
+            perm = discord.PermissionOverwrite(send_messages = False, read_messages = False)
+        else:
+            perm = discord.PermissionOverwrite(send_messages = None, read_messages = False)
+
+        await self.bot.edit_channel_permissions(channel, server.default_role, perm)
 
     async def logic_checks(self, settings, user, bet):
         if settings["System"]["Active"]:
@@ -180,15 +192,18 @@ class Russianroulette:
                                    "account".format(winner.mention, pot, winner.display_name))
                 bank = self.bot.get_cog("Economy").bank
                 bank.deposit_credits(winner, pot)
+                await self.toggle_channel(server, "419164164544528394", False)
                 break
 
     async def roulette_round(self, settings, server, players, turn):
         roulette_circle = players[:]
         chamber = 6
+        await self.toggle_channel(server, "419164164544528394", False)
         await self.bot.say("*{} put one round into the six shot revolver and gave it a good spin. "
                            "With a flick of the wrist, it locks in place."
                            "*".format(self.bot.user.display_name))
-        await asyncio.sleep(4)
+        await asyncio.sleep(20)
+        await self.toggle_channel(server, "419164164544528394", True)
         await self.bot.say("Let's begin round {}.".format(turn))
         while chamber >= 1:
             if not roulette_circle:
@@ -201,6 +216,7 @@ class Russianroulette:
                 await asyncio.sleep(4)
                 msg = "**BOOM**\n```{} died and was removed from the group.```".format(player.display_name)
                 await self.bot.say(msg)
+                await self.toggle_channel(server, "419164164544528394", False)
                 msg2 = random.choice(kill_message)
                 settings["Players"].pop(player.id)
                 remaining = [server.get_member(x) for x in list(settings["Players"].keys())]
