@@ -198,7 +198,6 @@ class Russianroulette:
     async def roulette_round(self, settings, server, players, turn):
         roulette_circle = players[:]
         chamber = 6
-        await self.toggle_channel(server, "419164164544528394", False)
         await self.bot.say("*{} put one round into the six shot revolver and gave it a good spin. "
                            "With a flick of the wrist, it locks in place."
                            "*".format(self.bot.user.display_name))
@@ -216,6 +215,7 @@ class Russianroulette:
                 await asyncio.sleep(4)
                 msg = "**BOOM**\n```{} died and was removed from the group.```".format(player.display_name)
                 await self.bot.say(msg)
+                await asyncio.sleep(2)
                 await self.toggle_channel(server, "419164164544528394", False)
                 msg2 = random.choice(kill_message)
                 settings["Players"].pop(player.id)
