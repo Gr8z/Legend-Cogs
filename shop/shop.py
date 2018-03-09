@@ -83,6 +83,9 @@ class shop:
         else:
             return False
 
+    def clanArray(self):
+        return self.clans.keys()
+
     def numClans(self):
         return len(self.clans.keys())
 
@@ -288,7 +291,7 @@ class shop:
         await self.bot.say("please contact @GR8#7968 or rakerran#7837 to purchase it for you.")
 
     @buy.command(pass_context=True, name="3")
-    async def buy_3(self, ctx):
+    async def buy_3(self, ctx, emoji):
 
         server = ctx.message.server
         author = ctx.message.author
@@ -298,7 +301,60 @@ class shop:
             await self.bot.say("This command can only be executed in the LeGeND Family Server")
             return
 
-        await self.bot.say("please contact @GR8#7968 or rakerran#7837 to purchase it for you.")
+        if emoji[:2] == "<:":
+            await self.bot.say("Error, you can only use default emojis.")
+            return
+
+        if self.bank_check(author, 80000):
+            bank = self.bot.get_cog('Economy').bank
+            pay = bank.get_balance(author) - 80000
+            bank.set_credits(author, pay)
+
+            try:
+                await self.updateClash()
+                await self.bot.type()
+                profiletag = self.tags[author.id]['tag']
+                profiledata = requests.get('http://api.cr-api.com/player/{}?exclude=games,currentDeck,cards,battles,achievements'.format(profiletag), headers=self.getAuth(), timeout=10).json()
+                if profiledata['clan'] is None:
+                    clantag = ""
+                    clanname = ""
+                else: 
+                    clantag = profiledata['clan']['tag']
+                    clanname = profiledata['clan']['name']
+                ign = profiledata['name']
+            except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
+                await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
+                return
+            except requests.exceptions.RequestException as e:
+                await self.bot.say(e)
+                return
+            except:
+                await self.bot.say("You must assosiate a tag with this member first using ``!save clash #tag @member``")
+                return
+
+            membership = False
+            for clankey in self.clanArray():
+                if self.clans[clankey]['tag'] == clantag:
+                    membership = True
+                    savekey = clankey
+                    break
+
+            if ign is None:
+                await self.bot.say("Error, Cannot add emoji.")
+            else:
+                try:
+                    if membership:
+                        newclanname = self.clans[savekey]['nickname']
+                        newname = "{} {} | {}".format(ign, emoji, newclanname)
+                    else:
+                        newname = "{} {}".format(ign, emoji)
+                    await self.bot.change_nickname(author, newname)
+                except discord.HTTPException:
+                    await self.bot.say("I don’t have permission to change nick for this user.")
+                else:
+                     await self.bot.say("Nickname changed to ** {} **\n".format(newname))
+        else:
+            await self.bot.say("You do not have enough credits to buy this item.")
 
     @buy.command(pass_context=True, name="4")
     async def buy_4(self , ctx):
