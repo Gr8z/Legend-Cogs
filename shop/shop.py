@@ -306,9 +306,6 @@ class shop:
             return
 
         if self.bank_check(author, 80000):
-            bank = self.bot.get_cog('Economy').bank
-            pay = bank.get_balance(author) - 80000
-            bank.set_credits(author, pay)
 
             try:
                 await self.updateClash()
@@ -352,7 +349,11 @@ class shop:
                 except discord.HTTPException:
                     await self.bot.say("I don’t have permission to change nick for this user.")
                 else:
-                     await self.bot.say("Nickname changed to ** {} **\n".format(newname))
+                    await self.bot.say("Nickname changed to ** {} **\n".format(newname))
+
+                    bank = self.bot.get_cog('Economy').bank
+                    pay = bank.get_balance(author) - 80000
+                    bank.set_credits(author, pay)
         else:
             await self.bot.say("You do not have enough credits to buy this item.")
 
