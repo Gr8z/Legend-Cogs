@@ -34,7 +34,7 @@ class friendlink:
             platform = urlparse.parse_qs(parsed.query)['platform'][0]
 
             try:
-                profiledata = requests.get('http://api.cr-api.com/player/{}'.format(profiletag), headers=self.getAuth(), timeout=10).json()
+                profiledata = requests.get('https://api.royaleapi.com/player/{}'.format(profiletag), headers=self.getAuth(), timeout=10).json()
             except:
                 return
 

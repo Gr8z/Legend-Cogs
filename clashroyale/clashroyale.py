@@ -77,7 +77,7 @@ class clashroyale:
 			await self.bot.type()
 
 			try:
-				profiledata = requests.get('http://api.cr-api.com/player/{}?exclude=currentDeck,cards,battles,achievements'.format(profiletag), headers=self.getAuth(), timeout=10).json()
+				profiledata = requests.get('https://api.royaleapi.com/player/{}?exclude=currentDeck,cards,battles,achievements'.format(profiletag), headers=self.getAuth(), timeout=10).json()
 			except:
 				await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 				return
@@ -129,7 +129,7 @@ class clashroyale:
 			await self.bot.type()
 
 			try:
-				profiledata = requests.get('http://api.cr-api.com/player/{}?keys=chestCycle,name,tag,clan'.format(profiletag), headers=self.getAuth(), timeout=10).json()
+				profiledata = requests.get('https://api.royaleapi.com/player/{}?keys=chestCycle,name,tag,clan'.format(profiletag), headers=self.getAuth(), timeout=10).json()
 			except:
 				await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 				return
@@ -170,7 +170,7 @@ class clashroyale:
 			await self.bot.type()
 
 			try:
-				profiledata = requests.get('http://api.cr-api.com/player/{}?keys=deckLink'.format(profiletag), headers=self.getAuth(), timeout=10).json()
+				profiledata = requests.get('https://api.royaleapi.com/player/{}?keys=deckLink'.format(profiletag), headers=self.getAuth(), timeout=10).json()
 				deckLink = profiledata['deckLink']
 			except:
 				await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
@@ -192,7 +192,7 @@ class clashroyale:
 		await self.bot.type()
 
 		try:
-			clandata = requests.get('http://api.cr-api.com/clan/{}'.format(clantag), headers=self.getAuth(), timeout=10).json()
+			clandata = requests.get('https://api.royaleapi.com/clan/{}'.format(clantag), headers=self.getAuth(), timeout=10).json()
 
 			embed=discord.Embed(title=clandata['name'] + " (#" + clandata['tag'] + ")", url="http://cr-api.com/clan/"+clandata['tag'], description=clandata['description'], color=0xFAA61A)
 			embed.set_thumbnail(url=clandata['badge']['image'])
@@ -216,7 +216,7 @@ class clashroyale:
 		await self.bot.type()
 
 		try:
-			tourneydata = requests.get('http://api.cr-api.com/tournaments/{}'.format(tag), headers=self.getAuth(), timeout=10).json()
+			tourneydata = requests.get('https://api.royaleapi.com/tournaments/{}'.format(tag), headers=self.getAuth(), timeout=10).json()
 
 			maxCapacity = tourneydata['maxCapacity']
 			cards = self.getCards(maxCapacity)
@@ -316,7 +316,7 @@ class clashroyale:
 			member = ctx.message.author
 
 		try:
-			profiledata = requests.get('http://api.cr-api.com/player/{}'.format(profiletag), headers=self.getAuth(), timeout=10).json()
+			profiledata = requests.get('https://api.royaleapi.com/player/{}'.format(profiletag), headers=self.getAuth(), timeout=10).json()
 
 			for key, value in self.clash.items():
 				if profiletag == self.clash[key]['tag']:

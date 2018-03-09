@@ -35,7 +35,7 @@ class clanchest:
             print("Checking Clan chest...")
 
             try:
-                clans = requests.get('http://api.cr-api.com/clan/'+','.join(self.clans[clan]["tag"] for clan in self.clans)+'?exclude=members', headers=self.getAuth(), timeout=10).json()
+                clans = requests.get('https://api.royaleapi.com/clan/'+','.join(self.clans[clan]["tag"] for clan in self.clans)+'?exclude=members', headers=self.getAuth(), timeout=10).json()
                         
                 for x in range(0, len(clans)):
 
