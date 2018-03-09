@@ -102,6 +102,12 @@ class Russianroulette:
     async def russian(self, ctx, bet: int):
         user = ctx.message.author
         server = ctx.message.server
+        channel = ctx.message.channel
+
+        if channel.name != "roulette":
+            await self.bot.say("You cannot run this command in this channel. Please run this command at #roulette")
+            return
+
         settings = self.check_server_settings(server)
         bank = self.bot.get_cog("Economy").bank
         if await self.logic_checks(settings, user, bet):

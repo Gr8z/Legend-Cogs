@@ -503,6 +503,11 @@ class Heist:
         t_heist = settings["Theme"]["Heist"]
         t_vault = settings["Theme"]["Vault"]
 
+        channel = ctx.message.channel
+        if channel.name != "heist":
+            await self.bot.say("You cannot run this command in this channel. Please run this command at #heist")
+            return
+
         self.account_check(settings, author)
         outcome, msg = self.requirement_check(settings, prefix, author, cost)
 
