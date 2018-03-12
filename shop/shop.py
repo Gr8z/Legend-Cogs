@@ -160,16 +160,16 @@ class shop:
                                     perDonation *= BonusMult
 
                                 amount = math.ceil((clan_donations*perDonation) + (clan_clanChestCrowns*perCrown))
-                                pay = bank.get_balance(user) + amount + 10000
+                                pay = bank.get_balance(user) + amount
                                 bank.set_credits(user, pay)
                                 perc = str(math.ceil((BonusMult-1)*100))
 
                                 await self.bot.say("{} - ({} donations, {} crowns)".format(user.display_name, clan_donations, clan_clanChestCrowns))
 
                                 if BonusMult > 1:
-                                    await self.bot.send_message(user,"Hello {} , take these credits*({}% Bonus)* for the **{}** donations and **{}** crowns you contributed to your clan this week. (+{} credits!)\n```Sorry, I dont have the donations data :( But take these free 10000 credits```".format(user.name, perc, str(clan_donations), str(clan_clanChestCrowns), str(amount)))
+                                    await self.bot.send_message(user,"Hello {} , take these credits*({}% Bonus)* for the **{}** donations and **{}** crowns you contributed to your clan this week. (+{} credits!)".format(user.name, perc, str(clan_donations), str(clan_clanChestCrowns), str(amount)))
                                 else:
-                                    await self.bot.send_message(user,"Hello {} , take these credits for the **{}** donations and **{}** crowns you contributed to your clan this week. (+{} credits!)\n```Sorry, I dont have the donations data :( But take these free 10000 credits```".format(user.name, str(clan_donations), str(clan_clanChestCrowns), str(amount)))
+                                    await self.bot.send_message(user,"Hello {} , take these credits for the **{}** donations and **{}** crowns you contributed to your clan this week. (+{} credits!)".format(user.name, str(clan_donations), str(clan_clanChestCrowns), str(amount)))
                             except Exception as e:
                                 await self.bot.say(e)
                     except:
