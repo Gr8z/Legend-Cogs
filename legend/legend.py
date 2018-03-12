@@ -10,6 +10,7 @@ import random
 from random import choice as rand_choice
 import string
 import datetime
+import time
 from collections import OrderedDict
 
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
@@ -129,6 +130,7 @@ class legend:
         self.auth = dataIO.load_json('cogs/auth.json')
         self.welcome = dataIO.load_json('data/legend/welcome.json')
         self.bank = dataIO.load_json('data/economy/bank.json')
+        self.seen = dataIO.load_json('data/seen/seen.json')
 
     async def updateClash(self):
         self.clash = dataIO.load_json('cogs/tags.json')
@@ -960,6 +962,7 @@ class legend:
         d_members_not_in_clan = []
         d_members_without_role = []
         d_members_without_name = []
+        d_members_inactive = []
         cr_clanSettings = []
 
         for d_member in d_members:
@@ -968,6 +971,12 @@ class legend:
 
                 if player_tag not in cr_members_tag:
                     d_members_not_in_clan.append(d_member.display_name)
+
+                try:
+                    if self.seen[legendServer[0]][d_member.id]['TIMESTAMP'] < time.time() - 432000:
+                        d_members_inactive.append(d_member.display_name)
+                except:
+                    pass
             except KeyError:
                 d_members_with_no_player_tag.append(d_member.display_name)
                 continue
@@ -1041,6 +1050,11 @@ class legend:
         if cr_members_with_less_trophies:
             message += "\n\n:warning: **("+str(len(cr_members_with_less_trophies))+")** Players in **" + clan_name + "**, but **DO NOT** meet the trophy requirements: ```• "
             message += "\n• ".join(cr_members_with_less_trophies)
+            message += "```"
+
+        if d_members_inactive:
+            message += "\n\n:warning: **("+str(len(d_members_inactive))+")** Players in **" + clan_name + "**, but **NOT** active on Discord: ```• "
+            message += "\n• ".join(d_members_inactive)
             message += "```"
 
         if message == "":
@@ -1487,6 +1501,10 @@ def check_folders():
         print("Creating data/legend folder...")
         os.makedirs("data/legend")
 
+    if not os.path.exists("data/seen"):
+        print("Creating data/seen folder...")
+        os.makedirs("data/seen")
+
 def check_files():
     f = "cogs/tags.json"
     if not fileIO(f, "check"):
@@ -1506,6 +1524,11 @@ def check_files():
     f = "data/legend/settings.json"
     if not fileIO(f, "check"):
         print("Creating empty settings.json...")
+        dataIO.save_json(f, {})        
+
+    f = "data/seen/seen.json"
+    if not fileIO(f, "check"):
+        print("Creating empty seen.json...")
         dataIO.save_json(f, {})
         
 def check_clans():
