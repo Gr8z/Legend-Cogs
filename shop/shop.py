@@ -308,8 +308,8 @@ class shop:
         if emoji.count(":") > 2:
             await self.bot.say("You can only have 1 emoji in your name.")
             return
-            
-        if emoji.count(":") != 2:: 
+
+        if emoji.count(":") != 2:
             await self.bot.say("Please select an emoji.")
             return
 
