@@ -733,7 +733,7 @@ class Heist:
                         else:
                             pass
                 self.save_system()
-                await asyncio.sleep(120)  # task runs every 120 seconds
+                await asyncio.sleep(900)  # task runs every 900 seconds
         except asyncio.CancelledError:
             pass
 
