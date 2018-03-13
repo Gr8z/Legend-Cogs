@@ -304,7 +304,7 @@ class shop:
         if emoji[:2] == "<:":
             await self.bot.say("Error, you can only use default emojis.")
             return
-
+"""
         if emoji.count(":") > 2:
             await self.bot.say("You can only have 1 emoji in your name.")
             return
@@ -312,7 +312,7 @@ class shop:
         if emoji.count(":") != 2:
             await self.bot.say("Please select an emoji.")
             return
-
+"""
         if self.bank_check(author, 80000):
 
             try:
