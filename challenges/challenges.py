@@ -135,7 +135,7 @@ class challenges:
         role_name = self.settings[server.id]["ROLE"]
         lock_state = self.settings[server.id]["LOCK"] 
         q_num = self.settings[server.id]["QUESTIONS"]
-        delay = 6
+        delay = 60
 
         if self.active:
             await self.bot.say("A challenge is already running, wait for it to end first.")
