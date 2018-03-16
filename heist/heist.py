@@ -464,10 +464,7 @@ class Heist:
         # Alert Time Remaining
         police_time = settings["Config"]["Police Alert"]
         alert_time = settings["Config"]["Alert Time"]
-
-        s = abs(alert_time - int(time.perf_counter()))
-        seconds = abs(s - police_time)
-        alert_fmt = self.time_format(seconds)
+        alert_fmt = self.cooldown_calculator(police_time, alert_time)
 
         rank = self.criminal_level(path["Criminal Level"])
 
