@@ -130,6 +130,7 @@ class challenges:
         """Start the challenge on the specified channel"""
         server = ctx.message.server
         self.add_defualt_settings(server)
+        global active
 
         channel = self.get_game_channel(server)
         role_name = self.settings[server.id]["ROLE"]
