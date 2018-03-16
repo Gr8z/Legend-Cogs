@@ -250,9 +250,9 @@ class challengeSession():
             ]
             await random.choice(gameList)(server)
         else:
-            await self.bot.say("Thats it, challenge ended. Type ``!togglerole challenges`` to get notified on the next challenge.")
             if self.scores:
                 await self.send_table()
+            await self.bot.say("Thats it, challenge ended. Type ``!togglerole challenges`` to get notified on the next challenge.")
 
     async def emoji_reacter(self, server):
         channel = self.get_game_channel(server)
