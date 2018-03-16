@@ -19,7 +19,6 @@ creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
 
 TriviaLine = namedtuple("TriviaLine", "question answers")
-active = False
 
 class challenges:
     """My custom cog that does stuff!"""
@@ -27,6 +26,7 @@ class challenges:
     def __init__(self, bot):
         self.bot = bot
         self.settings = dataIO.load_json(settings_path)
+        self.active = False
 
     def add_defualt_settings(self, server):
         if server.id not in self.settings:
@@ -130,7 +130,6 @@ class challenges:
         """Start the challenge on the specified channel"""
         server = ctx.message.server
         self.add_defualt_settings(server)
-        global active
 
         channel = self.get_game_channel(server)
         role_name = self.settings[server.id]["ROLE"]
@@ -138,7 +137,7 @@ class challenges:
         q_num = self.settings[server.id]["QUESTIONS"]
         delay = 60
 
-        if active:
+        if self.active:
             await self.bot.say("A challenge is already running, wait for it to end first.")
             return
 
@@ -162,7 +161,7 @@ class challenges:
             perm = discord.PermissionOverwrite(send_messages = False, read_messages = False)
             await self.bot.edit_channel_permissions(channel, server.default_role, perm)
 
-        active = True
+        self.active = True
 
         await asyncio.sleep(delay)
 
@@ -173,7 +172,7 @@ class challenges:
         c = challengeSession(self.bot)
         await c.start_game(server)
 
-        active = False
+        self.active = False
 
     @chal.command(pass_context=True)
     async def stop(self, ctx):
@@ -181,7 +180,7 @@ class challenges:
         server = ctx.message.server
 
         await self.bot.say("Challenge stopped.")
-        active = False
+        self.active = False
 
 class challengeSession():
     def __init__(self, bot):
@@ -239,10 +238,7 @@ class challengeSession():
     async def start_game(self, server):
         q_num = self.settings[server.id]["QUESTIONS"]
 
-        if self is not self.bot.get_cog("challenges"):
-            if not active:
-                if self.scores:
-                    await self.send_table()
+        if self is self.bot.get_cog("challenges"):
             return
 
         if self.games < q_num:
