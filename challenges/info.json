@@ -1,0 +1,10 @@
+{
+    "AUTHOR" : "GR8",
+    "INSTALL_MSG" : "Challenges added, if there are any issues, please mention them on https://github.com/Gr8z/LeGeND-Bot",
+    "NAME" : "challenges",
+    "SHORT" : "play a challenge with your friends and earn credits",
+    "DESCRIPTION" : "different challenges to complete to earn credits.",
+    "TAGS" : ["challenge", "trivia", "unscramble", "math"],
+    "REQUIREMENTS" : [],
+    "HIDDEN" : false
+}

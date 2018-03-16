@@ -15,6 +15,7 @@ If you want to see this bot in action, join the LeGeND Family Discord at [discor
  * **shop** - reward people for donations and crowns in credits.
  * **friendlink** - Convert Clash Royale Friend Links to Beautiful Embeds.
  * **clanchest** - Clan Chest Leaderboard for a clan family.
+ * **challenges** - Emoji, word and math question challenges.
  * **heist** - Clash Royale Themed Heist cog with additional features, port from Jumper-Cogs.
  * **russianroulette** - Russian Roullete styled game with additional features, port from Jumper-Cogs.
  * **fourinarow** - Four in a row game with additional features, post from Red-Cogs.
