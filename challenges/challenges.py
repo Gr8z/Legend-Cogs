@@ -241,10 +241,6 @@ class challengeSession():
         if self is self.bot.get_cog("challenges"):
             return
 
-        if self.games > 10 and not self.scores:
-            await self.bot.say("Guys...? Well, I guess I'll stop then.")
-            return
-
         if self.games < q_num:
             gameList = [
                 self.emoji_reacter,
