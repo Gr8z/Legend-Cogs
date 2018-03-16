@@ -384,8 +384,8 @@ class challengeSession():
         ops = {'+':operator.add,
                '-':operator.sub,
                '*':operator.mul}
-        num1 = random.randint(0,1200)
-        num2 = random.randint(1,1000)
+        num1 = random.randint(0,120)
+        num2 = random.randint(1,100)
         op = random.choice(list(ops.keys()))
         number = ops.get(op)(num1,num2)
 
