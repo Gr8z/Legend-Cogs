@@ -535,6 +535,22 @@ class Heist:
             await self.bot.say("{0} has joined the {2}.\nThe {2} now has {1} "
                                "members.".format(author.display_name, crew_size, t_crew))
 
+    @checks.admin_or_permissions(manage_server=True)
+    @heist.command(name="mention", pass_context=True)
+    async def _mention_heist(self, ctx):
+        """This mentions the @Heist role"""
+        server = ctx.message.server
+        role_name = "Heist"
+
+        if role_name is not None:
+            heist_role = discord.utils.get(server.roles, name=role_name)
+
+            await self.bot.edit_role(server, heist_role, mentionable=True)
+            await self.bot.say(heist_role.mention)
+            await self.bot.edit_role(server, heist_role, mentionable=False)
+        else:
+            await self.bot.say("No Heist role found.")
+
     @commands.group(pass_context=True, no_pm=True)
     async def setheist(self, ctx):
         """Set different options in the heist config"""
