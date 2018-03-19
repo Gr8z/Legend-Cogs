@@ -12,6 +12,7 @@ from copy import deepcopy
 import asyncio
 import random
 import operator
+import chardet
 
 default_settings = {"CHANNEL": "381338442543398912", "CREDITS": 50, "ROLE": None, "LOCK": False, "QUESTIONS" : 60}
 settings_path = "data/challenges/settings.json"
@@ -191,7 +192,7 @@ class challengeSession():
         self.words = dataIO.load_json("data/challenges/words.json")
         self.bank = self.bot.get_cog('Economy').bank
         self.scores = Counter()
-        self.trivia_list = ['artandliterature', 'clashroyale', 'computers', 'elements', 'games', 'general', 'uscapitals', 'worldcapitals', 'entertainment']
+        self.trivia_list = ['artandliterature', 'clashroyale', 'computers', 'elements', 'games', 'general', 'worldcapitals', 'entertainment']
         
     def get_game_channel(self, server):
         try:
