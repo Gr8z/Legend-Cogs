@@ -191,6 +191,7 @@ class challengeSession():
         self.words = dataIO.load_json("data/challenges/words.json")
         self.bank = self.bot.get_cog('Economy').bank
         self.scores = Counter()
+        self.trivia_list = ['artandliterature', 'clashroyale', 'computers', 'elements', 'games', 'general', 'uscapitals', 'worldcapitals', 'entertainment']
         
     def get_game_channel(self, server):
         try:
@@ -235,6 +236,15 @@ class challengeSession():
             t += "+ {}\t{}\n".format(user, score)
         await self.bot.say(box(t, lang="diff"))
 
+    async def correct_answer(self, server, answer):
+        try:
+            self.bank.deposit_credits(answer.author, self.settings[server.id]["CREDITS"])
+            await self.bot.say("You got it {} (+{} credits)".format(answer.author.mention, self.settings[server.id]["CREDITS"]))
+        except:
+            await self.bot.say("You got it {} (please do ``!bank register``)".format(answer.author.mention))
+
+        self.scores[answer.author] += 1
+
     async def start_game(self, server):
         q_num = self.settings[server.id]["QUESTIONS"]
 
@@ -265,12 +275,8 @@ class challengeSession():
 
         msg = await self.bot.send_message(channel, embed=embed)
 
-        def check(reaction, user):
-            e = str(reaction.emoji)
-            return e.startswith(emoji['emoji'])
-
         while True:
-            react = await self.bot.wait_for_reaction(check=check, timeout=15)
+            react = await self.bot.wait_for_reaction(emoji=emoji['emoji'], timeout=15)
 
             if react is None:
                 break
@@ -281,7 +287,7 @@ class challengeSession():
                         self.bank.deposit_credits(react.user, self.settings[server.id]["CREDITS"])
                         await self.bot.say("You got it {} (+{} credits)".format(react.user.mention, self.settings[server.id]["CREDITS"]))
                     except:
-                        await self.bot.say("{} You dont have a bank account, please do ``!bank register``".format(react.user.mention)) 
+                        await self.bot.say("You got it {} (please do ``!bank register``)".format(react.user.mention)) 
                     self.scores[react.user] += 1
                     break
 
@@ -317,13 +323,9 @@ class challengeSession():
                 await self.bot.say("Time's up, it was **{}**".format(word))
                 break 
 
-            try:
-                self.bank.deposit_credits(answer.author, self.settings[server.id]["CREDITS"])
-                await self.bot.say("You got it {} (+{} credits)".format(answer.author.mention, self.settings[server.id]["CREDITS"]))
-            except:
-                await self.bot.say("{} You dont have a bank account, please do ``!bank register``".format(answer.author.mention))
-            self.scores[answer.author] += 1
-            break
+            if answer.author != self.bot.user:
+                await self.correct_answer(server, answer)
+                break
 
         await asyncio.sleep(3)
 
@@ -333,7 +335,7 @@ class challengeSession():
     async def trivia(self, server):
         channel = self.get_game_channel(server)
 
-        trivia_list = random.choice(['artandliterature', 'clashroyale', 'computers', 'elements', 'games', 'general', 'uscapitals', 'worldcapitals'])     
+        trivia_list = random.choice(self.trivia_list)     
         question_list = self.parse_trivia_list(trivia_list)        
         current_line = random.choice(question_list)
         question_list.remove(current_line)
@@ -365,13 +367,9 @@ class challengeSession():
                 await self.bot.say("Time's up, it was **{}**".format(current_line.answers[0]))
                 break
 
-            try:
-                self.bank.deposit_credits(guess.author, self.settings[server.id]["CREDITS"])
-                await self.bot.say("You got it {} (+{} credits)".format(guess.author.mention, self.settings[server.id]["CREDITS"]))
-            except:
-                await self.bot.say("{} You dont have a bank account, please do ``!bank register``".format(guess.author.mention))
-            self.scores[guess.author] += 1
-            break
+            if guess.author != self.bot.user:
+                await self.correct_answer(server, guess)
+                break
 
         await asyncio.sleep(3)
 
@@ -405,13 +403,9 @@ class challengeSession():
                 await self.bot.say("Time's up, the correct answer is **{}**".format(str(number)))
                 break 
 
-            try:
-                self.bank.deposit_credits(answer.author, self.settings[server.id]["CREDITS"])
-                await self.bot.say("You got it {} (+{} credits)".format(answer.author.mention, self.settings[server.id]["CREDITS"]))
-            except:
-                await self.bot.say("{} You dont have a bank account, please do ``!bank register``".format(answer.author.mention))
-            self.scores[answer.author] += 1
-            break
+            if answer.author != self.bot.user:
+                await self.correct_answer(server, answer)
+                break
 
         await asyncio.sleep(3)
 
