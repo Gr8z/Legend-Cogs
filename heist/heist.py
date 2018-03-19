@@ -544,6 +544,7 @@ class Heist:
 
         if role_name is not None:
             heist_role = discord.utils.get(server.roles, name=role_name)
+            await self.bot.delete_message(ctx.message)
 
             await self.bot.edit_role(server, heist_role, mentionable=True)
             await self.bot.say(heist_role.mention)
