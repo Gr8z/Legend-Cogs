@@ -23,6 +23,8 @@ from tabulate import tabulate
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
 
+BOTCOMMANDER_ROLES =  ["Family Representative", "Clan Manager", "admin", "Heist Manager"];
+
 # Thanks stack overflow http://stackoverflow.com/questions/21872366/plural-string-formatting
 class PluralDict(dict):
     def __missing__(self, key):
@@ -535,12 +537,18 @@ class Heist:
             await self.bot.say("{0} has joined the {2}.\nThe {2} now has {1} "
                                "members.".format(author.display_name, crew_size, t_crew))
 
-    @checks.admin_or_permissions(manage_server=True)
     @heist.command(name="mention", pass_context=True)
     async def _mention_heist(self, ctx):
         """This mentions the @Heist role"""
         server = ctx.message.server
+        author = ctx.message.author
         role_name = "Heist"
+
+        allowed = await self._is_commander(author)
+
+        if not allowed:
+            await self.bot.say("You dont have enough permissions to mention Heist.")
+            return
 
         if role_name is not None:
             heist_role = discord.utils.get(server.roles, name=role_name)
@@ -792,6 +800,16 @@ class Heist:
         self.cycle_task.cancel()
         self.shutdown_save()
         self.save_system()
+
+    async def _is_commander(self, member):
+        server = member.server
+        botcommander_roles = [discord.utils.get(server.roles, name=r) for r in BOTCOMMANDER_ROLES]
+        botcommander_roles = set(botcommander_roles)
+        author_roles = set(member.roles)
+        if len(author_roles.intersection(botcommander_roles)):
+            return True
+        else:
+            return False
 
     def theme_loader(self, settings, theme_name):
         keys = ["Jail", "OOB", "Police", "Bail", "Crew", "Sentence", "Heist", "Vault"]
