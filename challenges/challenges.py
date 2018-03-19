@@ -14,7 +14,7 @@ import random
 import operator
 import chardet
 
-default_settings = {"CHANNEL": "381338442543398912", "CREDITS": 50, "ROLE": None, "LOCK": False, "QUESTIONS" : 60}
+default_settings = {"CHANNEL": "381338442543398912", "CREDITS": 50, "ROLE": None, "LOCK": False, "QUESTIONS" : 60, "DELAY": 60}
 settings_path = "data/challenges/settings.json"
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
@@ -119,6 +119,16 @@ class challenges:
         await self.bot.say("questions per challenge has been set to {}.".format(num))
         dataIO.save_json(settings_path, self.settings)
 
+    @chalset.command(pass_context=True)
+    async def delay(self, ctx, num):
+        """Set delay in second to start the challenge"""
+        server = ctx.message.server
+        self.add_defualt_settings(server)
+
+        self.settings[server.id]["DELAY"] = int(num)
+        await self.bot.say("challenge delay has been set to {}.".format(num))
+        dataIO.save_json(settings_path, self.settings)
+
     @commands.group(pass_context=True, no_pm=True)
     @checks.admin_or_permissions(manage_server=True)
     async def chal(self, ctx):
@@ -136,7 +146,7 @@ class challenges:
         role_name = self.settings[server.id]["ROLE"]
         lock_state = self.settings[server.id]["LOCK"] 
         q_num = self.settings[server.id]["QUESTIONS"]
-        delay = 60
+        delay = self.settings[server.id]["DELAY"]
 
         if self.active:
             await self.bot.say("A challenge is already running, wait for it to end first.")
@@ -300,10 +310,13 @@ class challengeSession():
     async def word_scramble(self, server):
         channel = self.get_game_channel(server)
 
-        def scramble(word):
-            foo = list(word)
-            random.shuffle(foo)
-            return ''.join(foo)
+        def scramble(wordie):
+            foo = list(wordie)
+            scambled = wordie
+            while wordie == scambled:
+                random.shuffle(foo)
+                scambled = ''.join(foo)
+            return scambled
                 
         word = random.choice(self.words)
         self.words.remove(word)
