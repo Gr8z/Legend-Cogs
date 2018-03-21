@@ -10,23 +10,16 @@ from .utils.dataIO import dataIO
 import os
 from fake_useragent import UserAgent
 
-from proxybroker import Broker, Proxy
-from collections import deque
-
+lastTag = '0'
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
 
 proxies_list = [
-	Proxy(host="94.249.160.49", port=6998),
-	Proxy(host="93.127.128.41", port=7341),
-	Proxy(host="107.175.43.100", port=6858),
-	Proxy(host="64.44.18.31", port=3691),
-	Proxy(host="172.82.173.100", port=5218),
-	Proxy(host="172.82.177.111", port=3432),
-	Proxy(host="45.43.219.185", port=2461),
-	Proxy(host="45.43.218.82", port=3577),
-	Proxy(host="195.162.4.111", port=4762),
-	Proxy(host="173.211.31.3", port=8053)
+	'154.16.44.229:3128',
+	'179.61.164.47:3128',
+	'185.145.37.143:3128',
+	'185.158.121.221:3128',
+	'191.101.96.26:3128'
 ]
 
 # Converts maxPlayers to Cards
@@ -61,25 +54,10 @@ class tournament:
 
 	def __init__(self, bot):
 		self.bot = bot
-		self.proxypath = 'data/tourney/proxyfile.txt'
-		self.goodproxy = []+proxies_list
-		with open(self.proxypath, 'r') as f:
-			for line in f:
-				asplit = line.split(':')
-				self.goodproxy.append(Proxy(host=asplit[0], port=asplit[1]))
-		print("{} proxies were loaded".format(len(self.goodproxy)))
 		self.path = 'data/tourney/settings.json'
 		self.settings = dataIO.load_json(self.path)
 		self.auth = dataIO.load_json('cogs/auth.json')
-		self.queue = asyncio.Queue()
-		self.broker = Broker(self.queue)
-		self.proxylist = deque(self.goodproxy)
-		self.goodproxy = []  # Proxies get saved once, then have to earn the right to stay again
-		self.lastTag = '0'
 		
-	def __unload(self):
-		self.broker.stop()
-	
 	def save_data(self):
 		"""Saves the json"""
 		dataIO.save_json(self.path, self.settings)
@@ -93,48 +71,30 @@ class tournament:
 		botcommander_roles = set(botcommander_roles)
 		author_roles = set(member.roles)
 		if len(author_roles.intersection(botcommander_roles)):
-			return True
+		    return True
 		else:
-			return False
-	
-	async def _fetchTourney(self):
-		tourney = {}
-		
-		for i in range(100):
-			ua = UserAgent()
-			headers = {
-				"User-Agent": ua.random
-			}
-			
-			strProxy, Proxy = self._get_proxy()
-			if not strProxy: return None
-			
-			proxies = {
-				'http': strProxy
-			}
-			
-			tourneydata={}
-			try:
-				tourneydata = requests.get('http://statsroyale.com/tournaments?appjson=1', timeout=5, headers=headers, proxies=proxies).json()
-			except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
-				continue
-			else:
-				self._add_proxy(Proxy) #Reward working proxies by reusing them
-				return tourneydata
-		
-		return None
-		
+		    return False
+
 	# Returns a list with tournaments
-	async def getTopTourneyNew(self):
+	def getTopTourneyNew(self):
+
+		global lastTag
+		tourney = {}
+
+		ua = UserAgent()
+		headers = {
+		    "User-Agent": ua.random
+		}
+
+		proxies = {
+	    	'http': random.choice(proxies_list)
+		}
 
 		try:
-			tourneydata = await self._fetchTourney()
+			tourneydata = requests.get('http://statsroyale.com/tournaments?appjson=1', timeout=5, headers=headers, proxies=proxies).json()
 		except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
 			return None
 		except requests.exceptions.RequestException as e:
-			return None
-
-		if not tourneydata:
 			return None
 
 		numTourney = len(tourneydata['tournaments'])
@@ -152,20 +112,21 @@ class tournament:
 			time = sec2tme(timeLeft)
 			players = str(totalPlayers) + "/" + str(maxPlayers)
 
-			if (maxPlayers > 50) and (not full) and (timeLeft > 600) and ((totalPlayers + 4) < maxPlayers) and (hashtag != self.lastTag):
+			if (maxPlayers > 50) and (not full) and (timeLeft > 600) and ((totalPlayers + 4) < maxPlayers) and (hashtag != lastTag):
+
+				lastTag = hashtag
+
 				try:
-					tourneydataAPI = requests.get('https://api.royaleapi.com/tournaments/{}'.format(hashtag), headers=self.getAuth(), timeout=10).json()
+					tourneydataAPI = requests.get('http://api.cr-api.com/tournaments/{}'.format(hashtag), headers=self.getAuth(), timeout=10).json()
 					totalPlayers = tourneydataAPI['capacity']
+					full = tourneydataAPI['capacity'] == tourneydataAPI['maxCapacity']
+					isClosed = tourneydataAPI['type'] == 'open'
+
+					if (full) or ((totalPlayers + 4) > maxPlayers) or (not isClosed):
+						return None
 				except :
 					pass
 				
-				full = tourneydataAPI['capacity'] == tourneydataAPI['maxCapacity']
-				isClosed = tourneydataAPI['type'] == 'open'
-
-				if (full) or ((totalPlayers + 4) > maxPlayers) or (not isClosed):
-					continue
-				
-				self.lastTag = hashtag
 				tourney['tag'] = hashtag
 				tourney['title'] = title
 				tourney['players'] = players
@@ -180,9 +141,9 @@ class tournament:
 	# checks for a tourney every 5 minutes
 	async def checkTourney(self):
 		while self is self.bot.get_cog("tournament"):
-			data = await self.getTopTourneyNew()
+			data = self.getTopTourneyNew()
 			if data is not None:
-				embed=discord.Embed(title="New Tournament", description="We found an open tournament. You can type !tourney to search for more.", color=0x00FFFF)
+				embed=discord.Embed(title="New Tournament", description="We found an open tournament. You can type !tourney to search for more.", color=0x00ffff)
 				embed.set_thumbnail(url='https://statsroyale.com/images/tournament.png')
 				embed.add_field(name="Title", value=data['title'], inline=True)
 				embed.add_field(name="Tag", value=data['tag'], inline=True)
@@ -199,8 +160,8 @@ class tournament:
 				await asyncio.sleep(900)
 			await asyncio.sleep(120)
 
-	@commands.command(pass_context=True, no_pm=True)
-	async def tourney(self, ctx, minPlayers: int=0):
+	@commands.group(pass_context=True, no_pm=True)
+	async def tourney(self, ctx):
 		"""Check an open tournament in clash royale instantly"""
 
 		author = ctx.message.author
@@ -209,21 +170,25 @@ class tournament:
 
 		allowed = await self._is_allowed(author)
 		if not allowed:
-			await self.bot.say("Error, this command is only available for Legend Members and Guests.")
-			return
+		    await self.bot.say("Error, this command is only available for Legend Members and Guests.")
+		    return
+
+		ua = UserAgent()
+		headers = {
+		    "User-Agent": ua.random
+		}
+		proxies = {
+	    	'http': random.choice(proxies_list)
+		}
 
 		try:
-			tourneydata = await self._fetchTourney()
+			tourneydata = requests.get('http://statsroyale.com/tournaments?appjson=1', timeout=5, headers=headers, proxies=proxies).json()
 		except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
-			await self.bot.say("Error: Cannot reach Clash Royale Servers. Please try again later.")
+			await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 			return
 		except requests.exceptions.RequestException as e:
-			await self.bot.say("Unexpected error while attempting to get tournaments.\nPlease wait a bit then try again")
+			await self.bot.say(e)
 			return
-			
-		if not tourneydata:
-			await self.bot.say("Error: Cog hasn't fully loaded yet. Please wait a bit then try again")
-			return None
 
 		numTourney = list(range(len(tourneydata['tournaments'])))
 		random.shuffle(numTourney)
@@ -242,9 +207,8 @@ class tournament:
 			cards = getCards(maxPlayers)
 			coins = getCoins(maxPlayers)
 
-			if not full and timeLeft > 600 and maxPlayers>=minPlayers and hashtag != self.lastTag:
-				self.lastTag = hashtag
-				embed=discord.Embed(title="Open Tournament", description="Here is a good one I found. You can search again if this is not what you are looking for.", color=0x00FFFF)
+			if not full and timeLeft > 600:
+				embed=discord.Embed(title="Open Tournament", description="Here is a good one I found. You can search again if this is not what you are looking for.", color=0x00ffff)
 				embed.set_thumbnail(url='https://statsroyale.com/images/tournament.png')
 				embed.add_field(name="Title", value=title, inline=True)
 				embed.add_field(name="Tag", value="#"+hashtag, inline=True)
@@ -254,14 +218,10 @@ class tournament:
 				embed.set_footer(text=credits, icon_url=creditIcon)
 				await self.bot.say(embed=embed)
 				return
-		await self.bot.say("No tournament found")
 
-	@commands.command(pass_context=True, no_pm=True)
+	@tourney.command(pass_context=True, no_pm=True)
 	@checks.admin_or_permissions(administrator=True)
-	async def tourneychannel(self, ctx, channel: discord.Channel=None):
-		"""Choose the channel for posting top tournaments
-		Pass no channel to disable"""
-		
+	async def channel(self, ctx, channel: discord.Channel=None):
 		serverid = ctx.message.server.id
 		if not channel:
 			self.settings[serverid] = None
@@ -270,53 +230,6 @@ class tournament:
 			self.settings[serverid] = channel.id
 			await self.bot.say("Tournament channel for this server set to "+channel.mention)
 		self.save_data()
-		
-	
-	def _get_proxy(self):
-		"""Grab and pop the oldest proxy"""
-		if not self.proxylist: return None, None
-		proxy = self.proxylist.popleft()
-		host = proxy.host
-		port = proxy.port
-		proxystr = '{}:{}'.format(host, port)
-		
-		return proxystr, proxy
-	
-	def _add_proxy(self, proxy):
-		"""If a proxy worked, reward it by adding it back to the deque"""
-		self.proxylist.append(proxy)
-		with open(self.proxypath, 'w') as f:
-			f.write('{}:{}\n'.format(proxy.host, proxy.port))
-		
-	async def _proxyBroker(self):
-		while self is self.bot.get_cog("tournament"):
-			types = ['HTTP']
-			countries = ['US', 'DE', 'FR']
-			self.broker.stop()
-			await self.broker.find(types=types, limit=15)
-			await asyncio.sleep(120)
-	
-	async def _brokerResult(self):
-		while self is self.bot.get_cog("tournament"):
-			anyfound = False
-			await asyncio.sleep(8)
-			print("Waiting on results from Proxy-Broker")
-			while True:
-				proxy = await self.queue.get()
-				if proxy is None: break
-				if type(proxy) is not Proxy: continue
-				self.proxylist.append(proxy)
-				if not anyfound:
-					print("Proxies are being found: {}".format(proxy))
-					anyfound = True
-			if anyfound:
-				print("No more proxies to be found")
-			else:
-				print("No proxies were found, trying in two minutes")
-			
-			await asyncio.sleep(120)
-		
-		
 
 def check_folders():
 	if not os.path.exists("data/tourney"):
@@ -327,13 +240,6 @@ def check_files():
 	f = "data/tourney/settings.json"
 	if not dataIO.is_valid_json(f):
 		dataIO.save_json(f, {})
-		
-	f = 'data/tourney/proxyfile.txt'
-	try:
-		file = open(f, 'r')
-	except IOError:
-		file = open(f, 'w')
-	file.close()
 
 def setup(bot):
 	check_folders()
@@ -341,6 +247,4 @@ def setup(bot):
 	n = tournament(bot)
 	loop = asyncio.get_event_loop()
 	loop.create_task(n.checkTourney())
-	loop.create_task(n._proxyBroker())
-	loop.create_task(n._brokerResult())
 	bot.add_cog(n)
