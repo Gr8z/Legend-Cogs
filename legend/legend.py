@@ -134,6 +134,9 @@ class legend:
 
     async def updateClash(self):
         self.clash = dataIO.load_json('cogs/tags.json')
+
+    async def updateSeen(self):
+        self.seen = dataIO.load_json('cogs/seen.json')
         
     def save_data(self):
         """Saves the json"""
@@ -943,6 +946,7 @@ class legend:
             return
  
         await self.updateClash()
+        await self.updateSeen()
 
         cr_members_name = []
         cr_members_tag = []
