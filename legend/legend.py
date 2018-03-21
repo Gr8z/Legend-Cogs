@@ -977,7 +977,7 @@ class legend:
                     d_members_not_in_clan.append(d_member.display_name)
 
                 try:
-                    if self.seen[legendServer[0]][d_member.id]['TIMESTAMP'] < time.time() - 432000:
+                    if self.seen[legendServer[0]][d_member.id]['TIMESTAMP'] < time.time() - 691200:
                         d_members_inactive.append(d_member.display_name)
                 except:
                     pass
