@@ -1315,6 +1315,15 @@ class legend:
             await self.bot.say("You dont have enough permissions to assign guest role.")
             return
 
+        try:
+            newname = member.name + " | Guest"
+            await self.bot.change_nickname(member, newname)
+        except discord.HTTPException:
+            await self.bot.say("I don’t have permission to change nick for this user.")
+            return
+        else:
+            await self.bot.say("Nickname changed to ** {} **\n".format(newname))
+
         role = discord.utils.get(server.roles, name="Guest")
         try:
             await self.bot.add_roles(member, role)
