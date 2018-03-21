@@ -136,7 +136,7 @@ class legend:
         self.clash = dataIO.load_json('cogs/tags.json')
 
     async def updateSeen(self):
-        self.seen = dataIO.load_json('cogs/seen.json')
+        self.seen = dataIO.load_json('data/seen/seen.json')
         
     def save_data(self):
         """Saves the json"""
