@@ -538,7 +538,7 @@ class Heist:
                                "members.".format(author.display_name, crew_size, t_crew))
 
     @heist.command(name="mention", pass_context=True)
-    async def _mention_heist(self, ctx):
+    async def _mention_heist(self, ctx, *, text=None):
         """This mentions the @Heist role"""
         server = ctx.message.server
         author = ctx.message.author
@@ -555,7 +555,12 @@ class Heist:
             await self.bot.delete_message(ctx.message)
 
             await self.bot.edit_role(server, heist_role, mentionable=True)
-            await self.bot.say(heist_role.mention)
+
+            if text:
+                await self.bot.say("{} {}".format(heist_role.mention, text))
+            else:
+                await self.bot.say(heist_role.mention)
+                
             await self.bot.edit_role(server, heist_role, mentionable=False)
         else:
             await self.bot.say("No Heist role found.")
