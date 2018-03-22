@@ -67,10 +67,17 @@ class Heist:
         await self.bot.say("Available Themes:```\n{}```".format('\n'.join(themes)))
 
     @heist.command(name="reset", pass_context=True)
-    @checks.admin_or_permissions(manage_server=True)
     async def _reset_heist(self, ctx):
         """Resets heist in case it hangs"""
         server = ctx.message.server
+        author = ctx.message.author
+
+        allowed = await self._is_commander(author)
+
+        if not allowed:
+            await self.bot.say("You dont have enough permissions to reset Heist.")
+            return
+
         settings = self.check_server_settings(server)
         self.reset_heist(settings)
         await self.bot.say("```Heist has been reset```")
@@ -560,7 +567,7 @@ class Heist:
                 await self.bot.say("{} {}".format(heist_role.mention, text))
             else:
                 await self.bot.say(heist_role.mention)
-                
+
             await self.bot.edit_role(server, heist_role, mentionable=False)
         else:
             await self.bot.say("No Heist role found.")
