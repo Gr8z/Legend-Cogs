@@ -87,7 +87,7 @@
     ]
   },
   {
-    "emoji": "☺️",
+    "emoji": "☺",
     "description": "smiling face",
     "aliases": [
       "relaxed"
@@ -358,7 +358,7 @@
     "tags": []
   },
   {
-    "emoji": "☹️",
+    "emoji": "☹",
     "description": "frowning face",
     "aliases": [
       "frowning_face"
@@ -814,7 +814,7 @@
     ]
   },
   {
-    "emoji": "☠️",
+    "emoji": "☠",
     "description": "skull and crossbones",
     "aliases": [
       "skull_and_crossbones"
@@ -1066,7 +1066,7 @@
     ]
   },
   {
-    "emoji": "✌️",
+    "emoji": "✌",
     "description": "victory hand",
     "aliases": [
       "v"
@@ -1125,7 +1125,7 @@
     "tags": []
   },
   {
-    "emoji": "☝️",
+    "emoji": "☝",
     "description": "index pointing up",
     "aliases": [
       "point_up"
@@ -1212,7 +1212,7 @@
     "tags": []
   },
   {
-    "emoji": "✍️",
+    "emoji": "✍",
     "description": "writing hand",
     "aliases": [
       "writing_hand"
@@ -1541,7 +1541,7 @@
     "tags": []
   },
   {
-    "emoji": "🕵️‍♀️",
+    "emoji": "🕵️‍♀",
     "description": "woman detective",
     "aliases": [
       "female_detective"
@@ -2776,7 +2776,7 @@
     ]
   },
   {
-    "emoji": "☂️",
+    "emoji": "☂",
     "description": "umbrella",
     "aliases": [
       "open_umbrella"
@@ -3593,7 +3593,7 @@
     "tags": []
   },
   {
-    "emoji": "☘️",
+    "emoji": "☘",
     "description": "shamrock",
     "aliases": [
       "shamrock"
@@ -3909,7 +3909,7 @@
     ]
   },
   {
-    "emoji": "⭐️",
+    "emoji": "⭐",
     "description": "white medium star",
     "aliases": [
       "star"
@@ -3935,7 +3935,7 @@
     ]
   },
   {
-    "emoji": "⚡️",
+    "emoji": "⚡",
     "description": "high voltage",
     "aliases": [
       "zap"
@@ -3975,7 +3975,7 @@
     "tags": []
   },
   {
-    "emoji": "☀️",
+    "emoji": "☀",
     "description": "sun",
     "aliases": [
       "sunny"
@@ -3993,7 +3993,7 @@
     "tags": []
   },
   {
-    "emoji": "⛅️",
+    "emoji": "⛅",
     "description": "sun behind cloud",
     "aliases": [
       "partly_sunny"
@@ -4028,7 +4028,7 @@
     "tags": []
   },
   {
-    "emoji": "☁️",
+    "emoji": "☁",
     "description": "cloud",
     "aliases": [
       "cloud"
@@ -4068,7 +4068,7 @@
     "tags": []
   },
   {
-    "emoji": "☃️",
+    "emoji": "☃",
     "description": "snowman",
     "aliases": [
       "snowman_with_snow"
@@ -4079,7 +4079,7 @@
     ]
   },
   {
-    "emoji": "⛄️",
+    "emoji": "⛄",
     "description": "snowman without snow",
     "aliases": [
       "snowman"
@@ -4089,7 +4089,7 @@
     ]
   },
   {
-    "emoji": "❄️",
+    "emoji": "❄",
     "description": "snowflake",
     "aliases": [
       "snowflake"
@@ -4168,7 +4168,7 @@
     ]
   },
   {
-    "emoji": "☔️",
+    "emoji": "☔",
     "description": "umbrella with rain drops",
     "aliases": [
       "umbrella"
@@ -4795,7 +4795,7 @@
     ]
   },
   {
-    "emoji": "☕️",
+    "emoji": "☕",
     "description": "hot beverage",
     "aliases": [
       "coffee"
@@ -4936,7 +4936,7 @@
     ]
   },
   {
-    "emoji": "⚽️",
+    "emoji": "⚽",
     "description": "soccer ball",
     "aliases": [
       "soccer"
@@ -4966,7 +4966,7 @@
     ]
   },
   {
-    "emoji": "⚾️",
+    "emoji": "⚾",
     "description": "baseball",
     "aliases": [
       "baseball"
@@ -5061,7 +5061,7 @@
     "tags": []
   },
   {
-    "emoji": "⛳️",
+    "emoji": "⛳",
     "description": "flag in hole",
     "aliases": [
       "golf"
@@ -5137,7 +5137,7 @@
     "tags": []
   },
   {
-    "emoji": "🏋️‍♀️",
+    "emoji": "🏋️‍♀",
     "description": "woman lifting weights",
     "aliases": [
       "weight_lifting_woman"
@@ -5199,7 +5199,7 @@
     "tags": []
   },
   {
-    "emoji": "⛹️‍♀️",
+    "emoji": "⛹️‍♀",
     "description": "woman bouncing ball",
     "aliases": [
       "basketball_woman"
@@ -5231,7 +5231,7 @@
     "tags": []
   },
   {
-    "emoji": "🏌️‍♀️",
+    "emoji": "🏌️‍♀",
     "description": "woman golfing",
     "aliases": [
       "golfing_woman"
@@ -5971,7 +5971,7 @@
     ]
   },
   {
-    "emoji": "✈️",
+    "emoji": "✈",
     "description": "airplane",
     "aliases": [
       "airplane"
@@ -6035,7 +6035,7 @@
     "tags": []
   },
   {
-    "emoji": "⛵️",
+    "emoji": "⛵",
     "description": "sailboat",
     "aliases": [
       "boat",
@@ -6088,7 +6088,7 @@
     "tags": []
   },
   {
-    "emoji": "⚓️",
+    "emoji": "⚓",
     "description": "anchor",
     "aliases": [
       "anchor"
@@ -6108,7 +6108,7 @@
     ]
   },
   {
-    "emoji": "⛽️",
+    "emoji": "⛽",
     "description": "fuel pump",
     "aliases": [
       "fuelpump"
@@ -6170,7 +6170,7 @@
     "tags": []
   },
   {
-    "emoji": "⛲️",
+    "emoji": "⛲",
     "description": "fountain",
     "aliases": [
       "fountain"
@@ -6308,7 +6308,7 @@
     "tags": []
   },
   {
-    "emoji": "⛺️",
+    "emoji": "⛺",
     "description": "tent",
     "aliases": [
       "tent"
@@ -6480,7 +6480,7 @@
     "tags": []
   },
   {
-    "emoji": "⛪️",
+    "emoji": "⛪",
     "description": "church",
     "aliases": [
       "church"
@@ -6647,7 +6647,7 @@
     ]
   },
   {
-    "emoji": "⌚️",
+    "emoji": "⌚",
     "description": "watch",
     "aliases": [
       "watch"
@@ -6690,7 +6690,7 @@
     ]
   },
   {
-    "emoji": "⌨️",
+    "emoji": "⌨",
     "description": "keyboard",
     "aliases": [
       "keyboard"
@@ -6854,7 +6854,7 @@
     ]
   },
   {
-    "emoji": "☎️",
+    "emoji": "☎",
     "description": "telephone",
     "aliases": [
       "phone",
@@ -6957,7 +6957,7 @@
     "tags": []
   },
   {
-    "emoji": "⌛️",
+    "emoji": "⌛",
     "description": "hourglass",
     "aliases": [
       "hourglass"
@@ -7125,7 +7125,7 @@
     ]
   },
   {
-    "emoji": "⚖️",
+    "emoji": "⚖",
     "description": "balance scale",
     "aliases": [
       "balance_scale"
@@ -7185,7 +7185,7 @@
     "tags": []
   },
   {
-    "emoji": "⚙️",
+    "emoji": "⚙",
     "description": "gear",
     "aliases": [
       "gear"
@@ -7242,7 +7242,7 @@
     "tags": []
   },
   {
-    "emoji": "⚔️",
+    "emoji": "⚔",
     "description": "crossed swords",
     "aliases": [
       "crossed_swords"
@@ -7268,7 +7268,7 @@
     ]
   },
   {
-    "emoji": "⚰️",
+    "emoji": "⚰",
     "description": "coffin",
     "aliases": [
       "coffin"
@@ -7278,7 +7278,7 @@
     ]
   },
   {
-    "emoji": "⚱️",
+    "emoji": "⚱",
     "description": "funeral urn",
     "aliases": [
       "funeral_urn"
@@ -7320,7 +7320,7 @@
     "tags": []
   },
   {
-    "emoji": "⚗️",
+    "emoji": "⚗",
     "description": "alembic",
     "aliases": [
       "alembic"
@@ -7601,7 +7601,7 @@
     "tags": []
   },
   {
-    "emoji": "✉️",
+    "emoji": "✉",
     "description": "envelope",
     "aliases": [
       "email",
@@ -8066,7 +8066,7 @@
     ]
   },
   {
-    "emoji": "✂️",
+    "emoji": "✂",
     "description": "scissors",
     "aliases": [
       "scissors"
@@ -8092,7 +8092,7 @@
     "tags": []
   },
   {
-    "emoji": "✒️",
+    "emoji": "✒",
     "description": "black nib",
     "aliases": [
       "black_nib"
@@ -8128,7 +8128,7 @@
     ]
   },
   {
-    "emoji": "✏️",
+    "emoji": "✏",
     "description": "pencil",
     "aliases": [
       "pencil2"
@@ -8194,7 +8194,7 @@
     ]
   },
   {
-    "emoji": "❤️",
+    "emoji": "❤",
     "description": "red heart",
     "aliases": [
       "heart"
@@ -8252,7 +8252,7 @@
     "tags": []
   },
   {
-    "emoji": "❣️",
+    "emoji": "❣",
     "description": "heavy heart exclamation",
     "aliases": [
       "heavy_heart_exclamation"
@@ -8329,7 +8329,7 @@
     "tags": []
   },
   {
-    "emoji": "☮️",
+    "emoji": "☮",
     "description": "peace symbol",
     "aliases": [
       "peace_symbol"
@@ -8337,7 +8337,7 @@
     "tags": []
   },
   {
-    "emoji": "✝️",
+    "emoji": "✝",
     "description": "latin cross",
     "aliases": [
       "latin_cross"
@@ -8345,7 +8345,7 @@
     "tags": []
   },
   {
-    "emoji": "☪️",
+    "emoji": "☪",
     "description": "star and crescent",
     "aliases": [
       "star_and_crescent"
@@ -8361,7 +8361,7 @@
     "tags": []
   },
   {
-    "emoji": "☸️",
+    "emoji": "☸",
     "description": "wheel of dharma",
     "aliases": [
       "wheel_of_dharma"
@@ -8369,7 +8369,7 @@
     "tags": []
   },
   {
-    "emoji": "✡️",
+    "emoji": "✡",
     "description": "star of David",
     "aliases": [
       "star_of_david"
@@ -8393,7 +8393,7 @@
     "tags": []
   },
   {
-    "emoji": "☯️",
+    "emoji": "☯",
     "description": "yin yang",
     "aliases": [
       "yin_yang"
@@ -8401,7 +8401,7 @@
     "tags": []
   },
   {
-    "emoji": "☦️",
+    "emoji": "☦",
     "description": "orthodox cross",
     "aliases": [
       "orthodox_cross"
@@ -8425,7 +8425,7 @@
     "tags": []
   },
   {
-    "emoji": "♈️",
+    "emoji": "♈",
     "description": "Aries",
     "aliases": [
       "aries"
@@ -8433,7 +8433,7 @@
     "tags": []
   },
   {
-    "emoji": "♉️",
+    "emoji": "♉",
     "description": "Taurus",
     "aliases": [
       "taurus"
@@ -8441,7 +8441,7 @@
     "tags": []
   },
   {
-    "emoji": "♊️",
+    "emoji": "♊",
     "description": "Gemini",
     "aliases": [
       "gemini"
@@ -8449,7 +8449,7 @@
     "tags": []
   },
   {
-    "emoji": "♋️",
+    "emoji": "♋",
     "description": "Cancer",
     "aliases": [
       "cancer"
@@ -8457,7 +8457,7 @@
     "tags": []
   },
   {
-    "emoji": "♌️",
+    "emoji": "♌",
     "description": "Leo",
     "aliases": [
       "leo"
@@ -8465,7 +8465,7 @@
     "tags": []
   },
   {
-    "emoji": "♍️",
+    "emoji": "♍",
     "description": "Virgo",
     "aliases": [
       "virgo"
@@ -8473,7 +8473,7 @@
     "tags": []
   },
   {
-    "emoji": "♎️",
+    "emoji": "♎",
     "description": "Libra",
     "aliases": [
       "libra"
@@ -8481,7 +8481,7 @@
     "tags": []
   },
   {
-    "emoji": "♏️",
+    "emoji": "♏",
     "description": "Scorpius",
     "aliases": [
       "scorpius"
@@ -8489,7 +8489,7 @@
     "tags": []
   },
   {
-    "emoji": "♐️",
+    "emoji": "♐",
     "description": "Sagittarius",
     "aliases": [
       "sagittarius"
@@ -8497,7 +8497,7 @@
     "tags": []
   },
   {
-    "emoji": "♑️",
+    "emoji": "♑",
     "description": "Capricorn",
     "aliases": [
       "capricorn"
@@ -8505,7 +8505,7 @@
     "tags": []
   },
   {
-    "emoji": "♒️",
+    "emoji": "♒",
     "description": "Aquarius",
     "aliases": [
       "aquarius"
@@ -8513,7 +8513,7 @@
     "tags": []
   },
   {
-    "emoji": "♓️",
+    "emoji": "♓",
     "description": "Pisces",
     "aliases": [
       "pisces"
@@ -8529,7 +8529,7 @@
     "tags": []
   },
   {
-    "emoji": "⚛️",
+    "emoji": "⚛",
     "description": "atom symbol",
     "aliases": [
       "atom_symbol"
@@ -8545,7 +8545,7 @@
     "tags": []
   },
   {
-    "emoji": "☢️",
+    "emoji": "☢",
     "description": "radioactive",
     "aliases": [
       "radioactive"
@@ -8553,7 +8553,7 @@
     "tags": []
   },
   {
-    "emoji": "☣️",
+    "emoji": "☣",
     "description": "biohazard",
     "aliases": [
       "biohazard"
@@ -8588,7 +8588,7 @@
     "tags": []
   },
   {
-    "emoji": "🈚️",
+    "emoji": "🈚",
     "description": "Japanese “free of charge” button",
     "aliases": [
       "u7121"
@@ -8612,7 +8612,7 @@
     "tags": []
   },
   {
-    "emoji": "🈷️",
+    "emoji": "🈷",
     "description": "Japanese “monthly amount” button",
     "aliases": [
       "u6708"
@@ -8620,7 +8620,7 @@
     "tags": []
   },
   {
-    "emoji": "✴️",
+    "emoji": "✴",
     "description": "eight-pointed star",
     "aliases": [
       "eight_pointed_black_star"
@@ -8652,7 +8652,7 @@
     "tags": []
   },
   {
-    "emoji": "㊙️",
+    "emoji": "㊙",
     "description": "Japanese “secret” button",
     "aliases": [
       "secret"
@@ -8660,7 +8660,7 @@
     "tags": []
   },
   {
-    "emoji": "㊗️",
+    "emoji": "㊗",
     "description": "Japanese “congratulations” button",
     "aliases": [
       "congratulations"
@@ -8700,7 +8700,7 @@
     "tags": []
   },
   {
-    "emoji": "🅰️",
+    "emoji": "🅰",
     "description": "A button (blood type)",
     "aliases": [
       "a"
@@ -8708,7 +8708,7 @@
     "tags": []
   },
   {
-    "emoji": "🅱️",
+    "emoji": "🅱",
     "description": "B button (blood type)",
     "aliases": [
       "b"
@@ -8732,7 +8732,7 @@
     "tags": []
   },
   {
-    "emoji": "🅾️",
+    "emoji": "🅾",
     "description": "O button (blood type)",
     "aliases": [
       "o2"
@@ -8759,7 +8759,7 @@
     "tags": []
   },
   {
-    "emoji": "⭕️",
+    "emoji": "⭕",
     "description": "heavy large circle",
     "aliases": [
       "o"
@@ -8775,7 +8775,7 @@
     "tags": []
   },
   {
-    "emoji": "⛔️",
+    "emoji": "⛔",
     "description": "no entry",
     "aliases": [
       "no_entry"
@@ -8825,7 +8825,7 @@
     ]
   },
   {
-    "emoji": "♨️",
+    "emoji": "♨",
     "description": "hot springs",
     "aliases": [
       "hotsprings"
@@ -8889,7 +8889,7 @@
     "tags": []
   },
   {
-    "emoji": "❗️",
+    "emoji": "❗",
     "description": "exclamation mark",
     "aliases": [
       "exclamation",
@@ -8926,7 +8926,7 @@
     "tags": []
   },
   {
-    "emoji": "‼️",
+    "emoji": "‼",
     "description": "double exclamation mark",
     "aliases": [
       "bangbang"
@@ -8934,7 +8934,7 @@
     "tags": []
   },
   {
-    "emoji": "⁉️",
+    "emoji": "⁉",
     "description": "exclamation question mark",
     "aliases": [
       "interrobang"
@@ -8958,7 +8958,7 @@
     "tags": []
   },
   {
-    "emoji": "〽️",
+    "emoji": "〽",
     "description": "part alternation mark",
     "aliases": [
       "part_alternation_mark"
@@ -8966,7 +8966,7 @@
     "tags": []
   },
   {
-    "emoji": "⚠️",
+    "emoji": "⚠",
     "description": "warning",
     "aliases": [
       "warning"
@@ -8992,7 +8992,7 @@
     "tags": []
   },
   {
-    "emoji": "⚜️",
+    "emoji": "⚜",
     "description": "fleur-de-lis",
     "aliases": [
       "fleur_de_lis"
@@ -9008,7 +9008,7 @@
     "tags": []
   },
   {
-    "emoji": "♻️",
+    "emoji": "♻",
     "description": "recycling symbol",
     "aliases": [
       "recycle"
@@ -9027,7 +9027,7 @@
     "tags": []
   },
   {
-    "emoji": "🈯️",
+    "emoji": "🈯",
     "description": "Japanese “reserved” button",
     "aliases": [
       "u6307"
@@ -9043,7 +9043,7 @@
     "tags": []
   },
   {
-    "emoji": "❇️",
+    "emoji": "❇",
     "description": "sparkle",
     "aliases": [
       "sparkle"
@@ -9051,7 +9051,7 @@
     "tags": []
   },
   {
-    "emoji": "✳️",
+    "emoji": "✳",
     "description": "eight-spoked asterisk",
     "aliases": [
       "eight_spoked_asterisk"
@@ -9087,7 +9087,7 @@
     "tags": []
   },
   {
-    "emoji": "Ⓜ️",
+    "emoji": "Ⓜ",
     "description": "circled M",
     "aliases": [
       "m"
@@ -9134,7 +9134,7 @@
     ]
   },
   {
-    "emoji": "♿️",
+    "emoji": "♿",
     "description": "wheelchair symbol",
     "aliases": [
       "wheelchair"
@@ -9144,7 +9144,7 @@
     ]
   },
   {
-    "emoji": "🅿️",
+    "emoji": "🅿",
     "description": "P button",
     "aliases": [
       "parking"
@@ -9160,7 +9160,7 @@
     "tags": []
   },
   {
-    "emoji": "🈂️",
+    "emoji": "🈂",
     "description": "Japanese “service charge” button",
     "aliases": [
       "sa"
@@ -9281,7 +9281,7 @@
     "tags": []
   },
   {
-    "emoji": "ℹ️",
+    "emoji": "ℹ",
     "description": "information",
     "aliases": [
       "information_source"
@@ -9485,7 +9485,7 @@
     "tags": []
   },
   {
-    "emoji": "▶️",
+    "emoji": "▶",
     "description": "play button",
     "aliases": [
       "arrow_forward"
@@ -9573,7 +9573,7 @@
     "tags": []
   },
   {
-    "emoji": "◀️",
+    "emoji": "◀",
     "description": "reverse button",
     "aliases": [
       "arrow_backward"
@@ -9597,7 +9597,7 @@
     "tags": []
   },
   {
-    "emoji": "➡️",
+    "emoji": "➡",
     "description": "right arrow",
     "aliases": [
       "arrow_right"
@@ -9605,7 +9605,7 @@
     "tags": []
   },
   {
-    "emoji": "⬅️",
+    "emoji": "⬅",
     "description": "left arrow",
     "aliases": [
       "arrow_left"
@@ -9613,7 +9613,7 @@
     "tags": []
   },
   {
-    "emoji": "⬆️",
+    "emoji": "⬆",
     "description": "up arrow",
     "aliases": [
       "arrow_up"
@@ -9621,7 +9621,7 @@
     "tags": []
   },
   {
-    "emoji": "⬇️",
+    "emoji": "⬇",
     "description": "down arrow",
     "aliases": [
       "arrow_down"
@@ -9629,7 +9629,7 @@
     "tags": []
   },
   {
-    "emoji": "↗️",
+    "emoji": "↗",
     "description": "up-right arrow",
     "aliases": [
       "arrow_upper_right"
@@ -9637,7 +9637,7 @@
     "tags": []
   },
   {
-    "emoji": "↘️",
+    "emoji": "↘",
     "description": "down-right arrow",
     "aliases": [
       "arrow_lower_right"
@@ -9645,7 +9645,7 @@
     "tags": []
   },
   {
-    "emoji": "↙️",
+    "emoji": "↙",
     "description": "down-left arrow",
     "aliases": [
       "arrow_lower_left"
@@ -9653,7 +9653,7 @@
     "tags": []
   },
   {
-    "emoji": "↖️",
+    "emoji": "↖",
     "description": "up-left arrow",
     "aliases": [
       "arrow_upper_left"
@@ -9661,7 +9661,7 @@
     "tags": []
   },
   {
-    "emoji": "↕️",
+    "emoji": "↕",
     "description": "up-down arrow",
     "aliases": [
       "arrow_up_down"
@@ -9669,7 +9669,7 @@
     "tags": []
   },
   {
-    "emoji": "↔️",
+    "emoji": "↔",
     "description": "left-right arrow",
     "aliases": [
       "left_right_arrow"
@@ -9677,7 +9677,7 @@
     "tags": []
   },
   {
-    "emoji": "↪️",
+    "emoji": "↪",
     "description": "left arrow curving right",
     "aliases": [
       "arrow_right_hook"
@@ -9685,7 +9685,7 @@
     "tags": []
   },
   {
-    "emoji": "↩️",
+    "emoji": "↩",
     "description": "right arrow curving left",
     "aliases": [
       "leftwards_arrow_with_hook"
@@ -9695,7 +9695,7 @@
     ]
   },
   {
-    "emoji": "⤴️",
+    "emoji": "⤴",
     "description": "right arrow curving up",
     "aliases": [
       "arrow_heading_up"
@@ -9703,7 +9703,7 @@
     "tags": []
   },
   {
-    "emoji": "⤵️",
+    "emoji": "⤵",
     "description": "right arrow curving down",
     "aliases": [
       "arrow_heading_down"
@@ -9799,7 +9799,7 @@
     "tags": []
   },
   {
-    "emoji": "✖️",
+    "emoji": "✖",
     "description": "heavy multiplication x",
     "aliases": [
       "heavy_multiplication_x"
@@ -9823,7 +9823,7 @@
     "tags": []
   },
   {
-    "emoji": "™️",
+    "emoji": "™",
     "description": "trade mark",
     "aliases": [
       "tm"
@@ -9833,7 +9833,7 @@
     ]
   },
   {
-    "emoji": "©️",
+    "emoji": "©",
     "description": "copyright",
     "aliases": [
       "copyright"
@@ -9841,7 +9841,7 @@
     "tags": []
   },
   {
-    "emoji": "®️",
+    "emoji": "®",
     "description": "registered",
     "aliases": [
       "registered"
@@ -9849,7 +9849,7 @@
     "tags": []
   },
   {
-    "emoji": "〰️",
+    "emoji": "〰",
     "description": "wavy dash",
     "aliases": [
       "wavy_dash"
@@ -9913,7 +9913,7 @@
     "tags": []
   },
   {
-    "emoji": "✔️",
+    "emoji": "✔",
     "description": "heavy check mark",
     "aliases": [
       "heavy_check_mark"
@@ -9921,7 +9921,7 @@
     "tags": []
   },
   {
-    "emoji": "☑️",
+    "emoji": "☑",
     "description": "ballot box with check",
     "aliases": [
       "ballot_box_with_check"
@@ -9937,7 +9937,7 @@
     "tags": []
   },
   {
-    "emoji": "⚪️",
+    "emoji": "⚪",
     "description": "white circle",
     "aliases": [
       "white_circle"
@@ -9945,7 +9945,7 @@
     "tags": []
   },
   {
-    "emoji": "⚫️",
+    "emoji": "⚫",
     "description": "black circle",
     "aliases": [
       "black_circle"
@@ -10033,7 +10033,7 @@
     "tags": []
   },
   {
-    "emoji": "▪️",
+    "emoji": "▪",
     "description": "black small square",
     "aliases": [
       "black_small_square"
@@ -10041,7 +10041,7 @@
     "tags": []
   },
   {
-    "emoji": "▫️",
+    "emoji": "▫",
     "description": "white small square",
     "aliases": [
       "white_small_square"
@@ -10049,7 +10049,7 @@
     "tags": []
   },
   {
-    "emoji": "◾️",
+    "emoji": "◾",
     "description": "black medium-small square",
     "aliases": [
       "black_medium_small_square"
@@ -10057,7 +10057,7 @@
     "tags": []
   },
   {
-    "emoji": "◽️",
+    "emoji": "◽",
     "description": "white medium-small square",
     "aliases": [
       "white_medium_small_square"
@@ -10065,7 +10065,7 @@
     "tags": []
   },
   {
-    "emoji": "◼️",
+    "emoji": "◼",
     "description": "black medium square",
     "aliases": [
       "black_medium_square"
@@ -10073,7 +10073,7 @@
     "tags": []
   },
   {
-    "emoji": "◻️",
+    "emoji": "◻",
     "description": "white medium square",
     "aliases": [
       "white_medium_square"
@@ -10081,7 +10081,7 @@
     "tags": []
   },
   {
-    "emoji": "⬛️",
+    "emoji": "⬛",
     "description": "black large square",
     "aliases": [
       "black_large_square"
@@ -10089,7 +10089,7 @@
     "tags": []
   },
   {
-    "emoji": "⬜️",
+    "emoji": "⬜",
     "description": "white large square",
     "aliases": [
       "white_large_square"
@@ -10212,7 +10212,7 @@
     "tags": []
   },
   {
-    "emoji": "♠️",
+    "emoji": "♠",
     "description": "spade suit",
     "aliases": [
       "spades"
@@ -10220,7 +10220,7 @@
     "tags": []
   },
   {
-    "emoji": "♣️",
+    "emoji": "♣",
     "description": "club suit",
     "aliases": [
       "clubs"
@@ -10228,7 +10228,7 @@
     "tags": []
   },
   {
-    "emoji": "♥️",
+    "emoji": "♥",
     "description": "heart suit",
     "aliases": [
       "hearts"
@@ -10236,7 +10236,7 @@
     "tags": []
   },
   {
-    "emoji": "♦️",
+    "emoji": "♦",
     "description": "diamond suit",
     "aliases": [
       "diamonds"
@@ -10260,7 +10260,7 @@
     "tags": []
   },
   {
-    "emoji": "🀄️",
+    "emoji": "🀄",
     "description": "mahjong red dragon",
     "aliases": [
       "mahjong"
@@ -10460,7 +10460,7 @@
     "tags": []
   },
   {
-    "emoji": "🏳️",
+    "emoji": "🏳",
     "description": "white flag",
     "aliases": [
       "white_flag"
