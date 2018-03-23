@@ -79,11 +79,7 @@ class academy:
         async for message in self.bot.logs_from(channel, limit=2000,
                                                 after=after):
             to_delete.append(message)
-
-        logger.info("{}({}) deleted {} messages in channel {}"
-                    "".format(author.name, author.id,
-                              len(to_delete), channel.name))
-
+            
         await self.mass_purge(to_delete)   
 
 
