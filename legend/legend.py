@@ -117,9 +117,6 @@ Visit our website to see live clan statistics:
 https://legendclans.com
 """
 
-coaching_info = """If you are looking to climb in your trophies and get better at the game, we have coaches at Legend Academy that can help you get to the top! Come join the Academy server and start a session with a dedicated coach now at https://discord.gg/eDzUwvx
-"""
-
 class legend:
 
     def __init__(self, bot):
@@ -660,9 +657,6 @@ class legend:
             
             await asyncio.sleep(300)
             await self.bot.send_message(member,credits_info)
-            
-            await asyncio.sleep(300)
-            await self.bot.send_message(member,coaching_info)
 
             await asyncio.sleep(300)
             await self.bot.send_message(member,coc_bs)
