@@ -1,0 +1,10 @@
+{
+    "AUTHOR" : "GR8",
+    "INSTALL_MSG" : "LeGeND Family Coaching management added, if there are any issues, please mention them on https://github.com/Gr8z/LeGeND-Bot",
+    "NAME" : "academy",
+    "SHORT" : "Coaching management commands",
+    "DESCRIPTION" : "Coaching management commands",
+    "TAGS" : ["legend", "management", "academy", "coaching"],
+    "REQUIREMENTS" : [],
+    "HIDDEN" : false
+}

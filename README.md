@@ -19,6 +19,7 @@ If you want to see this bot in action, join the LeGeND Family Discord at [discor
  * **heist** - Clash Royale Themed Heist cog with additional features, port from Jumper-Cogs.
  * **russianroulette** - Russian Roullete styled game with additional features, port from Jumper-Cogs.
  * **fourinarow** - Four in a row game with additional features, post from Red-Cogs.
+ * **academy** - Coaching command for LeGeND Family.
 
 ## Installation
 

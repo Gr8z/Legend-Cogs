@@ -2,7 +2,7 @@
     "AUTHOR" : "GR8",
     "INSTALL_MSG" : "LeGeND Family Discord Shop added, if there are any issues, please mention them on https://github.com/Gr8z/LeGeND-Bot",
     "NAME" : "shop",
-    "SHORT" : "Finally some good use the credits.",
+    "SHORT" : "Finally some good use for the credits.",
     "DESCRIPTION" : "Uses the economy cog to purchase different things : https://i.imgur.com/FIF5sug.png",
     "TAGS" : ["legend", "management", "activity", "shop"],
     "REQUIREMENTS" : ["requests"],
