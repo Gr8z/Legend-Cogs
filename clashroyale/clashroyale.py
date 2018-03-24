@@ -413,15 +413,15 @@ def check_files():
 	f = "cogs/tags.json"
 	if not fileIO(f, "check"):
 		print("Creating empty tags.json...")
-		fileIO(f, "save", [])
+		fileIO(f, "save", {"0" : {"tag" : "DONOTREMOVE"}})
 	f = "data/BrawlStats/tags.json"
 	if not fileIO(f, "check"):
 		print("Creating empty tags.json...")
-		fileIO(f, "save", [])
+		fileIO(f, "save", {"0" : {"tag" : "DONOTREMOVE"}})
 	f = "cogs/auth.json"
 	if not fileIO(f, "check"):
-		print("Creating empty auth.json...")
-		dataIO.save_json(f, {})
+		print("enter your RoyaleAPI token in auth.json...")
+		dataIO.save_json(f, "save", {"token" : "enter your RoyaleAPI token here!"})
 
 def check_auth():
 	c = dataIO.load_json('cogs/auth.json')
