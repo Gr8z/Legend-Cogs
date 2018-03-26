@@ -118,7 +118,7 @@ class tournament:
 				lastTag = hashtag
 
 				try:
-					tourneydataAPI = requests.get('http://api.cr-api.com/tournaments/{}'.format(hashtag), headers=self.getAuth(), timeout=10).json()
+					tourneydataAPI = requests.get('http://api.royaleapi.com/tournaments/{}'.format(hashtag), headers=self.getAuth(), timeout=10).json()
 					totalPlayers = tourneydataAPI['capacity']
 					full = tourneydataAPI['capacity'] == tourneydataAPI['maxCapacity']
 					isClosed = tourneydataAPI['type'] == 'open'

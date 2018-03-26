@@ -334,7 +334,7 @@ class legend:
         if "url" in self.settings and "family" in self.settings:
             embed.set_author(name=self.settings['family'], url=self.settings['url'], icon_url="https://i.imgur.com/dtSMITE.jpg")
         else:
-            embed.set_author(name="LeGeND Family Clans", url="http://cr-api.com/clan/family/legend", icon_url="https://i.imgur.com/dtSMITE.jpg")
+            embed.set_author(name="LeGeND Family Clans", url="http://royaleapi.com/clan/family/legend", icon_url="https://i.imgur.com/dtSMITE.jpg")
 
         embed.set_footer(text=credits, icon_url=creditIcon)
 
@@ -1094,7 +1094,7 @@ class legend:
                 familyurl = '{}/members/datatable'.format(self.settings['url'])
                 allplayers = requests.get(familyurl, timeout=15).json()
             else:
-                allplayers = requests.get('http://cr-api.com/clan/family/legend/members/datatable', timeout=15).json()
+                allplayers = requests.get('http://royaleapi.com/clan/family/legend/members/datatable', timeout=15).json()
         except:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
@@ -1165,7 +1165,7 @@ class legend:
                 familyurl = '{}/members/datatable'.format(self.settings['url'])
                 allplayers = requests.get(familyurl, timeout=15).json()
             else:
-                allplayers = requests.get('http://cr-api.com/clan/family/legend/members/datatable', timeout=15).json()
+                allplayers = requests.get('http://royaleapi.com/clan/family/legend/members/datatable', timeout=15).json()
         except:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
@@ -1235,7 +1235,7 @@ class legend:
                 familyurl = '{}/members/datatable'.format(self.settings['url'])
                 allplayers = requests.get(familyurl, timeout=15).json()
             else:
-                allplayers = requests.get('http://cr-api.com/clan/family/legend/members/datatable', timeout=15).json()
+                allplayers = requests.get('http://royaleapi.com/clan/family/legend/members/datatable', timeout=15).json()
         except:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
