@@ -169,7 +169,7 @@ class academy:
         else:
             more_info = reply.content        
         
-        await self.bot.send_message(channel_req, msg_req.format(user, ingame_name, trophies, info, time, more_info, coach_role.mention))
+        await self.bot.send_message(channel_req, msg_req.format(user.display_name, ingame_name, trophies, info, time, more_info, coach_role.mention))
         await self.bot.send_message(user, "Ok! I sent your request to coaches, someone will get to you as soon as possible.")
 
 
