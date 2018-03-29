@@ -333,7 +333,7 @@ class Deck:
             await self.bot.say("Cannot find a URL.")
             return
         await ctx.invoke(self.deck_get, *card_keys)
-        await self.bot.delete_message(ctx.message)
+        #await self.bot.delete_message(ctx.message)
 
     @deck.command(name="addlink", aliases=['al', 'import', 'i'], pass_context=True, no_pm=True)
     async def deck_addlink(self, ctx, *, url):
