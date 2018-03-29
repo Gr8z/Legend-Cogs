@@ -216,6 +216,87 @@ class Deck:
                 em = await self.decklink_embed(member_deck)
                 await self.bot.say(embed=em)
 
+    @deck.command(name="post", pass_context=True, no_pm=True)
+    async def deck_post(self, ctx,
+                       card1=None, card2=None, card3=None, card4=None,
+                       card5=None, card6=None, card7=None, card8=None,
+                       deck_name=None):
+        """Post your own deck in #decks channel
+
+        Enter 8 cards followed by a name.
+
+        Example:
+        !deck post barrel gg is it knight princess rocket log "Log Bait"
+
+        For the full list of acceptable card names, type !deck cards
+        """
+
+        author = ctx.message.author
+        server = ctx.message.server
+
+        member_deck = [card1, card2, card3, card4, card5, card6, card7, card8]
+        if not all(member_deck):
+            await self.bot.say("Please enter 8 cards.")
+            await self.bot.send_cmd_help(ctx)
+        elif len(set(member_deck)) < len(member_deck):
+            await self.bot.say("Please enter 8 unique cards.")
+        elif deck_name is None:
+            await self.bot.say("Please enter a deck name.")
+        else:
+            #await self.deck_upload(ctx, member_deck, deck_name, author)
+
+            self.check_server_settings(server)
+            self.check_member_settings(server, author)
+
+            member_deck = self.normalize_deck_data(member_deck)
+
+            deck_is_valid = True
+
+            # Ensure: exactly 8 cards are entered
+            if len(member_deck) != 8:
+                await self.bot.say(
+                    "You have entered {} card{}. "
+                    "Please enter exactly 8 cards.".format(
+                        len(member_deck),
+                        's' if len(member_deck) > 1 else ''))
+                await self.bot.send_cmd_help(ctx)
+                deck_is_valid = False
+
+            # Ensure: card names are valid
+            if not set(member_deck) < set(self.valid_card_keys):
+                for card in member_deck:
+                    if card not in self.valid_card_keys:
+                        await self.bot.say("**{}** is not a valid card name.".format(card))
+                await self.bot.say("\nType `{}deck cards` for the full list".format(ctx.prefix))
+                deck_is_valid = False
+
+            if deck_is_valid:
+                #await self.upload_deck_image(ctx, member_deck, deck_name, member)
+                deck_image = await self.bot.loop.run_in_executor(
+                    self.threadex,
+                    self.get_deck_image,
+                    member_deck, deck_name, author
+                )
+
+                # construct a filename using first three letters of each card
+                filename = "deck-{}.png".format("-".join([card[:3] for card in member_deck]))
+                description = "**" + deck_name + "** by " + author.mention
+
+                with io.BytesIO() as f:
+                    deck_image.save(f, "PNG")
+                    f.seek(0)
+                    await ctx.bot.send_file(
+                        discord.Object(391597618750423041), f,
+                        filename=filename, content=description)
+
+            self.deck_is_valid = deck_is_valid
+            # generate link
+            if self.deck_is_valid:
+                em = await self.decklink_embed(member_deck)
+                await self.bot.send_message(discord.Object(391597618750423041), "Post your favourite deck here using `!deck post`")
+                await self.bot.say("Deck successfully posted in #decks")
+                await self.bot.send_message(discord.Object(391597618750423041), embed=em)
+
     async def card_decklink_to_key(self, decklink):
         """Decklink id to card."""
         for card in self.cards:
