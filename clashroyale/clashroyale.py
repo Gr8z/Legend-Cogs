@@ -89,7 +89,7 @@ class clashroyale:
 
 			embed=discord.Embed(title="", url="http://royaleapi.com/player/"+profiledata['tag'], color=0xFAA61A)
 			embed.set_author(name=profiledata['name'] + " (#"+profiledata['tag']+")", icon_url=clanurl)
-			embed.set_thumbnail(url="https://cr-api.github.io/cr-api-assets/arenas/{}.png".format(profiledata['arena']['arena'].replace(' ', '').lower()))
+			embed.set_thumbnail(url="https://royaleapi.github.io/cr-api-assets/arenas/arena{}.png".format(profiledata['arena']['arena']))
 			embed.add_field(name="Trophies", value=profiledata['trophies'], inline=True)
 			embed.add_field(name="Highest Trophies", value=profiledata['stats']['maxTrophies'], inline=True)
 			embed.add_field(name="Level", value=profiledata['stats']['level'], inline=True)
