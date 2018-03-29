@@ -20,6 +20,7 @@ If you want to see this bot in action, join the LeGeND Family Discord at [discor
  * **russianroulette** - Russian Roullete styled game with additional features, port from Jumper-Cogs.
  * **fourinarow** - Four in a row game with additional features, post from Red-Cogs.
  * **academy** - Coaching command for LeGeND Family.
+ * **deck** - Clash Royale deck management system with additional features, port from SML-Cogs.
 
 ## Installation
 
