@@ -253,7 +253,7 @@ class Race:
         wait = settings['Time']
         await self.bot.say(":triangular_flag_on_post: A race has begun! Type {}race enter "
                            "to join the race! :triangular_flag_on_post:\n{}The race will "
-                           "begin in {} seconds!\n{}".format(ctx.prefix, ' ' * 25, wait, raceRole.mention))
+                           "begin in {} seconds!\n{}{}".format(ctx.prefix, ' ' * 25, wait, ' ' * 37, raceRole.mention))
         await asyncio.sleep(wait)
         await self.bot.say(":checkered_flag: The race is now in progress :checkered_flag:")
 
