@@ -233,6 +233,7 @@ class Race:
                 There are no cheaters and it isn't rigged.
         """
         author = ctx.message.author
+        server = ctx.message.server
         data = self.check_server(author.server)
         settings = self.check_config(author.server)
 
