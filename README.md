@@ -22,6 +22,7 @@ If you want to see this bot in action, join the LeGeND Family Discord at [discor
  * **fourinarow** - Four in a row game with additional features, post from Red-Cogs.
  * **academy** - Coaching command for LeGeND Family.
  * **deck** - Clash Royale deck management system with additional features, port from SML-Cogs.
+ * **duels** - Clash Royale 1v1 duels with credit bets.
 
 ## Installation
 
