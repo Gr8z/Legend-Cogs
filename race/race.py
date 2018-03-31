@@ -255,7 +255,7 @@ class Race:
         await self.bot.edit_role(server, raceRole, mentionable=True)
         await self.bot.say(":triangular_flag_on_post: A race has begun! Type {}race enter "
                            "to join the race! :triangular_flag_on_post:\n{}The race will "
-                           "begin in {} seconds!\n{}{}".format(ctx.prefix, ' ' * 25, wait, ' ' * 43, raceRole.mention))
+                           "begin in {} seconds!\n{}{}".format(ctx.prefix, ' ' * 25, wait, ' ' * 37, raceRole.mention))
         await self.bot.edit_role(server, raceRole, mentionable=False)
 
         await asyncio.sleep(wait)
