@@ -214,7 +214,7 @@ class Race:
         await self.bot.say("Parameters reset.")
 
     @race.command(name="start", pass_context=True)
-    @commands.cooldown(1, 120, commands.BucketType.server)
+    @checks.admin_or_permissions(manage_server=True)
     async def _start_race(self, ctx):
         """Start an animal race and enter yourself as participant
 
@@ -239,14 +239,20 @@ class Race:
         if data['Race Active']:
             return
 
+        role_name = "Race"
+
+        raceRole = discord.utils.get(server.roles, name=role_name)
+        if raceRole is None:
+            await self.bot.create_role(server, name=role_name)
+            raceRole = discord.utils.get(server.roles, name=role_name)
+
         self.game_teardown(data, force=True)
         data['Race Active'] = True
-        data['Players'][author.id] = {}
+        #data['Players'][author.id] = {}
         wait = settings['Time']
         await self.bot.say(":triangular_flag_on_post: A race has begun! Type {}race enter "
                            "to join the race! :triangular_flag_on_post:\n{}The race will "
-                           "begin in {} seconds!\n\n**{}** entered the "
-                           "race!".format(ctx.prefix, ' ' * 25, wait, author.mention))
+                           "begin in {} seconds!\n\n**{}**\n{}".format(ctx.prefix, ' ' * 25, wait, raceRole.mention))
         await asyncio.sleep(wait)
         await self.bot.say(":checkered_flag: The race is now in progress :checkered_flag:")
 
