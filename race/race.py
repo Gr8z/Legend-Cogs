@@ -249,13 +249,13 @@ class Race:
 
         self.game_teardown(data, force=True)
         data['Race Active'] = True
-        #data['Players'][author.id] = {}
+        data['Players'][author.id] = {}
         wait = settings['Time']
 
         await self.bot.edit_role(server, raceRole, mentionable=True)
         await self.bot.say(":triangular_flag_on_post: A race has begun! Type {}race enter "
-                           "to join the race! :triangular_flag_on_post:\n{}The race will "
-                           "begin in {} seconds!\n{}{}".format(ctx.prefix, ' ' * 25, wait, ' ' * 37, raceRole.mention))
+                           "to join the race! :triangular_flag_on_post:\n{}The {} will "
+                           "begin in {} seconds!".format(ctx.prefix, ' ' * 25, raceRole.mention, wait))
         await self.bot.edit_role(server, raceRole, mentionable=False)
 
         await asyncio.sleep(wait)
