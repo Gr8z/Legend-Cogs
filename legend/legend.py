@@ -845,7 +845,7 @@ class legend:
             await self.bot.say(embed=embed)
 
     @commands.command(pass_context=True, no_pm=True)
-    async def changenick(self, ctx, member: discord.Member = None):   
+    async def changenickfoooooools(self, ctx, member: discord.Member = None):   
         """ Change nickname of a user of their IGN + Clan"""
 
         server = ctx.message.server
