@@ -1218,7 +1218,7 @@ class Heist:
         topBank = bank_sorted[:1]
 
         target_fmt = {
-            "Name": "{}'s Bank".format(topBank[0].member.display_name.split('|', 1)[0]),
+            "Name": "{}’s Bank".format(topBank[0].member.display_name.split('|', 1)[0]),
             "Crew": 50, 
             "Vault": topBank[0].balance,
             "Vault Max": topBank[0].balance,
