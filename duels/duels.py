@@ -114,7 +114,7 @@ class duels:
             await self.bot.say("{} You are already registered!".format(author.mention))
 
     @duel.command(pass_context=True)
-    async def start(self, ctx, bet : int):
+    async def start(self, ctx, bet : int, member: discord.Member = None):
         """Start a duel with bets"""
         author = ctx.message.author
 
@@ -133,6 +133,12 @@ class duels:
         if self.account_check(author.id) is False:
             await self.bot.say("You need to register before starting a duel, type ``{}duel register``.".format(ctx.prefix))
             return
+
+        if member is None:
+            privateDuel = None
+        else:
+            privateDuel = member.id
+
 
         duelPlayer = self.settings['USERS'][author.id]
 
@@ -156,7 +162,11 @@ class duels:
             embed.add_field(name="Arena", value=profiledata['arena']['name'], inline=True)
             embed.set_footer(text=credits, icon_url=creditIcon)
 
-            await self.bot.say("{} wants to duel one of you in Clash Royale for {} credits, type ``{}duel accept`` the offer.".format(author.mention, str(bet), ctx.prefix))
+            if privateDuel is None:
+                await self.bot.say("{} wants to duel one of you in Clash Royale for {} credits, type ``{}duel accept`` the offer.".format(author.mention, str(bet), ctx.prefix))
+            else:
+                await self.bot.say("{} wants to duel {} in Clash Royale for {} credits, type ``{}duel accept`` the offer.".format(author.mention, member.mention, str(bet), ctx.prefix))
+                
             await self.bot.say(embed=embed)
 
         except:
@@ -169,7 +179,8 @@ class duels:
             "TIME" : duelID,
             "PLAYERS" : [author.id],
             "WINNER" : None,
-            "BET" : bet
+            "BET" : bet,
+            "PRIVATE" : privateDuel
         }
         self.settings.update({"CONFIG": {'ACTIVE': duelID}})
         fileIO(settings_path, "save", self.settings)
@@ -199,9 +210,16 @@ class duels:
             await self.bot.say("There is no duel active to accept, type ``{}duel start`` to start a new duel.".format(ctx.prefix))
             return
 
+
         duelID = self.settings["CONFIG"]["ACTIVE"]
         duelPlayers = self.settings["DUELS"][duelID]["PLAYERS"]
         duelBet = self.settings["DUELS"][duelID]["BET"]
+        privateDuel = self.settings["DUELS"][duelID]["PRIVATE"]
+
+        if privateDuel is not None:
+            if privateDuel is not author.id:
+                await self.bot.say("Cannot join the duel, it is set to private.")
+                return
 
         if not self.bank_check(author, duelBet):
             await self.bot.say("You do not have {} credits to accept the bet on this duel.".format(str(duelBet)))
@@ -213,7 +231,19 @@ class duels:
 
         if duelPlayers[0] == author.id:
             await self.bot.say("Sorry, You cannot duel yourself.")
-            return            
+            return
+
+        try:
+            profiledata = requests.get('https://api.royaleapi.com/player/{}?keys=battles'.format(','.join(duelPlayers)), headers=self.getAuth(), timeout=10).json()
+
+            if (profiledata[0]['stats']['maxTrophies'] + 600) < profiledata[1]['stats']['maxTrophies']:
+                await self.bot.say("Sorry, your trophies are too high for this duel.")
+            return
+
+        except:
+            await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
+            return
+
 
         duelPlayers.append(author.id)
 
