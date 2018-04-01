@@ -104,11 +104,13 @@ class Heist:
         settings = self.check_server_settings(server)
         t_vault = settings["Theme"]["Vault"]
 
+        self.set_top_bank(server)
+
         if len(settings["Targets"].keys()) < 0:
             msg = ("There aren't any targets! To create a target use {}heist "
                    "createtarget .".format(ctx.prefix))
         else:
-            target_names = [x for x in settings["Targets"]]
+            target_names = [subdict["Name"] for subdict in settings["Targets"].values()]
             crews = [int(subdict["Crew"]) for subdict in settings["Targets"].values()]
             success = [str(subdict["Success"]) + "%" for subdict in settings["Targets"].values()]
             vaults = [subdict["Vault"] for subdict in settings["Targets"].values()]
@@ -260,7 +262,7 @@ class Heist:
                                                     success.content)
                    )
             target_fmt = {"Crew": int(crew.content), "Vault": int(vault.content),
-                          "Vault Max": int(vault_max.content), "Success": int(success.content)}
+                          "Vault Max": int(vault_max.content), "Success": int(success.content), "player": None}
             settings["Targets"][string.capwords(name.content)] = target_fmt
             self.save_system()
             await self.bot.say(msg)
@@ -1206,6 +1208,27 @@ class Heist:
 
             return path
 
+    def set_top_bank(self, server):
+        settings = self.check_server_settings(server)
+        bank = self.bot.get_cog('Economy').bank
+
+        bank_sorted = sorted(bank.get_server_accounts(server), key=lambda x: x.balance, reverse=True)
+        bank_sorted = [a for a in bank_sorted if a.member] #  exclude users who left
+
+        topBank = bank_sorted[:1]
+
+        target_fmt = {
+            "Name": "{}'s Bank".format(topBank[0].member.display_name.split('|', 1)[0]),
+            "Crew": 50, 
+            "Vault": topBank[0].balance,
+            "Vault Max": topBank[0].balance,
+            "Success": 2,
+            "player": topBank[0].member.id
+        }
+        settings["Targets"]["Player Bank"] = target_fmt
+        self.save_system()
+
+
     # =========== Commission hooks =====================
 
     def reaper_hook(self, server, author, user):
@@ -1231,7 +1254,7 @@ class Heist:
             self.save_system()
             msg = ("{} casted :trident: `resurrection` :trident: on {} and returned them "
                    "to the living.".format(author.display_name, user.display_name))
-            action = "True"
+            action = "True" 
         else:
             msg = "Cast failed. {} is still alive.".format(user.display_name)
             action = None
