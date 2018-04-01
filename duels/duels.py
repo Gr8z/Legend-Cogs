@@ -114,7 +114,6 @@ class duels:
             await self.bot.say("{} You are already registered!".format(author.mention))
 
     @duel.command(pass_context=True)
-    @commands.cooldown(1, 300, commands.BucketType.server)
     async def start(self, ctx, bet : int):
         """Start a duel with bets"""
         author = ctx.message.author
