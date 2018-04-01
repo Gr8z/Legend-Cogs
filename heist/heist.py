@@ -7,6 +7,7 @@ import os
 import random
 import string
 import time
+import re
 from ast import literal_eval
 from operator import itemgetter
 
@@ -48,6 +49,13 @@ class Heist:
         self.version = "2.4.02"
         self.patch = 2.42
         self.cycle_task = bot.loop.create_task(self.vault_updater())
+        self.emoji_pattern = re.compile(
+            u"(\ud83d[\ude00-\ude4f])|"  # emoticons
+            u"(\ud83c[\udf00-\uffff])|"  # symbols & pictographs (1 of 2)
+            u"(\ud83d[\u0000-\uddff])|"  # symbols & pictographs (2 of 2)
+            u"(\ud83d[\ude80-\udeff])|"  # transport & map symbols
+            u"(\ud83c[\udde0-\uddff])"  # flags (iOS)
+            "+", flags=re.UNICODE)
 
     @commands.group(pass_context=True, no_pm=True)
     async def heist(self, ctx):
@@ -1218,7 +1226,7 @@ class Heist:
         topBank = bank_sorted[:1]
 
         target_fmt = {
-            "Name": "{}’s Bank".format(topBank[0].member.display_name.split('|', 1)[0]),
+            "Name": "{}’s Bank".format(self.emoji_pattern.sub(r'', topBank[0].member.display_name.split('|', 1)[0])),
             "Crew": 50, 
             "Vault": topBank[0].balance,
             "Vault Max": topBank[0].balance,
