@@ -210,7 +210,6 @@ class duels:
             await self.bot.say("There is no duel active to accept, type ``{}duel start`` to start a new duel.".format(ctx.prefix))
             return
 
-
         duelID = self.settings["CONFIG"]["ACTIVE"]
         duelPlayers = self.settings["DUELS"][duelID]["PLAYERS"]
         duelBet = self.settings["DUELS"][duelID]["BET"]
@@ -234,11 +233,11 @@ class duels:
             return
 
         try:
-            profiledata = requests.get('https://api.royaleapi.com/player/{}?keys=battles'.format(','.join(duelPlayers)), headers=self.getAuth(), timeout=10).json()
+            profiledata = requests.get('https://api.royaleapi.com/player/{},{}?keys=stats'.format(self.settings['USERS'][duelPlayers[0]]["TAG"], self.settings['USERS'][author.id]["TAG"]), headers=self.getAuth(), timeout=10).json()
 
             if (profiledata[0]['stats']['maxTrophies'] + 600) < profiledata[1]['stats']['maxTrophies']:
                 await self.bot.say("Sorry, your trophies are too high for this duel.")
-            return
+                return
 
         except:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
