@@ -352,7 +352,7 @@ class shop:
                     await self.bot.say("Nickname changed to ** {} **\n".format(newname))
 
                     bank = self.bot.get_cog('Economy').bank
-                    bank.withdraw_credits(user, 80000)
+                    bank.withdraw_credits(author, 80000)
         else:
             await self.bot.say("You do not have enough credits to buy this item.")
 
@@ -375,7 +375,7 @@ class shop:
 
         if self.bank_check(author, 160000):
             bank = self.bot.get_cog('Economy').bank
-            bank.withdraw_credits(user, 160000)
+            bank.withdraw_credits(author, 160000)
             await self._add_roles(author,["Pro Payday"])
             await self.bot.say("Congratulations, now you can get !payday every 10 minutes.")
         else:
@@ -402,7 +402,7 @@ class shop:
 
         if self.bank_check(author, 250000):
             bank = self.bot.get_cog('Economy').bank
-            bank.withdraw_credits(user, 250000)
+            bank.withdraw_credits(author, 250000)
             await self._add_roles(author,["Rare™"])
             await self.bot.say("Congratulations, you are now a **Rare™**")
         else:
@@ -433,7 +433,7 @@ class shop:
 
         if self.bank_check(author, 750000):
             bank = self.bot.get_cog('Economy').bank
-            bank.withdraw_credits(user, 750000)
+            bank.withdraw_credits(author, 750000)
             await self._remove_roles(author,["Rare™"])
             await asyncio.sleep(3)
             await self._add_roles(author,["Epic™"])
@@ -467,7 +467,7 @@ class shop:
 
         if self.bank_check(author, 1000000):
             bank = self.bot.get_cog('Economy').bank
-            bank.withdraw_credits(user, 1000000)
+            bank.withdraw_credits(author, 1000000)
             await self._remove_roles(author,["Epic™"])
             await asyncio.sleep(3)
             await self._add_roles(author,["LeGeNDary™"])
