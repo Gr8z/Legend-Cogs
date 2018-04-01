@@ -85,6 +85,8 @@ class duels:
         """Register to play duels"""
         author = ctx.message.author
 
+        await self.bot.type()
+
         bank = self.bot.get_cog('Economy').bank
         if bank.account_exists(author) is False:
             await self.bot.say("You need to first open a bank account using ``{}bank register``".format(ctx.prefix))
