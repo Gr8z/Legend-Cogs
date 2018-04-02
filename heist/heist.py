@@ -849,11 +849,11 @@ class Heist:
         stolen_data = [credits_stolen] * len(settings["Crew"])
         total_winnings = [x + y for x, y in zip(stolen_data, bonuses)]
 
-        if settings["Targets"][target]["player"] is None:
+        if settings["Targets"][target]["Player"] is None:
             settings["Targets"][target]["Vault"] -= credits_stolen * len(settings["Crew"])
         else:
             bank = self.bot.get_cog('Economy').bank
-            user = discord.utils.get(ctx.message.server.members, id = settings["Targets"][target]["player"])
+            user = discord.utils.get(ctx.message.server.members, id = settings["Targets"][target]["Player"])
 
             bank.withdraw_credits(user, credits_stolen * len(settings["Crew"]))
 
@@ -1231,7 +1231,7 @@ class Heist:
             "Vault": topBank[0].balance,
             "Vault Max": topBank[0].balance,
             "Success": 2,
-            "player": topBank[0].member.id
+            "Player": topBank[0].member.id
         }
         settings["Targets"]["Player Bank"] = target_fmt
         self.save_system()
