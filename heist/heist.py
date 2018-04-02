@@ -857,8 +857,6 @@ class Heist:
 
             bank.withdraw_credits(user, credits_stolen * len(settings["Crew"]))
 
-            await self.bot.send_message(user,"Hey! you just got robbed. {} credits were stolen from a huge hiest.".format(credits_stolen * len(settings["Crew"])))
-
         credit_data = list(zip(names, stolen_data, bonuses, total_winnings))
         deposits = list(zip(players, total_winnings))
         self.award_credits(deposits)
