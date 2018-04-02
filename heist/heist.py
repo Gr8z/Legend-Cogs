@@ -848,7 +848,17 @@ class Heist:
         credits_stolen = int(int(vault) * 0.75 / len(settings["Crew"]))
         stolen_data = [credits_stolen] * len(settings["Crew"])
         total_winnings = [x + y for x, y in zip(stolen_data, bonuses)]
-        settings["Targets"][target]["Vault"] -= credits_stolen * len(settings["Crew"])
+
+        if settings["Targets"][target]["player"] is None:
+            settings["Targets"][target]["Vault"] -= credits_stolen * len(settings["Crew"])
+        else:
+            bank = self.bot.get_cog('Economy').bank
+            user = discord.utils.get(ctx.message.server.members, id = settings["Targets"][target]["player"])
+
+            bank.withdraw_credits(user, credits_stolen * len(settings["Crew"]))
+
+            await self.bot.send_message(user,"Hey! you just got robbed. {} credits were stolen from a huge hiest.".format(credits_stolen * len(settings["Crew"])))
+
         credit_data = list(zip(names, stolen_data, bonuses, total_winnings))
         deposits = list(zip(players, total_winnings))
         self.award_credits(deposits)
