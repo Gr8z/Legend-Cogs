@@ -122,7 +122,7 @@ class duels:
             await self.bot.say("Another duel is already in progress")
             return
 
-        if bet < 1000:
+        if bet < 10000:
             await self.bot.say("Your bet is too low, bet a bigger number.")
             return
 
