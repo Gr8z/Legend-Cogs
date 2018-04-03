@@ -297,7 +297,7 @@ class duels:
             if (battle["utcTime"] > int(duelID)) and (battle["opponent"][0]["tag"] in playerTags):
                 if battle["winner"] > 0:
 
-                    msg = "Congratulations, you won the duel against **{}** and recieved **{}** credits!".format(battle["opponent"][0]["name"], str(duelBet * 2))
+                    msg = "Congratulations {}, you won the duel against **{}** and recieved **{}** credits!".format(author.mention, battle["opponent"][0]["name"], str(duelBet * 2))
                     await self.bot.say(msg)
 
                     bank = self.bot.get_cog('Economy').bank
@@ -316,7 +316,7 @@ class duels:
 
                     return
                 else:
-                    msg = "Sorry, you lost the duel against **{}**".format(battle["opponent"][0]["name"])
+                    msg = "Sorry {}, you lost the duel against **{}**".format(author.mention, battle["opponent"][0]["name"])
 
                     duelPlayer["DUELID"] = "0"
                     fileIO(settings_path, "save", self.settings)
