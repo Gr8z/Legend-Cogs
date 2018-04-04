@@ -1,69 +1,78 @@
-Jail = jail
+|Good| "{0} distracted a mini P.E.K.K.A with a butterfly. +500 credits.", 500
+|Good| "{0} brought a cannon cart for everyone to ride. +75 credits.", 75
+|Good| "{0} threw a goblin barrel inside the bank. +500 credits.", 500
+|Good| "{0} stayed with the cannon cart and had it ready. +500 credits", 500
+|Good| "{0} cut through the security like a P.E.K.K.A. +750 credits", 750
+|Good| "{0} pulled down the wizard's hood and distracted everyone. +500 credits", 500
+|Good| "{0} stopped the princess from firing at their comrades. +75 credits", 75
+|Good| "{0} sent goblins to loot. +500 credits", 500
+|Good| "{0} was distracting the archer by showing their archery skills. +75 credits", 75
+|Good| "{0} used a skeleton barrel to distract the archers. +75 credits", 75
+|Good| "{0} stole a hog. +500 credits", 500
+|Good| "{0} got the guards to deliver everyone pizza. +25 credits", 25
+|Good| "{0} saved the crew with a heal spell. +25 credits", 25
+|Good| "{0} stole a balloon and got away. +75 credits", 75
+|Good| "{0} befriended a doot. +500 credits.", 500
+|Good| "{0} reprogrammed the flying machine to attack the guards. +1000 credits", 1000
+|Good| "The baby dragon's fumes hid {0} while they were stealing the gold. +750 credits", 750
+|Good| "{0} brought sleeping gas for the guards. +500 credits", 500
+|Good| "{0} found a miner's tunnel! +2000 credits", 2000
+
+|Bad| "A butterfly brought P.E.K.K.A. to {0}.", "Dead"
+|Bad| "The Magic Archer took out {0} from far away. Where did he come from?", "Dead"
+|Bad| "{0} made a big mistake and got caught by the 3 musketeers.", "Apprehended"
+|Bad| "The baby dragon found something new for their barbeque, grilled {0}", "Dead" 
+|Bad| "The Dark Prince charged at {0} and got them with his mace.", "Dead"
+|Bad| "The witch used her destructo beams on {0}", "Dead"
+|Bad| "What's that in the sky? A skeleton barrel fell on {0} and they got surrounded!", "Apprehended"
+|Bad| "A princess caught {0} on fire!", "Apprehended"
+|Bad| "The Barbarian Barrel crushed and sliced {0}", "Dead"
+|Bad| "The Royal Ghost snuck up on {0}", "Apprehended"
+|Bad| "A goblin barrel landed right on {0}.", "Apprehended"
+|Bad| "The Zappies made {0} unable to move and they got captured. "Apprehended"
+|Bad| "The Executioner did its job with {0}", "Dead"
+|Bad| "A Valkyrie spun into {0}", "Dead"
+|Bad| "{0} forgot about the lava hound's pups", "Apprehended"
+|Bad| "{0} probably shouldn't have brought arrows to a rocket fight.", "Apprehended"
+|Bad| "The tornado brings {0} straight to the dungeon.", "Apprehended"
+|Bad| "The lumberjack decided to chop something other than wood and chopped {0} into pieces.", "Dead"
+|Bad| "{0} found a mini P.E.K.K.A.", "Apprehended"
+|Bad| "{0} got blown up by a bomber.", "Dead"
+|Bad| "{0} got pounded by a mega knight.", "Dead"
+|Bad| "{0} got surrounded by a skeleton army.", "Apprehended"
+|Bad| "{0} fell into a tombstone and got trapped.", "Apprehended"
+|Bad| "{0} was burned by a wizard and got thrown into jail.", "Apprehended"
+|Bad| "An archer was doing trick shots and hit {0}.", "Apprehended"
+|Bad| "Hog rider ran over {0}.", "Apprehended"
+|Bad| "The guards found {0}.", "Apprehended"
+|Bad| "A balloon dropped a bomb on {0}.", "Dead"
+|Bad| "A dart goblin shot {0} with a paralysis dart.", "Apprehended"
+|Bad| "The bats heard {0} while they tried to escape through a cave.", "Apprehended"
+|Bad| "The bowler bowled {0} straight to the dungeon.", "Apprehended"
+|Bad| "The miner caught {0} in his tunnels.", "Apprehended"
+|Bad| "{0} got injured from the prince's lance.", "Apprehended"
+|Bad| "{0} was surrounded by the witch's skeletons and was captured.", "Apprehended"
+|Bad| "{0} was surrounded by the enemy and captured.", "Apprehended"
+|Bad| "The barbarians found {0}.", "Apprehended"
+|Bad| "{0} was frozen by an Ice Spirit and was captured.", "Apprehended"
+|Bad| "{0} got shot by a musketeer while trying to escape, but survived!", "Apprehended"
+|Bad| "{0} was sniped by a princess. Gotcha!", "Dead"
+|Bad| "{0} exploded from a Giant Skeleton's bomb.", "Dead"
+|Bad| "{0} triggered a tesla.", "Dead"
+|Bad| "Lightning struck {0} and was electrocuted.", "Dead"
+|Bad| "The last thing {0} saw was Sparky's shot charged up.", "Dead"
+|Bad| "{0} tried to sneak behind a giant but failed.", "Apprehended"
+|Bad| "{0} tripped on a log.", "Apprehended"
+|Bad| "{0} got distracted by an ice golem and didn't realize they were captured until it was too late.", "Apprehended"
+|Bad| "{0} got zapped by an electro wizard and got arrested.", "Apprehended"
+|Bad| "The inferno tower cooked {0}. How did they survive?", "Apprehended"
+|Bad| "{0} was caught by a bandit at the last minute.", "Apprehended"
+
+Jail = dungeon
 OOB = out on bail
-Police = Police
+Police = guards
 Bail = bail
 Crew = crew
 Sentence = sentence
-Heist = heist
-Vault = vault
-
-|Good| "{} had the car gassed up and ready to go. +25 credits.", 25
-|Good| "{} cut the power to the bank. +50 credits.", 50
-|Good| "{} erased the video footage. +50 credits.", 50
-|Good| "{} hacked the security system and put it on a loop feed. +75 credits.", 75
-|Good| "{} stopped the teller from triggering the silent alarm. +50 credits.", 50
-|Good| "{} knocked out the local security. +50 credits.", 50
-|Good| "{} stopped a local from being a hero +50 credits.", 50
-|Good| "{} got the police negotiator to deliver everyone pizza. +25 credits.", 25
-|Good| "{} brought masks of former presidents to hide our identity. +25 credits.", 25
-|Good| "{} found an escape route. +25 credits.", 25
-|Good| "{} brought extra ammunition for the crew. +25 credits.", 25
-|Good| "{} cut through that safe like butter. +25 credits.", 25
-|Good| "{} kept the hostages under control. +25 credits.", 25
-|Good| "{} created a distraction to get the crew out. +50 credits.", 50
-|Good| "{} improvised under pressure and got the crew out. +50 credits.", 50
-|Good| "{} counter sniped a sniper. +100 credits.", 100
-|Good| "{} distracted the guard. +25 credits.", 25
-|Good| "{} brought a Go-Bag for the team. +25 credits.", 25
-|Good| "{} found a secret stash in the deposit box room. +50 credits.", 50
-|Good| "{} found a box of jewelry on a civilian. +25 credits.", 25
-|Good| "{} stayed focused and vigilant. +25 credits.", 25
-|Good| "{} spray painted the video cameras. +25 credits.", 25
-|Good| "{} located the vault manager. +25 credits.", 25
-|Good| "{} set a clever trap for the swat team. +50 credits.", 50
-|Good| "{} Planned the getaway route. +25 credits.", 25
-|Good| "{} Changed vehicles by stealing an old lady's car. +50 credits.", 50
-
-|Bad| "A shoot out with local authorities began and {0} was hit...but survived!", "Apprehended"
-|Bad| "The cops dusted for finger prints and later arrested {0}.", "Apprehended"
-|Bad| "{0} was gutted in a knife fight.", "Dead"
-|Bad| "{0} blew a tire in the getaway car.", "Apprehended"
-|Bad| "{0}'s gun jammed while fighting local security, and was knocked out.", "Apprehended"
-|Bad| "{0} held off the police while the crew was making their getaway.", "Apprehended"
-|Bad| "A hostage situation went south, and {0} was captured.", "Apprehended"
-|Bad| "{0} showed up to the heist high as kite, and was subsequently caught.", "Apprehended"
-|Bad| "{0}'s bag of money contained exploding blue ink and was later caught.", "Apprehended"
-|Bad| "{0} was sniped by a swat sniper.", "Dead"
-|Bad| "The crew decided to shaft {0}.", "Dead"
-|Bad| "Evidence was later found at {0}'s place' linking them to the heist.", "Apprehended"
-|Bad| "The crew missed a CCTV camera that identified {0} and they were caught.", "Apprehended"
-|Bad| "{0} forgot the escape plan, and took the route leading to the police.", "Apprehended"
-|Bad| "{0} was hit and killed by friendly fire.", "Dead"
-|Bad| "Security system's redundancies caused {0} to be identified.", "Apprehended"
-|Bad| "{0} accidentally revealed their identity to the teller.", "Apprehended"
-|Bad| "The swat team released sleeping gas, {0} is sleeping like a baby.", "Apprehended"
-|Bad| "'FLASH BANG OUT!', was the last thing {0} heard.", "Apprehended"
-|Bad| "'GRENADE OUT!', {0} is now sleeping with the fishes.", "Dead"
-|Bad| "{0} tripped a laser wire and was caught.", "Apprehended"
-|Bad| "One of the hostages later identified {0} from the heist.", "Apprehended"
-|Bad| "During the power outage, police caught {0} in the confusion.", "Apprehended"
-|Bad| "{0} was left behind for slowing down the crew, due to a leg wound.", "Apprehended"
-|Bad| "Someone snitched and {0} was arrested.", "Apprehended"
-|Bad| "Before the crew could intervene a guard tazed {0} and is now out cold.", "Apprehended"
-|Bad| "Swat came through the vents, and neutralized {0}.", "Apprehended"
-|Bad| "During a high-speed chase, {0} was shot by the cops.", "Dead"
-|Bad| "A fire was started in the bank, and {0} passed out from inhalation.", "Apprehended"
-|Bad| "{0} cut the wrong wire to the bank's systems and was electrocuted, but lived.", "Apprehended"
-|Bad| "During the escape, the crew left {0} behind.", "Apprehended"
-|Bad| "The crew knocked out {0} because they shot a hostage without cause.", "Apprehended"
-
+Heist = raid
+Vault = gold
