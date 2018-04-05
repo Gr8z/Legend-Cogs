@@ -793,7 +793,7 @@ class Heist:
         await self.show_results(settings, results)
         if settings["Crew"]:
             players = [server.get_member(x) for x in settings["Crew"]]
-            data = self.calculate_credits(settings, players, target)
+            data = self.calculate_credits(settings, players, target, server)
             headers = ["Players", "Credits Obtained", "Bonuses", "Total"]
             t = tabulate(data, headers=headers)
             msg = ("The credits collected from the {} was split among the winners:\n```"
@@ -841,7 +841,7 @@ class Heist:
         else:
             return "Some keys were missing in your theme. Please check your txt file."
 
-    def calculate_credits(self, settings, players, target):
+    def calculate_credits(self, settings, players, target, server):
         names = [player.display_name for player in players]
         bonuses = [subdict["Bonus"] for subdict in settings["Crew"].values()]
         vault = settings["Targets"][target]["Vault"]
@@ -853,7 +853,7 @@ class Heist:
             settings["Targets"][target]["Vault"] -= credits_stolen * len(settings["Crew"])
         else:
             bank = self.bot.get_cog('Economy').bank
-            user = discord.utils.get(ctx.message.server.members, id = settings["Targets"][target]["Player"])
+            user = discord.utils.get(server.members, id = settings["Targets"][target]["Player"])
 
             bank.withdraw_credits(user, credits_stolen * len(settings["Crew"]))
 
