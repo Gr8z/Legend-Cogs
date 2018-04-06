@@ -246,6 +246,13 @@ class duels:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
 
+        await self.bot.say("Are you sure you want to accept the bet of {} credits? (Yes/No)".format(str(duelBet)))
+        answer = await self.bot.wait_for_message(timeout=15, author=author)
+
+        if answer is None:
+            return
+        elif "yes" not in answer.content.lower():
+            return
 
         duelPlayers.append(author.id)
 
@@ -303,7 +310,7 @@ class duels:
                     duelPlayer["WON"] += 1
                     duelPlayer["DUELID"] = "0"
                     self.settings["DUELS"][duelID]["WINNER"] = author.id
-                    
+
                     fileIO(settings_path, "save", self.settings)
 
                     msg = "Congratulations {}, you won the duel against **{}** and recieved **{}** credits!".format(author.mention, battle["opponent"][0]["name"], str(duelBet * 2))
