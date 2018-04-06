@@ -250,7 +250,6 @@ class Race:
         self.game_teardown(data, force=True)
         data['Race Active'] = True
         data['Players'][author.id] = {}
-        data['Players']['112356193820758016'] = {} # temp fix
         wait = settings['Time']
 
         await self.bot.edit_role(server, raceRole, mentionable=True)
@@ -280,12 +279,12 @@ class Race:
             third = ':third_place:'
             tv = '--\n--'
 
-        await self.bot.say(data['Winner'].mention)
+        await self.bot.say("{} is the winner!".format(data['Winner'].mention))
         embed = discord.Embed(colour=0x00CC33)
         embed.add_field(name=first, value=fv)
         embed.add_field(name=second, value=sv)
         embed.add_field(name=third, value=tv)
-        embed.add_field(name='-' * 99, value='{} is the winner!\nType ``!race claim`` to receive prize money. \nType ``!togglerole race`` to get notified on the next race.'.format(data['Winner']))
+        embed.add_field(name='-' * 99, value='Type ``!race claim`` to receive prize money. \nType ``!togglerole race`` to get notified on the next race.')
         embed.title = "Race Results"
         embed.set_footer(text=credits, icon_url=creditIcon)
         await self.bot.say(embed=embed)
