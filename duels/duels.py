@@ -191,7 +191,7 @@ class duels:
         bank = self.bot.get_cog('Economy').bank
         bank.withdraw_credits(author, bet)
 
-        await asyncio.sleep(300)
+        await asyncio.sleep(180)
 
         if self.settings["DUELS"].get(duelID): 
             if len(self.settings["DUELS"][duelID]["PLAYERS"]) == 1:
@@ -203,6 +203,28 @@ class duels:
                 bank.set_credits(author, pay)
 
                 await self.bot.say("Duel cancelled, I guess no one is brave enough to go against " + author.mention)
+
+    @duel.command(pass_context=True)
+    async def cancel(self, ctx):
+        """Cancel an active duel"""
+        author = ctx.message.author
+
+        duelID = self.settings["CONFIG"]["ACTIVE"]
+        duelPlayers = self.settings["DUELS"][duelID]["PLAYERS"]
+        duelBet = self.settings["DUELS"][duelID]["BET"]
+
+        if duelPlayers[0] != author.id:
+            await self.bot.say("Sorry, Only the dueler can cancel his own battle.")
+            return
+
+        self.settings["DUELS"].pop(duelID)
+        fileIO(settings_path, "save", self.settings)
+        self.active = False
+
+        pay = bank.get_balance(author) + duelBet
+        bank.set_credits(author, pay)
+
+        await self.bot.say("Duel cancelled!")
 
     @duel.command(pass_context=True)
     async def accept(self, ctx):
