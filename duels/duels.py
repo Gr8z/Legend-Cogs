@@ -114,12 +114,13 @@ class duels:
             await self.bot.say("{} You are already registered!".format(author.mention))
 
     @duel.command(pass_context=True)
+    @commands.cooldown(1, 20, commands.BucketType.server)
     async def start(self, ctx, bet : int, member: discord.Member = None):
         """Start a duel with bets"""
         author = ctx.message.author
 
         if self.active:
-            await self.bot.say("Another duel is already in progress")
+            await self.bot.say("Another duel is already in progress, type ``!duel accept``.")
             return
 
         if bet < 10000:
@@ -146,7 +147,9 @@ class duels:
 
         try:
             profiledata = requests.get('https://api.royaleapi.com/player/{}'.format(duelPlayer['TAG']), headers=self.getAuth(), timeout=10).json()
-        
+            
+            self.active = True
+
             if profiledata['clan'] is None:
                 clanurl = "https://i.imgur.com/4EH5hUn.png"
             else:
@@ -173,7 +176,7 @@ class duels:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
 
-        self.active = True
+        
         duelID = str(int(time.time()))
         self.settings["DUELS"][duelID] = {
             "TIME" : duelID,
@@ -297,6 +300,12 @@ class duels:
             if (battle["utcTime"] > int(duelID)) and (battle["opponent"][0]["tag"] in playerTags):
                 if battle["winner"] > 0:
 
+                    duelPlayer["WON"] += 1
+                    duelPlayer["DUELID"] = "0"
+                    self.settings["DUELS"][duelID]["WINNER"] = author.id
+                    
+                    fileIO(settings_path, "save", self.settings)
+
                     msg = "Congratulations {}, you won the duel against **{}** and recieved **{}** credits!".format(author.mention, battle["opponent"][0]["name"], str(duelBet * 2))
                     await self.bot.say(msg)
 
@@ -304,11 +313,6 @@ class duels:
                     pay = bank.get_balance(author) + (duelBet * 2)
                     bank.set_credits(author, pay)
 
-                    duelPlayer["WON"] += 1
-                    duelPlayer["DUELID"] = "0"
-                    self.settings["DUELS"][duelID]["WINNER"] = author.id
-
-                    fileIO(settings_path, "save", self.settings)
                     return
                 elif battle["winner"] == 0:
                     msg = "Sorry, you and **{}** tied the match, try again.".format(battle["opponent"][0]["name"])
