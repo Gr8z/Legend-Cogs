@@ -62,7 +62,7 @@ class duels:
         if len(self.settings["USERS"]) >= 1:
             for p in self.settings["USERS"]:
                 points = self.settings["USERS"][p]["WON"]
-                userName = self.settings["USERS"][p]["NAME"]
+                userName = self.settings["USERS"][p]["NAME"].encode("ascii", errors="ignore").decode()
                 topScore.append((p, points, userName.split('|', 1)[0]))            
             topScore = sorted(topScore, key=itemgetter(1), reverse=True)
         # Get player rank.
@@ -343,7 +343,7 @@ class duels:
             raise
             data = False
         # Put players and their earned points in to a table.
-        msgHeader = "{}\n```erlang\nRank |   Username         |  Wins\n----------------------------------\n".format(user.mention)
+        msgHeader = "{}\n```erlang\nRank   |   Username         |  Wins\n----------------------------------\n".format(user.mention)
         if data and playerAmount >= 1:
             pages = []
             totalPages = 0
@@ -359,10 +359,9 @@ class duels:
                     ul = len(topScore[usr][2])
                     sp = '                '# 16
                     sp = sp[ul:]
-                    sn = ' '
-                    if usr+1 >= 10: sn = '    '
-                    if usr+1 >= 100: sn = '   '
-                    if usr+1 >= 1000: sn = '  '
+                    sn = '   '
+                    if usr+1 >= 10: sn = '  '
+                    if usr+1 >= 100: sn = ' '
                     if user.id == topScore[usr][0]:
                         msg = msg+"(#{}){}| » {} |  ({})\n".format(usr+1, sn, topScore[usr][2]+sp, topScore[usr][1])
                         userFound = True
