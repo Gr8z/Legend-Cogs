@@ -90,6 +90,7 @@ class duels:
         bank = self.bot.get_cog('Economy').bank
         if bank.account_exists(author) is False:
             await self.bot.say("You need to first open a bank account using ``{}bank register``".format(ctx.prefix))
+            return
 
         if self.account_check(author.id) is False:
 
