@@ -67,6 +67,12 @@
 |Bad| "{0} got zapped by an electro wizard and got arrested.", "Apprehended"
 |Bad| "The inferno tower cooked {0}. How did they survive?", "Apprehended"
 |Bad| "{0} was caught by a bandit at the last minute.", "Apprehended"
+|Bad| "The Mega Knight smushed {0}.", "Dead"
+|Bad| "A swarm of goblins stabbed {0} to death.", "Dead"
+|Bad| "The Magic Archer's arrow pierced through {0}.", "Dead"
+|Bad| "Zappies stunned {0} and captured them.", "Apprehended"
+|Bad| "The Hunter hunted down {0}.", "Apprehended"
+|Bad| "The Royal Ghost jump-scared {0}.", "Apprehended"
 
 Jail = dungeon
 OOB = out on bail
