@@ -268,7 +268,7 @@ class duels:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
 
-        await self.bot.say("Are you sure you want to accept the bet of {} credits? (Yes/No)".format(str(duelBet)))
+        await self.bot.say("{} Are you sure you want to accept the bet of {} credits? (Yes/No)".format(author.mention, str(duelBet)))
         answer = await self.bot.wait_for_message(timeout=15, author=author)
 
         if answer is None:
