@@ -221,6 +221,7 @@ class duels:
         fileIO(settings_path, "save", self.settings)
         self.active = False
 
+        bank = self.bot.get_cog('Economy').bank
         pay = bank.get_balance(author) + duelBet
         bank.set_credits(author, pay)
 
