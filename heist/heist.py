@@ -892,7 +892,7 @@ class Heist:
                 good_out.remove(good_thing)
                 settings["Crew"][player.id] = {"Name": player.display_name, "Bonus": good_thing[1]}
                 settings["Players"][player.id]["Spree"] += 1
-                results.append(good_msg.format(player.display_name))
+                results.append(good_msg.format(player.display_name.split('|', 1)[0]))
             else:
                 bad_thing = random.choice(bad_out)
                 dropout_msg = "```" + bad_thing[0] + "```"
