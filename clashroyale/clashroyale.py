@@ -215,6 +215,13 @@ class clashroyale:
 
 		await self.bot.type()
 
+		tag = tag.strip('#').upper().replace('O', '0')
+		check = ['P', 'Y', 'L', 'Q', 'G', 'R', 'J', 'C', 'U', 'V', '0', '2', '8', '9']
+
+		if any(i not in check for i in tag):
+			await self.bot.say("The ID you provided has invalid characters. Please try again.")
+			return
+
 		try:
 			tourneydata = requests.get('https://api.royaleapi.com/tournaments/{}'.format(tag), headers=self.getAuth(), timeout=10).json()
 
