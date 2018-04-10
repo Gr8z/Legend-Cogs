@@ -346,7 +346,7 @@ class clashroyale:
 
 	@save.command(pass_context=True, name="brawl")
 	async def save_brawl(self, ctx, profiletag : str, member: discord.Member = None):
-		"""		save your Brawl Stars Profile Tag	`
+		"""save your Brawl Stars Profile Tag
 
 		Example:
 			!save brawl #LJQ2GGR
