@@ -102,7 +102,7 @@ class duels:
             if author.id in self.tags:
                 self.settings["USERS"][author.id] = {
                     "WON" : 0,
-                    "DUELID" : None,
+                    "DUELID" : "0",
                     "ID" : author.id,
                     "NAME" : author.display_name,
                     "TAG" : self.tags[author.id]['tag']
