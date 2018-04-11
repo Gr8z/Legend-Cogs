@@ -1,0 +1,10 @@
+{
+    "AUTHOR" : "milan_25",
+    "INSTALL_MSG" : "Legend Family clanlog added, if there are any issues, please mention them on https://github.com/Gr8z/LeGeND-Bot",
+    "NAME" : "clanlog",
+    "SHORT" : "Clan log for LeGeND Family",
+    "DESCRIPTION" : "Notifies whenever someone leaves or joins",
+    "TAGS" : ["clashroyale", "legend","management"],
+    "REQUIREMENTS" : ["json","requests", "re"],
+    "HIDDEN" : false
+}
