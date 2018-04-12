@@ -259,13 +259,14 @@ class Race:
         await self.bot.edit_role(server, raceRole, mentionable=False)
 
         await asyncio.sleep(wait)
-        await self.bot.say(":checkered_flag: The race is now in progress :checkered_flag:")
-
-        data['Race Start'] = True
 
         racers = self.game_setup(author, data, settings['Mode'])
 
         if racers:
+            await self.bot.say(":checkered_flag: The race is now in progress :checkered_flag:")
+
+            data['Race Start'] = True
+
             race_msg = await self.bot.say('\u200b'+'\n'+'\n'.join([player.field() for player in racers]))
             await self.run_game(racers, race_msg, data)
 
@@ -293,6 +294,7 @@ class Race:
             self.game_teardown(data)
         else:
             await self.bot.say("The race has been cancelled, next one is an hour")
+            self.game_teardown(data)
 
     @race.command(name="enter", pass_context=True)
     async def _enter_race(self, ctx):
