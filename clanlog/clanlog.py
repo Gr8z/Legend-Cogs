@@ -2,120 +2,95 @@ import discord
 import requests
 import json
 from discord.ext import commands
-import re
+from cogs.utils import checks
 from .utils.dataIO import dataIO, fileIO
+from copy import deepcopy
 
 class Clanlog:
-    """Clan Log cog"""
+    """Clan Log cog for LeGeND family"""
 
     def __init__(self, bot):
         self.bot = bot
         self.auth = dataIO.load_json('cogs/auth.json')
-        self.c = dataIO.load_json('cogs/clans.json')
+        self.clans = dataIO.load_json('cogs/clans.json')
         
     def getAuth(self):
         return {"auth" : self.auth['token']}
-            
+    
+    def save_data(self):
+        dataIO.save_json('cogs/clans.json', self.clans)
+        
+    def update_data(self):
+        self.clans = dataIO.load_json('cogs/clans.json')
+    
+    @checks.is_owner()
     @commands.command()
     async def clanlog(self):
         try:
-            file = open("cogs/members.txt", "a")
-            file.close()
-            file = open("cogs/members.txt", "r")
-            input = file.read()
-            file.close()
+            self.update_data()
+            old_clans = deepcopy(self.clans)
             
-            old_log = []
-            old_log_tmp = input.split("|n|")
-            for d in old_log_tmp:
-                old_log.append(d.split(";n;"))
-     
-            clan_names = []
-            clan_tags = []
-                
-            for clankey in self.c.keys():
-                clan_names.append(self.c[clankey]["nickname"])
-                clan_tags.append(self.c[clankey]["tag"])
+            clan_keys = list(self.clans.keys())
+            clan_requests = requests.get("https://api.royaleapi.com/clan/{}".format(','.join(self.clans[clan]["tag"] for clan in self.clans)), headers=self.getAuth(), timeout = 60).json()
             
-            clan_requests = requests.get("https://api.royaleapi.com/clan/{}".format(",".join(clan_tags)), headers=self.getAuth(), timeout = 60).json()
-            
-            log = []
             for i in range(len(clan_requests)):
-                log_oneclan = []
-                for j in range(len(clan_requests[i]["members"])):
-                    log_oneclan.append(re.sub(r'[^\x00-\x7f]',r'', clan_requests[i]["members"][j]["name"]))
-                log.append(log_oneclan)
-              
-            log_str = ""
-            tmp = []
-            for i in log:
-                tmp.append(";n;".join(i))
-            log_str = "|n|".join(tmp)
-            
-            embed_left=discord.Embed(title="LEFT/ KICKED", color=0xff0000)
-            anyleft = False
+                one_clan = []
+                for member in clan_requests[i]["members"]:
+                    one_clan.append({"name" : member["name"], "tag" : member["tag"]})
+                self.clans[clan_keys[i]]["members"] = one_clan
+            self.save_data()
                     
-            for p in range(len(old_log)):
-                for q in range(len(old_log[p])):
-                    if old_log[p][q] not in log[p]:
-                        clan = clan_names[p]
-                        embed_left.add_field(name=old_log[p][q], value=clan, inline=False)
-                        anyleft = True
-                    
-            if anyleft:
-                await self.bot.say(embed=embed_left)
-                    
-            embed_join=discord.Embed(title="JOINED", color=0x00ff40)
-            anyjoined = False
-                    
-            for p in range(len(log)):
-                for q in range(len(log[p])):
-                    if log[p][q] not in old_log[p]:
-                        clan = clan_names[p]
-                        embed_join.add_field(name=log[p][q], value=clan, inline=False)
-                        anyjoined = True;
-                            
-            if anyjoined:
-                await self.bot.say(embed=embed_join)
-                     
-            file = open("cogs/members.txt", "w")
-            file.write(log_str)
-            file.close()
-        
-        except:
-            return
-        
+            for clankey in old_clans.keys():
+                for member in old_clans[clankey]["members"]:
+                    if member not in self.clans[clankey]["members"]:
+                        title = member["name"] + " (#" + member["tag"] + ")"
+                        embed_left = discord.Embed(title = title, url = "https://royaleapi.com/player/{}".format(member["tag"]), color=0xff0000)
+                        embed_left.add_field(name = "LEFT", value = old_clans[clankey]["name"], inline = False)
+                        await self.bot.say(embed = embed_left)
+          
+            for clankey in self.clans.keys():
+                for member in self.clans[clankey]["members"]:
+                    if member not in old_clans[clankey]["members"]:
+                        title = member["name"] + " (#" + member["tag"] + ")"
+                        embed_join = discord.Embed(title = title, url = "https://royaleapi.com/player/{}".format(member["tag"]), color=0x00ff40)
+                        embed_join.add_field(name = "JOINED", value = self.clans[clankey]["name"], inline = False)
+                        await self.bot.say(embed = embed_join)
+                        
+        except(requests.exceptions.Timeout, json.decoder.JSONDecodeError):
+            print("CLANLOG: Cannot reach Clash Royale Servers.")
+    
+    @checks.is_owner()    
     @commands.command()
     async def clanlogdownload(self):
         try:
-            clan_names = []
-            clan_tags = []
-                
-            for clankey in self.c.keys():
-                clan_names.append(self.c[clankey]["nickname"])
-                clan_tags.append(self.c[clankey]["tag"])
-                
-            clan_requests = requests.get("https://api.royaleapi.com/clan/{}".format(",".join(clan_tags)), headers=self.getAuth(), timeout = 60).json()
+            self.update_data()
+            clan_keys = list(self.clans.keys())
+            clan_requests = requests.get("https://api.royaleapi.com/clan/{}".format(','.join(self.clans[clan]["tag"] for clan in self.clans)), headers=self.getAuth(), timeout = 60).json()
             
-            log = []
             for i in range(len(clan_requests)):
-                log_oneclan = []
-                for j in range(len(clan_requests[i]["members"])):
-                    log_oneclan.append(re.sub(r'[^\x00-\x7f]',r'', clan_requests[i]["members"][j]["name"]))
-                log.append(log_oneclan)
-              
-            log_str = ""
-            tmp = []
-            for i in log:
-                tmp.append(";n;".join(i))
-            log_str = "|n|".join(tmp)
+                one_clan = []
+                for member in clan_requests[i]["members"]:
+                    one_clan.append({"name" : member["name"], "tag" : member["tag"]})
+                self.clans[clan_keys[i]]["members"] = one_clan
+            self.save_data()  
+            await self.bot.say("Downloaded.")
+        except(requests.exceptions.Timeout, json.decoder.JSONDecodeError):
+            await self.bot.say("Cannot reach Clash Royale servers. Try again later!")
+        
+def check_clans():
+    c = dataIO.load_json('cogs/clans.json')
+    for clankey in c.keys():
+        if 'members' not in c[clankey]:
+            c[clankey]['members'] = []  
+    dataIO.save_json('cogs/clans.json', c)
             
-            file = open("cogs/members.txt", "w")
-            file.write(log_str)
-            file.close()
-            await self.bot.say("Log downloaded")
-        except:
-            await self.bot.say("Couldnt't download log")
+def check_auth():
+    c = dataIO.load_json('cogs/auth.json')
+    if 'token' not in c:
+        c['token'] = ""
+    dataIO.save_json('cogs/auth.json', c)
         
 def setup(bot):
+    check_auth()
+    check_clans()
     bot.add_cog(Clanlog(bot))
