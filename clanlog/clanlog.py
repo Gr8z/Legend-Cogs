@@ -46,6 +46,8 @@ class Clanlog:
                         title = "{} (#{})".format(member["name"], member["tag"])
                         desc = "left **{}**".format(old_clans[clankey]["name"])
                         embed_left = discord.Embed(title = title, url = "https://royaleapi.com/player/{}".format(member["tag"]), description=desc, color=0xff0000)
+                        if old_clans[clankey]["tag"] == "9PJYVVL2":
+                            await self.bot.send_message(discord.Object(id='390506007287169024'),embed = embed_left)
                         await self.bot.say(embed = embed_left)
           
             for clankey in self.clans.keys():
@@ -54,6 +56,8 @@ class Clanlog:
                         title = "{} (#{})".format(member["name"], member["tag"])
                         desc = "joined **{}**".format(old_clans[clankey]["name"])
                         embed_join = discord.Embed(title = title, url = "https://royaleapi.com/player/{}".format(member["tag"]), description=desc, color=0x00ff40)
+                        if old_clans[clankey]["tag"] == "9PJYVVL2":
+                            await self.bot.send_message(discord.Object(id='390506007287169024'),embed = embed_join)
                         await self.bot.say(embed = embed_join)
                         
         except(requests.exceptions.Timeout, json.decoder.JSONDecodeError):
