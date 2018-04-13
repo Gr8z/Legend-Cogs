@@ -43,17 +43,17 @@ class Clanlog:
             for clankey in old_clans.keys():
                 for member in old_clans[clankey]["members"]:
                     if member not in self.clans[clankey]["members"]:
-                        title = member["name"] + " (#" + member["tag"] + ")"
-                        embed_left = discord.Embed(title = title, url = "https://royaleapi.com/player/{}".format(member["tag"]), color=0xff0000)
-                        embed_left.add_field(name = "LEFT", value = old_clans[clankey]["name"], inline = False)
+                        title = "{} (#{})".format(member["name"], member["tag"])
+                        desc = "left **{}**".format(old_clans[clankey]["name"])
+                        embed_left = discord.Embed(title = title, url = "https://royaleapi.com/player/{}".format(member["tag"]), description=desc, color=0xff0000)
                         await self.bot.say(embed = embed_left)
           
             for clankey in self.clans.keys():
                 for member in self.clans[clankey]["members"]:
                     if member not in old_clans[clankey]["members"]:
-                        title = member["name"] + " (#" + member["tag"] + ")"
-                        embed_join = discord.Embed(title = title, url = "https://royaleapi.com/player/{}".format(member["tag"]), color=0x00ff40)
-                        embed_join.add_field(name = "JOINED", value = self.clans[clankey]["name"], inline = False)
+                        title = "{} (#{})".format(member["name"], member["tag"])
+                        desc = "joined **{}**".format(old_clans[clankey]["name"])
+                        embed_join = discord.Embed(title = title, url = "https://royaleapi.com/player/{}".format(member["tag"]), description=desc, color=0x00ff40)
                         await self.bot.say(embed = embed_join)
                         
         except(requests.exceptions.Timeout, json.decoder.JSONDecodeError):
