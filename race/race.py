@@ -293,7 +293,7 @@ class Race:
             await self.bot.say(embed=embed)
             self.game_teardown(data)
         else:
-            await self.bot.say("The race has been cancelled, next one is an hour")
+            await self.bot.say("The race has been cancelled, next one is in an hour")
             self.game_teardown(data)
 
     @race.command(name="enter", pass_context=True)
