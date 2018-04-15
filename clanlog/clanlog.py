@@ -24,8 +24,8 @@ class Clanlog:
         self.clans = dataIO.load_json('cogs/clans.json')
     
     @checks.is_owner()
-    @commands.command()
-    async def clanlog(self):
+    @commands.command(pass_context=True, no_pm=True)
+    async def clanlog(self, ctx):
         try:
             self.update_data()
             old_clans = deepcopy(self.clans)
@@ -39,6 +39,8 @@ class Clanlog:
                     one_clan.append({"name" : member["name"], "tag" : member["tag"]})
                 self.clans[clan_keys[i]]["members"] = one_clan
             self.save_data()
+            
+            server = ctx.message.server
                     
             for clankey in old_clans.keys():
                 for member in old_clans[clankey]["members"]:
@@ -46,7 +48,7 @@ class Clanlog:
                         title = "{} (#{})".format(member["name"], member["tag"])
                         desc = "left **{}**".format(old_clans[clankey]["name"])
                         embed_left = discord.Embed(title = title, url = "https://royaleapi.com/player/{}".format(member["tag"]), description=desc, color=0xff0000)
-                        if old_clans[clankey]["tag"] == "9PJYVVL2":
+                        if old_clans[clankey]["tag"] == "9PJYVVL2" and server.id == "374596069989810176":
                             await self.bot.send_message(discord.Object(id='390506007287169024'),embed = embed_left)
                         await self.bot.say(embed = embed_left)
           
@@ -56,15 +58,15 @@ class Clanlog:
                         title = "{} (#{})".format(member["name"], member["tag"])
                         desc = "joined **{}**".format(old_clans[clankey]["name"])
                         embed_join = discord.Embed(title = title, url = "https://royaleapi.com/player/{}".format(member["tag"]), description=desc, color=0x00ff40)
-                        if old_clans[clankey]["tag"] == "9PJYVVL2":
+                        if old_clans[clankey]["tag"] == "9PJYVVL2" and server.id == "374596069989810176":
                             await self.bot.send_message(discord.Object(id='390506007287169024'),embed = embed_join)
                         await self.bot.say(embed = embed_join)
                         
-        except(requests.exceptions.Timeout, json.decoder.JSONDecodeError):
+        except(requests.exceptions.Timeout, json.decoder.JSONDecodeError, KeyError):
             print("CLANLOG: Cannot reach Clash Royale Servers.")
     
     @checks.is_owner()    
-    @commands.command()
+    @commands.command(no_pm=True)
     async def clanlogdownload(self):
         try:
             self.update_data()
@@ -78,7 +80,7 @@ class Clanlog:
                 self.clans[clan_keys[i]]["members"] = one_clan
             self.save_data()  
             await self.bot.say("Downloaded.")
-        except(requests.exceptions.Timeout, json.decoder.JSONDecodeError):
+        except(requests.exceptions.Timeout, json.decoder.JSONDecodeError, KeyError):
             await self.bot.say("Cannot reach Clash Royale servers. Try again later!")
         
 def check_clans():
