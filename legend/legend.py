@@ -787,6 +787,7 @@ class legend:
             return
 
         try:
+            await self.updateClash()
             self.c[clankey]['waiting'].remove(member.id)
             dataIO.save_json('cogs/clans.json', self.c)
 
@@ -818,6 +819,7 @@ class legend:
             return
 
         await self.bot.type()
+        await self.updateClash()
 
         embed=discord.Embed(color=0xFAA61A)
 
