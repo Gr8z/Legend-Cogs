@@ -13,6 +13,8 @@ import asyncio
 import random
 import operator
 import chardet
+import time
+import math
 
 default_settings = {"CHANNEL": "381338442543398912", "CREDITS": 50, "ROLE": None, "LOCK": False, "QUESTIONS" : 60, "DELAY": 60}
 settings_path = "data/challenges/settings.json"
@@ -202,6 +204,8 @@ class challengeSession():
         self.words = dataIO.load_json("data/challenges/words.json")
         self.bank = self.bot.get_cog('Economy').bank
         self.scores = Counter()
+        self.statusNum = ""
+        self.gameList = [self.emoji_reacter, self.word_scramble, self.trivia, self.maths, self.guess, self.stop]
         self.trivia_list = ['artandliterature', 'clashroyale', 'computers', 'elements', 'games', 'general', 'worldcapitals', 'entertainment','riddles']
         
     def get_game_channel(self, server):
@@ -209,6 +213,13 @@ class challengeSession():
             return server.get_channel(self.settings[server.id]["CHANNEL"])
         except:
             return None
+
+    def RepresentsInt(self, s):
+        try: 
+            int(s)
+            return True
+        except ValueError:
+            return False
 
     def parse_trivia_list(self, filename):
         path = "data/trivia/{}.txt".format(filename)
@@ -263,13 +274,8 @@ class challengeSession():
             return
 
         if self.games < q_num:
-            gameList = [
-                self.emoji_reacter,
-                self.word_scramble,
-                self.trivia,
-                self.maths
-            ]
-            await random.choice(gameList)(server)
+            await asyncio.sleep(3)
+            await random.choice(self.gameList)(server)
         else:
             if self.scores:
                 await self.send_table()
@@ -302,8 +308,6 @@ class challengeSession():
                     self.scores[react.user] += 1
                     break
 
-        await asyncio.sleep(3)
-
         self.games += 1
         await self.start_game(server)
 
@@ -326,6 +330,7 @@ class challengeSession():
         embed.set_footer(text=credits, icon_url=creditIcon)
 
         msg = await self.bot.send_message(channel, embed=embed)
+        print("Answer: {}".format(word))
 
         def check(msg):
             return word in msg.content.lower()
@@ -340,8 +345,6 @@ class challengeSession():
             if answer.author != self.bot.user:
                 await self.correct_answer(server, answer)
                 break
-
-        await asyncio.sleep(3)
 
         self.games += 1
         await self.start_game(server)
@@ -359,6 +362,7 @@ class challengeSession():
         embed.set_footer(text=credits, icon_url=creditIcon)
 
         msg = await self.bot.send_message(channel, embed=embed)
+        print("Answer: {}".format(str(current_line.answers[0])))
 
         def check(msg):
             for answer in current_line.answers:
@@ -385,8 +389,6 @@ class challengeSession():
                 await self.correct_answer(server, guess)
                 break
 
-        await asyncio.sleep(3)
-
         self.games += 1
         await self.start_game(server)
 
@@ -406,12 +408,10 @@ class challengeSession():
         embed.set_footer(text=credits, icon_url=creditIcon)
 
         msg = await self.bot.send_message(channel, embed=embed)
-
-        def check(msg):
-            return str(number) in msg.content.lower()
+        print("Answer: {}".format(str(number)))
 
         while True:
-            answer = await self.bot.wait_for_message(check=check, timeout=15)
+            answer = await self.bot.wait_for_message(content=str(number), timeout=15)
 
             if answer is None:
                 await self.bot.say("Time's up, the correct answer is **{}**".format(str(number)))
@@ -421,7 +421,81 @@ class challengeSession():
                 await self.correct_answer(server, answer)
                 break
 
-        await asyncio.sleep(3)
+        self.games += 1
+        await self.start_game(server)
+
+    async def guess(self, server):
+        channel = self.get_game_channel(server)
+
+        startNum = random.randint(10,100)
+        endNum = random.randint(startNum + 25,startNum + 100)
+        number = random.randint(startNum,endNum)
+
+        embed=discord.Embed(title="", description='A number between {} - {}'.format(startNum, endNum), color=0x0080ff)
+        embed.set_author(name="Guess the number")
+        embed.set_footer(text=credits, icon_url=creditIcon)
+
+        msg = await self.bot.send_message(channel, embed=embed)
+        print("Answer: {}".format(str(number)))
+
+        start = time.time()
+
+        while True:
+
+            if (time.time() - start > 20):
+                await self.bot.say("Time's up, the correct answer is **{}**".format(str(number)))
+                break 
+            
+            answer = await self.bot.wait_for_message(timeout=5)
+
+            if answer is not None:
+                if self.RepresentsInt(answer.content):
+                    msgNum = int(answer.content)
+                    if number == msgNum:
+                        if answer.author != self.bot.user:
+                            await self.correct_answer(server, answer)
+                            break
+                    elif number > msgNum:
+                        await self.bot.say(answer.author.mention + " Higher")
+                    else:
+                        await self.bot.say(answer.author.mention + " Lower")
+
+        self.games += 1
+        await self.start_game(server)
+
+    async def stop(self, server):
+        channel = self.get_game_channel(server)
+
+        timer = random.randint(3,15)
+        niceTry = []
+
+        embed=discord.Embed(title="", description='Type \'stop\' only once in {} seconds.'.format(timer), color=0x804000)
+        embed.set_author(name="Stop Watch")
+        embed.set_footer(text=credits, icon_url=creditIcon)
+
+        msg = await self.bot.send_message(channel, embed=embed)
+
+        start = time.time()
+        def check(msg):
+            if (math.ceil(time.time() - start) == timer):
+                return True
+            else:
+                niceTry.append(msg.author.id)
+                return False
+
+        while True:
+
+            if (time.time() - start > timer+3):
+                await self.bot.say("Time's up, you missed it.")
+                break 
+            
+            answer = await self.bot.wait_for_message(check=check, timeout=5)
+
+            if answer is not None:
+               if answer.author.id not in niceTry:
+                   if answer.author != self.bot.user:
+                       await self.correct_answer(server, answer)
+                       break
 
         self.games += 1
         await self.start_game(server)
