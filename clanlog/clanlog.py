@@ -7,9 +7,8 @@ from cogs.utils import checks
 from .utils.dataIO import dataIO, fileIO
 from copy import deepcopy
 from time import time as get_time
-import matplotlib
-matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+plt.switch_backend('agg')
 import matplotlib.dates as mdates
 from datetime import datetime as dt
 import operator
