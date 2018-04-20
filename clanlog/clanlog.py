@@ -40,7 +40,7 @@ class Clanlog:
     @checks.is_owner()
     @commands.command(pass_context=True, no_pm=True)
     async def clanlog(self, ctx):
-        """"Notifies whenever someone leaves or joins""""
+        """Notifies whenever someone leaves or joins"""
         try:
             self.update_clans()
             old_clans = deepcopy(self.clans)
@@ -97,7 +97,7 @@ class Clanlog:
     @checks.is_owner()    
     @commands.command(no_pm=True)
     async def clanlogdownload(self):
-        """"Downloads data to prevent clanlog from sending too many messages""""
+        """Downloads data to prevent clanlog from sending too many messages"""
         try:
             self.update_clans()
             clan_keys = list(self.clans.keys())
@@ -116,7 +116,7 @@ class Clanlog:
                
     @commands.command(pass_context=True, no_pm=True)
     async def history(self, ctx):
-        """"Graph with member count history""""
+        """Graph with member count history"""
         try:
             channel = ctx.message.channel
             await self.bot.send_typing(channel)
