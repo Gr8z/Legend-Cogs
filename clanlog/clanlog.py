@@ -5,6 +5,7 @@ from discord.ext import commands
 from cogs.utils import checks
 from .utils.dataIO import dataIO, fileIO
 from copy import deepcopy
+from time import time as get_time
 
 class Clanlog:
     """Clan Log cog for LeGeND family"""
@@ -13,32 +14,54 @@ class Clanlog:
         self.bot = bot
         self.auth = dataIO.load_json('cogs/auth.json')
         self.clans = dataIO.load_json('cogs/clans.json')
+        self.member_log = dataIO.load_json('cogs/member_log.json')
+        self.last_count = 0
         
     def getAuth(self):
         return {"auth" : self.auth['token']}
     
-    def save_data(self):
+    def save_clans(self):
         dataIO.save_json('cogs/clans.json', self.clans)
         
-    def update_data(self):
+    def save_member_log(self):
+        dataIO.save_json('cogs/member_log.json', self.member_log)
+        
+    def update_clans(self):
         self.clans = dataIO.load_json('cogs/clans.json')
     
+    def update_member_log(self):
+        self.member_log = dataIO.load_json('cogs/member_log.json')
+   
     @checks.is_owner()
     @commands.command(pass_context=True, no_pm=True)
     async def clanlog(self, ctx):
         try:
-            self.update_data()
+            self.update_clans()
             old_clans = deepcopy(self.clans)
             
             clan_keys = list(self.clans.keys())
             clan_requests = requests.get("https://api.royaleapi.com/clan/{}".format(','.join(self.clans[clan]["tag"] for clan in self.clans)), headers=self.getAuth(), timeout = 60).json()
             
+            count = 0
             for i in range(len(clan_requests)):
+                count = count + len(clan_requests[i]["members"])
                 one_clan = []
                 for member in clan_requests[i]["members"]:
                     one_clan.append({"name" : member["name"], "tag" : member["tag"]})
-                self.clans[clan_keys[i]]["members"] = one_clan
-            self.save_data()
+                self.clans[clan_keys[i]]["members"] = one_clan 
+            self.save_clans()
+            
+            if self.last_count != count:
+                self.update_member_log()
+                current_time = get_time()   
+                self.member_log[str(current_time)] = count
+                self.last_count = count
+                
+                saved_times = list(self.member_log.keys())
+                for time in saved_times:
+                    if (current_time - float(time)) > 2678400:#one month
+                        self.member_log.pop(time, None)
+                self.save_member_log()
             
             server = ctx.message.server
                     
@@ -69,7 +92,7 @@ class Clanlog:
     @commands.command(no_pm=True)
     async def clanlogdownload(self):
         try:
-            self.update_data()
+            self.update_clans()
             clan_keys = list(self.clans.keys())
             clan_requests = requests.get("https://api.royaleapi.com/clan/{}".format(','.join(self.clans[clan]["tag"] for clan in self.clans)), headers=self.getAuth(), timeout = 60).json()
             
@@ -78,8 +101,9 @@ class Clanlog:
                 for member in clan_requests[i]["members"]:
                     one_clan.append({"name" : member["name"], "tag" : member["tag"]})
                 self.clans[clan_keys[i]]["members"] = one_clan
-            self.save_data()  
+            self.save_clans()  
             await self.bot.say("Downloaded.")
+            
         except(requests.exceptions.Timeout, json.decoder.JSONDecodeError, KeyError):
             await self.bot.say("Cannot reach Clash Royale servers. Try again later!")
         
@@ -95,8 +119,15 @@ def check_auth():
     if 'token' not in c:
         c['token'] = ""
     dataIO.save_json('cogs/auth.json', c)
+    
+def check_files():
+    f = "cogs/member_log.json"
+    if not fileIO(f, "check"):
+        print("Creating empty member_log.json...")
+        dataIO.save_json(f, {})
         
 def setup(bot):
     check_auth()
     check_clans()
+    check_files()
     bot.add_cog(Clanlog(bot))

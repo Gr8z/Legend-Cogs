@@ -4,7 +4,7 @@
     "NAME" : "clanlog",
     "SHORT" : "Clan log for LeGeND Family",
     "DESCRIPTION" : "Notifies whenever someone leaves or joins",
-    "TAGS" : ["clashroyale", "legend","management"],
+    "TAGS" : ["clashroyale", "legend", "management"],
     "REQUIREMENTS" : ["json","requests"],
     "HIDDEN" : false
 }
