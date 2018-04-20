@@ -5,6 +5,6 @@
     "SHORT" : "Finally some good use for the credits.",
     "DESCRIPTION" : "Uses the economy cog to purchase different things : https://i.imgur.com/FIF5sug.png",
     "TAGS" : ["legend", "management", "activity", "shop"],
-    "REQUIREMENTS" : ["requests"],
+    "REQUIREMENTS" : ["requests", "emoji"],
     "HIDDEN" : false
 }
