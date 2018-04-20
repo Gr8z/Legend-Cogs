@@ -456,9 +456,9 @@ class challengeSession():
                             await self.correct_answer(server, answer)
                             break
                     elif number > msgNum:
-                        await self.bot.say(answer.author.mention + " Higher")
+                        await self.bot.add_reaction(answer, "🔽")
                     else:
-                        await self.bot.say(answer.author.mention + " Lower")
+                        await self.bot.add_reaction(answer, "🔼")
 
         self.games += 1
         await self.start_game(server)
