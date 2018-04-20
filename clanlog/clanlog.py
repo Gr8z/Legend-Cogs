@@ -1,10 +1,16 @@
 import discord
 import requests
 import json
+import os
 from discord.ext import commands
 from cogs.utils import checks
 from .utils.dataIO import dataIO, fileIO
 from copy import deepcopy
+from time import time as get_time
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+from datetime import datetime as dt
+import operator
 
 class Clanlog:
     """Clan Log cog for LeGeND family"""
@@ -13,32 +19,55 @@ class Clanlog:
         self.bot = bot
         self.auth = dataIO.load_json('cogs/auth.json')
         self.clans = dataIO.load_json('cogs/clans.json')
+        self.member_log = dataIO.load_json('data/clanlog/member_log.json')
+        self.last_count = 0
         
     def getAuth(self):
         return {"auth" : self.auth['token']}
     
-    def save_data(self):
+    def save_clans(self):
         dataIO.save_json('cogs/clans.json', self.clans)
         
-    def update_data(self):
+    def save_member_log(self):
+        dataIO.save_json('data/clanlog/member_log.json', self.member_log)
+        
+    def update_clans(self):
         self.clans = dataIO.load_json('cogs/clans.json')
     
+    def update_member_log(self):
+        self.member_log = dataIO.load_json('data/clanlog/member_log.json')
+   
     @checks.is_owner()
     @commands.command(pass_context=True, no_pm=True)
     async def clanlog(self, ctx):
+        """Notifies whenever someone leaves or joins"""
         try:
-            self.update_data()
+            self.update_clans()
             old_clans = deepcopy(self.clans)
             
             clan_keys = list(self.clans.keys())
             clan_requests = requests.get("https://api.royaleapi.com/clan/{}".format(','.join(self.clans[clan]["tag"] for clan in self.clans)), headers=self.getAuth(), timeout = 60).json()
             
+            count = 0
             for i in range(len(clan_requests)):
+                count = count + len(clan_requests[i]["members"])
                 one_clan = []
                 for member in clan_requests[i]["members"]:
                     one_clan.append({"name" : member["name"], "tag" : member["tag"]})
-                self.clans[clan_keys[i]]["members"] = one_clan
-            self.save_data()
+                self.clans[clan_keys[i]]["members"] = one_clan 
+            self.save_clans()
+            
+            if self.last_count != count:
+                self.update_member_log()
+                current_time = get_time()   
+                self.member_log[str(current_time)] = count
+                self.last_count = count
+                
+                saved_times = list(self.member_log.keys())
+                for time in saved_times:
+                    if (current_time - float(time)) > 2678400:#one month
+                        self.member_log.pop(time, None)
+                self.save_member_log()
             
             server = ctx.message.server
                     
@@ -68,8 +97,9 @@ class Clanlog:
     @checks.is_owner()    
     @commands.command(no_pm=True)
     async def clanlogdownload(self):
+        """Downloads data to prevent clanlog from sending too many messages"""
         try:
-            self.update_data()
+            self.update_clans()
             clan_keys = list(self.clans.keys())
             clan_requests = requests.get("https://api.royaleapi.com/clan/{}".format(','.join(self.clans[clan]["tag"] for clan in self.clans)), headers=self.getAuth(), timeout = 60).json()
             
@@ -78,10 +108,48 @@ class Clanlog:
                 for member in clan_requests[i]["members"]:
                     one_clan.append({"name" : member["name"], "tag" : member["tag"]})
                 self.clans[clan_keys[i]]["members"] = one_clan
-            self.save_data()  
+            self.save_clans()  
             await self.bot.say("Downloaded.")
+            
         except(requests.exceptions.Timeout, json.decoder.JSONDecodeError, KeyError):
             await self.bot.say("Cannot reach Clash Royale servers. Try again later!")
+               
+    @commands.command(pass_context=True, no_pm=True)
+    async def history(self, ctx):
+        """Graph with member count history"""
+        try:
+            channel = ctx.message.channel
+            await self.bot.send_typing(channel)
+            self.update_member_log()
+            
+            dates = []
+            counts = []
+            sorted_times = sorted(self.member_log.items(), key=operator.itemgetter(0))
+            for x in sorted_times:
+                dates.append(x[0])
+                counts.append(x[1])
+                
+            first_day= dt.fromtimestamp(float(dates[0])).strftime("%d. %m. %Y")
+            last_day = dt.fromtimestamp(float(dates[len(dates)-1])).strftime("%d. %m. %Y")
+                
+            for i in range(len(dates)):
+                dates[i] = dt.fromtimestamp(float(dates[i])).strftime("%d/%m/%Y")
+            
+            x = [dt.strptime(d,"%d/%m/%Y").date() for d in dates]
+            
+            plt.figure(figsize=(10, 6))
+            plt.plot(x, counts)
+            plt.gca().xaxis.set_major_formatter(mdates.DateFormatter("%d. %m."))
+            plt.title("MEMBER COUNT HISTORY OF LEGEND FAMILY", color = "orange", weight = "bold", size = 19)
+            plt.xlabel("DATE", color = "gray")
+            plt.ylabel("MEMBERS", color = "gray")
+            fromto = "({}. - {}.)".format(first_day, last_day)
+            
+            plt.savefig("data/clanlog/history.png")
+            await self.bot.send_file(channel, "data/clanlog/history.png", filename=None)
+            plt.close()
+        except (IndexError):
+            await self.bot.say("Clanlog command needs to collect more data!")
         
 def check_clans():
     c = dataIO.load_json('cogs/clans.json')
@@ -95,8 +163,22 @@ def check_auth():
     if 'token' not in c:
         c['token'] = ""
     dataIO.save_json('cogs/auth.json', c)
+    
+def check_files():
+    f = "data/clanlog/member_log.json"
+    if not fileIO(f, "check"):
+        print("Creating empty member_log.json...")
+        dataIO.save_json(f, {})
+        
+def check_folders():
+    if not os.path.exists("data/clanlog"):
+        print("Creating data/clanlog folder...")
+        os.makedirs("data/clanlog")
         
 def setup(bot):
     check_auth()
     check_clans()
+    check_folders()
+    check_files()
     bot.add_cog(Clanlog(bot))
+
