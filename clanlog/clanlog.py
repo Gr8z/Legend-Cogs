@@ -1,11 +1,16 @@
 import discord
 import requests
 import json
+import os
 from discord.ext import commands
 from cogs.utils import checks
 from .utils.dataIO import dataIO, fileIO
 from copy import deepcopy
 from time import time as get_time
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+from datetime import datetime as dt
+import operator
 
 class Clanlog:
     """Clan Log cog for LeGeND family"""
@@ -14,7 +19,7 @@ class Clanlog:
         self.bot = bot
         self.auth = dataIO.load_json('cogs/auth.json')
         self.clans = dataIO.load_json('cogs/clans.json')
-        self.member_log = dataIO.load_json('cogs/member_log.json')
+        self.member_log = dataIO.load_json('data/clanlog/member_log.json')
         self.last_count = 0
         
     def getAuth(self):
@@ -24,17 +29,18 @@ class Clanlog:
         dataIO.save_json('cogs/clans.json', self.clans)
         
     def save_member_log(self):
-        dataIO.save_json('cogs/member_log.json', self.member_log)
+        dataIO.save_json('data/clanlog/member_log.json', self.member_log)
         
     def update_clans(self):
         self.clans = dataIO.load_json('cogs/clans.json')
     
     def update_member_log(self):
-        self.member_log = dataIO.load_json('cogs/member_log.json')
+        self.member_log = dataIO.load_json('data/clanlog/member_log.json')
    
     @checks.is_owner()
     @commands.command(pass_context=True, no_pm=True)
     async def clanlog(self, ctx):
+        """"Notifies whenever someone leaves or joins""""
         try:
             self.update_clans()
             old_clans = deepcopy(self.clans)
@@ -91,6 +97,7 @@ class Clanlog:
     @checks.is_owner()    
     @commands.command(no_pm=True)
     async def clanlogdownload(self):
+        """"Downloads data to prevent clanlog from sending too many messages""""
         try:
             self.update_clans()
             clan_keys = list(self.clans.keys())
@@ -106,6 +113,43 @@ class Clanlog:
             
         except(requests.exceptions.Timeout, json.decoder.JSONDecodeError, KeyError):
             await self.bot.say("Cannot reach Clash Royale servers. Try again later!")
+               
+    @commands.command(pass_context=True, no_pm=True)
+    async def history(self, ctx):
+        """"Graph with member count history""""
+        try:
+            channel = ctx.message.channel
+            await self.bot.send_typing(channel)
+            self.update_member_log()
+            
+            dates = []
+            counts = []
+            sorted_times = sorted(self.member_log.items(), key=operator.itemgetter(0))
+            for x in sorted_times:
+                dates.append(x[0])
+                counts.append(x[1])
+                
+            first_day= dt.fromtimestamp(float(dates[0])).strftime("%d. %m. %Y")
+            last_day = dt.fromtimestamp(float(dates[len(dates)-1])).strftime("%d. %m. %Y")
+                
+            for i in range(len(dates)):
+                dates[i] = dt.fromtimestamp(float(dates[i])).strftime("%d/%m/%Y")
+            
+            x = [dt.strptime(d,"%d/%m/%Y").date() for d in dates]
+            
+            plt.figure(figsize=(10, 6))
+            plt.plot(x, counts)
+            plt.gca().xaxis.set_major_formatter(mdates.DateFormatter("%d. %m."))
+            plt.title("MEMBER COUNT HISTORY OF LEGEND FAMILY", color = "orange", weight = "bold", size = 19)
+            plt.xlabel("DATE", color = "gray")
+            plt.ylabel("MEMBERS", color = "gray")
+            fromto = "({}. - {}.)".format(first_day, last_day)
+            
+            plt.savefig("data/clanlog/history.png")
+            await self.bot.send_file(channel, "data/clanlog/history.png", filename=None)
+            plt.close()
+        except (IndexError):
+            await self.bot.say("Clanlog command needs to collect more data!")
         
 def check_clans():
     c = dataIO.load_json('cogs/clans.json')
@@ -121,13 +165,20 @@ def check_auth():
     dataIO.save_json('cogs/auth.json', c)
     
 def check_files():
-    f = "cogs/member_log.json"
+    f = "data/clanlog/member_log.json"
     if not fileIO(f, "check"):
         print("Creating empty member_log.json...")
         dataIO.save_json(f, {})
         
+def check_folders():
+    if not os.path.exists("data/clanlog"):
+        print("Creating data/clanlog folder...")
+        os.makedirs("data/clanlog")
+        
 def setup(bot):
     check_auth()
     check_clans()
+    check_folders()
     check_files()
     bot.add_cog(Clanlog(bot))
+
