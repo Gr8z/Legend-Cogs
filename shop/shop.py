@@ -6,7 +6,6 @@ from cogs.utils import checks
 import asyncio
 import json
 import math
-from emoji.unicode_codes import UNICODE_EMOJI
 
 class shop:
     """Legend Family Shop for credits"""
@@ -310,10 +309,6 @@ class shop:
             await self.bot.add_reaction(ctx.message, emoji)
         except (discord.errors.HTTPException, discord.errors.InvalidArgument):
             await self.bot.say("Error, That's not an emoji I recognize.")
-            return
-
-        if UNICODE_EMOJI[emoji] == ":crown:":
-            await self.bot.say("Error, That emoji is not allowed for purchase.")
             return
 
         if self.bank_check(author, 80000):
