@@ -137,14 +137,14 @@ class Clanlog:
             first_day= dt.fromtimestamp(float(dates[0])).strftime("%d. %m. %Y")
             last_day = dt.fromtimestamp(float(dates[len(dates)-1])).strftime("%d. %m. %Y")
                 
-            for i in range(len(dates)):
-                dates[i] = dt.fromtimestamp(float(dates[i])).strftime("%d/%m/%Y")
-            
-            x = [dt.strptime(d,"%d/%m/%Y").date() for d in dates]
+##            for i in range(len(dates)):
+##                dates[i] = dt.fromtimestamp(float(dates[i])).strftime("%d/%m/%Y")
+##            
+##            x = [dt.strptime(d,"%d/%m/%Y").date() for d in dates]
             
             plt.figure(figsize=(10, 6))
-            plt.plot(x, counts)
-            plt.gca().xaxis.set_major_formatter(mdates.DateFormatter("%d. %m."))
+            plt.plot(dates, counts)
+            #plt.gca().xaxis.set_major_formatter(mdates.DateFormatter("%d. %m."))
             plt.title("MEMBER COUNT HISTORY OF LEGEND FAMILY", color = "orange", weight = "bold", size = 19)
             plt.xlabel("DATE", color = "gray")
             plt.ylabel("MEMBERS", color = "gray")
