@@ -128,17 +128,19 @@ class Clanlog:
             self.update_member_log()
             
             dates = []
+            datesX = []
             counts = []
             sorted_times = sorted(self.member_log.items(), key=operator.itemgetter(0))
             for x in sorted_times:
-                dates.append(dt.fromtimestamp(float(x[0])).strftime("%a, %b %d %Y (%X)"))
+                dates.append(dt.fromtimestamp(float(x[0])).strftime("%a, %b %d %Y"))
+                datesX.append(x[0])
                 counts.append(x[1])
             
             plt.figure(figsize=(10, 6))
-            plt.plot(dates, counts)
+            plt.plot(datesX, counts)
 
             plt.gcf().autofmt_xdate()
-            plt.xticks(np.arange(0, len(self.member_log)+1, 20))
+            plt.xticks(np.arange(0, len(datesX)+1, 20), dates)
 
             plt.title("MEMBER COUNT HISTORY OF LEGEND FAMILY", color = "orange", weight = "bold", size = 19)
             plt.xlabel("DATE", color = "gray")
