@@ -150,6 +150,31 @@ class Clanlog:
             await self.bot.send_file(channel, "data/clanlog/history.png", filename=None)
             plt.close()
         except (IndexError):
+            await self.bot.say("Clanlog command needs to collect more data!")    
+
+    @commands.command(pass_context=True, no_pm=True)
+    async def history1(self, ctx):
+        """Graph with member count history"""
+        try:
+            channel = ctx.message.channel
+            await self.bot.send_typing(channel)
+            self.update_member_log()
+            
+            plt.figure(figsize=(10, 6))
+            x,y = zip(*sorted(self.member_log.items()))
+            plt.plot(x,y)
+
+            plt.gcf().autofmt_xdate()
+            plt.xticks(np.arange(0, len(self.member_log)+1, 20))
+
+            plt.title("MEMBER COUNT HISTORY OF LEGEND FAMILY", color = "orange", weight = "bold", size = 19)
+            plt.xlabel("DATE", color = "gray")
+            plt.ylabel("MEMBERS", color = "gray")
+            
+            plt.savefig("data/clanlog/history.png")
+            await self.bot.send_file(channel, "data/clanlog/history.png", filename=None)
+            plt.close()
+        except (IndexError):
             await self.bot.say("Clanlog command needs to collect more data!")
         
 def check_clans():
