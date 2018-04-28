@@ -477,7 +477,7 @@ class challengeSession():
 
         start = time.time()
         def check(msg):
-            if (math.ceil(time.time() - start) == timer):
+            if (math.ceil(time.time() - start) == timer) and (msg.content.lower() == "stop"):
                 return True
             else:
                 niceTry.append(msg.author.id)
