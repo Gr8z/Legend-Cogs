@@ -118,42 +118,9 @@ class Clanlog:
             
         except(requests.exceptions.Timeout, json.decoder.JSONDecodeError, KeyError):
             await self.bot.say("Cannot reach Clash Royale servers. Try again later!")
-               
+
     @commands.command(pass_context=True, no_pm=True)
     async def history(self, ctx):
-        """Graph with member count history"""
-        try:
-            channel = ctx.message.channel
-            await self.bot.send_typing(channel)
-            self.update_member_log()
-            
-            dates = []
-            datesX = []
-            counts = []
-            sorted_times = sorted(self.member_log.items(), key=operator.itemgetter(0))
-            for x in sorted_times:
-                dates.append(dt.fromtimestamp(float(x[0])).strftime("%a, %b %d %Y"))
-                datesX.append(x[0])
-                counts.append(x[1])
-            
-            plt.figure(figsize=(10, 6))
-            plt.plot(datesX, counts)
-
-            plt.gcf().autofmt_xdate()
-            plt.xticks(np.arange(0, len(datesX)+1, 20), dates)
-
-            plt.title("MEMBER COUNT HISTORY OF LEGEND FAMILY", color = "orange", weight = "bold", size = 19)
-            plt.xlabel("DATE", color = "gray")
-            plt.ylabel("MEMBERS", color = "gray")
-            
-            plt.savefig("data/clanlog/history.png")
-            await self.bot.send_file(channel, "data/clanlog/history.png", filename=None)
-            plt.close()
-        except (IndexError):
-            await self.bot.say("Clanlog command needs to collect more data!")    
-
-    @commands.command(pass_context=True, no_pm=True)
-    async def history1(self, ctx):
         """Graph with member count history"""
         try:
             channel = ctx.message.channel
@@ -164,8 +131,12 @@ class Clanlog:
             x,y = zip(*sorted(self.member_log.items()))
             plt.plot(x,y)
 
+            dates = []
+            for name in x:
+                dates.append(dt.fromtimestamp(float(name)).strftime("%a, %b %d %Y"))
+
             plt.gcf().autofmt_xdate()
-            plt.xticks(np.arange(0, len(self.member_log)+1, 20))
+            plt.xticks(np.arange(0, len(self.member_log)+1, 20), dates)
 
             plt.title("MEMBER COUNT HISTORY OF LEGEND FAMILY", color = "orange", weight = "bold", size = 19)
             plt.xlabel("DATE", color = "gray")
