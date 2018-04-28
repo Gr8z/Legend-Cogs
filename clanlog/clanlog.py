@@ -9,9 +9,9 @@ from copy import deepcopy
 from time import time as get_time
 import matplotlib.pyplot as plt
 plt.switch_backend('agg')
-import matplotlib.dates as mdates
 from datetime import datetime as dt
 import operator
+import numpy as np
 
 class Clanlog:
     """Clan Log cog for LeGeND family"""
@@ -131,24 +131,18 @@ class Clanlog:
             counts = []
             sorted_times = sorted(self.member_log.items(), key=operator.itemgetter(0))
             for x in sorted_times:
-                dates.append(x[0])
+                dates.append(dt.fromtimestamp(float(x[0])).strftime("%a, %b %d %Y (%X)"))
                 counts.append(x[1])
-                
-            first_day= dt.fromtimestamp(float(dates[0])).strftime("%d. %m. %Y")
-            last_day = dt.fromtimestamp(float(dates[len(dates)-1])).strftime("%d. %m. %Y")
-                
-##            for i in range(len(dates)):
-##                dates[i] = dt.fromtimestamp(float(dates[i])).strftime("%d/%m/%Y")
-##            
-##            x = [dt.strptime(d,"%d/%m/%Y").date() for d in dates]
             
             plt.figure(figsize=(10, 6))
             plt.plot(dates, counts)
-            #plt.gca().xaxis.set_major_formatter(mdates.DateFormatter("%d. %m."))
+
+            plt.gcf().autofmt_xdate()
+            plt.xticks(np.arange(0, len(self.member_log)+1, 20))
+
             plt.title("MEMBER COUNT HISTORY OF LEGEND FAMILY", color = "orange", weight = "bold", size = 19)
             plt.xlabel("DATE", color = "gray")
             plt.ylabel("MEMBERS", color = "gray")
-            fromto = "({}. - {}.)".format(first_day, last_day)
             
             plt.savefig("data/clanlog/history.png")
             await self.bot.send_file(channel, "data/clanlog/history.png", filename=None)
