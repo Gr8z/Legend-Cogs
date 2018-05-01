@@ -1,19 +1,9 @@
 import discord
 from discord.ext import commands
 from .utils.dataIO import dataIO, fileIO
-try: # check if BeautifulSoup4 is installed
-	from bs4 import BeautifulSoup
-	soupAvailable = True
-except:
-	soupAvailable = False
-import json
-from flask import Flask, request
 import requests
 import os
-import aiohttp
 from __main__ import send_cmd_help
-import socket
-import urllib.request  as urllib2
 import time
 
 BOTCOMMANDER_ROLES =  ["Family Representative", "Clan Manager", "Clan Deputy", "Co-Leader", "Hub Officer", "admin"];
@@ -264,29 +254,13 @@ class clashroyale:
 		except:
 			await self.bot.say("Error: Tournament not found. Please try again later!")
 
-	@commands.group(pass_context=True)
-	async def save(self, ctx):
-		"""Save profile tags for Clash Royale and Brawl Stars"""
-		author = ctx.message.author
-		if ctx.invoked_subcommand is None:
-			await send_cmd_help(ctx)
-			msg = "```"
-			if author.id in self.clash: 
-				msg += "CR Profile: {}\n".format(self.clash[author.id]['tag'])
-			if author.id in self.brawl: 
-				msg += "BS Profile: {}\n".format(self.brawl[author.id]['tag'])
-			if author.id in self.brawl: 
-				msg += "BS Clan: {}\n".format(self.brawl[author.id]['band_tag'])
-			msg += "```"
-			await self.bot.say(msg)
-
-	@save.command(pass_context=True, name="clash")
-	async def save_clash(self, ctx, profiletag : str, member: discord.Member = None):
+	@commands.command(pass_context=True)
+	async def save(self, ctx, profiletag : str, member: discord.Member = None):
 		""" save your Clash Royale Profile Tag	
 
 		Example:
-			!save clash #CRRYTPTT @GR8
-			!save clash #CRRYRPCC
+			!save #CRRYTPTT @GR8
+			!save #CRRYRPCC
 
 		Type !contact to ask for help.
 		"""
@@ -341,70 +315,6 @@ class clashroyale:
 			avatar = member.avatar_url if member.avatar else member.default_avatar_url
 			embed.set_author(name='{} (#{}) has been successfully saved.'.format(profiledata['name'], profiletag), icon_url=avatar)
 			await self.bot.say(embed=embed)
-		except:
-			await self.bot.say("We cannot find your ID in our database, please try again.")
-
-	@save.command(pass_context=True, name="brawl")
-	async def save_brawl(self, ctx, profiletag : str, member: discord.Member = None):
-		"""save your Brawl Stars Profile Tag
-
-		Example:
-			!save brawl #LJQ2GGR
-			!save brawl #LJQ2GGR @GR8
-
-		Type !contact to ask for help.
-		"""
-		server = ctx.message.server
-		author = ctx.message.author
-
-		profiletag = profiletag.strip('#').upper().replace('O', '0')
-		check = ['P', 'Y', 'L', 'Q', 'G', 'R', 'J', 'C', 'U', 'V', '0', '2', '8', '9']
-
-		if any(i not in check for i in profiletag):
-			await self.bot.say("The ID you provided has invalid characters. Please try again.")
-			return
-
-		allowed = False
-		if member is None:
-			allowed = True
-		elif member.id == author.id:
-			allowed = True
-		else:
-			botcommander_roles = [discord.utils.get(server.roles, name=r) for r in BOTCOMMANDER_ROLES]
-			botcommander_roles = set(botcommander_roles)
-			author_roles = set(author.roles)
-			if len(author_roles.intersection(botcommander_roles)):
-				allowed = True
-
-		if not allowed:
-			await self.bot.say("You dont have enough permissions to set tags for others.")
-			return
-
-		if member is None:
-			member = ctx.message.author
-		
-		url = "https://brawlstats.io/players/" + profiletag
-		refresh = "https://brawlstats.io/players/" + profiletag + "/refresh"
-		requests.get(refresh)
-
-		async with aiohttp.get(url) as response:
-			soupObject = BeautifulSoup(await response.text(), "html.parser")
-		try:
-
-			band = soupObject.find('div', {'class':'band-info'}).get_text()
-
-			if band == 'No Band':
-				band_tag = '#'
-			else:
-				band_link = soupObject.find('div', {'class':'band-info'}).find('a')
-				band_tag = band_link['href'][7:].strip()
-
-			tagUsername = soupObject.find('div', {'class':'player-name brawlstars-font'}).get_text()
-
-			self.brawl.update({member.id: {'tag': profiletag, 'band_tag': band_tag}})
-			dataIO.save_json('data/BrawlStats/tags.json', self.brawl)
-
-			await self.bot.say(tagUsername + ' has been successfully saved. Now you can use ``!brawlProfile`` ``!band``')
 		except:
 			await self.bot.say("We cannot find your ID in our database, please try again.")
 
