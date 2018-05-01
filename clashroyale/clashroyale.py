@@ -341,7 +341,3 @@ def setup(bot):
 	#check_folders()
 	check_files()
 	check_auth()
-	if soupAvailable:
-		bot.add_cog(clashroyale(bot))
-	else:
-		raise RuntimeError("You need to run `pip3 install beautifulsoup4`")
