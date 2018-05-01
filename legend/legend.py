@@ -315,7 +315,7 @@ class legend:
                 await self.bot.say(e)
                 return
             except:
-                await self.bot.say("You must assosiate a tag with this member first using ``!save clash #tag @member``")
+                await self.bot.say("You must assosiate a tag with this member first using ``!save #tag @member``")
                 return
 
         try:
@@ -440,7 +440,7 @@ class legend:
             await self.bot.say(e)
             return
         except:
-            await self.bot.say("You must assosiate a tag with this member first using ``!save clash #tag @member``")
+            await self.bot.say("You must assosiate a tag with this member first using ``!save #tag @member``")
             return
 
         membership = True
@@ -565,7 +565,7 @@ class legend:
             await self.bot.say(e)
             return
         except:
-            await self.bot.say("You must assosiate a tag with this member first using ``!save clash #tag @member``")
+            await self.bot.say("You must assosiate a tag with this member first using ``!save #tag @member``")
             return
 
         allowed = False
@@ -731,7 +731,7 @@ class legend:
             await self.bot.say(e)
             return
         except:
-            await self.bot.say("You must assosiate a tag with this member first using ``!save clash #tag @member``")
+            await self.bot.say("You must assosiate a tag with this member first using ``!save #tag @member``")
             return
 
 
@@ -877,7 +877,7 @@ class legend:
             await self.bot.say(e)
             return
         except:
-            await self.bot.say("You must assosiate a tag with this member first using ``!save clash #tag @member``")
+            await self.bot.say("You must assosiate a tag with this member first using ``!save #tag @member``")
             return
 
         membership = False
@@ -1400,7 +1400,7 @@ class legend:
             await self.bot.say(e)
             return
         except:
-            await self.bot.say("You must assosiate a tag with this member first using ``!save clash #tag @member``")
+            await self.bot.say("You must assosiate a tag with this member first using ``!save #tag @member``")
             return
 
         membership = False

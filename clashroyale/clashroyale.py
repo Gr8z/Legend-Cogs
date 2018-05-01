@@ -102,7 +102,7 @@ class clashroyale:
 			await self.bot.say(embed=embed)
 
 		except:
-			await self.bot.say("You need to first save your profile using ``!save clash #GAMETAG``")
+			await self.bot.say("You need to first save your profile using ``!save #GAMETAG``")
 
 	@commands.command(pass_context=True)
 	async def chests(self, ctx, member: discord.Member = None):
@@ -143,7 +143,7 @@ class clashroyale:
 			await self.bot.say(embed=embed)
 
 		except:
-			await self.bot.say("You need to first save your profile using ``!save clash #GAMETAG``")
+			await self.bot.say("You need to first save your profile using ``!save #GAMETAG``")
 
 	@commands.command(pass_context=True, aliases=['clashdeck'])
 	async def clashDeck(self, ctx, member: discord.Member = None):
@@ -171,7 +171,7 @@ class clashroyale:
 
 		except:
 			raise
-			await self.bot.say("You need to first save your profile using ``!save clash #GAMETAG``")
+			await self.bot.say("You need to first save your profile using ``!save #GAMETAG``")
 
 	@commands.command(pass_context=True)
 	async def clan(self, ctx, clantag):
@@ -341,3 +341,4 @@ def setup(bot):
 	#check_folders()
 	check_files()
 	check_auth()
+	bot.add_cog(clashroyale(bot))
