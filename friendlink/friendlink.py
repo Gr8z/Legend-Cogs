@@ -45,7 +45,7 @@ class friendlink:
 
             embed=discord.Embed(title='Click this link to add as friend in Clash Royale!', url=url[0], color=0x0080ff)
             embed.set_author(name=profiledata['name'] + " (#"+profiledata['tag']+")", icon_url=clanurl)
-            embed.set_thumbnail(url="https://i.imgur.com/zApqOVR.png")
+            embed.set_thumbnail(url="https://imgur.com/C9rLoeh.jpg")
             embed.add_field(name="User", value=message.author.mention, inline=True)
             embed.add_field(name="Trophies", value=profiledata['trophies'], inline=True)
             if profiledata['clan'] is not None:
