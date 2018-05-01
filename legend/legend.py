@@ -57,20 +57,20 @@ info_text = """You will find several channels on our Discord Server\n
 **#bots-spam**: play bot commands, You can mute the channels you don't need in DISCORD settings.
 **#friends-forever**: Post your Clash friend invite link or add others.
 """
-cw_info = """We organize a **clanwar** every weekend, which aims to determine **which clan is the strongest**. 
+cw_info = """We organize **Legend Wars** every weekend, which aims to determine **which clan is the strongest**. 
 
 The **idea** is simple: A private tournament that anyone may join **within LeGeND and the alliance. **
 Score is calculated in a way that allows every participant to contribute to help their clan win.  We sum the earned tournament trophies of the members of each clan to calculate a clan score, clan with highest clan score is declared the **winner**! 
 
 There are 2 factors to win: convince more players to participate within your clan and earn more tournament trophies. Both are **equally important**. We publish tourneys and passwords at same time, so we give equal chances to each clan and player. 
 
-Every Sunday, there will be a **special Gizer clanwar** where various clans outside and inside the family will join a tournament and the top clan will recieve $5 from Gizer. 
+Every Sunday, there will be a **special Gizer Legend War** where various clans outside and inside the family will join a tournament and the top clan will recieve $5 from Gizer. 
 
 Each and every participant will recieve discord credits for getting trophies for their clan. The more trophies you can collect, the more credits you will get. Credits can used in LeGeND shop to buy various items.
 
 **All clans** will be closed/full to avoid any leaks, nobody will be allowed to join.
 
-**3 golden Rules for clanwars:** We respect the Opponent (no BMing if you win), we play to have fun (no obligation to participate), and don't join if you think you cannot play.
+**3 golden Rules for Legend Wars:** We respect the Opponent (no BMing if you win), we play to have fun (no obligation to participate), and don't join if you think you cannot play.
 """
 
 credits_info = """**WHAT ARE CREDITS?**
