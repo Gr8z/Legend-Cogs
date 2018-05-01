@@ -99,10 +99,9 @@ Please note that if you just lurk in the server and not participate for a long p
 https://discord.gg/CN47Tkx
 """
 
-coc_bs = """We also play **Clash of Clans** and **Brawl Stars**, we would like to invite to you join them if you play either of these supercell games.
+coc_bs = """We also play **Clash of Clans**, and we would like to invite to you join our clans.
 
-• Clash of Clans - **LeGeND Raiders! (#JQJRGVJU)** - https://discord.gg/BG7wMFw
-• Brawl Stars - **LeGeND Bandits! (#L8V8UYC)** - https://discord.gg/brVC4Cz
+• **LeGeND Raiders! (#JQJRGVJU)** - https://discord.gg/BG7wMFw
 
 You can send a request to join with the message "from LEGEND". Join the discord server when you are accepted.
 """
