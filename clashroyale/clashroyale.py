@@ -11,7 +11,6 @@ creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
 
 clash = os.path.join("cogs", "tags.json")
-brawl = os.path.join("data", "BrawlStats", "tags.json")
 auth = os.path.join("cogs", "auth.json")
 
 class clashroyale:
@@ -20,7 +19,6 @@ class clashroyale:
 	def __init__(self, bot):
 		self.bot = bot
 		self.clash = dataIO.load_json(clash)
-		self.brawl = dataIO.load_json(brawl)
 		self.auth = dataIO.load_json(auth)
 
 	def getAuth(self):
@@ -322,16 +320,9 @@ def check_folders():
 	if not os.path.exists("data/clashroyale"):
 		print("Creating data/clashroyale folder...")
 		os.makedirs("data/clashroyale")
-	if not os.path.exists("data/BrawlStats"):
-		print("Creating data/BrawlStats folder...")
-		os.makedirs("data/BrawlStats")
 
 def check_files():
 	f = "cogs/tags.json"
-	if not fileIO(f, "check"):
-		print("Creating empty tags.json...")
-		fileIO(f, "save", {"0" : {"tag" : "DONOTREMOVE"}})
-	f = "data/BrawlStats/tags.json"
 	if not fileIO(f, "check"):
 		print("Creating empty tags.json...")
 		fileIO(f, "save", {"0" : {"tag" : "DONOTREMOVE"}})
