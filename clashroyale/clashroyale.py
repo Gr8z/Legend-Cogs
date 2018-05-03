@@ -217,12 +217,7 @@ class clashroyale:
 			cards = self.getCards(maxCapacity)
 			coins = self.getCoins(maxCapacity)
 
-			try:
-				desc = tourneydata['description']
-			except KeyError:
-				desc = "No description"
-
-			embed=discord.Embed(title=tourneydata['name']+" (#"+tourneydata['tag']+")", url="http://royaleapi.com/tournament/"+tourneydata['tag'], description=desc, color=0xFAA61A)
+			embed=discord.Embed(title="Click this link to join the Tournament in Clash Royale!", url="https://legendclans.com/tournaments.php?id={}?pass={}".format(tag, password), color=0xFAA61A)
 			embed.set_thumbnail(url='https://statsroyale.com/images/tournament.png')
 			embed.add_field(name="Players", value=str(tourneydata['playerCount']) + "/" + str(maxCapacity), inline=True)
 			embed.add_field(name="Status", value=tourneydata['status'].title(), inline=True)
