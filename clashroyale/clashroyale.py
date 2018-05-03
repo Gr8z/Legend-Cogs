@@ -217,7 +217,7 @@ class clashroyale:
 			cards = self.getCards(maxCapacity)
 			coins = self.getCoins(maxCapacity)
 
-			embed=discord.Embed(title="Click this link to join the Tournament in Clash Royale!", url="https://legendclans.com/tournaments.php?id={}?pass={}".format(tag, password), color=0xFAA61A)
+			embed=discord.Embed(title="Click this link to join the Tournament in Clash Royale!", url="https://link.clashroyale.com/?joinTournament?id={}?pass={}".format(tag, password), color=0xFAA61A)
 			embed.set_thumbnail(url='https://statsroyale.com/images/tournament.png')
 
 			embed.set_author(name=tourneydata['name']+" (#"+tourneydata['tag']+")")
