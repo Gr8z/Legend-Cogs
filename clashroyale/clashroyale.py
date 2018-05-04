@@ -226,9 +226,7 @@ class clashroyale:
 			embed.add_field(name="Status", value=tourneydata['status'].title(), inline=True)
 
 			if tourneydata['type'] == "passwordProtected":
-				if password is not None:
-					embed.add_field(name="Password", value=password, inline=True)
-				else:
+				if password is None:
 					await self.bot.say("Error: Please enter a tournament password.")
 					return
 
