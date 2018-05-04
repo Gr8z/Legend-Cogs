@@ -182,7 +182,7 @@ class clashroyale:
 		try:
 			clandata = requests.get('https://api.royaleapi.com/clan/{}'.format(clantag), headers=self.getAuth(), timeout=10).json()
 
-			embed=discord.Embed(title=clandata['name'] + " (#" + clandata['tag'] + ")", url="http://royaleapi.com/clan/"+clandata['tag'], description=clandata['description'], color=0xFAA61A)
+			embed=discord.Embed(title=clandata['name'] + " (#" + clandata['tag'] + ")", url="https://link.clashroyale.com/?clanInfo?id={}".format(clandata['tag']), description=clandata['description'], color=0xFAA61A)
 			embed.set_thumbnail(url=clandata['badge']['image'])
 			embed.add_field(name="Members", value=str(clandata['memberCount'])+"/50", inline=True)
 			embed.add_field(name="Donations", value=str(clandata['donations']), inline=True)

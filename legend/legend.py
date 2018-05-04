@@ -378,7 +378,7 @@ class legend:
             if bonustitle is not None:
                 title += bonustitle  
 
-            desc = emoji + " " + showMembers + "     :trophy: " + str(clans[x]['requiredScore']) + "+     :medal: " +str(clans[x]['score'])
+            desc = "{}{}      :trophy: {}+     :medal:{}   [:arrow_upper_right: Open](https://link.clashroyale.com/?clanInfo?id={})".format(emoji, showMembers, str(clans[x]['requiredScore']), str(clans[x]['score']), clans[x]['tag'])
 
             if (member is None) or ((clans[x]['requiredScore'] <= trophies) and (maxtrophies > personalbest) and (trophies - clans[x]['requiredScore'] < 1500) and (clans[x]['type'] != 'closed')):
                 foundClan = True
@@ -512,10 +512,11 @@ class legend:
                 recruitCode = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6))
 
                 await self.bot.send_message(member, 
-                    "Congratulations, You have been approved to join **"+ clan_name + " (#" + clan_tag + ")**. Please follow the instructions below on how to join: \n\n" +
-                    "Your Recruit Code is: ``" + recruitCode + "`` \n\n"+
-                    "All you have to do is search the clan name in Clash Royale, request to join and enter your recruit code in the request message.\n\n" +
-                    "That's it! Now wait for your clan leadership to accept you. \n\n" +
+                    "Congratulations, You have been approved to join **"+ clan_name + " (#" + clan_tag + ")**.\n\n\n" +
+                    "Your **RECRUIT CODE** is: ``" + recruitCode + "`` \n"+
+                    "Send this code in the join request message.\n\n"+
+                    "Click this link to join the clan : https://link.clashroyale.com/?clanInfo?id="+ clan_tag +"\n\n" +
+                    "That's it! Now wait for your clan leadership to accept you. \n" +
                     "If you do not see a 'request to join' button, make sure you leave your current clan and check the trophy requirements. \n\n" + 
                     "**IMPORTANT**: Once your clan leadership has accepted your request, let a staff member in discord know that you have been accepted. They will then unlock all the member channels for you."
                     )
