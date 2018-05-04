@@ -210,6 +210,8 @@ class clashroyale:
 			await self.bot.say("The ID you provided has invalid characters. Please try again.")
 			return
 
+		await self.bot.delete_message(ctx.message)
+
 		try:
 			tourneydata = requests.get('https://api.royaleapi.com/tournaments/{}'.format(tag), headers=self.getAuth(), timeout=10).json()
 
