@@ -214,7 +214,6 @@ class Race:
         await self.bot.say("Parameters reset.")
 
     @race.command(name="start", pass_context=True)
-    @checks.admin_or_permissions(manage_server=True)
     async def _start_race(self, ctx):
         """Start an animal race and enter yourself as participant
 
@@ -249,7 +248,7 @@ class Race:
 
         self.game_teardown(data, force=True)
         data['Race Active'] = True
-        #data['Players'][author.id] = {}
+        data['Players'][author.id] = {}
         wait = settings['Time']
 
         await self.bot.edit_role(server, raceRole, mentionable=True)
@@ -262,39 +261,35 @@ class Race:
 
         racers = self.game_setup(author, data, settings['Mode'])
 
-        if racers:
-            await self.bot.say(":checkered_flag: The race is now in progress :checkered_flag:")
+        await self.bot.say(":checkered_flag: The race is now in progress :checkered_flag:")
 
-            data['Race Start'] = True
+        data['Race Start'] = True
 
-            race_msg = await self.bot.say('\u200b'+'\n'+'\n'.join([player.field() for player in racers]))
-            await self.run_game(racers, race_msg, data)
+        race_msg = await self.bot.say('\u200b'+'\n'+'\n'.join([player.field() for player in racers]))
+        await self.run_game(racers, race_msg, data)
 
-            footer = "Type {}race claim to receive prize money. You must claim it before the next race!"
-            first = ':first_place:  {0}'.format(*data['First'])
-            fv = '{1}\n{2:.2f}s'.format(*data['First'])
-            second = ':second_place: {0}'.format(*data['Second'])
-            sv = '{1}\n{2:.2f}s'.format(*data['Second'])
-            if data['Third']:
-                third = ':third_place:  {0}'.format(*data['Third'])
-                tv = '{1}\n{2:.2f}s'.format(*data['Third'])
-            else:
-                third = ':third_place:'
-                tv = '--\n--'
-
-            await self.bot.say("{} is the winner!".format(data['Winner'].mention))
-            embed = discord.Embed(colour=0x00CC33)
-            embed.add_field(name=first, value=fv)
-            embed.add_field(name=second, value=sv)
-            embed.add_field(name=third, value=tv)
-            embed.add_field(name='-' * 99, value='Type ``!race claim`` to receive prize money. \nType ``!togglerole race`` to get notified on the next race.')
-            embed.title = "Race Results"
-            embed.set_footer(text=credits, icon_url=creditIcon)
-            await self.bot.say(embed=embed)
-            self.game_teardown(data)
+        footer = "Type {}race claim to receive prize money. You must claim it before the next race!"
+        first = ':first_place:  {0}'.format(*data['First'])
+        fv = '{1}\n{2:.2f}s'.format(*data['First'])
+        second = ':second_place: {0}'.format(*data['Second'])
+        sv = '{1}\n{2:.2f}s'.format(*data['Second'])
+        if data['Third']:
+            third = ':third_place:  {0}'.format(*data['Third'])
+            tv = '{1}\n{2:.2f}s'.format(*data['Third'])
         else:
-            await self.bot.say("The race has been cancelled, next one is in an hour")
-            self.game_teardown(data)
+            third = ':third_place:'
+            tv = '--\n--'
+
+        await self.bot.say("{} is the winner!".format(data['Winner'].mention))
+        embed = discord.Embed(colour=0x00CC33)
+        embed.add_field(name=first, value=fv)
+        embed.add_field(name=second, value=sv)
+        embed.add_field(name=third, value=tv)
+        embed.add_field(name='-' * 99, value='Type ``!race claim`` to receive prize money. \nType ``!togglerole race`` to get notified on the next race.')
+        embed.title = "Race Results"
+        embed.set_footer(text=credits, icon_url=creditIcon)
+        await self.bot.say(embed=embed)
+        self.game_teardown(data)
 
     @race.command(name="enter", pass_context=True)
     async def _enter_race(self, ctx):
