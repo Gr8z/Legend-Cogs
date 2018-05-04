@@ -258,8 +258,8 @@ class shop:
             await self.bot.send_file(ctx.message.channel, 'FIF5sug.png')
 
     @buy.command(pass_context=True, name="1")
-    async def buy_1(self, ctx):
-
+    async def buy_1(self , ctx):
+        """ Buy Payday Pro from the shop """
         server = ctx.message.server
         author = ctx.message.author
         legendServer = ["374596069989810176"]
@@ -268,8 +268,17 @@ class shop:
             await self.bot.say("This command can only be executed in the LeGeND Family Server")
             return
 
-        if self.bank_check(author, 90000):
-            await self.bot.say("please contact @GR8#7968 or rakerran#7837 to purchase it for you.")
+        payday = await self._is_payday(author)
+
+        if payday:
+            await self.bot.say("You already have Pro Payday.")
+            return
+
+        if self.bank_check(author, 30000):
+            bank = self.bot.get_cog('Economy').bank
+            bank.withdraw_credits(author, 30000)
+            await self._add_roles(author,["Pro Payday"])
+            await self.bot.say("Congratulations, now you can get !payday every 10 minutes.")
         else:
             await self.bot.say("You do not have enough credits to buy this item.")
 
@@ -363,8 +372,8 @@ class shop:
             await self.bot.say("You do not have enough credits to buy this item.")
 
     @buy.command(pass_context=True, name="4")
-    async def buy_4(self , ctx):
-        """ Buy Payday Pro from the shop """
+    async def buy_4(self, ctx):
+
         server = ctx.message.server
         author = ctx.message.author
         legendServer = ["374596069989810176"]
@@ -373,17 +382,8 @@ class shop:
             await self.bot.say("This command can only be executed in the LeGeND Family Server")
             return
 
-        payday = await self._is_payday(author)
-
-        if payday:
-            await self.bot.say("You already have Pro Payday.")
-            return
-
-        if self.bank_check(author, 160000):
-            bank = self.bot.get_cog('Economy').bank
-            bank.withdraw_credits(author, 160000)
-            await self._add_roles(author,["Pro Payday"])
-            await self.bot.say("Congratulations, now you can get !payday every 10 minutes.")
+        if self.bank_check(author, 90000):
+            await self.bot.say("please contact @GR8#7968 or rakerran#7837 to purchase it for you.")
         else:
             await self.bot.say("You do not have enough credits to buy this item.")
 
