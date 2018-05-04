@@ -378,7 +378,7 @@ class legend:
             if bonustitle is not None:
                 title += bonustitle  
 
-            desc = "{}{}      :trophy: {}+     :medal:{}   [:arrow_upper_right: Open](https://legendclans.com/clanInfo/{})".format(emoji, showMembers, str(clans[x]['requiredScore']), str(clans[x]['score']), clans[x]['tag'])
+            desc = "{}{}      :trophy: {}+     :medal:{}   :arrow_upper_right: [Open](https://legendclans.com/clanInfo/{})".format(emoji, showMembers, str(clans[x]['requiredScore']), str(clans[x]['score']), clans[x]['tag'])
 
             if (member is None) or ((clans[x]['requiredScore'] <= trophies) and (maxtrophies > personalbest) and (trophies - clans[x]['requiredScore'] < 1500) and (clans[x]['type'] != 'closed')):
                 foundClan = True
