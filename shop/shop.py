@@ -110,7 +110,6 @@ class shop:
         await self.updateClash()
 
         bank = self.bot.get_cog('Economy').bank
-        #banks = list(self.banks['363728974821457921']) # Test Server
         banks = list(self.banks['374596069989810176'])
 
         try:
@@ -127,11 +126,10 @@ class shop:
 
                 clan_tag = clans[x]['members'][y]['tag']
                 clan_donations = clans[x]['members'][y]['donations']
-                clan_clanChestCrowns = clans[x]['members'][y]['clanChestCrowns']
 
                 for key in range(0,len(banks)):
                     try:
-                        if ((clan_clanChestCrowns+clan_donations) > 0) and (clan_tag == self.tags[banks[key]]['tag']):
+                        if (clan_donations > 0) and (clan_tag == self.tags[banks[key]]['tag']):
 
                             try:
                                 user = discord.utils.get(ctx.message.server.members, id = banks[key])
@@ -140,36 +138,33 @@ class shop:
                                 epic = await self._is_epic(user)
                                 legendary = await self._is_legendary(user)
 
-                                perCrown = 300
                                 perDonation = 15
                                 BonusMult = 1
 
                                 if rare:
                                     BonusMult = 1.2
-                                    perCrown *= BonusMult
+    
                                     perDonation *= BonusMult
 
                                 if epic:
                                     BonusMult = 1.35
-                                    perCrown *= BonusMult
                                     perDonation *= BonusMult
 
                                 if legendary:
                                     BonusMult = 1.5
-                                    perCrown *= BonusMult
                                     perDonation *= BonusMult
 
-                                amount = math.ceil((clan_donations*perDonation) + (clan_clanChestCrowns*perCrown))
+                                amount = math.ceil((clan_donations*perDonation))
                                 pay = bank.get_balance(user) + amount
                                 bank.set_credits(user, pay)
                                 perc = str(math.ceil((BonusMult-1)*100))
 
-                                await self.bot.say("{} - ({} donations, {} crowns)".format(user.display_name, clan_donations, clan_clanChestCrowns))
+                                await self.bot.say("{} - ({} donations)".format(user.display_name, clan_donations))
 
                                 if BonusMult > 1:
-                                    await self.bot.send_message(user,"Hello {} , take these credits*({}% Bonus)* for the **{}** donations and **{}** crowns you contributed to your clan this week. (+{} credits!)".format(user.name, perc, str(clan_donations), str(clan_clanChestCrowns), str(amount)))
+                                    await self.bot.send_message(user,"Hello {} , take these credits*({}% Bonus)* for the **{}** donations you contributed to your clan this week. (+{} credits!)".format(user.name, perc, str(clan_donations), str(amount)))
                                 else:
-                                    await self.bot.send_message(user,"Hello {} , take these credits for the **{}** donations and **{}** crowns you contributed to your clan this week. (+{} credits!)".format(user.name, str(clan_donations), str(clan_clanChestCrowns), str(amount)))
+                                    await self.bot.send_message(user,"Hello {} , take these credits for the **{}** donations you contributed to your clan this week. (+{} credits!)".format(user.name, str(clan_donations), str(amount)))
                             except Exception as e:
                                 await self.bot.say(e)
                     except:
@@ -265,7 +260,6 @@ class shop:
     @buy.command(pass_context=True, name="1")
     async def buy_1(self, ctx):
 
-
         server = ctx.message.server
         author = ctx.message.author
         legendServer = ["374596069989810176"]
@@ -274,7 +268,10 @@ class shop:
             await self.bot.say("This command can only be executed in the LeGeND Family Server")
             return
 
-        await self.bot.say("please contact @GR8#7968 or rakerran#7837 to purchase it for you.")
+        if self.bank_check(author, 90000):
+            await self.bot.say("please contact @GR8#7968 or rakerran#7837 to purchase it for you.")
+        else:
+            await self.bot.say("You do not have enough credits to buy this item.")
 
     @buy.command(pass_context=True, name="2")
     async def buy_2(self, ctx):
@@ -288,7 +285,10 @@ class shop:
             await self.bot.say("This command can only be executed in the LeGeND Family Server")
             return
 
-        await self.bot.say("please contact @GR8#7968 or rakerran#7837 to purchase it for you.")
+        if self.bank_check(author, 75000):
+            await self.bot.say("please contact @GR8#7968 or rakerran#7837 to purchase it for you.")
+        else:
+            await self.bot.say("You do not have enough credits to buy this item.")
 
     @buy.command(pass_context=True, name="3")
     async def buy_3(self, ctx, emoji):
@@ -403,7 +403,7 @@ class shop:
         legendary = await self._is_legendary(author)
 
         if rare or epic or legendary:
-            await self.bot.say("You already have a special role.")
+            await self.bot.say("You are already Rare™.")
             return
 
         if self.bank_check(author, 250000):
@@ -434,7 +434,7 @@ class shop:
             return    
 
         if epic or legendary:
-            await self.bot.say("You already have a special role.")
+            await self.bot.say("You are already Rare™.")
             return
 
         if self.bank_check(author, 750000):
@@ -459,7 +459,6 @@ class shop:
             await self.bot.say("This command can only be executed in the LeGeND Family Server")
             return
 
-        rare = await self._is_rare(author)
         epic = await self._is_epic(author)
         legendary = await self._is_legendary(author)
 
@@ -468,7 +467,7 @@ class shop:
             return    
 
         if legendary:
-            await self.bot.say("You are already have a special role.")
+            await self.bot.say("You are already LeGeNDary™.")
             return
 
         if self.bank_check(author, 1000000):
@@ -480,6 +479,23 @@ class shop:
             await self.bot.say("Congratulations, you are now a **LeGeNDary™**")
         else:
             await self.bot.say("You do not have enough credits to buy this role.")
+
+    @buy.command(pass_context=True, name="8")
+    async def buy_8(self, ctx):
+
+
+        server = ctx.message.server
+        author = ctx.message.author
+        legendServer = ["374596069989810176"]
+
+        if server.id not in legendServer:
+            await self.bot.say("This command can only be executed in the LeGeND Family Server")
+            return
+
+        if self.bank_check(author, 4000000):
+            await self.bot.say("please contact @GR8#7968 to purchase it for you.")
+        else:
+            await self.bot.say("You do not have enough credits to buy Nitro.")
 
 def setup(bot):
     bot.add_cog(shop(bot))
