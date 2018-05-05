@@ -228,8 +228,11 @@ class duels:
         self.active = False
 
         bank = self.bot.get_cog('Economy').bank
-        pay = bank.get_balance(author) + duelBet
-        bank.set_credits(author, pay)
+
+        for player in duelPlayers:
+            user = discord.utils.get(ctx.message.server.members, id = player)
+            pay = bank.get_balance(user) + duelBet
+            bank.set_credits(user, pay)
 
         await self.bot.say("Duel cancelled!")
 
