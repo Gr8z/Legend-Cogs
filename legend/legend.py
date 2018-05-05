@@ -1351,10 +1351,9 @@ class legend:
             rolesToRemove.append(self.c[x]['role'])
 
         await self._remove_roles(member, rolesToRemove)
+        await self.bot.change_nickname(member, None)
 
-        await self.bot.send_message(member, "Hey there, I am sorry to inform you that we have removed you from the clan. We hope to see you back again soon when you are able to follow the clan requirements.")
-
-        await self.bot.say("Member and clan roles removed.")
+        await self.bot.say("Member and clan roles removed.\nNickname has been reset.")
 
     @commands.command()
     async def gmt(self):
