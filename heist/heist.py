@@ -48,6 +48,7 @@ class Heist:
         self.version = "2.4.02"
         self.patch = 2.42
         self.cycle_task = bot.loop.create_task(self.vault_updater())
+        self.pause = False
 
     @commands.group(pass_context=True, no_pm=True)
     async def heist(self, ctx):
@@ -516,6 +517,10 @@ class Heist:
             await self.bot.say("You cannot run this command in this channel. Please run this command at #heist")
             return
 
+        if self.pause:
+            await self.bot.say("You cannot play right now, Heist has been paused by a Manager.")
+            return
+
         self.account_check(settings, author)
         outcome, msg = self.requirement_check(settings, prefix, author, cost)
 
@@ -545,6 +550,24 @@ class Heist:
             crew_size = len(settings["Crew"])
             await self.bot.say("{0} has joined the {2}.\nThe {2} now has {1} "
                                "members.".format(author.display_name, crew_size, t_crew))
+
+    @heist.command(name="pause", pass_context=True)
+    async def _pause_heist(self, ctx, *, text=None):
+        """This pauses !heist play"""
+        server = ctx.message.server
+        author = ctx.message.author
+
+        allowed = await self._is_commander(author)
+
+        if not allowed:
+            await self.bot.say("You dont have enough permissions to pause Heist.")
+            return
+
+        self.pause = not self.pause
+        if self.pause:
+            await self.bot.say("Heist has been paused!")
+        else:
+            await self.bot.say("Heist has been resumed!")
 
     @heist.command(name="mention", pass_context=True)
     async def _mention_heist(self, ctx, *, text=None):
