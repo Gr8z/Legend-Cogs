@@ -517,15 +517,15 @@ class Heist:
             await self.bot.say("You cannot run this command in this channel. Please run this command at #heist")
             return
 
-        if self.pause:
-            await self.bot.say("You cannot play right now, Heist has been paused by a Manager.")
-            return
-
         self.account_check(settings, author)
         outcome, msg = self.requirement_check(settings, prefix, author, cost)
 
         if outcome == "Failed":
             return await self.bot.say(msg)
+
+        if self.pause:
+            await self.bot.say("You cannot play right now, Heist has been paused by a Manager.")
+            return
 
         if not settings["Config"]["Heist Planned"]:
             self.subtract_costs(author, cost)
