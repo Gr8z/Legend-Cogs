@@ -23,6 +23,9 @@ class shop:
     async def updateClash(self):
         self.tags = dataIO.load_json('cogs/tags.json')
 
+    async def updateBank(self):
+        self.banks = dataIO.load_json('data/economy/bank.json')
+
     async def _add_roles(self, member, role_names):
         """Add roles"""
         server = member.server
@@ -108,6 +111,7 @@ class shop:
         author = ctx.message.author
         
         await self.updateClash()
+        await self.updateBank()
 
         bank = self.bot.get_cog('Economy').bank
         banks = list(self.banks['374596069989810176'])
@@ -179,6 +183,7 @@ class shop:
         author = ctx.message.author
         
         await self.updateClash()
+        await self.updateBank()
 
         bank = self.bot.get_cog('Economy').bank
         #banks = list(self.banks['363728974821457921']) # Test Server
