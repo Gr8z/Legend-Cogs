@@ -31,6 +31,7 @@ import re
 import yaml
 import string
 from concurrent.futures import ThreadPoolExecutor
+from collections import namedtuple
 
 import aiohttp
 import discord
@@ -159,6 +160,19 @@ class Deck:
             return default
         return decklink
 
+    @deckset.command(name="autodecklink", pass_context=True, no_pm=True)
+    @checks.mod_or_permissions()
+    async def deckset_autodecklink(self, ctx, use=None):
+        """Toggle auto transform on server."""
+        server = ctx.message.server
+        if server.id not in self.settings['Servers']:
+            self.settings["Servers"][server.id] = {}
+        auto_deck_link = self.settings["Servers"][server.id].get('auto_deck_link', False)
+        auto_deck_link = not auto_deck_link
+        self.settings["Servers"][server.id]['auto_deck_link'] = auto_deck_link
+        await self.bot.say("Auto deck link: {}".format(auto_deck_link))
+        self.save_settings()
+
     @commands.group(pass_context=True, no_pm=True)
     async def deck(self, ctx):
         """Clash Royale deck builder.
@@ -214,6 +228,8 @@ class Deck:
             # generate link
             if self.deck_is_valid:
                 em = await self.decklink_embed(member_deck)
+                await self.bot.say(embed=em)
+                em = await self.decklink_embed(member_deck, war=True)
                 await self.bot.say(embed=em)
 
     @deck.command(name="post", pass_context=True, no_pm=True)
@@ -508,17 +524,22 @@ class Deck:
         if decklink_setting == 'embed':
             em = await self.decklink_embed(deck_cards)
             await self.bot.say(embed=em)
+            em = await self.decklink_embed(deck_cards, war=True)
+            await self.bot.say(embed=em)
         elif decklink_setting == 'link':
             url = await self.decklink_url(deck_cards)
             await self.bot.say('<{}>'.format(url))
 
-    async def decklink_embed(self, deck_cards):
+    async def decklink_embed(self, deck_cards, war=False):
         """Decklink embed."""
-        url = await self.decklink_url(deck_cards)
-        em = discord.Embed(title='Copy deck to Clash Royale', url=url)
+        url = await self.decklink_url(deck_cards, war=war)
+        if war:
+            em = discord.Embed(title='Copy deck to war deck', url=url)
+        else:
+            em = discord.Embed(title='Copy deck', url=url)
         return em
 
-    async def decklink_url(self, deck_cards):
+    async def decklink_url(self, deck_cards, war=False):
         """Decklink URL."""
         deck_cards = self.normalize_deck_data(deck_cards)
         ids = []
@@ -527,6 +548,8 @@ class Deck:
             if id is not None:
                 ids.append(await self.card_key_to_decklink(card))
         url = 'https://link.clashroyale.com/deck/en?deck=' + ';'.join(ids)
+        if war:
+            url += '&war=1'
         return url
 
     @deck.command(name="cards", pass_context=True, no_pm=True)
@@ -877,6 +900,30 @@ class Deck:
     def save_settings(self):
         """Save data to settings file."""
         dataIO.save_json(SETTINGS_PATH, self.settings)
+
+    async def on_message(self, msg):
+        """Listen for decklinks, auto create useful image."""
+        server = msg.server
+        try:
+            auto_deck_link = self.settings["Servers"][server.id].get('auto_deck_link', False)
+        except KeyError:
+            self.settings["Servers"][server.id] = {}
+        else:
+            if auto_deck_link:
+                card_keys = await self.decklink_to_cards(msg.content)
+                if card_keys is None:
+                    return
+
+                CTX = namedtuple("CTX", ['bot', 'message'])
+                ctx = CTX(self.bot, msg)
+                deck = card_keys
+                deck_name = ''
+                member = msg.author
+
+                await self.upload_deck_image(ctx, deck, deck_name, member)
+                await self.bot.send_message(msg.channel, embed=await self.decklink_embed(card_keys))
+                await self.bot.send_message(msg.channel, embed=await self.decklink_embed(card_keys, war=True))
+                await self.bot.delete_message(msg)
 
 
 def check_folder():
