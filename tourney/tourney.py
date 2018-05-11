@@ -2,7 +2,6 @@ import discord
 from discord.ext import commands
 from random import randint
 import requests
-from bs4 import BeautifulSoup
 import asyncio
 from .utils.dataIO import dataIO, fileIO
 import time
@@ -19,39 +18,8 @@ class tournament:
 		self.bot = bot
 		self.auth = dataIO.load_json('cogs/auth.json')
 
-	# Return parsed profile page using BS4
-	async def parseURL(self):
-		link = 'http://statsroyale.com/tournaments/'
-		response = requests.get(link).text
-		soup = BeautifulSoup(response, 'html.parser')
-		return soup
-
 	def getAuth(self):
 		return {"auth" : self.auth['token']}
-
-	async def getMaxPlayers(self, plyr):
-		if '/50' in plyr:
-			return 50
-		elif '/100' in plyr:
-			return 100
-		elif '/200' in plyr:
-			return 200
-		elif '/1000' in plyr:
-			return 300
-
-	async def getTotalPlayers(self, plyr):
-		if '/50' in plyr:
-			joined = plyr.replace('/50','')
-			return int(joined)
-		elif '/100' in plyr:
-			joined = plyr.replace('/100','')
-			return int(joined)
-		elif '/200' in plyr:
-			joined = plyr.replace('/200','')
-			return int(joined)
-		elif '/1000' in plyr:
-			joined = plyr.replace('/1000','')
-			return int(joined)
 
 	# Converts maxPlayers to Cards
 	def getCards(self, maxPlayers):
@@ -84,15 +52,16 @@ class tournament:
 	async def getTopTourney(self):
 
 		global lastTag
-		soup = await self.parseURL()
+		try:
+			openTourney = requests.get('https://api.royaleapi.com/tournaments/open', headers=self.getAuth(), timeout=10).json()
+		except:
+			return None
 
-		for i in range(5):
-			tourney_stats = soup.find_all('div', {'class':'challenges__rowContainer'})[i]
-			plyr = tourney_stats.find_all('div', {'class':'challenges__row'})[2].get_text().strip()
-			tag = tourney_stats.find_all('div', {'class':'challenges__row'})[1].get_text().strip().replace("#", "")
+		for tourney in openTourney:
 
-			joined = await self.getTotalPlayers(plyr)
-			maxplayers = await self.getMaxPlayers(plyr)
+			tag = tourney['tag']
+			joined = tourney['playerCount']
+			maxplayers = tourney['maxCapacity']
 
 			if ((maxplayers > 50) and ((joined + 4) < maxplayers) and (tag != lastTag)):
 
@@ -105,7 +74,6 @@ class tournament:
 
 				if ((maxplayers > 50) and ((joined + 4) < maxplayers) and  (tourneyAPI['status'] != "ended") and (tourneyAPI['type'] != "passwordProtected")):
 					tourneyAPI['tag'] = tag
-					lastTag = tag
 					
 					return tourneyAPI
 
@@ -125,29 +93,6 @@ class tournament:
 			tag = tourney['tag']
 			joined = tourney['playerCount']
 			maxplayers = tourney['maxCapacity']
-
-			if ((joined + 1) < maxplayers):
-
-				try:
-					tourneyAPI = requests.get('https://api.royaleapi.com/tournaments/{}'.format(tag), headers=self.getAuth(), timeout=10).json()
-					joined = tourneyAPI['playerCount']
-					maxplayers = tourneyAPI['maxCapacity']
-				except:
-					return None
-
-				if ((joined < maxplayers) and  (tourneyAPI['status'] != "ended") and (tourneyAPI['type'] != "passwordProtected")):
-					tourneyAPI['tag'] = tag
-					
-					return tourneyAPI
-
-		soup = await self.parseURL()
-		for i in range(20):
-			tourney_stats = soup.find_all('div', {'class':'challenges__rowContainer'})[i]
-			plyr = tourney_stats.find_all('div', {'class':'challenges__row'})[2].get_text().strip()
-			tag = tourney_stats.find_all('div', {'class':'challenges__row'})[1].get_text().strip().replace("#", "")
-
-			joined = await self.getTotalPlayers(plyr)
-			maxplayers = await self.getMaxPlayers(plyr)
 
 			if ((joined + 1) < maxplayers):
 
