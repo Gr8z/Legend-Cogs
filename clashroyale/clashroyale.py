@@ -117,26 +117,21 @@ class clashroyale:
 			await self.bot.type()
 
 			try:
-				profiledata = requests.get('https://api.royaleapi.com/player/{}?keys=chestCycle,name,tag,clan'.format(profiletag), headers=self.getAuth(), timeout=10).json()
+				profiledata = requests.get('https://api.royaleapi.com/player/{}/chests'.format(profiletag), headers=self.getAuth(), timeout=10).json()
 			except:
 				await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 				return
 
-			valuechestText = ' '.join(profiledata['chestCycle']['upcoming']).replace('silver', '<:silver:385784583343439882>').replace('gold', '<:gold:385784630227369985>').replace('giant', '<:giant:380832560504373249>').replace('epic', '<:epic:380832620059033610>').replace('super magical', '<:super:380832745305276416>').replace('magical', '<:magic:380832656704798731>').replace('legendary', '<:legend:380832458482122752>')
+			valuechestText = ' '.join(profiledata['upcoming']).replace('silver', '<:silver:385784583343439882>').replace('gold', '<:gold:385784630227369985>').replace('giant', '<:giant:380832560504373249>').replace('epic', '<:epic:380832620059033610>').replace('super magical', '<:super:380832745305276416>').replace('magical', '<:magic:380832656704798731>').replace('legendary', '<:legend:380832458482122752>')
 
-			chest1 = "<:giant:380832560504373249> +" + str(profiledata['chestCycle']['giant']+1) + "  "
-			chest2 = "<:epic:380832620059033610> +" + str(profiledata['chestCycle']['epic']+1) + "  "
-			chest3 = "<:magic:380832656704798731> +" + str(profiledata['chestCycle']['magical']+1) + "  "
-			chest4 = "<:super:380832745305276416> +" + str(profiledata['chestCycle']['superMagical']+1) + "  "
-			chest5 = "<:legend:380832458482122752> +" + str(profiledata['chestCycle']['legendary']+1) + "  "
-
-			if profiledata['clan'] is None:
-				clanurl = "https://i.imgur.com/4EH5hUn.png"
-			else:
-				clanurl = profiledata['clan']['badge']['image']
+			chest1 = "<:giant:380832560504373249> +" + str(profiledata['giant']+1) + "  "
+			chest2 = "<:epic:380832620059033610> +" + str(profiledata['epic']+1) + "  "
+			chest3 = "<:magic:380832656704798731> +" + str(profiledata['magical']+1) + "  "
+			chest4 = "<:super:380832745305276416> +" + str(profiledata['superMagical']+1) + "  "
+			chest5 = "<:legend:380832458482122752> +" + str(profiledata['legendary']+1) + "  "
 
 			embed=discord.Embed(title="", color=0xFAA61A, description="Your Upcoming chests.")
-			embed.set_author(name=profiledata['name'] + " (#"+profiledata['tag']+")", icon_url=clanurl)
+			embed.set_author(name="#"+profiletag)
 			embed.add_field(name="Upcoming Chests", value=valuechestText, inline=False)
 			embed.add_field(name="Special Chests", value=chest1+chest2+chest3+chest4+chest5, inline=False)
 			embed.set_footer(text=credits, icon_url=creditIcon)
