@@ -174,7 +174,7 @@ class duels:
             if privateDuel is None:
                 await self.bot.say("{} wants to duel one of you in Clash Royale for {} credits, type ``{}duel accept`` the offer.".format(author.mention, str(bet), ctx.prefix))
             else:
-                await self.bot.say("{} wants to duel {} in Clash Royale for {} credits, type ``{}duel accept`` the offer.".format(author.mention, member.mention, str(bet), ctx.prefix))
+                await self.bot.say("{} wants to duel {} in Clash Royale for {} credits, type ``{}duel accept`` to accept the offer.".format(author.mention, member.mention, str(bet), ctx.prefix))
                 
             await self.bot.say(embed=embed)
 
