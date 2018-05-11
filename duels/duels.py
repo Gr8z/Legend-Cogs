@@ -329,13 +329,13 @@ class duels:
         await self.bot.type()
 
         try:
-            profiledata = requests.get('https://api.royaleapi.com/player/{}?keys=battles'.format(duelPlayer['TAG']), headers=self.getAuth(), timeout=10).json()
+            profiledata = requests.get('https://api.royaleapi.com/player/{}/battles'.format(duelPlayer['TAG']), headers=self.getAuth(), timeout=10).json()
         except:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
 
         msg = ""
-        for battle in profiledata["battles"]:
+        for battle in profiledata:
             if (battle["utcTime"] > int(duelID)) and (battle["opponent"][0]["tag"] in playerTags):
                 if battle["winner"] > 0:
 
