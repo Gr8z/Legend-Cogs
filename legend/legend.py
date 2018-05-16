@@ -760,6 +760,9 @@ class legend:
             raise
         await self.bot.say(member.mention + " You have been added to the waiting list for **"+ clan_name + "**. We will mention you when a spot is available.")
 
+        roleName = discord.utils.get(server.roles, name=self.c[clankey]['role'])
+        await self.bot.send_message(discord.Object(id='375839851955748874'), "**{} (#{})** added to the waiting list for {}".format(ign, profiletag, roleName.mention))
+
     @commands.command(pass_context=True, no_pm=True)
     async def remove(self, ctx, member: discord.Member, clankey):
         """Delete people from the waiting list for a clan"""
