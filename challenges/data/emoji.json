@@ -1427,14 +1427,6 @@
     ]
   },
   {
-    "emoji": "👱‍♀",
-    "description": "blond-haired woman",
-    "aliases": [
-      "blonde_woman"
-    ],
-    "tags": []
-  },
-  {
     "emoji": "👱",
     "description": "blond-haired person",
     "aliases": [
@@ -1470,26 +1462,10 @@
     "tags": []
   },
   {
-    "emoji": "👳‍♀",
-    "description": "woman wearing turban",
-    "aliases": [
-      "woman_with_turban"
-    ],
-    "tags": []
-  },
-  {
     "emoji": "👳",
     "description": "person wearing turban",
     "aliases": [
       "man_with_turban"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "👮‍♀",
-    "description": "woman police officer",
-    "aliases": [
-      "policewoman"
     ],
     "tags": []
   },
@@ -1506,14 +1482,6 @@
     ]
   },
   {
-    "emoji": "👷‍♀",
-    "description": "woman construction worker",
-    "aliases": [
-      "construction_worker_woman"
-    ],
-    "tags": []
-  },
-  {
     "emoji": "👷",
     "description": "construction worker",
     "aliases": [
@@ -1525,30 +1493,12 @@
     ]
   },
   {
-    "emoji": "💂‍♀",
-    "description": "woman guard",
-    "aliases": [
-      "guardswoman"
-    ],
-    "tags": []
-  },
-  {
     "emoji": "💂",
     "description": "guard",
     "aliases": [
       "guardsman"
     ],
     "tags": []
-  },
-  {
-    "emoji": "🕵️‍♀",
-    "description": "woman detective",
-    "aliases": [
-      "female_detective"
-    ],
-    "tags": [
-      "sleuth"
-    ]
   },
   {
     "emoji": "🕵",
@@ -1559,310 +1509,6 @@
     ],
     "tags": [
       "sleuth"
-    ]
-  },
-  {
-    "emoji": "👩‍⚕",
-    "description": "woman health worker",
-    "aliases": [
-      "woman_health_worker"
-    ],
-    "tags": [
-      "doctor",
-      "nurse"
-    ]
-  },
-  {
-    "emoji": "👨‍⚕",
-    "description": "man health worker",
-    "aliases": [
-      "man_health_worker"
-    ],
-    "tags": [
-      "doctor",
-      "nurse"
-    ]
-  },
-  {
-    "emoji": "👩‍🌾",
-    "description": "woman farmer",
-    "aliases": [
-      "woman_farmer"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "👨‍🌾",
-    "description": "man farmer",
-    "aliases": [
-      "man_farmer"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "👩‍🍳",
-    "description": "woman cook",
-    "aliases": [
-      "woman_cook"
-    ],
-    "tags": [
-      "chef"
-    ]
-  },
-  {
-    "emoji": "👨‍🍳",
-    "description": "man cook",
-    "aliases": [
-      "man_cook"
-    ],
-    "tags": [
-      "chef"
-    ]
-  },
-  {
-    "emoji": "👩‍🎓",
-    "description": "woman student",
-    "aliases": [
-      "woman_student"
-    ],
-    "tags": [
-      "graduation"
-    ]
-  },
-  {
-    "emoji": "👨‍🎓",
-    "description": "man student",
-    "aliases": [
-      "man_student"
-    ],
-    "tags": [
-      "graduation"
-    ]
-  },
-  {
-    "emoji": "👩‍🎤",
-    "description": "woman singer",
-    "aliases": [
-      "woman_singer"
-    ],
-    "tags": [
-      "rockstar"
-    ]
-  },
-  {
-    "emoji": "👨‍🎤",
-    "description": "man singer",
-    "aliases": [
-      "man_singer"
-    ],
-    "tags": [
-      "rockstar"
-    ]
-  },
-  {
-    "emoji": "👩‍🏫",
-    "description": "woman teacher",
-    "aliases": [
-      "woman_teacher"
-    ],
-    "tags": [
-      "school",
-      "professor"
-    ]
-  },
-  {
-    "emoji": "👨‍🏫",
-    "description": "man teacher",
-    "aliases": [
-      "man_teacher"
-    ],
-    "tags": [
-      "school",
-      "professor"
-    ]
-  },
-  {
-    "emoji": "👩‍🏭",
-    "description": "woman factory worker",
-    "aliases": [
-      "woman_factory_worker"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "👨‍🏭",
-    "description": "man factory worker",
-    "aliases": [
-      "man_factory_worker"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "👩‍💻",
-    "description": "woman technologist",
-    "aliases": [
-      "woman_technologist"
-    ],
-    "tags": [
-      "coder"
-    ]
-  },
-  {
-    "emoji": "👨‍💻",
-    "description": "man technologist",
-    "aliases": [
-      "man_technologist"
-    ],
-    "tags": [
-      "coder"
-    ]
-  },
-  {
-    "emoji": "👩‍💼",
-    "description": "woman office worker",
-    "aliases": [
-      "woman_office_worker"
-    ],
-    "tags": [
-      "business"
-    ]
-  },
-  {
-    "emoji": "👨‍💼",
-    "description": "man office worker",
-    "aliases": [
-      "man_office_worker"
-    ],
-    "tags": [
-      "business"
-    ]
-  },
-  {
-    "emoji": "👩‍🔧",
-    "description": "woman mechanic",
-    "aliases": [
-      "woman_mechanic"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "👨‍🔧",
-    "description": "man mechanic",
-    "aliases": [
-      "man_mechanic"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "👩‍🔬",
-    "description": "woman scientist",
-    "aliases": [
-      "woman_scientist"
-    ],
-    "tags": [
-      "research"
-    ]
-  },
-  {
-    "emoji": "👨‍🔬",
-    "description": "man scientist",
-    "aliases": [
-      "man_scientist"
-    ],
-    "tags": [
-      "research"
-    ]
-  },
-  {
-    "emoji": "👩‍🎨",
-    "description": "woman artist",
-    "aliases": [
-      "woman_artist"
-    ],
-    "tags": [
-      "painter"
-    ]
-  },
-  {
-    "emoji": "👨‍🎨",
-    "description": "man artist",
-    "aliases": [
-      "man_artist"
-    ],
-    "tags": [
-      "painter"
-    ]
-  },
-  {
-    "emoji": "👩‍🚒",
-    "description": "woman firefighter",
-    "aliases": [
-      "woman_firefighter"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "👨‍🚒",
-    "description": "man firefighter",
-    "aliases": [
-      "man_firefighter"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "👩‍✈",
-    "description": "woman pilot",
-    "aliases": [
-      "woman_pilot"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "👨‍✈",
-    "description": "man pilot",
-    "aliases": [
-      "man_pilot"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "👩‍🚀",
-    "description": "woman astronaut",
-    "aliases": [
-      "woman_astronaut"
-    ],
-    "tags": [
-      "space"
-    ]
-  },
-  {
-    "emoji": "👨‍🚀",
-    "description": "man astronaut",
-    "aliases": [
-      "man_astronaut"
-    ],
-    "tags": [
-      "space"
-    ]
-  },
-  {
-    "emoji": "👩‍⚖",
-    "description": "woman judge",
-    "aliases": [
-      "woman_judge"
-    ],
-    "tags": [
-      "justice"
-    ]
-  },
-  {
-    "emoji": "👨‍⚖",
-    "description": "man judge",
-    "aliases": [
-      "man_judge"
-    ],
-    "tags": [
-      "justice"
     ]
   },
   {
@@ -1948,17 +1594,6 @@
     "tags": []
   },
   {
-    "emoji": "🙇‍♀",
-    "description": "woman bowing",
-    "aliases": [
-      "bowing_woman"
-    ],
-    "tags": [
-      "respect",
-      "thanks"
-    ]
-  },
-  {
     "emoji": "🙇",
     "description": "person bowing",
     "aliases": [
@@ -1981,35 +1616,12 @@
     "tags": []
   },
   {
-    "emoji": "💁‍♂",
-    "description": "man tipping hand",
-    "aliases": [
-      "tipping_hand_man",
-      "sassy_man"
-    ],
-    "tags": [
-      "information"
-    ]
-  },
-  {
     "emoji": "🙅",
     "description": "person gesturing NO",
     "aliases": [
       "no_good_woman",
       "no_good",
       "ng_woman"
-    ],
-    "tags": [
-      "stop",
-      "halt"
-    ]
-  },
-  {
-    "emoji": "🙅‍♂",
-    "description": "man gesturing NO",
-    "aliases": [
-      "no_good_man",
-      "ng_man"
     ],
     "tags": [
       "stop",
@@ -2025,14 +1637,6 @@
     "tags": []
   },
   {
-    "emoji": "🙆‍♂",
-    "description": "man gesturing OK",
-    "aliases": [
-      "ok_man"
-    ],
-    "tags": []
-  },
-  {
     "emoji": "🙋",
     "description": "person raising hand",
     "aliases": [
@@ -2042,59 +1646,11 @@
     "tags": []
   },
   {
-    "emoji": "🙋‍♂",
-    "description": "man raising hand",
-    "aliases": [
-      "raising_hand_man"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "🤦‍♀",
-    "description": "woman facepalming",
-    "aliases": [
-      "woman_facepalming"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "🤦‍♂",
-    "description": "man facepalming",
-    "aliases": [
-      "man_facepalming"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "🤷‍♀",
-    "description": "woman shrugging",
-    "aliases": [
-      "woman_shrugging"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "🤷‍♂",
-    "description": "man shrugging",
-    "aliases": [
-      "man_shrugging"
-    ],
-    "tags": []
-  },
-  {
     "emoji": "🙎",
     "description": "person pouting",
     "aliases": [
       "pouting_woman",
       "person_with_pouting_face"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "🙎‍♂",
-    "description": "man pouting",
-    "aliases": [
-      "pouting_man"
     ],
     "tags": []
   },
@@ -2110,14 +1666,6 @@
     ]
   },
   {
-    "emoji": "🙍‍♂",
-    "description": "man frowning",
-    "aliases": [
-      "frowning_man"
-    ],
-    "tags": []
-  },
-  {
     "emoji": "💇",
     "description": "person getting haircut",
     "aliases": [
@@ -2129,29 +1677,11 @@
     ]
   },
   {
-    "emoji": "💇‍♂",
-    "description": "man getting haircut",
-    "aliases": [
-      "haircut_man"
-    ],
-    "tags": []
-  },
-  {
     "emoji": "💆",
     "description": "person getting massage",
     "aliases": [
       "massage_woman",
       "massage"
-    ],
-    "tags": [
-      "spa"
-    ]
-  },
-  {
-    "emoji": "💆‍♂",
-    "description": "man getting massage",
-    "aliases": [
-      "massage_man"
     ],
     "tags": [
       "spa"
@@ -2197,24 +1727,6 @@
     ]
   },
   {
-    "emoji": "👯‍♂",
-    "description": "men with bunny ears partying",
-    "aliases": [
-      "dancing_men"
-    ],
-    "tags": [
-      "bunny"
-    ]
-  },
-  {
-    "emoji": "🚶‍♀",
-    "description": "woman walking",
-    "aliases": [
-      "walking_woman"
-    ],
-    "tags": []
-  },
-  {
     "emoji": "🚶",
     "description": "person walking",
     "aliases": [
@@ -2222,18 +1734,6 @@
       "walking"
     ],
     "tags": []
-  },
-  {
-    "emoji": "🏃‍♀",
-    "description": "woman running",
-    "aliases": [
-      "running_woman"
-    ],
-    "tags": [
-      "exercise",
-      "workout",
-      "marathon"
-    ]
   },
   {
     "emoji": "🏃",
@@ -2452,86 +1952,6 @@
     "description": "family: man, man, girl, girl",
     "aliases": [
       "family_man_man_girl_girl"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "👩‍👦",
-    "description": "family: woman, boy",
-    "aliases": [
-      "family_woman_boy"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "👩‍👧",
-    "description": "family: woman, girl",
-    "aliases": [
-      "family_woman_girl"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "👩‍👧‍👦",
-    "description": "family: woman, girl, boy",
-    "aliases": [
-      "family_woman_girl_boy"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "👩‍👦‍👦",
-    "description": "family: woman, boy, boy",
-    "aliases": [
-      "family_woman_boy_boy"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "👩‍👧‍👧",
-    "description": "family: woman, girl, girl",
-    "aliases": [
-      "family_woman_girl_girl"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "👨‍👦",
-    "description": "family: man, boy",
-    "aliases": [
-      "family_man_boy"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "👨‍👧",
-    "description": "family: man, girl",
-    "aliases": [
-      "family_man_girl"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "👨‍👧‍👦",
-    "description": "family: man, girl, boy",
-    "aliases": [
-      "family_man_girl_boy"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "👨‍👦‍👦",
-    "description": "family: man, boy, boy",
-    "aliases": [
-      "family_man_boy_boy"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "👨‍👧‍👧",
-    "description": "family: man, girl, girl",
-    "aliases": [
-      "family_man_girl_girl"
     ],
     "tags": []
   },
@@ -5137,17 +4557,6 @@
     "tags": []
   },
   {
-    "emoji": "🏋️‍♀",
-    "description": "woman lifting weights",
-    "aliases": [
-      "weight_lifting_woman"
-    ],
-    "tags": [
-      "gym",
-      "workout"
-    ]
-  },
-  {
     "emoji": "🏋",
     "description": "person lifting weights",
     "aliases": [
@@ -5167,46 +4576,6 @@
     "tags": []
   },
   {
-    "emoji": "🤼‍♀",
-    "description": "women wrestling",
-    "aliases": [
-      "women_wrestling"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "🤼‍♂",
-    "description": "men wrestling",
-    "aliases": [
-      "men_wrestling"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "🤸‍♀",
-    "description": "woman cartwheeling",
-    "aliases": [
-      "woman_cartwheeling"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "🤸‍♂",
-    "description": "man cartwheeling",
-    "aliases": [
-      "man_cartwheeling"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "⛹️‍♀",
-    "description": "woman bouncing ball",
-    "aliases": [
-      "basketball_woman"
-    ],
-    "tags": []
-  },
-  {
     "emoji": "⛹",
     "description": "person bouncing ball",
     "aliases": [
@@ -5215,42 +4584,10 @@
     "tags": []
   },
   {
-    "emoji": "🤾‍♀",
-    "description": "woman playing handball",
-    "aliases": [
-      "woman_playing_handball"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "🤾‍♂",
-    "description": "man playing handball",
-    "aliases": [
-      "man_playing_handball"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "🏌️‍♀",
-    "description": "woman golfing",
-    "aliases": [
-      "golfing_woman"
-    ],
-    "tags": []
-  },
-  {
     "emoji": "🏌",
     "description": "person golfing",
     "aliases": [
       "golfing_man"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "🏄‍♀",
-    "description": "woman surfing",
-    "aliases": [
-      "surfing_woman"
     ],
     "tags": []
   },
@@ -5264,43 +4601,11 @@
     "tags": []
   },
   {
-    "emoji": "🏊‍♀",
-    "description": "woman swimming",
-    "aliases": [
-      "swimming_woman"
-    ],
-    "tags": []
-  },
-  {
     "emoji": "🏊",
     "description": "person swimming",
     "aliases": [
       "swimming_man",
       "swimmer"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "🤽‍♀",
-    "description": "woman playing water polo",
-    "aliases": [
-      "woman_playing_water_polo"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "🤽‍♂",
-    "description": "man playing water polo",
-    "aliases": [
-      "man_playing_water_polo"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "🚣‍♀",
-    "description": "woman rowing boat",
-    "aliases": [
-      "rowing_woman"
     ],
     "tags": []
   },
@@ -5322,27 +4627,11 @@
     "tags": []
   },
   {
-    "emoji": "🚴‍♀",
-    "description": "woman biking",
-    "aliases": [
-      "biking_woman"
-    ],
-    "tags": []
-  },
-  {
     "emoji": "🚴",
     "description": "person biking",
     "aliases": [
       "biking_man",
       "bicyclist"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "🚵‍♀",
-    "description": "woman mountain biking",
-    "aliases": [
-      "mountain_biking_woman"
     ],
     "tags": []
   },
@@ -5463,22 +4752,6 @@
     "description": "circus tent",
     "aliases": [
       "circus_tent"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "🤹‍♀",
-    "description": "woman juggling",
-    "aliases": [
-      "woman_juggling"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "🤹‍♂",
-    "description": "man juggling",
-    "aliases": [
-      "man_juggling"
     ],
     "tags": []
   },
@@ -9369,86 +8642,6 @@
     "tags": []
   },
   {
-    "emoji": "0️⃣",
-    "description": "keycap: 0",
-    "aliases": [
-      "zero"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "1️⃣",
-    "description": "keycap: 1",
-    "aliases": [
-      "one"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "2️⃣",
-    "description": "keycap: 2",
-    "aliases": [
-      "two"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "3️⃣",
-    "description": "keycap: 3",
-    "aliases": [
-      "three"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "4️⃣",
-    "description": "keycap: 4",
-    "aliases": [
-      "four"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "5️⃣",
-    "description": "keycap: 5",
-    "aliases": [
-      "five"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "6️⃣",
-    "description": "keycap: 6",
-    "aliases": [
-      "six"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "7️⃣",
-    "description": "keycap: 7",
-    "aliases": [
-      "seven"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "8️⃣",
-    "description": "keycap: 8",
-    "aliases": [
-      "eight"
-    ],
-    "tags": []
-  },
-  {
-    "emoji": "9️⃣",
-    "description": "keycap: 9",
-    "aliases": [
-      "nine"
-    ],
-    "tags": []
-  },
-  {
     "emoji": "🔟",
     "description": "keycap 10",
     "aliases": [
@@ -9465,24 +8658,6 @@
     "tags": [
       "numbers"
     ]
-  },
-  {
-    "emoji": "#️⃣",
-    "description": "keycap: #",
-    "aliases": [
-      "hash"
-    ],
-    "tags": [
-      "number"
-    ]
-  },
-  {
-    "emoji": "*️⃣",
-    "description": "keycap: *",
-    "aliases": [
-      "asterisk"
-    ],
-    "tags": []
   },
   {
     "emoji": "▶",
