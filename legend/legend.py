@@ -662,8 +662,8 @@ class legend:
             await asyncio.sleep(300)
             await self.bot.send_message(member,coc_bs)
 
-            await asyncio.sleep(300)
-            await self.bot.send_message(member,esports_info)
+            #await asyncio.sleep(300)
+            #await self.bot.send_message(member,esports_info)
 
             await asyncio.sleep(300)
             await self.bot.send_message(member,social_info)
