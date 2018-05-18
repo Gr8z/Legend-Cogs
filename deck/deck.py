@@ -904,6 +904,10 @@ class Deck:
 
     async def on_message(self, msg):
         """Listen for decklinks, auto create useful image."""
+
+        if msg.channel.type == "dm":
+            return
+
         server = msg.server
         try:
             auto_deck_link = self.settings["Servers"][server.id].get('auto_deck_link', False)
