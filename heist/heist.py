@@ -526,10 +526,13 @@ class Heist:
             self.subtract_costs(author, cost)
             settings["Config"]["Heist Planned"] = True
             settings["Crew"][author.id] = {}
-            await self.bot.say("A {4} is being planned by {0}\nThe {4} "
+            heist_role = discord.utils.get(server.roles, name="Heist")
+            await self.bot.edit_role(server, heist_role, mentionable=True)
+            await self.bot.say("A {5} is being planned by {0}\nThe {4} "
                                "will begin in {1} seconds. Type ``{2}heist play`` to join their "
                                "{3}.\n"
-                               "Type ``!togglerole heist`` to get notified on the next heist.".format(author.display_name, wait_time, ctx.prefix, t_crew, t_heist))
+                               "Type ``!togglerole heist`` to get notified on the next heist.".format(author.display_name, wait_time, ctx.prefix, t_crew, t_heist, heist_role.mention))
+            await self.bot.edit_role(server, heist_role, mentionable=False)
             await asyncio.sleep(wait_time)
 
             if len(settings["Crew"]) <= 1:
