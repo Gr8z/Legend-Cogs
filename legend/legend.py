@@ -256,7 +256,21 @@ class legend:
             return 
         
         self.save_data()
-        await self.bot.say("Success")
+        await self.bot.say("Success")    
+
+    @clans.command(pass_context=True, name="private")
+    @checks.mod_or_permissions(administrator=True)
+    async def clans_private(self, ctx, clankey):
+        """Toggle Private approval of new recruits"""
+        clankey = clankey.lower()
+        try:
+            self.c[clankey]['approval'] != self.c[clankey]['approval']
+        except KeyError:
+            await self.bot.say("Please use a valid clanname : "+",".join(key for key in self.c.keys()))
+            return 
+        
+        self.save_data()
+        await self.bot.say("Private Approval now is set to " + self.c[clankey]['approval'])
         
     @clans.command(pass_context=True, name="family")
     @checks.mod_or_permissions(administrator=True)
@@ -413,7 +427,8 @@ class legend:
             clan_tag = self.c[clankey]['tag']
             clan_name = self.c[clankey]['name'] 
             clan_role = self.c[clankey]['role'] 
-            clan_pb = self.c[clankey]['personalbest'] 
+            clan_pb = self.c[clankey]['personalbest']
+            clan_approval = self.c[clankey]['approval']
         except KeyError:
             await self.bot.say("Please use a valid clanname : "+", ".join(key for key in self.c.keys()))
             return
@@ -465,6 +480,11 @@ class legend:
 
             if (clandata['type'] == "closed"):
                 await self.bot.say("Approval failed, the clan is currently closed.")
+                return
+
+            if clan_approval:
+                if clan_role in [y.name.lower() for y in member.roles]:
+                    await self.bot.say("Approval failed, only an {} staff can approve new recruits for this clan.".format(clan_name))
                 return
 
             if not leftClan:
@@ -1480,7 +1500,9 @@ def check_clans():
         if 'bonustitle' not in c[clankey]:
             c[clankey]['bonustitle'] = ""
         if 'personalbest' not in c[clankey]:
-            c[clankey]['personalbest'] = 0   
+            c[clankey]['personalbest'] = 0 
+        if 'approval' not in c[clankey]:
+            c[clankey]['approval'] = False
     dataIO.save_json('cogs/clans.json', c)
 
 def check_auth():
