@@ -270,7 +270,7 @@ class legend:
             return 
         
         self.save_data()
-        await self.bot.say("Private Approval now is set to " + self.c[clankey]['approval'])
+        await self.bot.say("Private Approval now is set to " + str(self.c[clankey]['approval']))
         
     @clans.command(pass_context=True, name="family")
     @checks.mod_or_permissions(administrator=True)
