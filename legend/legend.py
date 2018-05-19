@@ -15,7 +15,7 @@ from collections import OrderedDict
 
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
-BOTCOMMANDER_ROLES =  ["Family Representative", "Clan Manager", "Clan Deputy", "Co-Leader", "Hub Officer", "admin"];
+BOTCOMMANDER_ROLES =  ["Family Representative", "Clan Manager", "Clan Deputy", "Co-Leader", "Hub Officer", "admin"]
 
 rules_text = """**Here are some Legend Family Discord server rules.**\n
 • Respect others' opinions. If you disagree, please do so in a constructive manner. 
@@ -405,6 +405,7 @@ class legend:
         await self.bot.say(embed=embed)
 
     @commands.command(pass_context=True, no_pm=True)
+    @commands.has_any_role(*BOTCOMMANDER_ROLES)
     async def approve(self, ctx, member: discord.Member, clankey):
         """Send instructions to people joining a clan"""
         server = ctx.message.server
@@ -413,12 +414,6 @@ class legend:
 
         if server.id not in legendServer:
             await self.bot.say("This command can only be executed in the LeGeND Family Server")
-            return
-
-        allowed = await self._is_commander(author)
-
-        if not allowed:
-            await self.bot.say("You dont have enough permissions to approve a recruit.")
             return
 
         clankey = clankey.lower()
@@ -704,6 +699,7 @@ class legend:
             await self.bot.process_commands(message)
 
     @commands.command(pass_context=True, no_pm=True)
+    @commands.has_any_role(*BOTCOMMANDER_ROLES)
     async def waiting(self, ctx, member: discord.Member, clankey):
         """Add people to the waiting list for a clan"""
         server = ctx.message.server
@@ -712,12 +708,6 @@ class legend:
 
         if server.id not in legendServer:
             await self.bot.say("This command can only be executed in the LeGeND Family Server")
-            return
-
-        allowed = await self._is_commander(author)
-
-        if not allowed:
-            await self.bot.say("You dont have enough permissions to add someone to the waiting list.")
             return
 
         clankey = clankey.lower()
@@ -784,6 +774,7 @@ class legend:
         await self.bot.send_message(discord.Object(id='375839851955748874'), "**{} (#{})** added to the waiting list for {}".format(ign, profiletag, roleName.mention))
 
     @commands.command(pass_context=True, no_pm=True)
+    @commands.has_any_role(*BOTCOMMANDER_ROLES)
     async def remove(self, ctx, member: discord.Member, clankey):
         """Delete people from the waiting list for a clan"""
         server = ctx.message.server
@@ -792,12 +783,6 @@ class legend:
 
         if server.id not in legendServer:
             await self.bot.say("This command can only be executed in the LeGeND Family Server")
-            return
-
-        allowed = await self._is_commander(author)
-
-        if not allowed:
-            await self.bot.say("You dont have enough permissions to delete someone from the waiting list.")
             return
 
         clankey = clankey.lower()
@@ -871,6 +856,7 @@ class legend:
             await self.bot.say(embed=embed)
 
     @commands.command(pass_context=True, no_pm=True)
+    @commands.has_any_role(*BOTCOMMANDER_ROLES)
     async def changenick(self, ctx, member: discord.Member = None):   
         """ Change nickname of a user of their IGN + Clan"""
 
@@ -879,12 +865,6 @@ class legend:
 
         if member is None:
             member = ctx.message.author
-
-        allowed = await self._is_commander(author)
-
-        if not allowed:
-            await self.bot.say("You dont have enough permissions to change your nickname.")
-            return
 
         try:
             await self.updateClash()
@@ -929,6 +909,7 @@ class legend:
             await self.bot.say("You are not even in any of our clans, what are you doing here?")
 
     @commands.command(pass_context=True, no_pm=True)
+    @commands.has_any_role(*BOTCOMMANDER_ROLES)
     async def audit(self, ctx, clankey):
         """ Check to see if your clan members are setup properly in discord."""
         server = ctx.message.server
@@ -949,12 +930,6 @@ class legend:
             clan_role_id = self.c[clankey]['role_id']
         except KeyError:
             await self.bot.say("Please use a valid clanname : "+", ".join(key for key in self.c.keys()))
-            return
-
-        allowed = await self._is_commander(author)
-
-        if not allowed:
-            await self.bot.say("You dont have enough permissions to use Audit.")
             return
 
         await self.bot.type()
@@ -1255,16 +1230,11 @@ class legend:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 
     @commands.command(pass_context=True, no_pm=True)
+    @commands.has_any_role(*BOTCOMMANDER_ROLES)
     async def guest(self, ctx, member: discord.Member):
         """Toggle waiting Role for members"""
         server = ctx.message.server
         author = ctx.message.author
-        
-        allowed = await self._is_commander(author)
-
-        if not allowed:
-            await self.bot.say("You dont have enough permissions to assign guest role.")
-            return
 
         try:
             newname = member.name + " | Guest"
@@ -1283,6 +1253,7 @@ class legend:
         await self.bot.say("{} Role Added to {}".format(role.name, member.display_name))
 
     @commands.command(pass_context=True, no_pm=True)
+    @commands.has_any_role(*BOTCOMMANDER_ROLES)
     async def inactive(self, ctx, member: discord.Member):
         """Use this command after kicking people from clan"""
 
@@ -1292,12 +1263,6 @@ class legend:
 
         if server.id not in legendServer:
             await self.bot.say("This command can only be executed in the LeGeND Family Server")
-            return
-
-        allowed = await self._is_commander(author)
-
-        if not allowed:
-            await self.bot.say("You dont have enough permissions to use this command.")
             return
 
         rolesToRemove = ["Member"]
@@ -1315,7 +1280,7 @@ class legend:
         await self.bot.say(datetime.datetime.now(datetime.timezone.utc).strftime("%H:%M GMT"))
 
     @commands.command(pass_context=True, no_pm=True)
-    async def mm5(self, ctx):   
+    async def mm5(self, ctx):
         """ Enter the Qualifier stage for Monthly Mayhem 5"""
 
         server = ctx.message.server

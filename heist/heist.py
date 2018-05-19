@@ -23,7 +23,7 @@ from tabulate import tabulate
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
 
-BOTCOMMANDER_ROLES =  ["Family Representative", "Clan Manager", "admin", "Heist Manager"];
+BOTCOMMANDER_ROLES =  ["Family Representative", "Clan Manager", "admin", "Heist Manager", "admin"]
 
 # Thanks stack overflow http://stackoverflow.com/questions/21872366/plural-string-formatting
 class PluralDict(dict):
@@ -68,16 +68,11 @@ class Heist:
         await self.bot.say("Available Themes:```\n{}```".format('\n'.join(themes)))
 
     @heist.command(name="reset", pass_context=True)
+    @commands.has_any_role(*BOTCOMMANDER_ROLES)
     async def _reset_heist(self, ctx):
         """Resets heist in case it hangs"""
         server = ctx.message.server
         author = ctx.message.author
-
-        allowed = await self._is_commander(author)
-
-        if not allowed:
-            await self.bot.say("You dont have enough permissions to reset Heist.")
-            return
 
         settings = self.check_server_settings(server)
         self.reset_heist(settings)
@@ -552,16 +547,11 @@ class Heist:
                                "members.".format(author.display_name, crew_size, t_crew))
 
     @heist.command(name="pause", pass_context=True)
+    @commands.has_any_role(*BOTCOMMANDER_ROLES)
     async def _pause_heist(self, ctx, *, text=None):
         """This pauses !heist play"""
         server = ctx.message.server
         author = ctx.message.author
-
-        allowed = await self._is_commander(author)
-
-        if not allowed:
-            await self.bot.say("You dont have enough permissions to pause Heist.")
-            return
 
         self.pause = not self.pause
         if self.pause:
@@ -570,17 +560,12 @@ class Heist:
             await self.bot.say("Heist has been resumed!")
 
     @heist.command(name="mention", pass_context=True)
+    @commands.has_any_role(*BOTCOMMANDER_ROLES)
     async def _mention_heist(self, ctx, *, text=None):
         """This mentions the @Heist role"""
         server = ctx.message.server
         author = ctx.message.author
         role_name = "Heist"
-
-        allowed = await self._is_commander(author)
-
-        if not allowed:
-            await self.bot.say("You dont have enough permissions to mention Heist.")
-            return
 
         if role_name is not None:
             heist_role = discord.utils.get(server.roles, name=role_name)
@@ -837,16 +822,6 @@ class Heist:
         self.cycle_task.cancel()
         self.shutdown_save()
         self.save_system()
-
-    async def _is_commander(self, member):
-        server = member.server
-        botcommander_roles = [discord.utils.get(server.roles, name=r) for r in BOTCOMMANDER_ROLES]
-        botcommander_roles = set(botcommander_roles)
-        author_roles = set(member.roles)
-        if len(author_roles.intersection(botcommander_roles)):
-            return True
-        else:
-            return False
 
     def theme_loader(self, settings, theme_name):
         keys = ["Jail", "OOB", "Police", "Bail", "Crew", "Sentence", "Heist", "Vault"]

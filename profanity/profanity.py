@@ -4,7 +4,7 @@ from .utils.dataIO import dataIO, fileIO
 import os
 import asyncio
 
-BOTCOMMANDER_ROLES =  ["Family Representative", "Clan Manager", "Clan Deputy", "Co-Leader", "Hub Officer", "admin"];
+BOTCOMMANDER_ROLES =  ["Family Representative", "Clan Manager", "Clan Deputy", "Co-Leader", "Hub Officer", "admin"]
 
 class profanity:
     """profanity!"""
