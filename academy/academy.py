@@ -57,7 +57,7 @@ class academy:
         msg_timeout = "I had to wait too long. Start over by typing !coaching again!"
         msg_stop = "Stopped."
         msg_start = "I will ask you few questions, let's move to DM!"
-        msg_start_dm = "Please do not send any message to LeGeND server while filling this request! You can stop anytime by typing \"stop\". Let's start!"
+        msg_start_dm = "Lets start! You can stop anytime by typing \"stop\". "
         
         user = ctx.message.author
         channel = await self.bot.start_private_message(user)
