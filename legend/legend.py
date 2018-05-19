@@ -264,7 +264,7 @@ class legend:
         """Toggle Private approval of new recruits"""
         clankey = clankey.lower()
         try:
-            self.c[clankey]['approval'] != self.c[clankey]['approval']
+            self.c[clankey]['approval'] = not self.c[clankey]['approval']
         except KeyError:
             await self.bot.say("Please use a valid clanname : "+",".join(key for key in self.c.keys()))
             return 
