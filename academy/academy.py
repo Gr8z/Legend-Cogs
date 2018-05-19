@@ -52,7 +52,7 @@ class academy:
     @commands.command(pass_context=True)
     @commands.has_any_role(*BOTCOMMANDER_ROLES)
     async def coaching(self, ctx):  
-        channel = await self.bot.start_private_message(user)
+        
         msg_req = "**Request by:** {}\n**In-game name:** {}\n**Trophies:** {}\n**Wants to learn:** {}\n**Time:** {}\n**Additional info:** {}\n{}"
         msg_timeout = "I had to wait too long. Start over by typing !coaching again!"
         msg_stop = "Stopped."
@@ -60,6 +60,7 @@ class academy:
         msg_start_dm = "Please do not send any message to LeGeND server while filling this request! You can stop anytime by typing \"stop\". Let's start!"
         
         user = ctx.message.author
+        channel = await self.bot.start_private_message(user)
         channel_req = self.bot.get_channel("426689763173597185")
         server_req = self.bot.get_server("374596069989810176")
         coach_role= discord.utils.get(server_req.roles, name="Coach")
