@@ -163,7 +163,7 @@ class duels:
 
             embed=discord.Embed(color=0x0080ff)
             embed.set_author(name=profiledata['name'] + " (#"+profiledata['tag']+")", icon_url=clanurl)
-            embed.set_thumbnail(url="https://imgur.com/jNDd0ad.png")
+            embed.set_thumbnail(url="https://imgur.com/9DoEq22.jpg")
             embed.add_field(name="Duel Wins", value=str(duelPlayer['WON']), inline=True)
             embed.add_field(name="Trophies", value=profiledata['trophies'], inline=True)
             if profiledata['clan'] is not None:
