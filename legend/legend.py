@@ -366,6 +366,7 @@ class legend:
                     personalbest = self.c[clankey]['personalbest']
                     bonustitle = self.c[clankey]['bonustitle']
                     emoji = self.c[clankey]['emoji']
+                    warTrophies = self.c[clankey]['warTrophies']
                     totalWaiting += numWaiting
                     break
 
@@ -392,7 +393,7 @@ class legend:
             if bonustitle is not None:
                 title += bonustitle  
 
-            desc = "{} {}      :trophy: {}+     :medal:{}   :arrow_upper_right: [Open](https://legendclans.com/clanInfo/{})".format(emoji, showMembers, str(clans[x]['requiredScore']), str(clans[x]['score']), clans[x]['tag'])
+            desc = "{} {}      <:crtrophy:448609948008579073> {}+     <:wartrophy:448609141796241408> {}   <:openlink:448611387040595979> [Open](https://legendclans.com/clanInfo/{})".format(emoji, showMembers, str(clans[x]['requiredScore']), str(warTrophies), clans[x]['tag'])
 
             if (member is None) or ((clans[x]['requiredScore'] <= trophies) and (maxtrophies > personalbest) and (trophies - clans[x]['requiredScore'] < 1500) and (clans[x]['type'] != 'closed')):
                 foundClan = True
