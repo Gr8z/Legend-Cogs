@@ -23,6 +23,7 @@ If you want to see this bot in action, join the LeGeND Family Discord at [discor
  * **academy** - Coaching command for LeGeND Family.
  * **deck** - Clash Royale deck management system with additional features, port from SML-Cogs.
  * **duels** - Clash Royale 1v1 duels with credit bets.
+ * **warlog** - Clash Royale Clan War Logs using images.
 
 ## Installation
 
@@ -45,4 +46,3 @@ To install a cog on your bot instance:
 * [CR-API](https://github.com/cr-api/cr-api)
 * [Bobloy](https://github.com/bobloy)
 * [Karthik Suresh](https://github.com/karthiks2601)
-* [milan252525](https://github.com/milan252525)

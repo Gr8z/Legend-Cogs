@@ -1466,6 +1466,8 @@ def check_clans():
             c[clankey]['bonustitle'] = ""
         if 'personalbest' not in c[clankey]:
             c[clankey]['personalbest'] = 0 
+        if 'warTrophies' not in c[clankey]:
+            c[clankey]['warTrophies'] = 0 
         if 'approval' not in c[clankey]:
             c[clankey]['approval'] = False
     dataIO.save_json('cogs/clans.json', c)
