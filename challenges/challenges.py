@@ -255,7 +255,7 @@ class challengeSession():
     async def send_table(self):
         t = "+ Results: \n\n"
         for user, score in self.scores.most_common():
-            t += "+ {}\t{}\n".format(user, score)
+            t += "+ {}\t{}\n".format(user.display_name, score)
         await self.bot.say(box(t, lang="diff"))
 
     async def correct_answer(self, server, answer):
