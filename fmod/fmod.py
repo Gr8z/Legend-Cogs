@@ -752,6 +752,9 @@ class fmod:
         """Run when new channels are created and set up role permissions"""
         if channel.is_private:
             return
+
+        if channel.server.id != "374596069989810176":
+            return
             
         rolename = self.settingsload[server.id]['Mute Role']
         role = discord.utils.get(server.roles, name=rolename)
@@ -799,6 +802,9 @@ class fmod:
         """Restore punishment if punished user leaves/rejoins"""
         server = member.server
         sid = member.server.id
+
+        if server.id != "374596069989810176":
+            return
         
         #role = discord.utils.get(server.roles, name=rolename)
         deniedrole = self.settingsload[server.id]['Denied Role']
