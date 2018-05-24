@@ -24,6 +24,7 @@ If you want to see this bot in action, join the LeGeND Family Discord at [discor
  * **deck** - Clash Royale deck management system with additional features, port from SML-Cogs.
  * **duels** - Clash Royale 1v1 duels with credit bets.
  * **warlog** - Clash Royale Clan War Logs using images.
+ * **fmod** - Advanced Warning system by RSNFreud.
 
 ## Installation
 

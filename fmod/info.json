@@ -1,0 +1,9 @@
+{
+    "AUTHOR" : "RSNFreud",
+    "INSTALL_MSG" : "Thanks for installing this cog! This cog is in a beta phase which means it may have bugs. Please post them on the github if you find any.",
+    "NAME" : "fmod",
+    "SHORT" : "A moderation cog with many cool features",
+    "DESCRIPTION" : "A moderation cog with many cool features such as reporting, denying from channels, muting and more!",
+    "TAGS" : ["mod", "warn", "punish", "moderation", "warnings", "report"],
+    "HIDDEN" : false
+}
