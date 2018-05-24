@@ -1,7 +1,7 @@
 # Legend-Cogs
+[<img src="https://discordapp.com/api/guilds/374596069989810176/widget.png?style=shield">](http://discord.me/LegendFamily) [<img src="https://img.shields.io/badge/discord-py-blue.svg">](https://github.com/Rapptz/discord.py)
 
 Made with Python and [RED](https://github.com/Cog-Creators/Red-DiscordBot).
-[<img src="https://discordapp.com/api/guilds/374596069989810176/widget.png?style=shield">](https://discord.gg/red) [<img src="https://img.shields.io/badge/discord-py-blue.svg">](https://github.com/Rapptz/discord.py)
 
 If you want to see this bot in action, join the LeGeND Family Discord at [discord.me/LegendFamily](http://discord.me/LegendFamily)
 
