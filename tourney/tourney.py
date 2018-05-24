@@ -87,7 +87,7 @@ class tournament:
 		except:
 			return None
 
-		random.shuffle(openTourney)
+		#random.shuffle(openTourney)
 		for tourney in openTourney:
 
 			tag = tourney['tag']
