@@ -1251,7 +1251,10 @@ class fmod:
         embed.add_field(name = 'User:', value = user, inline = False)
         embed.add_field(name = 'Reason:', value = reason.content, inline = False)
         embed.add_field(name = 'Attachments:', value = attachlist2, inline = False)
-        await self.bot.send_message(logchannel, embed = embed)
+        react = await self.bot.send_message(logchannel, embed = embed)
+        await self.bot.add_reaction(react, "\U0001f44d")
+        await self.bot.add_reaction(react, "\U0001f44e")
+        await self.bot.add_reaction(react, "\U0001f937")
       
 def check_folder():
     if not os.path.exists("data/fmod"):
