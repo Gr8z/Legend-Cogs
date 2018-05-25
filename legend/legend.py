@@ -35,7 +35,6 @@ commands_text =  """Here are some of the Legend Family Bot commands, you can use
 **!topmembers** - shows the top ranked players in our family.
 **!payday** - receive your 300 credits every 30 minutes.
 **!heist** - Play a heist with a crew in #heist channel.
-**!slot** - Play the slot machine.
 **!buy** - Take a look at what you can purchase with your credits.
 **!balance** - To check your current bank balance.
 **!profile** - view your server profile.
@@ -44,8 +43,10 @@ commands_text =  """Here are some of the Legend Family Bot commands, you can use
 **!rep @user** - give reputation points to users.
 **!remindme** - Use this command to make the bot remind you of something in the future.
 **!trivia** - start a trivia of your choice. Bot will ask you questions, you will get points of answering them.
-**!play** -  Listen to songs, type with command with the song name inside a voice channel. (!skip, !pause, !resume, !playlist).\n
-**!invite** -  Get the invite link for the server to share with your friends.\n
+**!play** - Listen to songs, type with command with the song name inside a voice channel. (!skip, !pause, !resume, !playlist).\n
+**!invite** - Get the invite link for the server to share with your friends.\n
+**!report** - Report a user to the moderators for breaking the rules.\n
+**!coaching** - To request a coaching session.\n
 **You can type !help here to see the full commands list**"""
 
 info_text = """You will find several channels on our Discord Server\n

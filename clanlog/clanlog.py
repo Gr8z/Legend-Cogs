@@ -8,6 +8,7 @@ from .utils.dataIO import dataIO, fileIO
 from copy import deepcopy
 from time import time as get_time
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdate
 plt.switch_backend('agg')
 from datetime import datetime as dt
 import operator
@@ -127,24 +128,34 @@ class Clanlog:
             await self.bot.send_typing(channel)
             self.update_member_log()
             
-            plt.figure(figsize=(10, 6))
-            x,y = zip(*sorted(self.member_log.items()))
-            plt.plot(x,y)
+            secs, vals = zip(*sorted(self.member_log.items()))
 
-            dates = []
-            for name in x:
-                dates.append(dt.fromtimestamp(float(name)).strftime("%a, %b %d %Y"))
+            # Convert to the correct format for matplotlib.
+            # mdate.epoch2num converts epoch timestamps to the right format for matplotlib
+            secs = mdate.epoch2num(np.array(secs, dtype=float))
+ 
+            fig, ax = plt.subplots(figsize=(10, 6))
 
-            plt.gcf().autofmt_xdate()
-            plt.xticks(np.arange(0, len(self.member_log)+1, 20), dates)
+            # Plot the date using plot_date rather than plot
+            ax.plot_date(secs, vals, linestyle='solid', marker='None')
+
+            # Choose your xtick format string
+            date_fmt = '%a, %b %d %Y'
+
+            # Use a DateFormatter to set the data to the correct format.
+            date_formatter = mdate.DateFormatter(date_fmt)
+            ax.xaxis.set_major_formatter(date_formatter)
 
             plt.title("MEMBER COUNT HISTORY OF LEGEND FAMILY", color = "orange", weight = "bold", size = 19)
             plt.xlabel("DATE", color = "gray")
             plt.ylabel("MEMBERS", color = "gray")
+
+            # Sets the tick labels diagonal so they fit easier.
+            fig.autofmt_xdate()
             
             plt.savefig("data/clanlog/history.png")
             await self.bot.send_file(channel, "data/clanlog/history.png", filename=None)
-            plt.close()
+
         except (IndexError):
             await self.bot.say("Clanlog command needs to collect more data!")
         
