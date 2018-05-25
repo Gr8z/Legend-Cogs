@@ -562,7 +562,7 @@ class Heist:
         prefix = ctx.prefix
         heist_role = discord.utils.get(server.roles, name="Heist")
         heist_channel = discord.utils.get(ctx.message.server.channels, name="heist")
-
+"""
         await self.bot.edit_role(server, heist_role, mentionable=True)
         await self.bot.send_message(discord.Object(id='391382712499568641'), "**Daily Grand** {} is going to start in an hour.".format(heist_role.mention))
         await self.bot.edit_role(server, heist_role, mentionable=False)
@@ -579,45 +579,36 @@ class Heist:
         await asyncio.sleep(540)
 
         await self.bot.edit_role(server, heist_role, mentionable=True)
-        await self.bot.send_message(discord.Object(id='391382712499568641'), "**Daily Grand** {} is going to start in 60 seconds. We have set the gather time to **10 minutes**, prepare and bring your friends to {}.".format(heist_role.mention, heist_channel.mention))
-        await self.bot.edit_role(server, heist_role, mentionable=False)
+            await self.bot.send_message(discord.Object(id='391382712499568641'), "**Daily Grand** {} is going to start in 60 seconds. We have set the gather time to **10 minutes**, prepare and bring your friends to {}.".format(heist_role.mention, heist_channel.mention))
+            await self.bot.edit_role(server, heist_role, mentionable=False)
 
         await asyncio.sleep(60)
-
+"""
         # Theme Variables
         t_crew = settings["Theme"]["Crew"]
         t_heist = settings["Theme"]["Heist"]
         t_vault = settings["Theme"]["Vault"]
 
-        if not settings["Config"]["Heist Planned"]:
+        settings["Config"]["Heist Planned"] = True
 
-            settings["Config"]["Heist Planned"] = True
+        heist_role = discord.utils.get(server.roles, name="Heist")
+        await self.bot.edit_role(server, heist_role, mentionable=True)
+        await self.bot.say("A Daily GRAND {5} is being planned.\nThe {4} "
+                           "will begin in 10 minutes. Type ``{2}heist play`` to join the "
+                           "{3}.\n"
+                           "Type ``!togglerole heist`` to get notified on the next Grand Heist.".format(author.display_name, wait_time, ctx.prefix, t_crew, t_heist, heist_role.mention))
+        await self.bot.edit_role(server, heist_role, mentionable=False)
 
-            heist_role = discord.utils.get(server.roles, name="Heist")
-            await self.bot.edit_role(server, heist_role, mentionable=True)
-            await self.bot.say("A Daily GRAND {5} is being planned.\nThe {4} "
-                               "will begin in 10 minutes. Type ``{2}heist play`` to join the "
-                               "{3}.\n"
-                               "Type ``!togglerole heist`` to get notified on the next Grand Heist.".format(author.display_name, wait_time, ctx.prefix, t_crew, t_heist, heist_role.mention))
-            await self.bot.edit_role(server, heist_role, mentionable=False)
+        self.pause = False
 
-            self.pause = False
+        await asyncio.sleep(600)
 
-            await asyncio.sleep(600)
-
-            if len(settings["Crew"]) <= 1:
-                await self.bot.say("We tried to rally a {}, but no one wanted to join. The "
-                                   "Grand {} has been cancelled.".format(t_crew, t_heist))
-                self.reset_heist(settings)
-            else:
-                await self.heist_game(settings, server, t_heist, t_crew, t_vault)
-
+        if len(settings["Crew"]) <= 1:
+            await self.bot.say("We tried to rally a {}, but no one wanted to join. The "
+                               "Grand {} has been cancelled.".format(t_crew, t_heist))
+            self.reset_heist(settings)
         else:
-            self.subtract_costs(author, cost)
-            settings["Crew"][author.id] = {}
-            crew_size = len(settings["Crew"])
-            await self.bot.say("{0} has joined the daily Grand {2}.\nThe {2} now has {1} "
-                               "members.".format(author.display_name, crew_size, t_crew))
+            await self.heist_game(settings, server, t_heist, t_crew, t_vault)
 
     @heist.command(name="pause", pass_context=True)
     @commands.has_any_role(*BOTCOMMANDER_ROLES)
