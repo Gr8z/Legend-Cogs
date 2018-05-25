@@ -750,10 +750,10 @@ class fmod:
         
     async def on_channel_create(self, channel):
         """Run when new channels are created and set up role permissions"""
-        server = channel.server
         if channel.is_private:
             return
 
+        server = channel.server
         if server.id != "374596069989810176":
             return
             
