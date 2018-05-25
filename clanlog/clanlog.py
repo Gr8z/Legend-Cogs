@@ -9,6 +9,7 @@ from copy import deepcopy
 from time import time as get_time
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdate
+import matplotlib.ticker as ticker
 plt.switch_backend('agg')
 from datetime import datetime as dt
 import operator
@@ -141,10 +142,12 @@ class Clanlog:
 
             # Choose your xtick format string
             date_fmt = '%a, %b %d %Y'
+            tick_spacing = 3
 
             # Use a DateFormatter to set the data to the correct format.
             date_formatter = mdate.DateFormatter(date_fmt)
             ax.xaxis.set_major_formatter(date_formatter)
+            ax.xaxis.set_major_locator(ticker.MultipleLocator(tick_spacing))
 
             plt.title("MEMBER COUNT HISTORY OF LEGEND FAMILY", color = "orange", weight = "bold", size = 19)
             plt.xlabel("DATE", color = "gray")
