@@ -596,7 +596,7 @@ class Heist:
             heist_role = discord.utils.get(server.roles, name="Heist")
             await self.bot.edit_role(server, heist_role, mentionable=True)
             await self.bot.say("A Daily GRAND {5} is being planned.\nThe {4} "
-                               "will begin in {1} seconds. Type ``{2}heist play`` to join the "
+                               "will begin in 10 minutes. Type ``{2}heist play`` to join the "
                                "{3}.\n"
                                "Type ``!togglerole heist`` to get notified on the next Grand Heist.".format(author.display_name, wait_time, ctx.prefix, t_crew, t_heist, heist_role.mention))
             await self.bot.edit_role(server, heist_role, mentionable=False)
