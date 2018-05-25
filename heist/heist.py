@@ -533,6 +533,7 @@ class Heist:
                                "{3}.\n"
                                "Type ``!togglerole heist`` to get notified on the next heist.".format(author.display_name, wait_time, ctx.prefix, t_crew, t_heist, heist_role.mention))
             await self.bot.edit_role(server, heist_role, mentionable=False)
+            self.pause = False
             await asyncio.sleep(wait_time)
 
             if len(settings["Crew"]) <= 1:
@@ -566,11 +567,14 @@ class Heist:
         await self.bot.send_message(discord.Object(id='391382712499568641'), "**Daily Grand** {} Starting is going to start in an hour.".format(heist_role.mention))
         await self.bot.edit_role(server, heist_role, mentionable=False)
 
+        self.pause = True
+
         await asyncio.sleep(3000)
 
         await self.bot.edit_role(server, heist_role, mentionable=True)
         await self.bot.send_message(discord.Object(id='391382712499568641'), "**Daily Grand** {} Starting is going to start in 10 minutes.".format(heist_role.mention))
         await self.bot.edit_role(server, heist_role, mentionable=False)
+
 
         await asyncio.sleep(540)
 
@@ -596,6 +600,8 @@ class Heist:
                                "{3}.\n"
                                "Type ``!togglerole heist`` to get notified on the next Grand Heist.".format(author.display_name, wait_time, ctx.prefix, t_crew, t_heist, heist_role.mention))
             await self.bot.edit_role(server, heist_role, mentionable=False)
+
+            self.pause = False
 
             await asyncio.sleep(600)
 
