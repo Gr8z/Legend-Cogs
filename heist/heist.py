@@ -562,7 +562,7 @@ class Heist:
         prefix = ctx.prefix
         heist_role = discord.utils.get(server.roles, name="Heist")
         heist_channel = discord.utils.get(ctx.message.server.channels, name="heist")
-        """
+
         await self.bot.edit_role(server, heist_role, mentionable=True)
         await self.bot.send_message(discord.Object(id='391382712499568641'), "**Daily Grand** {} is going to start in an hour.".format(heist_role.mention))
         await self.bot.edit_role(server, heist_role, mentionable=False)
@@ -583,7 +583,7 @@ class Heist:
             await self.bot.edit_role(server, heist_role, mentionable=False)
 
         await asyncio.sleep(60)
-        """
+
         # Theme Variables
         t_crew = settings["Theme"]["Crew"]
         t_heist = settings["Theme"]["Heist"]
