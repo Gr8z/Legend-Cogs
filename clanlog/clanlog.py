@@ -179,7 +179,7 @@ def check_files():
     f = "data/clanlog/member_log.json"
     if not fileIO(f, "check"):
         print("Creating empty member_log.json...")
-        dataIO.save_json(f, {})
+        dataIO.save_json(f, {"1524540132" : 0})
         
 def check_folders():
     if not os.path.exists("data/clanlog"):

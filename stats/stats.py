@@ -16,6 +16,7 @@ class stats:
     def __init__(self, bot):
         self.bot = bot
         self.settings = dataIO.load_json(settings_path)
+        self.member_log = dataIO.load_json('data/clanlog/member_log.json')
         self.cycle_task1 = bot.loop.create_task(self.updateUserCount())
         self.cycle_task2 = bot.loop.create_task(self.updateMiscCount())
 
@@ -80,7 +81,9 @@ class stats:
                 for server in servers:
                     channels = self.settings[server.id]['channels']
 
-                    await self.bot.edit_channel(server.get_channel(channels['member_channel']),name="{} Members".format(await self.getUserCount(server, "Member")))
+                    self.member_log = dataIO.load_json('data/clanlog/member_log.json')
+
+                    await self.bot.edit_channel(server.get_channel(channels['member_channel']),name="{} Members".format(str(self.member_log[max(self.member_log.keys())])))
                     await self.bot.edit_channel(server.get_channel(channels['guests_channel']),name="{} Guests".format(await self.getUserCount(server, "Guest")))
                     await self.bot.edit_channel(server.get_channel(channels['user_channel']),name="{} Total Users".format(len(server.members)))
                     
@@ -124,7 +127,13 @@ def check_files():
         print("Creating stats settings.json...")
         dataIO.save_json(f, {})
 
+    f = "data/clanlog/member_log.json"
+    if not fileIO(f, "check"):
+        print("Creating empty member_log.json...")
+        dataIO.save_json(f, {"1524540132" : 0})
+
 def setup(bot):
     check_folders()
     check_files()
+
     bot.add_cog(stats(bot))
