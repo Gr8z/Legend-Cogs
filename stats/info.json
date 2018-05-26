@@ -1,0 +1,10 @@
+{
+    "AUTHOR" : "GR8",
+    "INSTALL_MSG" : "Server Stats Addon added, if there are any issues, please mention them on https://github.com/Gr8z/LeGeND-Bot",
+    "NAME" : "stats",
+    "SHORT" : "Use Voice Channels to showcase user stats",
+    "DESCRIPTION" : "Make a locked channel to update the total users, users in a role, online users, etc.",
+    "TAGS" : ["stats","server stats"],
+    "REQUIREMENTS" : ["os","asyncio"],
+    "HIDDEN" : false
+}

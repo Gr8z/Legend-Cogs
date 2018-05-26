@@ -26,6 +26,7 @@ If you want to see this bot in action, join the LeGeND Family Discord at [discor
  * **duels** - Clash Royale 1v1 duels with credit bets.
  * **warlog** - Clash Royale Clan War Logs using images.
  * **fmod** - Advanced Warning system by RSNFreud.
+ * **stats** - Count Server Statistics on a Voice Channel.
 
 ## Installation
 
