@@ -173,18 +173,21 @@ class duels:
             embed.set_footer(text=credits, icon_url=creditIcon)
 
             if privateDuel is None:
-                await self.bot.say("{} wants to duel one of you in Clash Royale for {} credits, type ``{}duel accept`` the offer.".format(author.mention, str(bet), ctx.prefix))
-            else:
+
                 role_name = "Duels"
                 if role_name is not None:
                     duels_role = discord.utils.get(server.roles, name=role_name)
                     if duels_role is None:
                         await self.bot.create_role(server, name=role_name)
                         duels_role = discord.utils.get(server.roles, name=role_name)
-
                 await self.bot.edit_role(server, duels_role, mentionable=True)
-                await self.bot.say("[{}] {} wants to duel {} in Clash Royale for {} credits, type ``{}duel accept`` to accept the offer.".format(duels_role.mention, author.mention, member.mention, str(bet), ctx.prefix))
+                await self.bot.say("[{}] {} wants to duel one of you in Clash Royale for {} credits, type ``{}duel accept`` the offer.".format(duels_role.mention, author.mention, str(bet), ctx.prefix))
                 await self.bot.edit_role(server, duels_role, mentionable=False)
+            else:
+
+                
+                await self.bot.say("{} wants to duel {} in Clash Royale for {} credits, type ``{}duel accept`` to accept the offer.".format(author.mention, member.mention, str(bet), ctx.prefix))
+                
                 
             await self.bot.say(embed=embed)
 
