@@ -126,7 +126,6 @@ def check_files():
         dataIO.save_json(f, {})
 
 def setup(bot):
-    n = stats(bot)
     check_folders()
     check_files()
-    bot.add_cog(n)
+    bot.add_cog(stats(bot))
