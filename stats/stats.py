@@ -43,7 +43,7 @@ class stats:
         guests_channel = await self.bot.create_channel(server, '0 Guests', (server.default_role, everyone), type=discord.ChannelType.voice)
         online_channel = await self.bot.create_channel(server, '0 Online Users', (server.default_role, everyone), type=discord.ChannelType.voice)
         user_channel = await self.bot.create_channel(server, '0 Total Users', (server.default_role, everyone), type=discord.ChannelType.voice)
-        server_channel = await self.bot.create_channel(server, '0 Days Passed', (server.default_role, everyone), type=discord.ChannelType.voice)
+        server_channel = await self.bot.create_channel(server, '0 Days Old', (server.default_role, everyone), type=discord.ChannelType.voice)
         time_channel = await self.bot.create_channel(server, '0 GMT', (server.default_role, everyone), type=discord.ChannelType.voice)
 
         self.settings[server.id] = {}
@@ -82,10 +82,12 @@ class stats:
                     channels = self.settings[server.id]['channels']
 
                     self.member_log = dataIO.load_json('data/clanlog/member_log.json')
+                    passed = (datetime.datetime.utcnow() - server.created_at).days
 
                     await self.bot.edit_channel(server.get_channel(channels['member_channel']),name="{} Members".format(str(self.member_log[max(self.member_log.keys())])))
                     await self.bot.edit_channel(server.get_channel(channels['guests_channel']),name="{} Guests".format(await self.getUserCount(server, "Guest")))
                     await self.bot.edit_channel(server.get_channel(channels['user_channel']),name="{} Total Users".format(len(server.members)))
+                    await self.bot.edit_channel(server.get_channel(channels['server_channel']),name="{} Days Old".format(str(passed)))
                     
                 await asyncio.sleep(600)  # task runs every 600 seconds
         except asyncio.CancelledError:
@@ -104,15 +106,12 @@ class stats:
 
                     online = len([m.status for m in server.members
                       if m.status == discord.Status.online or
-                      m.status == discord.Status.idle])
-
-                    passed = (datetime.datetime.utcnow() - server.created_at).days
+                      m.status == discord.Status.idle])   
 
                     await self.bot.edit_channel(server.get_channel(channels['online_channel']),name="{} Online Users".format(str(online)))
-                    await self.bot.edit_channel(server.get_channel(channels['server_channel']),name="{} Days Passed".format(str(passed)))
                     await self.bot.edit_channel(server.get_channel(channels['time_channel']),name="{} GMT".format(datetime.datetime.now(datetime.timezone.utc).strftime("%H:%M")))
         
-                await asyncio.sleep(60)  # task runs every 60 seconds
+                await asyncio.sleep(15)  # task runs every 60 seconds
         except asyncio.CancelledError:
             pass
 
