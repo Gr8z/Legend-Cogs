@@ -74,7 +74,7 @@ class stats:
         await self.bot.wait_until_ready()
 
         try:
-            #await asyncio.sleep(20)  # Start-up Time
+            await asyncio.sleep(20)  # Start-up Time
             while True:
                 servers = [x for x in self.bot.servers if x.id in self.settings]
                 for server in servers:
@@ -93,7 +93,7 @@ class stats:
         await self.bot.wait_until_ready()
 
         try:
-            #await asyncio.sleep(20)  # Start-up Time
+            await asyncio.sleep(20)  # Start-up Time
             while True:
                 servers = [x for x in self.bot.servers if x.id in self.settings]
                 for server in servers:
