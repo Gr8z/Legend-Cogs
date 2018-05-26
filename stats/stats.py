@@ -42,7 +42,7 @@ class stats:
         guests_channel = await self.bot.create_channel(server, '0 Guests', (server.default_role, everyone), type=discord.ChannelType.voice)
         online_channel = await self.bot.create_channel(server, '0 Online Users', (server.default_role, everyone), type=discord.ChannelType.voice)
         user_channel = await self.bot.create_channel(server, '0 Total Users', (server.default_role, everyone), type=discord.ChannelType.voice)
-        server_channel = await self.bot.create_channel(server, '0 Days Old Server', (server.default_role, everyone), type=discord.ChannelType.voice)
+        server_channel = await self.bot.create_channel(server, '0 Days Passed', (server.default_role, everyone), type=discord.ChannelType.voice)
         time_channel = await self.bot.create_channel(server, '0 GMT', (server.default_role, everyone), type=discord.ChannelType.voice)
 
         self.settings[server.id] = {}
@@ -108,7 +108,6 @@ class stats:
                     await self.bot.edit_channel(server.get_channel(channels['online_channel']),name="{} Online Users".format(str(online)))
                     await self.bot.edit_channel(server.get_channel(channels['server_channel']),name="{} Days Passed".format(str(passed)))
                     await self.bot.edit_channel(server.get_channel(channels['time_channel']),name="{} GMT".format(datetime.datetime.now(datetime.timezone.utc).strftime("%H:%M")))
-                    print("edit_channel")
         
                 await asyncio.sleep(60)  # task runs every 60 seconds
         except asyncio.CancelledError:
