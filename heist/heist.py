@@ -579,8 +579,8 @@ class Heist:
         await asyncio.sleep(540)
 
         await self.bot.edit_role(server, heist_role, mentionable=True)
-            await self.bot.send_message(discord.Object(id='391382712499568641'), "**Daily Grand** {} is going to start in 60 seconds. We have set the gather time to **10 minutes**, prepare and bring your friends to {}.".format(heist_role.mention, heist_channel.mention))
-            await self.bot.edit_role(server, heist_role, mentionable=False)
+        await self.bot.send_message(discord.Object(id='391382712499568641'), "**Daily Grand** {} is going to start in 60 seconds. We have set the gather time to **10 minutes**, prepare and bring your friends to {}.".format(heist_role.mention, heist_channel.mention))
+        await self.bot.edit_role(server, heist_role, mentionable=False)
 
         await asyncio.sleep(60)
 
