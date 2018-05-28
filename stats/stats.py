@@ -25,6 +25,7 @@ class stats:
         self.cycle_task2.cancel()
 
     @commands.group(pass_context=True, no_pm=True)
+    @checks.is_owner()
     async def stats(self, ctx):
         """Server Stats settings"""
 
