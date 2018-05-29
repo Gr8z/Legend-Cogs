@@ -872,7 +872,7 @@ class legend:
             await self.updateClash()
             await self.bot.type()
             profiletag = self.clash[member.id]['tag']
-            profiledata = requests.get('https://api.royaleapi.com/player/{}?exclude=games,currentDeck,cards,battles,achievements'.format(profiletag), headers=self.getAuth(), timeout=10).json()
+            profiledata = requests.get('https://api.royaleapi.com/player/{}?exclude=games,currentDeck,cards,achievements'.format(profiletag), headers=self.getAuth(), timeout=10).json()
             clantag = profiledata['clan']['tag']
             clanname = profiledata['clan']['name']
             ign = profiledata['name']
@@ -1239,7 +1239,25 @@ class legend:
         author = ctx.message.author
 
         try:
-            newname = member.name + " | Guest"
+            await self.updateClash()
+            await self.bot.type()
+            profiletag = self.clash[member.id]['tag']
+            profiledata = requests.get('https://api.royaleapi.com/player/{}?exclude=games,currentDeck,cards,achievements'.format(profiletag), headers=self.getAuth(), timeout=10).json()
+            clantag = profiledata['clan']['tag']
+            clanname = profiledata['clan']['name']
+            ign = profiledata['name']
+        except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
+            await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
+            return
+        except requests.exceptions.RequestException as e:
+            await self.bot.say(e)
+            return
+        except:
+            await self.bot.say("You must assosiate a tag with this member first using ``!save #tag @member``")
+            return
+
+        try:
+            newname = ign + " | Guest"
             await self.bot.change_nickname(member, newname)
         except discord.HTTPException:
             await self.bot.say("I don’t have permission to change nick for this user.")
