@@ -809,13 +809,13 @@ class fmod:
         
         #role = discord.utils.get(server.roles, name=rolename)
         deniedrole = self.settingsload[server.id]['Denied Role']
-        count = self.warningsload[server.id][member.id]["Count"]
+        
         #re-adds warning roles
         if 'Punishment Roles' in self.settingsload[sid]:
             if self.settingsload[sid]['Punishment Roles'] == True:
                 if member.id in self.warningsload[sid]:
+                    count = self.warningsload[sid][member.id]["Count"]
                     if count >= 1:
-                        count = self.warningsload[sid][member.id]["Count"]
                         poops = "\U0001f528" * count
                         role_name = "Warning {}".format(poops)
                         is_there = False
