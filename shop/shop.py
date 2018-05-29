@@ -147,7 +147,6 @@ class shop:
 
                                 if rare:
                                     BonusMult = 1.2
-    
                                     perDonation *= BonusMult
 
                                 if epic:
