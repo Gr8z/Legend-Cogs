@@ -7,10 +7,10 @@ from cogs.utils import checks
 from .utils.dataIO import dataIO, fileIO
 from copy import deepcopy
 from time import time as get_time
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdate
-import matplotlib.ticker as ticker
-plt.switch_backend('agg')
+#import matplotlib.pyplot as plt
+#import matplotlib.dates as mdate
+#import matplotlib.ticker as ticker
+#plt.switch_backend('agg')
 from datetime import datetime as dt
 import operator
 import numpy as np
