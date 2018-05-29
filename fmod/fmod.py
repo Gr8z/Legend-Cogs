@@ -863,7 +863,7 @@ class fmod:
     
 
     @commands.command(no_pm=True, pass_context=True)
-    @checks.mod()
+    @checks.admin()
     async def warns(self, ctx):
         """Lists all the warnings on the server"""
         server = ctx.message.server
@@ -912,7 +912,7 @@ class fmod:
             except:
                 continue
 
-        for warnid, member_name, numwarns, mod, reason in sorted(table, key=lambda x: x[0]):
+        for warnid, member_name, numwarns, punisher_name, reason in sorted(table, key=lambda x: x[0]):
             disp_table.append((warnid, member_name, numwarns, punisher_name, reason))
 
         for page in pagify(tabulate(disp_table, headers)):
