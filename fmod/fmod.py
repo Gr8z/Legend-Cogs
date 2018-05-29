@@ -17,6 +17,8 @@ except Exception as e:
 
 
 PATH = 'data/fmod/'
+creditIcon = "https://i.imgur.com/TP8GXZb.png"
+credits = "Bot by GR8 | Titan"
 
 #stuff for mute time
 UNIT_TABLE = {'s': 1, 'm': 60, 'h': 60 * 60, 'd': 60 * 60 * 24}
@@ -428,18 +430,18 @@ class fmod:
     async def embedlog(self, mod, user, reason, countnum, channel, ID, warntype):
         avatar = user.avatar_url if user.avatar else user.default_avatar_url
         if warntype == 'denied':
-            embed=discord.Embed(title="User Denied:")
+            embed=discord.Embed(title="User Denied", color=0xfd9e11)
         elif warntype == 'Ban':
-            embed=discord.Embed(title="User Banned:")
+            embed=discord.Embed(title="User Banned", color=0xf01e1e)
         else:
-            embed=discord.Embed(title="User Warned:")
+            embed=discord.Embed(title="User Warned", color=0xfd9e11)
         embed.set_thumbnail(url=avatar)
         embed.add_field(name="Case ID:", value=ID, inline=False)
-        embed.add_field(name="Moderator:", value=mod, inline=False)
         embed.add_field(name="User:", value=user, inline=False)
         embed.add_field(name="Reason:", value=reason, inline=False)
         embed.add_field(name="Warning Number:", value=countnum, inline=False)
         embed.add_field(name="Attachments:", value='None', inline=False)
+        embed.set_footer(text=credits, icon_url=creditIcon)
         react = await self.bot.send_message(channel, embed=embed)
         await self.bot.add_reaction(react, "\U0001f44d")
         await self.bot.add_reaction(react, "\U0001f44e")
@@ -523,14 +525,14 @@ class fmod:
                                             user=user,
                                             count=count,
                                             _max=_max)
-            data = discord.Embed()
-            data.add_field(name="Warning:",
+            data = discord.Embed(title=server.name, color=0xfd9e11)
+            data.add_field(name="Warning",
                            value=msg)
             data.add_field(name="Reason:",
                                value=reason,
                                inline=False)
             data.add_field(name="​​Additional Actions:", value="*In addition to this you have been muted for {} as a result of your actions.*".format(mutetime), inline=False)
-            data.set_footer(text=server.name)
+            data.set_footer(text=credits, icon_url=creditIcon)
             if p:
                 #if dm is on
                 await self.bot.send_message(user, embed=data)
@@ -580,13 +582,13 @@ class fmod:
                                             user=user,
                                             count=count,
                                             _max=_max)
-            data = discord.Embed()
-            data.add_field(name="Warning:",
+            data = discord.Embed(title=server.name, color=0xfd9e11)
+            data.add_field(name="Warning",
                            value=msg)
             data.add_field(name="Reason:",
                                value=reason,
                                inline=False)
-            data.set_footer(text=server.name)
+            data.set_footer(text=credits, icon_url=creditIcon)
             if p:
                 #if dm is on
                 await self.bot.send_message(user, embed=data) 
@@ -630,13 +632,13 @@ class fmod:
                                             user=user,
                                             count=count,
                                             _max=_max)
-            data = discord.Embed()
-            data.add_field(name="Warning:",
+            data = discord.Embed(title=server.name, color=0xf01e1e)
+            data.add_field(name="Banned",
                            value=msg)
             data.add_field(name="Reason:",
                                value=reason,
                                inline=False)
-            data.set_footer(text=server.name)
+            data.set_footer(text=credits, icon_url=creditIcon)
             if p:
                 #if dm is on
                 await self.bot.send_message(user, embed=data)
@@ -925,7 +927,6 @@ class fmod:
         for mid in self.warningsload[server.id]:
             try:
                 for warning_key, data in self.warningsload[server.id][mid]["Warnings"].items():
-                    print (warning_key)
                     if warning_key == warnid:
                         await self.bot.say("Are you sure you want to delete warn number **{}**?\n\nType `yes` to continue.".format(warnid)) 
                         continuemsg = await self.bot.wait_for_message(channel=channel, author=ctx.message.author)
@@ -981,7 +982,6 @@ class fmod:
                             logchannel = self.settingsload[server.id]["Log Channel"]
                             logchannel = discord.utils.get(server.channels, name = logchannel)
                             messageid = data['Message ID']
-                            print(messageid)
                             try:
                                 embed2 = await self.bot.get_message(logchannel, messageid)
                             except discord.NotFound:
@@ -1185,13 +1185,18 @@ class fmod:
                         attachlist2 = ('\n'.join(attachlist))
                         embed = embed2.embeds[0]
                         title = embed['title']
-                        newembed = discord.Embed(title=title)
+
+                        user = discord.utils.get(server.members, id=data['User'])
+                        avatar = user.avatar_url if user.avatar else user.default_avatar_url
+
+                        newembed = discord.Embed(title=title, color=embed['color'])
+                        embed.set_thumbnail(url=avatar)
                         newembed.add_field(name = 'Case ID:', value = warnid, inline = False)
-                        newembed.add_field(name = 'Moderator:', value = getmname(data['Mod']), inline = False)
                         newembed.add_field(name = 'User:', value = getmname(data['User']), inline = False)
                         newembed.add_field(name = 'Reason:', value = data['Reason'], inline = False)
                         newembed.add_field(name = 'Warning Number:', value = data['Warning Number'], inline = False)
                         newembed.add_field(name = 'Attachments:', value = attachlist2, inline = False)
+                        newembed.set_footer(text=credits, icon_url=creditIcon)
                         await self.bot.edit_message(embed2, embed=newembed)
                         self.warningsload[server.id][mid]["Warnings"][warnid].update({"Attachments": attachlist})                   
                         dataIO.save_json(self.warnings, self.warningsload)
@@ -1247,10 +1252,11 @@ class fmod:
         logchannel = self.settingsload[server.id]['Log Channel']
         logchannel = discord.utils.get(server.channels, name = logchannel)
         attachlist2 = ('\n'.join(attachlist))
-        embed = discord.Embed(title = 'Report by {}'.format(ctx.message.author))
+        embed = discord.Embed(title = 'Report', color=0x0080ff)
         embed.add_field(name = 'User:', value = user, inline = False)
         embed.add_field(name = 'Reason:', value = reason.content, inline = False)
         embed.add_field(name = 'Attachments:', value = attachlist2, inline = False)
+        embed.set_footer(text=credits, icon_url=creditIcon)
         react = await self.bot.send_message(logchannel, embed = embed)
         await self.bot.add_reaction(react, "\U0001f44d")
         await self.bot.add_reaction(react, "\U0001f44e")
