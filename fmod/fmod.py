@@ -972,8 +972,9 @@ class fmod:
                                                                      poop_role)
                                         except discord.errors.Forbidden:
                                             await self.bot.say("No permission to add roles") 
-                            embed = discord.Embed(title='Warning Revoked by {}'.format(ctx.message.author), description = revokemessage)
+                            embed = discord.Embed(title='Warning Revoked by {}'.format(ctx.message.author), description = revokemessage, color="0x00ff40")
                             embed.add_field(name = 'Reason:', value = reason)
+                            embed.set_footer(text=credits, icon_url=creditIcon)
                             channel = await self.bot.start_private_message(user)
                             await self.bot.send_message(channel, embed=embed)
                             warnid = warning_key
@@ -986,7 +987,7 @@ class fmod:
                                 embed2 = await self.bot.get_message(logchannel, messageid)
                             except discord.NotFound:
                                 await self.bot.say("Log Message is not found. If you changed the log channel you will need to react to the message there")
-                            newembed = discord.Embed(title='Warning Revoked', description='The warning for **{}** has been revoked by **{}** for the reason **{}**.'.format(user, ctx.message.author, reason))
+                            newembed = discord.Embed(title='Warning Revoked', color="0x00ff40", description='The warning for **{}** has been revoked by **{}** for the reason **{}**.'.format(user, ctx.message.author, reason))
                             await self.bot.edit_message(embed2, embed=newembed)
                             await self.bot.clear_reactions(embed2)
                             return
@@ -1148,6 +1149,7 @@ class fmod:
                         logchannel = self.settingsload[server.id]["Log Channel"]
                         logchannel = discord.utils.get(server.channels, name = logchannel)
                         messageid = data['Message ID']
+                        await self.bot.say("Warning attachment manager sent through DM!")
                         try:
                             embed2 = await self.bot.get_message(logchannel, messageid)
                         except discord.NotFound:
@@ -1189,7 +1191,7 @@ class fmod:
                         avatar = user.avatar_url if user.avatar else user.default_avatar_url
 
                         newembed = discord.Embed(title=title, color=embed['color'])
-                        embed.set_thumbnail(url=avatar)
+                        newembed.set_thumbnail(url=avatar)
                         newembed.add_field(name = 'Case ID:', value = warnid, inline = False)
                         newembed.add_field(name = 'User:', value = getmname(data['User']), inline = False)
                         newembed.add_field(name = 'Reason:', value = data['Reason'], inline = False)
@@ -1203,8 +1205,7 @@ class fmod:
                     # else:
             except:
                 continue
-        await self.bot.say("This warning was not found. Please make sure you typed it correctly!")
-                
+          
     @commands.command(no_pm=True, pass_context=True)
     async def report(self, ctx, user: discord.Member):
         """Reports a user to the staff"""
