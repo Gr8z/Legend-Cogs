@@ -994,8 +994,7 @@ class fmod:
             except:
                 continue
         await self.bot.say("This warning was not found. Please make sure you typed it correctly!")
-      
-                    
+                     
     @commands.command(no_pm=True, pass_context=True)
     @checks.admin()
     async def delwarn(self, ctx, id, *, reason):
@@ -1202,9 +1201,9 @@ class fmod:
                         dataIO.save_json(self.warnings, self.warningsload)
                         return
                     # else:
-                await self.bot.say("This warning was not found. Please make sure you typed it correctly!")
             except:
                 continue
+        await self.bot.say("This warning was not found. Please make sure you typed it correctly!")
                 
     @commands.command(no_pm=True, pass_context=True)
     async def report(self, ctx, user: discord.Member):
