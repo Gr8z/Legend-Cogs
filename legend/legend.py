@@ -117,6 +117,27 @@ Visit our website to see live clan statistics:
 https://legendclans.com
 """
 
+guest_rules = """Welcome to the **Legend Family** Discord server. As a guest, you agree to follow the following rules:
+
+• Respect others' opinions. If you disagree, please do so in a constructive manner. 
+• This is an English only server, please use any other languages in a private message.
+• Do not spam, and avoid ever using @clanname without permission from clan managers or deputies.
+• No advertisement of any kind, e.g. clans, websites, discord invites.
+• Use #bot-spam for bot features, e.g. !deck or !payday
+• Respect and do not subvert moderators and managers.
+• A good rule is to talk to people as if you were talking to them face to face.
+
+Failure to follow these rules will get you kicked from the server. Repeat offenders will be banned.
+
+You can chat with family members and guests in `#global-chat`. For games, you can check out `#heist` `#duels` and `#challenges`.
+
+If you would like to invite your friends to join this server, you may use this Discord invite: <http://discord.gg/T7XdjFS>
+
+Additional help and information: https://legendclans.com
+
+Thanks + enjoy!
+"""
+
 class legend:
 
     def __init__(self, bot):
@@ -1270,6 +1291,8 @@ class legend:
             raise
         except discord.HTTPException:
             raise
+
+        await self.bot.send_message(member,guest_rules)
         await self.bot.say("{} Role Added to {}".format(role.name, member.display_name))
 
     @commands.command(pass_context=True, no_pm=True)
