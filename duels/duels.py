@@ -263,6 +263,10 @@ class duels:
         duelBet = self.settings["DUELS"][duelID]["BET"]
         privateDuel = self.settings["DUELS"][duelID]["PRIVATE"]
 
+        if duelPlayers[0] == author.id:
+            await self.bot.say("Sorry, You cannot duel yourself.")
+            return
+
         if privateDuel is not None:
             if privateDuel is not author.id:
                 await self.bot.say("Cannot join the duel, it is set to private.")
@@ -274,10 +278,6 @@ class duels:
 
         if self.account_check(author.id) is False:
             await self.bot.say("You need to register before accepting a duel, type ``{}duel register``.".format(ctx.prefix))
-            return
-
-        if duelPlayers[0] == author.id:
-            await self.bot.say("Sorry, You cannot duel yourself.")
             return
 
         try:
