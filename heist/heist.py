@@ -564,7 +564,7 @@ class Heist:
         heist_channel = discord.utils.get(ctx.message.server.channels, name="heist")
 
         await self.bot.edit_role(server, heist_role, mentionable=True)
-        await self.bot.send_message(discord.Object(id='391382712499568641'), "**Daily Grand** {} is going to start in an hour.".format(heist_role.mention))
+        await self.bot.send_message(discord.Object(id='391382712499568641'), "**Weekly Grand** {} is going to start in an hour.".format(heist_role.mention))
         await self.bot.edit_role(server, heist_role, mentionable=False)
 
         self.pause = True
@@ -572,14 +572,14 @@ class Heist:
         await asyncio.sleep(3000)
 
         await self.bot.edit_role(server, heist_role, mentionable=True)
-        await self.bot.send_message(discord.Object(id='391382712499568641'), "**Daily Grand** {} is going to start in 10 minutes.".format(heist_role.mention))
+        await self.bot.send_message(discord.Object(id='391382712499568641'), "**Weekly Grand** {} is going to start in 10 minutes.".format(heist_role.mention))
         await self.bot.edit_role(server, heist_role, mentionable=False)
 
 
         await asyncio.sleep(540)
 
         await self.bot.edit_role(server, heist_role, mentionable=True)
-        await self.bot.send_message(discord.Object(id='391382712499568641'), "**Daily Grand** {} is going to start in 60 seconds. We have set the gather time to **10 minutes**, prepare and bring your friends to {}.".format(heist_role.mention, heist_channel.mention))
+        await self.bot.send_message(discord.Object(id='391382712499568641'), "**Weekly Grand** {} is going to start in 60 seconds. We have set the gather time to **10 minutes**, prepare and bring your friends to {}.".format(heist_role.mention, heist_channel.mention))
         await self.bot.edit_role(server, heist_role, mentionable=False)
 
         await asyncio.sleep(60)
@@ -593,7 +593,7 @@ class Heist:
 
         heist_role = discord.utils.get(server.roles, name="Heist")
         await self.bot.edit_role(server, heist_role, mentionable=True)
-        await self.bot.say("A Daily GRAND {5} is being planned.\nThe {4} "
+        await self.bot.say("A Weekly GRAND {5} is being planned.\nThe {4} "
                            "will begin in 10 minutes. Type ``{2}heist play`` to join the "
                            "{3}.\n"
                            "Type ``!togglerole heist`` to get notified on the next Grand Heist.".format(author.display_name, wait_time, ctx.prefix, t_crew, t_heist, heist_role.mention))
