@@ -86,7 +86,7 @@ class logging:
             return
 
         content = str(message.content) if len(message.content)>0 else ""
-        content += str(reaction.message.attachments[0]['url']) if len(reaction.message.attachments)>0 else ""
+        content += str(message.attachments[0]['url']) if len(message.attachments)>0 else ""
         self.db.addLog(message.server, message.id, self.OPERATION_MESSAGE, content, message.author, message.channel, message.timestamp)
 
     async def on_message_edit(self, before, after):
@@ -99,7 +99,7 @@ class logging:
 
         if before != after:
             content = str(after.content) if len(after.content)>0 else ""
-            content += str(reaction.message.attachments[0]['url']) if len(reaction.message.attachments)>0 else ""
+            content += str(after.message.attachments[0]['url']) if len(after.message.attachments)>0 else ""
             self.db.addLog(after.server, after.id, self.OPERATION_EDIT, content, after.author, after.channel, after.timestamp)
 
     async def on_reaction_add(self, reaction, user):
