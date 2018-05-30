@@ -42,8 +42,7 @@ class dbHandler:
 
       self.conn.commit()
       return True
-    else:
-      return False
+    return False
 
   def addLog(self, server_name, message_id, operation, message_content, author_name, channel_name, timestamp):
     c = self.conn.cursor()
