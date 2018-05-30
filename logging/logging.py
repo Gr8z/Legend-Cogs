@@ -69,28 +69,41 @@ class logging:
         self.OPERATION_EDIT = 'E'
 
     async def on_message(self, message):
-        if message.author != self.bot.user:
-            content = str(message.content) if len(message.content)>0 else ""
-            content += str(message.attachments) if len(message.attachments)>0 else ""
-            self.db.addLog(message.server, message.id, self.OPERATION_MESSAGE, content, message.author, message.channel, message.timestamp)
+
+      if message.author.bot:
+        return
+
+      content = str(message.content) if len(message.content)>0 else ""
+      content += str(message.attachments) if len(message.attachments)>0 else ""
+      self.db.addLog(message.server, message.id, self.OPERATION_MESSAGE, content, message.author, message.channel, message.timestamp)
 
     async def on_message_edit(self, before, after):
-        if before.author != self.bot.user and after.author != self.bot.user and not before == after:
-            content = str(after.content) if len(after.content)>0 else ""
-            content += str(after.attachments) if len(after.attachments)>0 else ""
-            self.db.addLog(after.server, after.id, self.OPERATION_EDIT, content, after.author, after.channel, after.timestamp)
+
+      if before.author.bot:
+        return
+
+      if before != after:
+          content = str(after.content) if len(after.content)>0 else ""
+          content += str(after.attachments) if len(after.attachments)>0 else ""
+          self.db.addLog(after.server, after.id, self.OPERATION_EDIT, content, after.author, after.channel, after.timestamp)
 
     async def on_reaction_add(self, reaction, user):
-        if user != self.bot.user:
-            content = str(reaction.message.content) if len(reaction.message.content)>0 else ""
-            content += str(reaction.message.attachments) if len(reaction.message.attachments)>0 else ""
-            self.db.addReaction(reaction.message.server, reaction.message.id, self.OPERATION_REACT_ADD, content, reaction.emoji, user, reaction.message.channel)
+
+      if user.author.bot:
+        return
+
+      content = str(reaction.message.content) if len(reaction.message.content)>0 else ""
+      content += str(reaction.message.attachments) if len(reaction.message.attachments)>0 else ""
+      self.db.addReaction(reaction.message.server, reaction.message.id, self.OPERATION_REACT_ADD, content, reaction.emoji, user, reaction.message.channel)
 
     async def on_reaction_remove(self, reaction, user):
-        if user != self.bot.user:
-            content = str(reaction.message.content) if len(reaction.message.content)>0 else ""
-            content += str(reaction.message.attachments) if len(reaction.message.attachments)>0 else ""
-            self.db.addReaction(reaction.message.server, reaction.message.id, self.OPERATION_REACT_DELETE, content, reaction.emoji, user, reaction.message.channel)
+
+      if user.author.bot:
+        return
+
+      content = str(reaction.message.content) if len(reaction.message.content)>0 else ""
+      content += str(reaction.message.attachments) if len(reaction.message.attachments)>0 else ""
+      self.db.addReaction(reaction.message.server, reaction.message.id, self.OPERATION_REACT_DELETE, content, reaction.emoji, user, reaction.message.channel)
 
 def check_folders():
     if not os.path.exists("data/sqlite"):
