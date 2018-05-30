@@ -9,41 +9,41 @@ import sqlite3
 class dbHandler:
 
     def __init__(self, dbPath):
-    self.dbPath = dbPath
-    self.DB_TABLE_LOG = 'log'
-    self.DB_LOG_SERVER_NAME = 'server_name'
-    self.DB_LOG_MESSAGE_ID = 'message_id'
-    self.DB_LOG_OPERATION = 'operation_type'
-    self.DB_LOG_MESSAGE_CONTENT = 'message_content'
-    self.DB_LOG_AUTHOR_NAME = 'author_name'
-    self.DB_LOG_CHANNEL_NAME = 'channel_name'
-    self.DB_LOG_TIMESTAMP = 'timestamp'
-    self.DB_TABLE_REACTION = 'reaction'
-    self.DB_REACTION_SERVER_NAME = 'server_name'
-    self.DB_REACTION_MESSAGE_ID = 'message_id'
-    self.DB_REACTION_OPERATION = 'operation_type'
-    self.DB_REACTION_MESSAGE = 'reaction_message'
-    self.DB_REACTION_EMOJI = 'reaction_emoji'
-    self.DB_REACTION_USER = 'reaction_user'
-    self.DB_REACTION_CHANNEL_NAME = 'channel_name'
-    self.dbOpen()
-    self.createTableIfNotExist()
+        self.dbPath = dbPath
+        self.DB_TABLE_LOG = 'log'
+        self.DB_LOG_SERVER_NAME = 'server_name'
+        self.DB_LOG_MESSAGE_ID = 'message_id'
+        self.DB_LOG_OPERATION = 'operation_type'
+        self.DB_LOG_MESSAGE_CONTENT = 'message_content'
+        self.DB_LOG_AUTHOR_NAME = 'author_name'
+        self.DB_LOG_CHANNEL_NAME = 'channel_name'
+        self.DB_LOG_TIMESTAMP = 'timestamp'
+        self.DB_TABLE_REACTION = 'reaction'
+        self.DB_REACTION_SERVER_NAME = 'server_name'
+        self.DB_REACTION_MESSAGE_ID = 'message_id'
+        self.DB_REACTION_OPERATION = 'operation_type'
+        self.DB_REACTION_MESSAGE = 'reaction_message'
+        self.DB_REACTION_EMOJI = 'reaction_emoji'
+        self.DB_REACTION_USER = 'reaction_user'
+        self.DB_REACTION_CHANNEL_NAME = 'channel_name'
+        self.dbOpen()
+        self.createTableIfNotExist()
 
     def dbOpen(self):
-    self.conn = sqlite3.connect(self.dbPath)
+        self.conn = sqlite3.connect(self.dbPath)
 
     def dbClose(self):
-    self.conn.close()
+        self.conn.close()
 
     def createTableIfNotExist(self):
-    if self.conn.cursor().execute("SELECT COUNT(*) FROM sqlite_master WHERE type = 'table'").fetchone()[0] == 0:
-        c = self.conn.cursor()
-        c.execute('CREATE table {0} ({1} TEXT, {2} TEXT, {3} TEXT, {4} TEXT, {5} TEXT, {6} TEXT, {7} TEXT)'.format(self.DB_TABLE_LOG, self.DB_LOG_SERVER_NAME, self.DB_LOG_CHANNEL_NAME, self.DB_LOG_MESSAGE_ID, self.DB_LOG_OPERATION, self.DB_LOG_MESSAGE_CONTENT, self.DB_LOG_AUTHOR_NAME, self.DB_LOG_TIMESTAMP))
-        c.execute('CREATE table {0} ({1} TEXT, {2} TEXT, {3} TEXT, {4} TEXT, {5} TEXT, {6} TEXT, {7} TEXT, {8} TEXT)'.format(self.DB_TABLE_REACTION, self.DB_REACTION_SERVER_NAME, self.DB_REACTION_CHANNEL_NAME, self.DB_REACTION_OPERATION, self.DB_REACTION_MESSAGE_ID, self.DB_REACTION_MESSAGE, self.DB_REACTION_EMOJI, self.DB_REACTION_USER, self.DB_REACTION_TIMESTAMP))
+        if self.conn.cursor().execute("SELECT COUNT(*) FROM sqlite_master WHERE type = 'table'").fetchone()[0] == 0:
+            c = self.conn.cursor()
+            c.execute('CREATE table {0} ({1} TEXT, {2} TEXT, {3} TEXT, {4} TEXT, {5} TEXT, {6} TEXT, {7} TEXT)'.format(self.DB_TABLE_LOG, self.DB_LOG_SERVER_NAME, self.DB_LOG_CHANNEL_NAME, self.DB_LOG_MESSAGE_ID, self.DB_LOG_OPERATION, self.DB_LOG_MESSAGE_CONTENT, self.DB_LOG_AUTHOR_NAME, self.DB_LOG_TIMESTAMP))
+            c.execute('CREATE table {0} ({1} TEXT, {2} TEXT, {3} TEXT, {4} TEXT, {5} TEXT, {6} TEXT, {7} TEXT, {8} TEXT)'.format(self.DB_TABLE_REACTION, self.DB_REACTION_SERVER_NAME, self.DB_REACTION_CHANNEL_NAME, self.DB_REACTION_OPERATION, self.DB_REACTION_MESSAGE_ID, self.DB_REACTION_MESSAGE, self.DB_REACTION_EMOJI, self.DB_REACTION_USER, self.DB_REACTION_TIMESTAMP))
 
-        self.conn.commit()
-        return True
-    return False
+            self.conn.commit()
+            return True
+        return False
 
     def addLog(self, server_name, message_id, operation, message_content, author_name, channel_name, timestamp):
         c = self.conn.cursor()
