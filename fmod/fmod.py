@@ -849,15 +849,17 @@ class fmod:
                         break
             except:
                 continue
-        if 'User Muted' in self.warningsload[sid][member.id]:
-            duration = self.warningsload[sid][member.id]['User Muted']['until'] - time.time()
-            if duration > 0:
-                rolename = self.settingsload[server.id]['Mute Role']
-                role = discord.utils.get(member.server.roles, name=rolename)
-                await self.bot.add_roles(member, role)
-  
-                if member.id not in self.handles[sid]:
-                    self.schedule_unpunish(duration, member, reason)
+                
+        if member.id in self.warningsload[sid]:
+            if 'User Muted' in self.warningsload[sid][member.id]:
+                duration = self.warningsload[sid][member.id]['User Muted']['until'] - time.time()
+                if duration > 0:
+                    rolename = self.settingsload[server.id]['Mute Role']
+                    role = discord.utils.get(member.server.roles, name=rolename)
+                    await self.bot.add_roles(member, role)
+      
+                    if member.id not in self.handles[sid]:
+                        self.schedule_unpunish(duration, member, reason)
 
     #other commands
     
