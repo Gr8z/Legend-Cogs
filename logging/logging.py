@@ -89,7 +89,7 @@ class logging:
 
     async def on_reaction_add(self, reaction, user):
 
-      if user.author.bot:
+      if user.bot:
         return
 
       content = str(reaction.message.content) if len(reaction.message.content)>0 else ""
@@ -98,7 +98,7 @@ class logging:
 
     async def on_reaction_remove(self, reaction, user):
 
-      if user.author.bot:
+      if user.bot:
         return
 
       content = str(reaction.message.content) if len(reaction.message.content)>0 else ""
