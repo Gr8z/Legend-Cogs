@@ -3,6 +3,7 @@ from discord.ext import commands
 from .utils.dataIO import dataIO, fileIO
 import os
 import asyncio
+from cogs.utils import checks
 
 import sqlite3
 
@@ -26,6 +27,7 @@ class dbHandler:
         self.DB_REACTION_EMOJI = 'reaction_emoji'
         self.DB_REACTION_USER = 'reaction_user'
         self.DB_REACTION_CHANNEL_NAME = 'channel_name'
+        self.DB_REACTION_TIMESTAMP = 'timestamp'
         self.dbOpen()
         self.createTableIfNotExist()
 
@@ -61,11 +63,12 @@ class dbHandler:
 
     def deleteOldLogReaction(self):
         c = self.conn.cursor()
-        # c.execute("DELETE FROM {0} WHERE ({1} <= datetime('now', '-1 month'))".format(self.DB_TABLE_LOG, self.DB_LOG_TIMESTAMP))
-        # c.execute("DELETE FROM {0} WHERE ({1} <= datetime('now', '-1 month'))".format(self.DB_TABLE_REACTION, self.DB_REACTION_TIMESTAMP))
+        c.execute("DELETE FROM {0} WHERE ({1} <= datetime('now', '-1 month'))".format(self.DB_TABLE_LOG, self.DB_LOG_TIMESTAMP))
+        c.execute("DELETE FROM {0} WHERE ({1} <= datetime('now', '-1 month'))".format(self.DB_TABLE_REACTION, self.DB_REACTION_TIMESTAMP))
 
-        c.execute("DELETE FROM {0} WHERE ({1} <= datetime('now', '-5 minutes'))".format(self.DB_TABLE_LOG, self.DB_LOG_TIMESTAMP))
-        c.execute("DELETE FROM {0} WHERE ({1} <= datetime('now', '-5 minutes'))".format(self.DB_TABLE_REACTION, self.DB_REACTION_TIMESTAMP))
+        # Test
+        #c.execute("DELETE FROM {0} WHERE ({1} <= datetime('now', '-5 minutes'))".format(self.DB_TABLE_LOG, self.DB_LOG_TIMESTAMP))
+        #c.execute("DELETE FROM {0} WHERE ({1} <= datetime('now', '-5 minutes'))".format(self.DB_TABLE_REACTION, self.DB_REACTION_TIMESTAMP))
         self.conn.commit()
         return True
 
@@ -99,7 +102,7 @@ class logging:
 
         if before != after:
             content = str(after.content) if len(after.content)>0 else ""
-            content += str(after.message.attachments[0]['url']) if len(after.message.attachments)>0 else ""
+            content += str(after.attachments[0]['url']) if len(after.attachments)>0 else ""
             self.db.addLog(after.server, after.id, self.OPERATION_EDIT, content, after.author, after.channel, after.timestamp)
 
     async def on_reaction_add(self, reaction, user):
@@ -109,7 +112,7 @@ class logging:
 
         content = str(reaction.message.content) if len(reaction.message.content)>0 else ""
         content += str(reaction.message.attachments[0]['url']) if len(reaction.message.attachments)>0 else ""
-        self.db.addReaction(reaction.message.server, reaction.message.id, self.OPERATION_REACT_ADD, content, reaction.emoji, user, reaction.message.channel)
+        self.db.addReaction(reaction.message.server, reaction.message.id, self.OPERATION_REACT_ADD, content, reaction.emoji, user, reaction.message.channel, reaction.message.timestamp)
 
     async def on_reaction_remove(self, reaction, user):
 
@@ -118,10 +121,13 @@ class logging:
 
         content = str(reaction.message.content) if len(reaction.message.content)>0 else ""
         content += str(reaction.message.attachments[0]['url']) if len(reaction.message.attachments)>0 else ""
-        self.db.addReaction(reaction.message.server, reaction.message.id, self.OPERATION_REACT_DELETE, content, reaction.emoji, user, reaction.message.channel)
+        self.db.addReaction(reaction.message.server, reaction.message.id, self.OPERATION_REACT_DELETE, content, reaction.emoji, user, reaction.message.channel, reaction.message.timestamp)
 
-    async def removeOldLogs(self):
+    @commands.command(no_pm=True, pass_context=True)
+    @checks.admin()
+    async def removelogs(self):
         self.db.deleteOldLogReaction()
+        await self.bot.say("Logs older than 30 days deleted.")
 
 def check_folders():
     if not os.path.exists("data/sqlite"):
