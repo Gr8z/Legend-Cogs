@@ -27,6 +27,7 @@ If you want to see this bot in action, join the LeGeND Family Discord at [discor
  * **warlog** - Clash Royale Clan War Logs using images.
  * **fmod** - Advanced Warning system by RSNFreud.
  * **stats** - Count Server Statistics on a Voice Channel.
+ * **logging** - log messages and reactions to a database.
 
 ## Installation
 

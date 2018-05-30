@@ -8,31 +8,26 @@ import sqlite3
 
 class dbHandler:
 
-  DB_TABLE_LOG = 'log'
-  DB_LOG_SERVER_NAME = 'server_name'
-  DB_LOG_MESSAGE_ID = 'message_id'
-  DB_LOG_OPERATION = 'operation_type'
-  DB_LOG_MESSAGE_CONTENT = 'message_content'
-  DB_LOG_AUTHOR_NAME = 'author_name'
-  DB_LOG_CHANNEL_NAME = 'channel_name'
-  DB_LOG_TIMESTAMP = 'timestamp'
-
-
-  DB_TABLE_REACTION = 'reaction'
-  DB_REACTION_SERVER_NAME = 'server_name'
-  DB_REACTION_MESSAGE_ID = 'message_id'
-  DB_REACTION_OPERATION = 'operation_type'
-  DB_REACTION_MESSAGE = 'reaction_message'
-  DB_REACTION_EMOJI = 'reaction_emoji'
-  DB_REACTION_USER = 'reaction_user'
-  DB_REACTION_CHANNEL_NAME = 'channel_name'
-
-  OPERATION_REACT_ADD = 'A'
-  OPERATION_REACT_DELETE = 'D'
-  OPERATION_MESSAGE = 'A'
-  OPERATION_EDIT = 'E'
-
-  DB_CHANNEL_NAME = 'channel_name'
+  def __init__(self, dbPath):
+    self.dbPath = dbPath
+    self.DB_TABLE_LOG = 'log'
+    self.DB_LOG_SERVER_NAME = 'server_name'
+    self.DB_LOG_MESSAGE_ID = 'message_id'
+    self.DB_LOG_OPERATION = 'operation_type'
+    self.DB_LOG_MESSAGE_CONTENT = 'message_content'
+    self.DB_LOG_AUTHOR_NAME = 'author_name'
+    self.DB_LOG_CHANNEL_NAME = 'channel_name'
+    self.DB_LOG_TIMESTAMP = 'timestamp'
+    self.DB_TABLE_REACTION = 'reaction'
+    self.DB_REACTION_SERVER_NAME = 'server_name'
+    self.DB_REACTION_MESSAGE_ID = 'message_id'
+    self.DB_REACTION_OPERATION = 'operation_type'
+    self.DB_REACTION_MESSAGE = 'reaction_message'
+    self.DB_REACTION_EMOJI = 'reaction_emoji'
+    self.DB_REACTION_USER = 'reaction_user'
+    self.DB_REACTION_CHANNEL_NAME = 'channel_name'
+    self.dbOpen()
+    self.createTableIfNotExist()
 
   def dbOpen(self):
     self.conn = sqlite3.connect(self.dbPath)
@@ -62,41 +57,40 @@ class dbHandler:
     self.conn.commit()
     return True
 
-  def __init__(self, dbPath):
-    self.dbPath = dbPath
-    self.dbOpen()
-    self.createTableIfNotExist()
-
 class logging:
     """Message Logging!"""
 
     def __init__(self, bot):
         self.bot = bot
         self.db = dbHandler("data/sqlite/MessageLog.sqlite3")
+        self.OPERATION_REACT_ADD = 'A'
+        self.OPERATION_REACT_DELETE = 'D'
+        self.OPERATION_MESSAGE = 'A'
+        self.OPERATION_EDIT = 'E'
 
-    async def on_message(message):
-        if message.author != bot.user:
+    async def on_message(self, message):
+        if message.author != self.bot.user:
             content = str(message.content) if len(message.content)>0 else ""
             content += str(message.attachments) if len(message.attachments)>0 else ""
-            self.db.addLog(message.server, message.id, db.OPERATION_MESSAGE, content, message.author, message.channel, message.timestamp)
+            self.db.addLog(message.server, message.id, self.OPERATION_MESSAGE, content, message.author, message.channel, message.timestamp)
 
-    async def on_message_edit(before, after):
-        if before.author != bot.user and after.author != bot.user and not before == after:
+    async def on_message_edit(self, before, after):
+        if before.author != self.bot.user and after.author != self.bot.user and not before == after:
             content = str(after.content) if len(after.content)>0 else ""
             content += str(after.attachments) if len(after.attachments)>0 else ""
-            self.db.addLog(after.server, after.id, db.OPERATION_EDIT, content, after.author, after.channel, after.timestamp)
+            self.db.addLog(after.server, after.id, self.OPERATION_EDIT, content, after.author, after.channel, after.timestamp)
 
-    async def on_reaction_add(reaction, user):
-        if user != bot.user:
+    async def on_reaction_add(self, reaction, user):
+        if user != self.bot.user:
             content = str(reaction.message.content) if len(reaction.message.content)>0 else ""
             content += str(reaction.message.attachments) if len(reaction.message.attachments)>0 else ""
-            self.db.addReaction(reaction.message.server, reaction.message.id, db.OPERATION_REACT_ADD, content, reaction.emoji, user, reaction.message.channel)
+            self.db.addReaction(reaction.message.server, reaction.message.id, self.OPERATION_REACT_ADD, content, reaction.emoji, user, reaction.message.channel)
 
-    async def on_reaction_remove(reaction, user):
-        if user != bot.user:
+    async def on_reaction_remove(self, reaction, user):
+        if user != self.bot.user:
             content = str(reaction.message.content) if len(reaction.message.content)>0 else ""
             content += str(reaction.message.attachments) if len(reaction.message.attachments)>0 else ""
-            self.db.addReaction(reaction.message.server, reaction.message.id, db.OPERATION_REACT_DELETE, content, reaction.emoji, user, reaction.message.channel)
+            self.db.addReaction(reaction.message.server, reaction.message.id, self.OPERATION_REACT_DELETE, content, reaction.emoji, user, reaction.message.channel)
 
 def check_folders():
     if not os.path.exists("data/sqlite"):
