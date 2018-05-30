@@ -1,6 +1,6 @@
 {
     "AUTHOR" : "YJ",
-    "INSTALL_MSG" : "Profanity Addon added, if there are any issues, please mention them on https://github.com/Gr8z/LeGeND-Bot",
+    "INSTALL_MSG" : "Message Logging added, if there are any issues, please mention them on https://github.com/Gr8z/LeGeND-Bot",
     "NAME" : "Log Messages",
     "SHORT" : "Log every react and messages by user",
     "DESCRIPTION" : "Bot store every new/editted message and emotes by user",

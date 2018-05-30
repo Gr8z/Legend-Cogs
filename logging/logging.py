@@ -43,5 +43,5 @@ def check_folders():
         os.makedirs("data/sqlite")
 
 def setup(bot):
-    check_files()
+    check_folders()
     bot.add_cog(logging(bot))
