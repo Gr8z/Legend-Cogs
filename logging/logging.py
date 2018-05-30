@@ -8,7 +8,7 @@ import sqlite3
 
 class dbHandler:
 
-  def __init__(self, dbPath):
+    def __init__(self, dbPath):
     self.dbPath = dbPath
     self.DB_TABLE_LOG = 'log'
     self.DB_LOG_SERVER_NAME = 'server_name'
@@ -29,33 +29,45 @@ class dbHandler:
     self.dbOpen()
     self.createTableIfNotExist()
 
-  def dbOpen(self):
+    def dbOpen(self):
     self.conn = sqlite3.connect(self.dbPath)
 
-  def dbClose(self):
+    def dbClose(self):
     self.conn.close()
 
-  def createTableIfNotExist(self):
+    def createTableIfNotExist(self):
     if self.conn.cursor().execute("SELECT COUNT(*) FROM sqlite_master WHERE type = 'table'").fetchone()[0] == 0:
-      c = self.conn.cursor()
-      c.execute('CREATE table {0} ({1} TEXT, {2} TEXT, {3} TEXT, {4} TEXT, {5} TEXT, {6} TEXT, {7} TEXT)'.format(self.DB_TABLE_LOG, self.DB_LOG_SERVER_NAME, self.DB_LOG_CHANNEL_NAME, self.DB_LOG_MESSAGE_ID, self.DB_LOG_OPERATION, self.DB_LOG_MESSAGE_CONTENT, self.DB_LOG_AUTHOR_NAME, self.DB_LOG_TIMESTAMP))
-      c.execute('CREATE table {0} ({1} TEXT, {2} TEXT, {3} TEXT, {4} TEXT, {5} TEXT, {6} TEXT, {7} TEXT)'.format(self.DB_TABLE_REACTION, self.DB_REACTION_SERVER_NAME, self.DB_REACTION_CHANNEL_NAME, self.DB_REACTION_OPERATION, self.DB_REACTION_MESSAGE_ID, self.DB_REACTION_MESSAGE, self.DB_REACTION_EMOJI, self.DB_REACTION_USER))
+        c = self.conn.cursor()
+        c.execute('CREATE table {0} ({1} TEXT, {2} TEXT, {3} TEXT, {4} TEXT, {5} TEXT, {6} TEXT, {7} TEXT)'.format(self.DB_TABLE_LOG, self.DB_LOG_SERVER_NAME, self.DB_LOG_CHANNEL_NAME, self.DB_LOG_MESSAGE_ID, self.DB_LOG_OPERATION, self.DB_LOG_MESSAGE_CONTENT, self.DB_LOG_AUTHOR_NAME, self.DB_LOG_TIMESTAMP))
+        c.execute('CREATE table {0} ({1} TEXT, {2} TEXT, {3} TEXT, {4} TEXT, {5} TEXT, {6} TEXT, {7} TEXT, {8} TEXT)'.format(self.DB_TABLE_REACTION, self.DB_REACTION_SERVER_NAME, self.DB_REACTION_CHANNEL_NAME, self.DB_REACTION_OPERATION, self.DB_REACTION_MESSAGE_ID, self.DB_REACTION_MESSAGE, self.DB_REACTION_EMOJI, self.DB_REACTION_USER, self.DB_REACTION_TIMESTAMP))
 
-      self.conn.commit()
-      return True
+        self.conn.commit()
+        return True
     return False
 
-  def addLog(self, server_name, message_id, operation, message_content, author_name, channel_name, timestamp):
-    c = self.conn.cursor()
-    c.execute("INSERT INTO {0} ({1}, {2}, {3}, {4}, {5}, {6}, {7}) VALUES (?, ?, ?, ?, ?, ?, ?)".format(self.DB_TABLE_LOG, self.DB_LOG_SERVER_NAME, self.DB_LOG_MESSAGE_ID, self.DB_LOG_OPERATION, self.DB_LOG_MESSAGE_CONTENT, self.DB_LOG_AUTHOR_NAME, self.DB_LOG_CHANNEL_NAME, self.DB_LOG_TIMESTAMP), (str(server_name), str(message_id), str(operation), str(message_content), str(author_name), str(channel_name), str(timestamp)))
-    self.conn.commit()
-    return True
+    def addLog(self, server_name, message_id, operation, message_content, author_name, channel_name, timestamp):
+        c = self.conn.cursor()
+        ts = str(timestamp)
+        c.execute("INSERT INTO {0} ({1}, {2}, {3}, {4}, {5}, {6}, {7}) VALUES (?, ?, ?, ?, ?, ?, ?)".format(self.DB_TABLE_LOG, self.DB_LOG_SERVER_NAME, self.DB_LOG_MESSAGE_ID, self.DB_LOG_OPERATION, self.DB_LOG_MESSAGE_CONTENT, self.DB_LOG_AUTHOR_NAME, self.DB_LOG_CHANNEL_NAME, self.DB_LOG_TIMESTAMP), (str(server_name), str(message_id), str(operation), str(message_content), str(author_name), str(channel_name), ts[:19]))
+        self.conn.commit()
+        return True
 
-  def addReaction(self, server_name, message_id, operation, reaction_message, emoji, user, channel_name):
-    c = self.conn.cursor()
-    c.execute("INSERT INTO {0} ({1}, {2}, {3}, {4}, {5}, {6}, {7}) VALUES (?, ?, ?, ?, ?, ?, ?)".format(self.DB_TABLE_REACTION, self.DB_REACTION_SERVER_NAME, self.DB_REACTION_MESSAGE_ID, self.DB_REACTION_OPERATION, self.DB_REACTION_MESSAGE, self.DB_REACTION_EMOJI, self.DB_REACTION_USER, self.DB_REACTION_CHANNEL_NAME), (str(server_name), str(message_id), str(operation), str(reaction_message), str(emoji), str(user), str(channel_name)))
-    self.conn.commit()
-    return True
+    def addReaction(self, server_name, message_id, operation, reaction_message, emoji, user, channel_name, timestamp):
+        c = self.conn.cursor()
+        ts = str(timestamp)
+        c.execute("INSERT INTO {0} ({1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}) VALUES (?, ?, ?, ?, ?, ?, ?, ?)".format(self.DB_TABLE_REACTION, self.DB_REACTION_SERVER_NAME, self.DB_REACTION_MESSAGE_ID, self.DB_REACTION_OPERATION, self.DB_REACTION_MESSAGE, self.DB_REACTION_EMOJI, self.DB_REACTION_USER, self.DB_REACTION_CHANNEL_NAME, self.DB_REACTION_TIMESTAMP), (str(server_name), str(message_id), str(operation), str(reaction_message), str(emoji), str(user), str(channel_name), ts[:19]))
+        self.conn.commit()
+        return True
+
+    def deleteOldLogReaction(self):
+        c = self.conn.cursor()
+        # c.execute("DELETE FROM {0} WHERE ({1} <= datetime('now', '-1 month'))".format(self.DB_TABLE_LOG, self.DB_LOG_TIMESTAMP))
+        # c.execute("DELETE FROM {0} WHERE ({1} <= datetime('now', '-1 month'))".format(self.DB_TABLE_REACTION, self.DB_REACTION_TIMESTAMP))
+
+        c.execute("DELETE FROM {0} WHERE ({1} <= datetime('now', '-5 minutes'))".format(self.DB_TABLE_LOG, self.DB_LOG_TIMESTAMP))
+        c.execute("DELETE FROM {0} WHERE ({1} <= datetime('now', '-5 minutes'))".format(self.DB_TABLE_REACTION, self.DB_REACTION_TIMESTAMP))
+        self.conn.commit()
+        return True
 
 class logging:
     """Message Logging!"""
@@ -70,40 +82,46 @@ class logging:
 
     async def on_message(self, message):
 
-      if message.author.bot:
-        return
+        if message.author.bot:
+            return
 
-      content = str(message.content) if len(message.content)>0 else ""
-      content += str(message.attachments) if len(message.attachments)>0 else ""
-      self.db.addLog(message.server, message.id, self.OPERATION_MESSAGE, content, message.author, message.channel, message.timestamp)
+        content = str(message.content) if len(message.content)>0 else ""
+        content += str(reaction.message.attachments[0]['url']) if len(reaction.message.attachments)>0 else ""
+        self.db.addLog(message.server, message.id, self.OPERATION_MESSAGE, content, message.author, message.channel, message.timestamp)
 
     async def on_message_edit(self, before, after):
 
-      if before.author.bot:
-        return
+        if before.author.bot:
+            return
 
-      if before != after:
-          content = str(after.content) if len(after.content)>0 else ""
-          content += str(after.attachments) if len(after.attachments)>0 else ""
-          self.db.addLog(after.server, after.id, self.OPERATION_EDIT, content, after.author, after.channel, after.timestamp)
+        if after.author.bot:
+            return
+
+        if before != after:
+            content = str(after.content) if len(after.content)>0 else ""
+            content += str(reaction.message.attachments[0]['url']) if len(reaction.message.attachments)>0 else ""
+            self.db.addLog(after.server, after.id, self.OPERATION_EDIT, content, after.author, after.channel, after.timestamp)
 
     async def on_reaction_add(self, reaction, user):
 
-      if user.bot:
-        return
+        if user.bot:
+            return
 
-      content = str(reaction.message.content) if len(reaction.message.content)>0 else ""
-      content += str(reaction.message.attachments) if len(reaction.message.attachments)>0 else ""
-      self.db.addReaction(reaction.message.server, reaction.message.id, self.OPERATION_REACT_ADD, content, reaction.emoji, user, reaction.message.channel)
+        content = str(reaction.message.content) if len(reaction.message.content)>0 else ""
+        content += str(reaction.message.attachments[0]['url']) if len(reaction.message.attachments)>0 else ""
+        self.db.addReaction(reaction.message.server, reaction.message.id, self.OPERATION_REACT_ADD, content, reaction.emoji, user, reaction.message.channel)
 
     async def on_reaction_remove(self, reaction, user):
 
-      if user.bot:
-        return
+        if user.bot:
+            return
 
-      content = str(reaction.message.content) if len(reaction.message.content)>0 else ""
-      content += str(reaction.message.attachments) if len(reaction.message.attachments)>0 else ""
-      self.db.addReaction(reaction.message.server, reaction.message.id, self.OPERATION_REACT_DELETE, content, reaction.emoji, user, reaction.message.channel)
+        content = str(reaction.message.content) if len(reaction.message.content)>0 else ""
+        content += str(reaction.message.attachments[0]['url']) if len(reaction.message.attachments)>0 else ""
+        self.db.addReaction(reaction.message.server, reaction.message.id, self.OPERATION_REACT_DELETE, content, reaction.emoji, user, reaction.message.channel)
+
+    async def removeOldLogs(self):
+        self.db.deleteOldLogReaction()
 
 def check_folders():
     if not os.path.exists("data/sqlite"):
