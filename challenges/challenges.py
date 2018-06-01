@@ -275,13 +275,15 @@ class challengeSession():
         if self is self.bot.get_cog("challenges"):
             return
 
-        if self.games < q_num:
-            await asyncio.sleep(3)
-            await random.choice(self.gameList)(server)
-        elif self.timeout > 5:
+        if self.timeout > 5:
+            await asyncio.sleep(5)
+            self.timeout = 0
             if self.scores:
                 await self.send_table()
             await self.bot.say("No one is playing, challenge ended. Type ``!togglerole challenges`` to get notified on the next challenge.")
+        elif self.games < q_num:
+            await asyncio.sleep(3)
+            await random.choice(self.gameList)(server)
         else:
             if self.scores:
                 await self.send_table()
