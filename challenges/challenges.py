@@ -199,6 +199,7 @@ class challengeSession():
     def __init__(self, bot):
         self.bot = bot
         self.games = 0
+        self.timeout = 0
         self.settings = dataIO.load_json(settings_path)
         self.emoji = dataIO.load_json("data/challenges/emoji.json")
         self.words = dataIO.load_json("data/challenges/words.json")
@@ -266,6 +267,7 @@ class challengeSession():
             await self.bot.say("You got it {} (please do ``!bank register``)".format(answer.author.mention))
 
         self.scores[answer.author] += 1
+        self.timeout = 0
 
     async def start_game(self, server):
         q_num = self.settings[server.id]["QUESTIONS"]
@@ -276,6 +278,10 @@ class challengeSession():
         if self.games < q_num:
             await asyncio.sleep(3)
             await random.choice(self.gameList)(server)
+        elif self.timeout > 5:
+            if self.scores:
+                await self.send_table()
+            await self.bot.say("No one is playing, challenge ended. Type ``!togglerole challenges`` to get notified on the next challenge.")
         else:
             if self.scores:
                 await self.send_table()
@@ -296,6 +302,7 @@ class challengeSession():
             react = await self.bot.wait_for_reaction(emoji=emoji['emoji'], timeout=15)
 
             if react is None:
+                self.timeout += 1
                 break
 
             if react.user != self.bot.user:
@@ -306,6 +313,7 @@ class challengeSession():
                     except:
                         await self.bot.say("You got it {} (please do ``!bank register``)".format(react.user.mention)) 
                     self.scores[react.user] += 1
+                    self.timeout = 0
                     break
 
         self.games += 1
@@ -340,6 +348,7 @@ class challengeSession():
 
             if answer is None:
                 await self.bot.say("Time's up, it was **{}**".format(word))
+                self.timeout += 1
                 break 
 
             if answer.author != self.bot.user:
@@ -383,6 +392,7 @@ class challengeSession():
 
             if guess is None:
                 await self.bot.say("Time's up, it was **{}**".format(current_line.answers[0]))
+                self.timeout += 1
                 break
 
             if guess.author != self.bot.user:
@@ -415,6 +425,7 @@ class challengeSession():
 
             if answer is None:
                 await self.bot.say("Time's up, the correct answer is **{}**".format(str(number)))
+                self.timeout += 1
                 break 
 
             if answer.author != self.bot.user:
@@ -444,6 +455,7 @@ class challengeSession():
 
             if (time.time() - start > 20):
                 await self.bot.say("Time's up, the correct answer is **{}**".format(str(number)))
+                self.timeout += 1
                 break 
             
             answer = await self.bot.wait_for_message(timeout=5)
@@ -487,6 +499,7 @@ class challengeSession():
 
             if (time.time() - start > timer+3):
                 await self.bot.say("Time's up, you missed it.")
+                self.timeout += 1
                 break 
             
             answer = await self.bot.wait_for_message(check=check, timeout=5)
