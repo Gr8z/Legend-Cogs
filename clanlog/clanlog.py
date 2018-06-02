@@ -82,6 +82,8 @@ class Clanlog:
                         embed_left = discord.Embed(title = title, url = "https://royaleapi.com/player/{}".format(member["tag"]), description=desc, color=0xff0000)
                         if old_clans[clankey]["tag"] == "9PJYVVL2" and server.id == "374596069989810176":
                             await self.bot.send_message(discord.Object(id='390506007287169024'),embed = embed_left) 
+                        if old_clans[clankey]["tag"] == "P9GG9QQY" and server.id == "374596069989810176":
+                            await self.bot.send_message(discord.Object(id='451581437359947786'),embed = embed_left) 
                         await self.bot.say(embed = embed_left)
           
             for clankey in self.clans.keys():
@@ -92,6 +94,8 @@ class Clanlog:
                         embed_join = discord.Embed(title = title, url = "https://royaleapi.com/player/{}".format(member["tag"]), description=desc, color=0x00ff40)
                         if old_clans[clankey]["tag"] == "9PJYVVL2" and server.id == "374596069989810176":
                             await self.bot.send_message(discord.Object(id='390506007287169024'),embed = embed_join)
+                        if old_clans[clankey]["tag"] == "P9GG9QQY" and server.id == "374596069989810176":
+                            await self.bot.send_message(discord.Object(id='451581437359947786'),embed = embed_join)
                         await self.bot.say(embed = embed_join)
                         
         except(requests.exceptions.Timeout, json.decoder.JSONDecodeError, KeyError):
