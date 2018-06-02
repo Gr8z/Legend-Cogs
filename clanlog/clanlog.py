@@ -83,7 +83,7 @@ class Clanlog:
                         if server.id == "374596069989810176":
                             for clan in self.clans:
                                 if clan["log_channel"] is not None:
-                                    if old_clans[clankey]["tag"] == clan["tag"]
+                                    if old_clans[clankey]["tag"] == clan["tag"]:
                                         await self.bot.send_message(discord.Object(id=clan["log_channel"]),embed = embed_left) 
                         await self.bot.say(embed = embed_left)
           
@@ -96,7 +96,7 @@ class Clanlog:
                         if server.id == "374596069989810176":
                             for clan in self.clans:
                                 if clan["log_channel"] is not None:
-                                    if old_clans[clankey]["tag"] == clan["tag"]
+                                    if old_clans[clankey]["tag"] == clan["tag"]:
                                         await self.bot.send_message(discord.Object(id=clan["log_channel"]), embed = embed_join) 
                         await self.bot.say(embed = embed_join)
                         
