@@ -206,7 +206,7 @@ class legend:
             await self.bot.send_cmd_help(ctx)
 
     @clans.command(pass_context=True, name="register")
-    @checks.mod_or_permissions(administrator=True)
+    @checks.admin_or_permissions(administrator=True)
     async def clans_register(self, ctx, clankey, ctag, role: discord.Role, nickname):
         """Register a clan for tracking"""
         toregister = {
@@ -228,7 +228,7 @@ class legend:
         await self.bot.say("Success")
         
     @clans.command(pass_context=True, name="delete")
-    @checks.mod_or_permissions(administrator=True)
+    @checks.admin_or_permissions(administrator=True)
     async def clans_delete(self, ctx, clankey):
         """Remove a clan from tracking"""
         clankey = clankey.lower()
@@ -239,7 +239,7 @@ class legend:
         await self.bot.say("Failed")
     
     @clans.command(pass_context=True, name="pb")
-    @checks.mod_or_permissions(administrator=True)
+    @checks.admin_or_permissions(administrator=True)
     async def clans_pb(self, ctx, clankey, pb: int):
         """Set a Personal Best requirement for a clan"""
         clankey = clankey.lower()
@@ -253,7 +253,7 @@ class legend:
         await self.bot.say("Success")
 
     @clans.command(pass_context=True, name="bonus")
-    @checks.mod_or_permissions(administrator=True)
+    @checks.admin_or_permissions(administrator=True)
     async def clans_bonus(self, ctx, clankey, *bonus):
         """Add bonus information to title of clan (i.e. Age: 21+)"""
         clankey = clankey.lower()
@@ -267,7 +267,7 @@ class legend:
         await self.bot.say("Success")
     
     @clans.command(pass_context=True, name="discord")
-    @checks.mod_or_permissions(administrator=True)
+    @checks.admin_or_permissions(administrator=True)
     async def clans_discord(self, ctx, clankey, discordinv):
         """Add discord invite link"""
         clankey = clankey.lower()
@@ -281,7 +281,7 @@ class legend:
         await self.bot.say("Success")        
 
     @clans.command(pass_context=True, name="log")
-    @checks.mod_or_permissions(administrator=True)
+    @checks.admin_or_permissions(administrator=True)
     async def clans_log(self, ctx, clankey, channel : discord.Channel):
         """Add discord invite link"""
         clankey = clankey.lower()
@@ -295,7 +295,7 @@ class legend:
         await self.bot.say("Success")    
 
     @clans.command(pass_context=True, name="private")
-    @checks.mod_or_permissions(administrator=True)
+    @checks.admin_or_permissions(administrator=True)
     async def clans_private(self, ctx, clankey):
         """Toggle Private approval of new recruits"""
         clankey = clankey.lower()
@@ -309,7 +309,7 @@ class legend:
         await self.bot.say("Private Approval now is set to " + str(self.c[clankey]['approval']))
         
     @clans.command(pass_context=True, name="family")
-    @checks.mod_or_permissions(administrator=True)
+    @checks.admin_or_permissions(administrator=True)
     async def clans_family(self, ctx, url, *FamilyName):
         """Add Clan Family name and link"""
         
