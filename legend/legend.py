@@ -278,6 +278,20 @@ class legend:
             return 
         
         self.save_data()
+        await self.bot.say("Success")        
+
+    @clans.command(pass_context=True, name="log")
+    @checks.mod_or_permissions(administrator=True)
+    async def clans_log(self, ctx, clankey, channel : discord.Channel):
+        """Add discord invite link"""
+        clankey = clankey.lower()
+        try:
+            self.c[clankey]['log_channel'] = channel.id
+        except KeyError:
+            await self.bot.say("Please use a valid clanname : "+",".join(key for key in self.c.keys()))
+            return 
+        
+        self.save_data()
         await self.bot.say("Success")    
 
     @clans.command(pass_context=True, name="private")
@@ -1511,6 +1525,8 @@ def check_clans():
             c[clankey]['warTrophies'] = 0 
         if 'approval' not in c[clankey]:
             c[clankey]['approval'] = False
+        if 'log_channel' not in c[clankey]:
+            c[clankey]['log_channel'] = None
     dataIO.save_json('cogs/clans.json', c)
 
 def check_auth():
