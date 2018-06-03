@@ -127,7 +127,7 @@ class logging:
     @checks.admin()
     async def removelogs(self):
         self.db.deleteOldLogReaction()
-        await self.bot.say("Logs older than 30 days deleted.")
+        print("Logs older than 30 days deleted.")
 
 def check_folders():
     if not os.path.exists("data/sqlite"):
