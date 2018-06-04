@@ -33,14 +33,15 @@ class warlog:
         self.clans = dataIO.load_json('cogs/clans.json')
 
     async def getLeague(self, trophies):
-        if trophies <= 400:
-            return "bronze"
-        if trophies <= 1200:
-            return "silver"
-        if trophies <= 2500:
-            return "gold"
-        if trophies <= 3000:
+        
+        if trophies >= 3000:
             return "legend"
+        elif trophies >= 1500:
+            return "gold"
+        elif trophies >= 600:
+            return "silver"
+        else:
+            return "bronze"
 
     async def findRank(self, lst, key, value):
         for i, dic in enumerate(lst):
