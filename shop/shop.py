@@ -142,7 +142,7 @@ class shop:
                                 epic = await self._is_epic(user)
                                 legendary = await self._is_legendary(user)
 
-                                perDonation = 15
+                                perDonation = 25
                                 BonusMult = 1
 
                                 if rare:
