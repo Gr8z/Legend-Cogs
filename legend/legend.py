@@ -436,7 +436,7 @@ class legend:
 
             desc = "{} {}      <:crtrophy:448609948008579073> {}+     <:wartrophy:448609141796241408> {}   <:openlink:448611387040595979> [Open](https://legendclans.com/clanInfo/{})".format(emoji, showMembers, str(clans[x]['requiredScore']), str(warTrophies), clans[x]['tag'])
 
-            if (member is None) or ((clans[x]['requiredScore'] <= trophies) and (maxtrophies > personalbest) and (trophies - clans[x]['requiredScore'] < 1500) and (clans[x]['type'] != 'closed')):
+            if (member is None) or ((clans[x]['requiredScore'] <= trophies) and (maxtrophies > personalbest) and (trophies - clans[x]['requiredScore'] < 1200) and (clans[x]['type'] != 'closed')):
                 foundClan = True
                 embed.add_field(name=title, value=desc, inline=False)
 
