@@ -113,7 +113,7 @@ class tournament:
 	# checks for a tourney every 5 minutes
 	async def checkTourney(self):
 		while self is self.bot.get_cog("tournament"):
-			data = await self.getTopTourney()
+			tourneydata = await self.getTopTourney()
 			if data is not None:
 				maxCapacity = tourneydata['maxCapacity']
 				cards = self.getCards(maxCapacity)
