@@ -355,9 +355,14 @@ class legend:
                 profiledata = requests.get('https://api.royaleapi.com/player/{}?exclude=games,currentDeck,cards,battles,achievements'.format(profiletag), headers=self.getAuth(), timeout=10).json()
                 trophies = profiledata['trophies']
                 maxtrophies = profiledata['stats']['maxTrophies']
+
+                if profiledata['clan'] is None:
+                    clanname = "*None*"
+                else: 
+                    clanname = profiledata['clan']['name']
+
                 ign = profiledata['name']
                 maxmembers = 50
-                await self.bot.say("Hello **{}**, these are all the clans you are allowed to join, based on your statistics. \nYour Trophies: {}/{}```WARNING: PLEASE DO NOT REQUEST TO JOIN ANY CLANS IF YOU HAVE NOT YET RECIEVED YOUR RECRUIT CODE!```".format(ign, str(trophies), str(maxtrophies)))
             except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
                 await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
                 return
@@ -440,6 +445,9 @@ class legend:
 
         embed.description = "Our Family is made up of " + str(self.numClans()) + " clans with a total of " + str(totalMembers) + " members. We have " + str((self.numClans()*50)-totalMembers) + " spots left and " + str(totalWaiting) + " members in waiting lists."
         await self.bot.say(embed=embed)
+
+        if member is not None:
+            await self.bot.say("```WARNING: PLEASE DO NOT REQUEST TO JOIN ANY CLANS IF YOU HAVE NOT YET RECIEVED YOUR RECRUIT CODE!```\nHello **{}**, above are all the clans you are allowed to join, based on your statistics. \n\n**Name:** {} (#{})\n**Trophies:** {}/{}\n**Clan:** {}".format(ign, ign, profiletag, str(trophies), str(maxtrophies), clanname))
 
     @commands.command(pass_context=True, no_pm=True)
     @commands.has_any_role(*BOTCOMMANDER_ROLES)
@@ -573,6 +581,12 @@ class legend:
                     "**IMPORTANT**: Once your clan leadership has accepted your request, let a staff member in discord know that you have been accepted. They will then unlock all the member channels for you."
                     )
                 await self.bot.say(member.mention + " has been approved for **" + clan_name + "**. Please check your DM for instructions on how to join.")
+
+                try:
+                    newname = ign + " (Approved)"
+                    await self.bot.change_nickname(member, newname)
+                except discord.HTTPException:
+                    await self.bot.say("I don’t have permission to change nick for this user.")
 
                 roleName = discord.utils.get(server.roles, name=clan_role)
                 await self.bot.send_message(discord.Object(id='375839851955748874'), roleName.mention + " \nName: " + ign + "\n" + "Recruit Code: ``" + recruitCode + "``")

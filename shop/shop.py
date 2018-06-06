@@ -299,7 +299,7 @@ class shop:
             return
 
         if self.bank_check(author, 75000):
-            await self.bot.say("please contact @GR8#7968 or rakerran#7837 to purchase it for you.")
+            await self.bot.say("please contact @GR8#7968 to purchase it for you.")
         else:
             await self.bot.say("You do not have enough credits to buy this item.")
 
@@ -363,7 +363,7 @@ class shop:
                         newclanname = self.clans[savekey]['nickname']
                         newname = "{} {} | {}".format(ign, emoji, newclanname)
                     else:
-                        newname = "{} {}".format(ign, emoji)
+                        newname = "{} | Guest {}".format(ign, emoji)
                     await self.bot.change_nickname(author, newname)
                 except discord.HTTPException:
                     await self.bot.say("I don’t have permission to change nick for this user.")
@@ -387,7 +387,7 @@ class shop:
             return
 
         if self.bank_check(author, 90000):
-            await self.bot.say("please contact @GR8#7968 or rakerran#7837 to purchase it for you.")
+            await self.bot.say("please contact @GR8#7968 to purchase it for you.")
         else:
             await self.bot.say("You do not have enough credits to buy this item.")
 

@@ -275,7 +275,7 @@ class challengeSession():
         if self is self.bot.get_cog("challenges"):
             return
 
-        if self.timeout > 5:
+        if self.timeout > 10:
             await asyncio.sleep(5)
             self.timeout = 0
             if self.scores:
