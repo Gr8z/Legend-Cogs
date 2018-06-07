@@ -300,6 +300,7 @@ class legend:
             self.save_data()
 
             await self.bot.send_message(channel, "I will now send log messages to {0.mention}".format(channel))
+            await self.bot.say("Clash log channel for {} is now set to {}".format(clankey, channel))
 
         except KeyError:
             await self.bot.say("Please use a valid clanname : "+",".join(key for key in self.c.keys()))
@@ -603,12 +604,12 @@ class legend:
                     await self.bot.say("I don’t have permission to change nick for this user.")
 
                 roleName = discord.utils.get(server.roles, name=clan_role)
-                #await self.bot.send_message(discord.Object(id='375839851955748874'), roleName.mention + " \nName: " + ign + "\n" + "Recruit Code: ``" + recruitCode + "``")
 
                 embed = discord.Embed(color=0x0080ff)
-                embed.add_field(name="Name", value="{} - {}".format(ign, member.mention), inline=False)
-                embed.add_field(name="Recruit Code", value=recruitCode, inline=False)
-                embed.add_field(name="Clan", value=clan_name, inline=False)
+                embed.set_author(name="New Recruit", icon_url="https://i.imgur.com/dtSMITE.jpg")
+                embed.add_field(name="Name", value=ign, inline=True)
+                embed.add_field(name="Recruit Code", value=recruitCode, inline=True)
+                embed.add_field(name="Clan", value=clan_name, inline=True)
                 embed.set_footer(text=credits, icon_url=creditIcon)
 
                 await self.bot.send_message(discord.Object(id='375839851955748874'), content=roleName.mention, embed=embed)
