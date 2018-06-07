@@ -82,7 +82,12 @@ class Clanlog:
                         embed_left = discord.Embed(title = title, url = "https://royaleapi.com/player/{}".format(member["tag"]), description=desc, color=0xff0000)
                         if server.id == "374596069989810176":
                             if self.clans[clankey]["log_channel"] is not None:
-                                await self.bot.send_message(discord.Object(id=self.clans[clankey]["log_channel"]),embed = embed_left) 
+                                try:
+                                    await self.bot.send_message(discord.Object(id=self.clans[clankey]["log_channel"]),embed = embed_left)
+                                except discord.errors.NotFound:
+                                    await self.bot.say("<#{}> NOT FOUND".format(self.clans[clankey]["log_channel"]))
+                                except discord.errors.Forbidden:
+                                    await self.bot.say("No Permission to send messages in <#{}>".format(self.clans[clankey]["log_channel"]))
                         await self.bot.say(embed = embed_left)
           
             for clankey in self.clans.keys():
@@ -93,7 +98,12 @@ class Clanlog:
                         embed_join = discord.Embed(title = title, url = "https://royaleapi.com/player/{}".format(member["tag"]), description=desc, color=0x00ff40)
                         if server.id == "374596069989810176":
                             if self.clans[clankey]["log_channel"] is not None:
-                                await self.bot.send_message(discord.Object(id=self.clans[clankey]["log_channel"]),embed = embed_join) 
+                                try:
+                                    await self.bot.send_message(discord.Object(id=self.clans[clankey]["log_channel"]),embed = embed_join)
+                                except discord.errors.NotFound:
+                                    await self.bot.say("<#{}> NOT FOUND".format(self.clans[clankey]["log_channel"]))
+                                except discord.errors.Forbidden:
+                                    await self.bot.say("No Permission to send messages in <#{}>".format(self.clans[clankey]["log_channel"]))
                         await self.bot.say(embed = embed_join)
                         
         except(requests.exceptions.Timeout, json.decoder.JSONDecodeError, KeyError):

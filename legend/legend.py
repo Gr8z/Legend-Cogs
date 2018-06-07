@@ -285,14 +285,28 @@ class legend:
     async def clans_log(self, ctx, clankey, channel : discord.Channel):
         """Add discord invite link"""
         clankey = clankey.lower()
+
         try:
+            server = ctx.message.server
+
+            if not server.get_member(self.bot.user.id).permissions_in(channel).send_messages:
+                await self.bot.say("I do not have permissions to send messages to {0.mention}".format(channel))
+                return
+
+            if channel is None:
+                await self.bot.say("I can't find the specified channel. It might have been deleted.")
+
             self.c[clankey]['log_channel'] = channel.id
+            self.save_data()
+
+            await self.bot.send_message(channel, "I will now send log messages to {0.mention}".format(channel))
+
         except KeyError:
             await self.bot.say("Please use a valid clanname : "+",".join(key for key in self.c.keys()))
             return 
+        except discord.errors.Forbidden:
+            await self.bot.say("No permission to send messages to that channel")
         
-        self.save_data()
-        await self.bot.say("Success")    
 
     @clans.command(pass_context=True, name="private")
     @checks.admin_or_permissions(administrator=True)
