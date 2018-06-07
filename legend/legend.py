@@ -612,7 +612,7 @@ class legend:
                 embed.set_footer(text=credits, icon_url=creditIcon)
 
                 await self.bot.send_message(discord.Object(id='375839851955748874'), content=roleName.mention, embed=embed)
-            except discord.Forbidden:
+            except discord.errors.Forbidden:
                 await self.bot.say("Approval failed, please fix your privacy settings, we are unable to send you Direct Messages.")
         else:
             await self.bot.say("Approval failed, You are already a part of a clan in the family.")
@@ -715,19 +715,23 @@ class legend:
 
             await self._remove_roles(member, ['Guest'])
 
-            if self.c[savekey]['discord'] is not None:
-                joinLink = "https://discord.gg/" + str(self.c[savekey]['discord'])
-                await self.bot.send_message(member, 
-                    "Hi There! Congratulations on getting accepted into our family. We have unlocked all the member channels for you in LeGeND Discord Server. Now you have to carefuly read this message and follow the steps mentioned below: \n\n"+
-                    "Please click on the link below to join your clan Discord server. \n\n"+
-                    clanname + ": " + joinLink + "\n\n" +
-                    "Please do not leave our main or clan servers while you are in the clan. Thank you."
-                    )
-            else:
-                await self.bot.send_message(member, 
-                    "Hi There! Congratulations on getting accepted into our family. We have unlocked all the member channels for you in LeGeND Discord Server. \n\n"+
-                    "Please do not leave our Discord server while you are in the clan. Thank you."
-                    )
+            try:
+                if self.c[savekey]['discord'] is not None:
+                    joinLink = "https://discord.gg/" + str(self.c[savekey]['discord'])
+                    await self.bot.send_message(member, 
+                        "Hi There! Congratulations on getting accepted into our family. We have unlocked all the member channels for you in LeGeND Discord Server. Now you have to carefuly read this message and follow the steps mentioned below: \n\n"+
+                        "Please click on the link below to join your clan Discord server. \n\n"+
+                        clanname + ": " + joinLink + "\n\n" +
+                        "Please do not leave our main or clan servers while you are in the clan. Thank you."
+                        )
+                else:
+                    
+                        await self.bot.send_message(member, 
+                            "Hi There! Congratulations on getting accepted into our family. We have unlocked all the member channels for you in LeGeND Discord Server. \n\n"+
+                            "Please do not leave our Discord server while you are in the clan. Thank you."
+                            )
+            except discord.errors.Forbidden:
+                    await self.bot.say("Membership failed, {} please fix your privacy settings, we are unable to send you Direct Messages.".format(member.mention))
 
             roleName = discord.utils.get(server.roles, name=role_names[0])
             await self.bot.send_message(discord.Object(id='375839851955748874'), '**' + ctx.message.author.display_name + '** recruited ' + '**' + ign + ' (#'+ profiletag + ')** to ' + roleName.mention)
