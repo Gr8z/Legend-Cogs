@@ -614,7 +614,7 @@ class legend:
 
                 await self.bot.send_message(discord.Object(id='375839851955748874'), content=roleName.mention, embed=embed)
             except discord.errors.Forbidden:
-                await self.bot.say("Approval failed, please fix your privacy settings, we are unable to send you Direct Messages.")
+                await self.bot.say("Approval failed, {} please fix your privacy settings, we are unable to send you Direct Messages.".format(member.mention))
         else:
             await self.bot.say("Approval failed, You are already a part of a clan in the family.")
 
