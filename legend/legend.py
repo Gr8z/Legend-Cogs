@@ -462,7 +462,7 @@ class legend:
         await self.bot.say(embed=embed)
 
         if member is not None:
-            await self.bot.say("```WARNING: PLEASE DO NOT REQUEST TO JOIN ANY CLANS IF YOU HAVE NOT YET RECIEVED YOUR RECRUIT CODE!```\nHello **{}**, above are all the clans you are allowed to join, based on your statistics. \n\n**Name:** {} (#{})\n**Trophies:** {}/{}\n**Clan:** {}".format(ign, ign, profiletag, str(trophies), str(maxtrophies), clanname))
+            await self.bot.say("Hello **{}**, above are all the clans you are allowed to join, based on your statistics. Which clan would you like to join? \n\n**Name:** {} (#{})\n**Trophies:** {}/{}\n**Clan:** {}\n```WARNING: PLEASE DO NOT REQUEST TO JOIN ANY CLANS IF YOU HAVE NOT YET RECIEVED YOUR RECRUIT CODE!```".format(ign, ign, profiletag, str(trophies), str(maxtrophies), clanname))
 
     @commands.command(pass_context=True, no_pm=True)
     @commands.has_any_role(*BOTCOMMANDER_ROLES)
