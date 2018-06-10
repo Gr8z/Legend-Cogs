@@ -177,14 +177,22 @@ class tournament:
 			await self.bot.say("Found nothing, please try again after a few minutes!")
 			return
 
+def check_files():
+	f = "cogs/auth.json"
+	if not fileIO(f, "check"):
+		print("enter your RoyaleAPI token in auth.json...")
+		fileIO(f, "save", {"token" : "enter your RoyaleAPI token here!"})
+
 def check_auth():
-    c = dataIO.load_json('cogs/auth.json')
-    if 'token' not in c:
-        c['token'] = ""
-    fileIO('cogs/auth.json', c)
+	c = dataIO.load_json('cogs/auth.json')
+	if 'token' not in c:
+		c['token'] = ""
+	dataIO.save_json('cogs/auth.json', c)
+
 
 def setup(bot):
 	n = tournament(bot)
+	check_files()
 	check_auth()
 	loop = asyncio.get_event_loop()
 	loop.create_task(n.checkTourney())
