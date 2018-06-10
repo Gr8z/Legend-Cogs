@@ -181,7 +181,7 @@ def check_auth():
     c = dataIO.load_json('cogs/auth.json')
     if 'token' not in c:
         c['token'] = ""
-    dataIO.save_json('cogs/auth.json', c)
+    fileIO('cogs/auth.json', c)
 
 def setup(bot):
 	n = tournament(bot)

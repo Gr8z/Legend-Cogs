@@ -1532,27 +1532,27 @@ def check_files():
     f = "cogs/tags.json"
     if not fileIO(f, "check"):
         print("Creating empty tags.json...")
-        dataIO.save_json(f, {})
+        fileIO(f, "save", {"0" : {"tag" : "DONOTREMOVE"}})
 
     f = "cogs/clans.json"
     if not fileIO(f, "check"):
         print("Creating empty clans.json...")
-        dataIO.save_json(f, {})
+        fileIO(f, "save", {})
 
     f = "cogs/auth.json"
     if not fileIO(f, "check"):
-        print("Creating empty auth.json...")
-        dataIO.save_json(f, {})
+        print("enter your RoyaleAPI token in auth.json...")
+        fileIO(f, "save", {"token" : "enter your RoyaleAPI token here!"})
         
     f = "data/legend/settings.json"
     if not fileIO(f, "check"):
         print("Creating empty settings.json...")
-        dataIO.save_json(f, {})        
+        fileIO(f, "save", {})      
 
     f = "data/seen/seen.json"
     if not fileIO(f, "check"):
         print("Creating empty seen.json...")
-        dataIO.save_json(f, {})
+        fileIO(f, "save", {})
         
 def check_clans():
     c = dataIO.load_json('cogs/clans.json')

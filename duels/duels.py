@@ -446,7 +446,7 @@ def check_files():
     f = settings_path
     if not fileIO(f, "check"):
         print("Creating duels settings.json...")
-        dataIO.save_json(f, {"CONFIG" : {}, "USERS" : {},"DUELS" : {}})
+        fileIO(f, {"CONFIG" : {}, "USERS" : {},"DUELS" : {}})
     f = "cogs/tags.json"
     if not fileIO(f, "check"):
         print("Creating empty tags.json...")
@@ -454,7 +454,7 @@ def check_files():
     f = "cogs/auth.json"
     if not fileIO(f, "check"):
         print("enter your RoyaleAPI token in auth.json...")
-        dataIO.save_json(f, "save", {"token" : "enter your RoyaleAPI token here!"})
+        fileIO(f, "save", {"token" : "enter your RoyaleAPI token here!"})
 
 def setup(bot):
     check_folders()

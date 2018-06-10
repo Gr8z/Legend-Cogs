@@ -94,7 +94,13 @@ class warlog:
 
         for clankey in self.clans.keys():
 
-            clandata = requests.get('https://api.royaleapi.com/clan/{}/warlog'.format(self.clans[clankey]['tag']), headers=self.getAuth(), timeout=10).json()
+            try:
+                clandata = requests.get('https://api.royaleapi.com/clan/{}/warlog'.format(self.clans[clankey]['tag']), headers=self.getAuth(), timeout=10).json()
+            except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
+                return
+            except requests.exceptions.RequestException as e:
+                print(e)
+                return
 
             standings = clandata[0]['standings']
             clanRank = await self.findRank(standings, "tag", self.clans[clankey]['tag'])
@@ -136,7 +142,7 @@ def check_files():
     f = "cogs/auth.json"
     if not fileIO(f, "check"):
         print("enter your RoyaleAPI token in auth.json...")
-        dataIO.save_json(f, "save", {"token" : "enter your RoyaleAPI token here!"})
+        fileIO(f, "save", {"token" : "enter your RoyaleAPI token here!"})
 
 def setup(bot):
     check_files()
