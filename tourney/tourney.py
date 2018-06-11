@@ -138,7 +138,6 @@ class tournament:
 				embed.set_footer(text=credits, icon_url=creditIcon)
 
 				await self.bot.send_message(discord.Object(id='374597050530136064'), embed=embed) # Family
-				await self.bot.send_message(discord.Object(id='363728974821457923'), embed=embed) # testing
 				await asyncio.sleep(900)
 			await asyncio.sleep(120)
 
