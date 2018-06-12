@@ -112,6 +112,14 @@ class tournament:
 
 	# checks for a tourney every 5 minutes
 	async def checkTourney(self):
+		server = [x.id for x in self.bot.servers if x.id == "374596069989810176"]
+		role_name = "Tournaments"
+                if role_name is not None:
+                    tour_role = discord.utils.get(server.roles, name=role_name)
+                    if tour_role is None:
+                        await self.bot.create_role(server, name=role_name)
+                        tour_role = discord.utils.get(server.roles, name=role_name)
+
 		while self is self.bot.get_cog("tournament"):
 			tourneydata = await self.getTopTourney()
 			if tourneydata is not None:
@@ -119,7 +127,7 @@ class tournament:
 				cards = self.getCards(maxCapacity)
 				coins = self.getCoins(maxCapacity)
 
-				embed=discord.Embed(title="Click this link to join the Tournament in Clash Royale!", url="https://legendclans.com/tournaments?id={}".format(tourneydata['tag']), color=0xFAA61A)
+				embed=discord.Embed(content="New {}. Type ``!r tournaments`` to turn on tournament notifications.".format(tour_role.mention), title="Click this link to join the Tournament in Clash Royale!", url="https://legendclans.com/tournaments?id={}".format(tourneydata['tag']), color=0xFAA61A)
 				embed.set_thumbnail(url='https://statsroyale.com/images/tournament.png')
 
 				embed.set_author(name=tourneydata['name']+" (#"+tourneydata['tag']+")")
@@ -137,7 +145,9 @@ class tournament:
 				embed.add_field(name="Top prize", value="<:tournamentcards:380832770454192140> " + str(cards) + "	 <:coin:380832316932489268> " +  str(coins), inline=True)
 				embed.set_footer(text=credits, icon_url=creditIcon)
 
+				await self.bot.edit_role(server, tour_role, mentionable=True)
 				await self.bot.send_message(discord.Object(id='374597050530136064'), embed=embed) # Family
+				await self.bot.edit_role(server, tour_role, mentionable=False)
 				await asyncio.sleep(900)
 			await asyncio.sleep(120)
 
