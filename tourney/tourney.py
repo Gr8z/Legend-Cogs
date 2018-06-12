@@ -114,11 +114,11 @@ class tournament:
 	async def checkTourney(self):
 		server = [x.id for x in self.bot.servers if x.id == "374596069989810176"]
 		role_name = "Tournaments"
-                if role_name is not None:
-                    tour_role = discord.utils.get(server.roles, name=role_name)
-                    if tour_role is None:
-                        await self.bot.create_role(server, name=role_name)
-                        tour_role = discord.utils.get(server.roles, name=role_name)
+				if role_name is not None:
+					tour_role = discord.utils.get(server.roles, name=role_name)
+					if tour_role is None:
+						await self.bot.create_role(server, name=role_name)
+						tour_role = discord.utils.get(server.roles, name=role_name)
 
 		while self is self.bot.get_cog("tournament"):
 			tourneydata = await self.getTopTourney()
