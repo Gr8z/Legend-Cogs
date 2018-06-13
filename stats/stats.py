@@ -5,7 +5,7 @@ from .utils.dataIO import dataIO, fileIO
 from __main__ import send_cmd_help
 import os
 import datetime
-import time
+from time import time as get_time
 import asyncio
 
 settings_path = "data/stats/settings.json"
@@ -17,6 +17,8 @@ class stats:
         self.bot = bot
         self.settings = dataIO.load_json(settings_path)
         self.member_log = dataIO.load_json('data/clanlog/member_log.json')
+        self.discord_log = dataIO.load_json('data/clanlog/discord_log.json')
+        self.last_count = 0
         self.cycle_task1 = bot.loop.create_task(self.updateUserCount())
         self.cycle_task2 = bot.loop.create_task(self.updateMiscCount())
 
@@ -81,13 +83,23 @@ class stats:
                 servers = [x for x in self.bot.servers if x.id in self.settings]
                 for server in servers:
                     channels = self.settings[server.id]['channels']
+                    userTotal = len(server.members)
 
                     self.member_log = dataIO.load_json('data/clanlog/member_log.json')
                     passed = (datetime.datetime.utcnow() - server.created_at).days
 
                     await self.bot.edit_channel(server.get_channel(channels['member_channel']),name="{} Members".format(str(self.member_log[max(self.member_log.keys())])))
                     await self.bot.edit_channel(server.get_channel(channels['guests_channel']),name="{} Guests".format(await self.getUserCount(server, "Guest")))
-                    await self.bot.edit_channel(server.get_channel(channels['user_channel']),name="{} Total Users".format(len(server.members)))
+
+
+                    if self.last_count != userTotal:
+                        current_time = get_time()   
+                        self.discord_log[str(current_time)] = userTotal
+                        self.last_count = userTotal
+                        dataIO.save_json('data/clanlog/discord_log.json', self.discord_log)
+
+                        await self.bot.edit_channel(server.get_channel(channels['user_channel']),name="{} Total Users".format(userTotal))
+
                     await self.bot.edit_channel(server.get_channel(channels['server_channel']),name="{} Days Old".format(str(passed)))
                     
                 await asyncio.sleep(600)  # task runs every 600 seconds
@@ -130,6 +142,11 @@ def check_files():
     f = "data/clanlog/member_log.json"
     if not fileIO(f, "check"):
         print("Creating empty member_log.json...")
+        dataIO.save_json(f, {"1524540132" : 0})
+
+    f = "data/clanlog/discord_log.json"
+    if not fileIO(f, "check"):
+        print("Creating empty discord_log.json...")
         dataIO.save_json(f, {"1524540132" : 0})
 
 def setup(bot):

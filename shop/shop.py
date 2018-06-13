@@ -254,7 +254,6 @@ class shop:
     @commands.group(pass_context=True)
     async def buy(self, ctx):
         """Buy different items from the legend shop"""
-        author = ctx.message.author
 
         await self.bot.type()
 

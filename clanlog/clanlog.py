@@ -14,6 +14,7 @@ plt.switch_backend('agg')
 from datetime import datetime as dt
 import operator
 import numpy as np
+from __main__ import send_cmd_help
 
 class Clanlog:
     """Clan Log cog for LeGeND family"""
@@ -23,6 +24,7 @@ class Clanlog:
         self.auth = dataIO.load_json('cogs/auth.json')
         self.clans = dataIO.load_json('cogs/clans.json')
         self.member_log = dataIO.load_json('data/clanlog/member_log.json')
+        self.discord_log = dataIO.load_json('data/clanlog/discord_log.json')
         self.last_count = 0
         
     def getAuth(self):
@@ -39,6 +41,9 @@ class Clanlog:
     
     def update_member_log(self):
         self.member_log = dataIO.load_json('data/clanlog/member_log.json')
+    
+    def update_discord_log(self):
+        self.discord_log = dataIO.load_json('data/clanlog/discord_log.json')
    
     @checks.is_owner()
     @commands.command(pass_context=True, no_pm=True)
@@ -129,9 +134,15 @@ class Clanlog:
         except(requests.exceptions.Timeout, json.decoder.JSONDecodeError, KeyError):
             await self.bot.say("Cannot reach Clash Royale servers. Try again later!")
 
-    @commands.command(pass_context=True, no_pm=True)
+    @commands.group(pass_context=True, no_pm=True)
     async def history(self, ctx):
         """Graph with member count history"""
+        if ctx.invoked_subcommand is None:
+            await send_cmd_help(ctx)
+
+    @commands.command(pass_context=True, no_pm=True)
+    async def clash(self, ctx):
+        """Graph with clash member count history"""
         try:
             channel = ctx.message.channel
             await self.bot.send_typing(channel)
@@ -157,7 +168,48 @@ class Clanlog:
             ax.xaxis.set_major_formatter(date_formatter)
             ax.xaxis.set_major_locator(ticker.MultipleLocator(tick_spacing))
 
-            plt.title("MEMBER COUNT HISTORY OF LEGEND FAMILY", color = "orange", weight = "bold", size = 19)
+            plt.title("CR MEMBER HISTORY OF LEGEND FAMILY", color = "orange", weight = "bold", size = 19)
+            plt.xlabel("DATE", color = "gray")
+            plt.ylabel("MEMBERS", color = "gray")
+
+            # Sets the tick labels diagonal so they fit easier.
+            fig.autofmt_xdate()
+            
+            plt.savefig("data/clanlog/history.png")
+            await self.bot.send_file(channel, "data/clanlog/history.png", filename=None)
+
+        except (IndexError):
+            await self.bot.say("Clanlog command needs to collect more data!")
+
+    @commands.command(pass_context=True, no_pm=True)
+    async def discord(self, ctx):
+        """Graph with clash member count history"""
+        try:
+            channel = ctx.message.channel
+            await self.bot.send_typing(channel)
+            self.update_discord_log()
+            
+            secs, vals = zip(*sorted(self.discord_log.items()))
+
+            # Convert to the correct format for matplotlib.
+            # mdate.epoch2num converts epoch timestamps to the right format for matplotlib
+            secs = mdate.epoch2num(np.array(secs, dtype=float))
+ 
+            fig, ax = plt.subplots(figsize=(10, 6))
+
+            # Plot the date using plot_date rather than plot
+            ax.plot_date(secs, vals, linestyle='solid', marker='None')
+
+            # Choose your xtick format string
+            date_fmt = '%a, %b %d %Y'
+            tick_spacing = 3
+
+            # Use a DateFormatter to set the data to the correct format.
+            date_formatter = mdate.DateFormatter(date_fmt)
+            ax.xaxis.set_major_formatter(date_formatter)
+            ax.xaxis.set_major_locator(ticker.MultipleLocator(tick_spacing))
+
+            plt.title("DISCORD USER HISTORY OF LEGEND FAMILY", color = "blue", weight = "bold", size = 19)
             plt.xlabel("DATE", color = "gray")
             plt.ylabel("MEMBERS", color = "gray")
 
