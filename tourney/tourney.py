@@ -112,7 +112,7 @@ class tournament:
 
 	# checks for a tourney every 5 minutes
 	async def checkTourney(self):
-		server = [x.id for x in self.bot.servers if x.id == "374596069989810176"][0]
+		server = [x for x in self.bot.servers if x.id == "374596069989810176"][0]
 		role_name = "Tournaments"
 		if role_name is not None:
 			tour_role = discord.utils.get(server.roles, name=role_name)
