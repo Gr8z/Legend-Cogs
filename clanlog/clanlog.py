@@ -140,7 +140,7 @@ class Clanlog:
         if ctx.invoked_subcommand is None:
             await send_cmd_help(ctx)
 
-    @commands.command(pass_context=True, no_pm=True)
+    @history.command(pass_context=True, no_pm=True)
     async def clash(self, ctx):
         """Graph with clash member count history"""
         try:
@@ -181,7 +181,7 @@ class Clanlog:
         except (IndexError):
             await self.bot.say("Clanlog command needs to collect more data!")
 
-    @commands.command(pass_context=True, no_pm=True)
+    @history.command(pass_context=True, no_pm=True)
     async def discord(self, ctx):
         """Graph with clash member count history"""
         try:
