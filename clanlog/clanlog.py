@@ -209,7 +209,7 @@ class Clanlog:
             ax.xaxis.set_major_formatter(date_formatter)
             ax.xaxis.set_major_locator(ticker.MultipleLocator(tick_spacing))
 
-            plt.title("DISCORD USER HISTORY OF LEGEND FAMILY", color = "blue", weight = "bold", size = 19)
+            plt.title("DISCORD USER HISTORY OF LEGEND FAMILY", color = "#7289DA", weight = "bold", size = 19)
             plt.xlabel("DATE", color = "gray")
             plt.ylabel("MEMBERS", color = "gray")
 
