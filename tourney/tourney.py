@@ -146,7 +146,7 @@ class tournament:
 				embed.set_footer(text=credits, icon_url=creditIcon)
 
 				await self.bot.edit_role(server, tour_role, mentionable=True)
-				await self.bot.send_message(discord.Object(id='374597050530136064'), content="New {}. Type ``!r tournaments`` to turn on tournament notifications.".format(tour_role.mention),  embed=embed) # Family
+				await self.bot.send_message(discord.Object(id='374597050530136064'), content="{}. Type ``!r tournaments`` to turn on tournament notifications.".format(tour_role.mention),  embed=embed) # Family
 				await self.bot.edit_role(server, tour_role, mentionable=False)
 				await asyncio.sleep(900)
 			await asyncio.sleep(120)
