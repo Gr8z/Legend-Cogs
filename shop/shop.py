@@ -500,5 +500,22 @@ class shop:
         else:
             await self.bot.say("You do not have enough credits to buy Nitro.")
 
+def check_files():
+    f = "cogs/tags.json"
+    if not fileIO(f, "check"):
+        print("Creating empty tags.json...")
+        fileIO(f, "save", {"0" : {"tag" : "DONOTREMOVE"}})
+
+    f = "cogs/clans.json"
+    if not fileIO(f, "check"):
+        print("Creating empty clans.json...")
+        fileIO(f, "save", {})
+
+    f = "cogs/auth.json"
+    if not fileIO(f, "check"):
+        print("enter your RoyaleAPI token in auth.json...")
+        fileIO(f, "save", {"token" : "enter your RoyaleAPI token here!"})
+
 def setup(bot):
+    check_files()
     bot.add_cog(shop(bot))
