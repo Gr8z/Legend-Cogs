@@ -499,6 +499,73 @@ class shop:
             await self.bot.say("please contact @GR8#7968 to purchase it for you.")
         else:
             await self.bot.say("You do not have enough credits to buy Nitro.")
+    
+    @buy.command(pass_context=True, name="9")
+    async def buy_9(self, ctx, emoji):
+
+        server = ctx.message.server
+        author = ctx.message.author
+        world_cup_flare = {'russia':'flag_rs','brazil':'flag_br','japan':'flag_jp','iran':'flag_ir','mexico':'flag_mx','belgium':'flag_be'
+                           ,'korea':'flag_kr','saudiarabia':'flag_sa','germany':'flag_de','england':'flag_gb','spain':'flag_es'
+                           ,'nigeria':'flag_ng','costarica':'flag_cr','poland':'flag_pl','egypt':'flag_eg','iceland':'flag_is'
+                           ,'serbia':'flag_si','portugal':'flag_pt','france':'flag_fr','uruguay':'flag_uy','argentina':'flag_ar'
+                           ,'panama':'flag_pa','colombia':'flag_co','senegal':'flag_sn','moroco':'flag_ma','tunisia':'flag_tn'
+                           ,'switzerland':'flag_ch','croatia':'flag_cr','sweden':'flag_se','denmark':'flag_dk','australia':'flag_au'
+                           ,'peru':'flag_pe'
+                          }
+        emoji = emoji.lower()
+        emoji = world_cup_flare[emoji]
+        emoji = ':'+emoji+':'
+                          
+        if self.bank_check(author, 80000):
+            try:
+                await self.updateClash()
+                await self.bot.type()
+                profiletag = self.tags[author.id]['tag']
+                profiledata = requests.get('https://api.royaleapi.com/player/{}?exclude=games,currentDeck,cards,battles,achievements'.format(profiletag), headers=self.getAuth(), timeout=10).json()
+                if profiledata['clan'] is None:
+                    clantag = ""
+                    clanname = ""
+                else: 
+                    clantag = profiledata['clan']['tag']
+                    clanname = profiledata['clan']['name']
+                ign = profiledata['name']
+            except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
+                await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
+                return
+            except requests.exceptions.RequestException as e:
+                await self.bot.say(e)
+                return
+            except:
+                await self.bot.say("You must assosiate a tag with this member first using ``!save #tag @member``")
+                return
+
+            membership = False
+            for clankey in self.clanArray():
+                if self.clans[clankey]['tag'] == clantag:
+                    membership = True
+                    savekey = clankey
+                    break
+
+            if ign is None:
+                await self.bot.say("Error, Cannot add emoji.")
+            else:
+                try:
+                    if membership:
+                        newclanname = self.clans[savekey]['nickname']
+                        newname = "{} {} | {}".format(ign, emoji, newclanname)
+                    else:
+                        newname = "{} | Guest {}".format(ign, emoji)
+                    await self.bot.change_nickname(author, newname)
+                except discord.HTTPException:
+                    await self.bot.say("I don’t have permission to change nick for this user.")
+                else:
+                    await self.bot.say("Nickname changed to ** {} **\n".format(newname))
+
+                    bank = self.bot.get_cog('Economy').bank
+                    bank.withdraw_credits(author, 80000)
+        else:
+            await self.bot.say("You do not have enough credits to buy this item.")
 
 def check_files():
     f = "cogs/tags.json"
