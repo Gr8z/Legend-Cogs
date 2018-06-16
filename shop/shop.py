@@ -506,11 +506,21 @@ class shop:
         server = ctx.message.server
         author = ctx.message.author
        
+        clist = ' ,'
+        country_list = {'russia','brazil','japan','iran','mexico','belgium','korea','saudiarabia','germany','england','spain','nigeria','costarica','poland','egypt','iceland','serbia',
+                'portugal','france','uruguay','argentina','panama','colombia','senegal','moroco','tunisia','switzerland','croatia','sweden','denmark','australia','peru'}
+        clist = clist.join(country_list)
+
         world_cup_flare = {'russia':🇷🇺,'brazil':🇧🇷,'japan':🇯🇵,'iran':🇮🇷,'mexico':🇲🇽,'belgium':🇧🇪,'korea':🇰🇷,'saudiarabia':🇸🇦
                            ,'germany':🇩🇪,'england':🇬🇧,'spain':🇪🇸,'nigeria':🇳🇬,'costarica':🇨🇷,'poland':🇵🇱,'egypt':🇪🇬,'iceland':🇮🇸
                            ,'serbia':🇷🇸,'portugal':🇵🇹,'france':🇫🇷,'uruguay':🇺🇾,'argentina':🇦🇷,'panama':🇵🇦,'colombia':🇨🇴,'senegal':🇸🇳
                            ,'morocco':🇲🇦,'tunisia':🇹🇳,'switzerland':🇨🇭,'croatia':🇭🇷,'sweden':🇸🇪,'denmark':🇩🇰,'australia':🇦🇺,'peru':🇵🇪
                           }
+        try:
+            result=world_cup_flare[emoji]
+        except KeyError:
+            await self.bot.say("{} is not a valid country name, select from the following options:{}".format(emoji,clist))
+            return
                           
         await self.updateClash()
         await self.bot.type()
