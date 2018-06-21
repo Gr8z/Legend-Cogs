@@ -505,7 +505,11 @@ class shop:
 
         server = ctx.message.server
         author = ctx.message.author
-       
+        legendServer = ["374596069989810176"]
+
+        if server.id not in legendServer:
+            await self.bot.say("This command can only be executed in the LeGeND Family Server")
+            return
         clist = ''
         world_cup_flare = {'russia':'🇷🇺','brazil':'🇧🇷','japan':'🇯🇵','iran':'🇮🇷','mexico':'🇲🇽','belgium':'🇧🇪','korea':'🇰🇷','saudi-arabia':'🇸🇦'
                            ,'germany':'🇩🇪','england':'🇬🇧','spain':'🇪🇸','nigeria':'🇳🇬','costa-rica':'🇨🇷','poland':'🇵🇱','egypt':'🇪🇬','iceland':'🇮🇸'
