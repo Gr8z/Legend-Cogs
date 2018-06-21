@@ -513,7 +513,7 @@ class shop:
                            ,'morocco':'🇲🇦','tunisia':'🇹🇳','switzerland':'🇨🇭','croatia':'🇭🇷','sweden':'🇸🇪','denmark':'🇩🇰','australia':'🇦🇺','peru':'🇵🇪'
                           }
         for key,value in world_cup_flare.items():
-            clist = clist + key.capitalize() +' '+ value + '\n'
+            clist = clist + value + ' ' + key.capitalize()+ '\n'
         try:
             result=world_cup_flare[emoji]
         except KeyError:
