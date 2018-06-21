@@ -511,10 +511,10 @@ class shop:
                 'portugal','france','uruguay','argentina','panama','colombia','senegal','moroco','tunisia','switzerland','croatia','sweden','denmark','australia','peru'}
         clist = clist.join(country_list)
 
-        world_cup_flare = {'russia':🇷🇺,'brazil':🇧🇷,'japan':🇯🇵,'iran':🇮🇷,'mexico':🇲🇽,'belgium':🇧🇪,'korea':🇰🇷,'saudiarabia':🇸🇦
-                           ,'germany':🇩🇪,'england':🇬🇧,'spain':🇪🇸,'nigeria':🇳🇬,'costarica':🇨🇷,'poland':🇵🇱,'egypt':🇪🇬,'iceland':🇮🇸
-                           ,'serbia':🇷🇸,'portugal':🇵🇹,'france':🇫🇷,'uruguay':🇺🇾,'argentina':🇦🇷,'panama':🇵🇦,'colombia':🇨🇴,'senegal':🇸🇳
-                           ,'morocco':🇲🇦,'tunisia':🇹🇳,'switzerland':🇨🇭,'croatia':🇭🇷,'sweden':🇸🇪,'denmark':🇩🇰,'australia':🇦🇺,'peru':🇵🇪
+        world_cup_flare = {'russia':'🇷🇺','brazil':'🇧🇷','japan':'🇯🇵','iran':'🇮🇷','mexico':'🇲🇽','belgium':'🇧🇪','korea':'🇰🇷','saudiarabia':'🇸🇦'
+                           ,'germany':'🇩🇪','england':'🇬🇧','spain':'🇪🇸','nigeria':'🇳🇬','costarica':'🇨🇷','poland':'🇵🇱','egypt':'🇪🇬','iceland':'🇮🇸'
+                           ,'serbia':'🇷🇸','portugal':'🇵🇹','france':'🇫🇷','uruguay':'🇺🇾','argentina':'🇦🇷','panama':'🇵🇦','colombia':'🇨🇴','senegal':'🇸🇳'
+                           ,'morocco':'🇲🇦','tunisia':'🇹🇳','switzerland':'🇨🇭','croatia':'🇭🇷','sweden':'🇸🇪','denmark':'🇩🇰','australia':'🇦🇺','peru':'🇵🇪'
                           }
         try:
             result=world_cup_flare[emoji]
