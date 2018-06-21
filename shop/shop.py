@@ -554,7 +554,7 @@ class shop:
                 await self.bot.say("I don’t have permission to change nick for this user.")
             else:
                 await self.bot.say("Nickname changed to ** {} **\n".format(newname))
-    @buy.command(pass_context=True, name="7")
+    @buy.command(pass_context=True, name="10")
     async def buy_10(self , ctx):
         """ Buy worldcup Role from the shop """
 
