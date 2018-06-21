@@ -517,7 +517,7 @@ class shop:
         try:
             result=world_cup_flare[emoji]
         except KeyError:
-            await self.bot.say("{} is not participating in FIFA World Cup 2018, select from the following options:\n {}".format(emoji,clist))
+            await self.bot.say("**{}** is not participating in FIFA World Cup 2018, select from the following options:\n{}".format(emoji,clist))
             return
                           
         await self.updateClash()
