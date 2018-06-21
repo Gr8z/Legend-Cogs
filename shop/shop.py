@@ -506,7 +506,7 @@ class shop:
         server = ctx.message.server
         author = ctx.message.author
        
-        clist = ' ,'
+        clist = '\t'
         country_list = {'russia','brazil','japan','iran','mexico','belgium','korea','saudiarabia','germany','england','spain','nigeria','costarica','poland','egypt','iceland','serbia',
                 'portugal','france','uruguay','argentina','panama','colombia','senegal','moroco','tunisia','switzerland','croatia','sweden','denmark','australia','peru'}
         clist = clist.join(country_list)
@@ -554,7 +554,15 @@ class shop:
                 await self.bot.say("I don’t have permission to change nick for this user.")
             else:
                 await self.bot.say("Nickname changed to ** {} **\n".format(newname))
+    @buy.command(pass_context=True, name="7")
+    async def buy_10(self , ctx):
+        """ Buy worldcup Role from the shop """
 
+        server = ctx.message.server
+        author = ctx.message.author
+        await self._add_roles(author,["worldcup"])
+        await self.bot.say("Congratulations, you are now have **worldcup** roles")
+                
 def check_files():
     f = "cogs/tags.json"
     if not fileIO(f, "check"):
