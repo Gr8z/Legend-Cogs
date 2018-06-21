@@ -506,7 +506,7 @@ class shop:
         server = ctx.message.server
         author = ctx.message.author
        
-        clist = ' '
+        clist = ''
         world_cup_flare = {'russia':'🇷🇺','brazil':'🇧🇷','japan':'🇯🇵','iran':'🇮🇷','mexico':'🇲🇽','belgium':'🇧🇪','korea':'🇰🇷','saudiarabia':'🇸🇦'
                            ,'germany':'🇩🇪','england':'🇬🇧','spain':'🇪🇸','nigeria':'🇳🇬','costarica':'🇨🇷','poland':'🇵🇱','egypt':'🇪🇬','iceland':'🇮🇸'
                            ,'serbia':'🇷🇸','portugal':'🇵🇹','france':'🇫🇷','uruguay':'🇺🇾','argentina':'🇦🇷','panama':'🇵🇦','colombia':'🇨🇴','senegal':'🇸🇳'
@@ -517,7 +517,7 @@ class shop:
         try:
             result=world_cup_flare[emoji]
         except KeyError:
-            await self.bot.say("**{}** is not participating in FIFA World Cup 2018, select from the following options:\n{}".format(emoji,clist))
+            await self.bot.say("**{}** is not participating in FIFA World Cup 2018, select from the following options:\n{}".format(emoji.upper(),clist))
             return
                           
         await self.updateClash()
