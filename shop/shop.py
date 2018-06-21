@@ -512,11 +512,12 @@ class shop:
                            ,'serbia':'🇷🇸','portugal':'🇵🇹','france':'🇫🇷','uruguay':'🇺🇾','argentina':'🇦🇷','panama':'🇵🇦','colombia':'🇨🇴','senegal':'🇸🇳'
                            ,'morocco':'🇲🇦','tunisia':'🇹🇳','switzerland':'🇨🇭','croatia':'🇭🇷','sweden':'🇸🇪','denmark':'🇩🇰','australia':'🇦🇺','peru':'🇵🇪'
                           }
-        clist = "\n ".join(key for key in world_cup_flare.keys())
+        for key,value in world_cup_flare.items():
+            clist = clist + key.capitalize() +' '+ value + '\n'
         try:
             result=world_cup_flare[emoji]
         except KeyError:
-            await self.bot.say("{} is not participating in FIFA World Cup 2018, select from the following options:\n {}".format(emoji,world_cup_flare))
+            await self.bot.say("{} is not participating in FIFA World Cup 2018, select from the following options:\n {}".format(emoji,clist))
             return
                           
         await self.updateClash()
