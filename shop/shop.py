@@ -501,23 +501,23 @@ class shop:
             await self.bot.say("You do not have enough credits to buy Nitro.")
     
     @buy.command(pass_context=True, name="9")
-    async def buy_9(self, ctx, emoji):
+    async def buy_9(self, ctx, country):
 
         server = ctx.message.server
         author = ctx.message.author
        
         clist = ''
-        world_cup_flare = {'russia':'🇷🇺','brazil':'🇧🇷','japan':'🇯🇵','iran':'🇮🇷','mexico':'🇲🇽','belgium':'🇧🇪','korea':'🇰🇷','saudiarabia':'🇸🇦'
-                           ,'germany':'🇩🇪','england':'🇬🇧','spain':'🇪🇸','nigeria':'🇳🇬','costarica':'🇨🇷','poland':'🇵🇱','egypt':'🇪🇬','iceland':'🇮🇸'
+        world_cup_flare = {'russia':'🇷🇺','brazil':'🇧🇷','japan':'🇯🇵','iran':'🇮🇷','mexico':'🇲🇽','belgium':'🇧🇪','korea':'🇰🇷','saudi-arabia':'🇸🇦'
+                           ,'germany':'🇩🇪','england':'🇬🇧','spain':'🇪🇸','nigeria':'🇳🇬','costa-rica':'🇨🇷','poland':'🇵🇱','egypt':'🇪🇬','iceland':'🇮🇸'
                            ,'serbia':'🇷🇸','portugal':'🇵🇹','france':'🇫🇷','uruguay':'🇺🇾','argentina':'🇦🇷','panama':'🇵🇦','colombia':'🇨🇴','senegal':'🇸🇳'
                            ,'morocco':'🇲🇦','tunisia':'🇹🇳','switzerland':'🇨🇭','croatia':'🇭🇷','sweden':'🇸🇪','denmark':'🇩🇰','australia':'🇦🇺','peru':'🇵🇪'
                           }
         for key,value in world_cup_flare.items():
             clist = clist + value + ' ' + key.capitalize()+ '\n'
         try:
-            result=world_cup_flare[emoji]
+            country=world_cup_flare[country]
         except KeyError:
-            await self.bot.say("**{}** is not participating in FIFA World Cup 2018, select from the following options:\n{}".format(emoji.upper(),clist))
+            await self.bot.say("**{}** is not participating in FIFA World Cup 2018, select from the following options:\n{}".format(country.upper(),clist))
             return
                           
         await self.updateClash()
@@ -544,9 +544,9 @@ class shop:
             try:
                 if membership:
                     newclanname = self.clans[savekey]['nickname']
-                    newname = "{} {} | {}".format(ign, result, newclanname)
+                    newname = "{} {} | {}".format(ign, country, newclanname)
                 else:
-                    newname = "{} {} | Guest ".format(ign, result)
+                    newname = "{} {} | Guest ".format(ign, country)
                 await self.bot.change_nickname(author, newname)
             except discord.HTTPException:
                 await self.bot.say("I don’t have permission to change nick for this user.")
