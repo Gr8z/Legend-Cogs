@@ -53,26 +53,26 @@ class tournament:
 
 		global lastTag
 		try:
-			openTourney = requests.get('https://api.royaleapi.com/tournaments/open', headers=self.getAuth(), timeout=10).json()
+			openTourney = requests.get('https://api.royaleapi.com/tournaments/joinable', headers=self.getAuth(), timeout=10).json()
 		except:
 			return None
 
 		for tourney in openTourney:
 
 			tag = tourney['tag']
-			joined = tourney['playerCount']
-			maxplayers = tourney['maxCapacity']
+			joined = tourney['currentPlayers']
+			maxplayers = tourney['maxPlayers']
 
 			if ((maxplayers > 50) and ((joined + 4) < maxplayers) and (tag != lastTag)):
 
 				try:
 					tourneyAPI = requests.get('https://api.royaleapi.com/tournaments/{}'.format(tag), headers=self.getAuth(), timeout=10).json()
-					joined = tourneyAPI['playerCount']
-					maxplayers = tourneyAPI['maxCapacity']
+					joined = tourneyAPI['currentPlayers']
+					maxplayers = tourneyAPI['maxPlayers']
 				except:
 					return None
 
-				if ((maxplayers > 50) and ((joined + 4) < maxplayers) and  (tourneyAPI['status'] != "ended") and (tourneyAPI['type'] != "passwordProtected")):
+				if ((maxplayers > 50) and ((joined + 4) < maxplayers) and  (tourneyAPI['status'] != "ended") and (tourneyAPI['open'])):
 					tourneyAPI['tag'] = tag
 					
 					return tourneyAPI
@@ -83,7 +83,7 @@ class tournament:
 	async def getRandomTourney(self):
 
 		try:
-			openTourney = requests.get('https://api.royaleapi.com/tournaments/open', headers=self.getAuth(), timeout=10).json()
+			openTourney = requests.get('https://api.royaleapi.com/tournaments/joinable', headers=self.getAuth(), timeout=10).json()
 		except:
 			return None
 
@@ -91,19 +91,19 @@ class tournament:
 		for tourney in openTourney:
 
 			tag = tourney['tag']
-			joined = tourney['playerCount']
-			maxplayers = tourney['maxCapacity']
+			joined = tourney['currentPlayers']
+			maxplayers = tourney['maxPlayers']
 
 			if ((joined + 1) < maxplayers):
 
 				try:
 					tourneyAPI = requests.get('https://api.royaleapi.com/tournaments/{}'.format(tag), headers=self.getAuth(), timeout=10).json()
-					joined = tourneyAPI['playerCount']
-					maxplayers = tourneyAPI['maxCapacity']
+					joined = tourneyAPI['currentPlayers']
+					maxplayers = tourneyAPI['maxPlayers']
 				except:
 					return None
 
-				if ((joined < maxplayers) and  (tourneyAPI['status'] != "ended") and (tourneyAPI['type'] != "passwordProtected")):
+				if ((joined < maxplayers) and  (tourneyAPI['status'] != "ended") and (tourneyAPI['open'])):
 					tourneyAPI['tag'] = tag
 					
 					return tourneyAPI
@@ -123,23 +123,23 @@ class tournament:
 		while self is self.bot.get_cog("tournament"):
 			tourneydata = await self.getTopTourney()
 			if tourneydata is not None:
-				maxCapacity = tourneydata['maxCapacity']
-				cards = self.getCards(maxCapacity)
-				coins = self.getCoins(maxCapacity)
+				maxPlayers = tourneydata['maxPlayers']
+				cards = self.getCards(maxPlayers)
+				coins = self.getCoins(maxPlayers)
 
 				embed=discord.Embed(title="Click this link to join the Tournament in Clash Royale!", url="https://legendclans.com/tournaments?id={}".format(tourneydata['tag']), color=0xFAA61A)
 				embed.set_thumbnail(url='https://statsroyale.com/images/tournament.png')
 
 				embed.set_author(name=tourneydata['name']+" (#"+tourneydata['tag']+")")
 
-				embed.add_field(name="Players", value=str(tourneydata['playerCount']) + "/" + str(maxCapacity), inline=True)
+				embed.add_field(name="Players", value=str(tourneydata['currentPlayers']) + "/" + str(maxPlayers), inline=True)
 				embed.add_field(name="Status", value=tourneydata['status'].title(), inline=True)
 
 				if tourneydata['status'] != "inProgress":
-					startTime = self.sec2tme((tourneydata['createTime'] + tourneydata['preparationDuration']) - int(time.time()))
+					startTime = self.sec2tme((tourneydata['createTime'] + tourneydata['prepTime']) - int(time.time()))
 					embed.add_field(name="Starts In", value=startTime, inline=True)
 
-				endTime = self.sec2tme((tourneydata['createTime'] + tourneydata['preparationDuration'] + tourneydata['duration']) - int(time.time()))
+				endTime = self.sec2tme((tourneydata['createTime'] + tourneydata['prepTime'] + tourneydata['duration']) - int(time.time()))
 				embed.add_field(name="Ends In", value=endTime, inline=True)
 
 				embed.add_field(name="Top prize", value="<:tournamentcards:380832770454192140> " + str(cards) + "	 <:coin:380832316932489268> " +  str(coins), inline=True)
@@ -160,23 +160,23 @@ class tournament:
 		tourneydata = await self.getRandomTourney()
 		
 		if tourneydata is not None:
-			maxCapacity = tourneydata['maxCapacity']
-			cards = self.getCards(maxCapacity)
-			coins = self.getCoins(maxCapacity)
+			maxPlayers = tourneydata['maxPlayers']
+			cards = self.getCards(maxPlayers)
+			coins = self.getCoins(maxPlayers)
 
 			embed=discord.Embed(title="Click this link to join the Tournament in Clash Royale!", url="https://legendclans.com/tournaments?id={}".format(tourneydata['tag']), color=0xFAA61A)
 			embed.set_thumbnail(url='https://statsroyale.com/images/tournament.png')
 
 			embed.set_author(name=tourneydata['name']+" (#"+tourneydata['tag']+")")
 
-			embed.add_field(name="Players", value=str(tourneydata['playerCount']) + "/" + str(maxCapacity), inline=True)
+			embed.add_field(name="Players", value=str(tourneydata['currentPlayers']) + "/" + str(maxPlayers), inline=True)
 			embed.add_field(name="Status", value=tourneydata['status'].title(), inline=True)
 
 			if tourneydata['status'] != "inProgress":
-				startTime = self.sec2tme((tourneydata['createTime'] + tourneydata['preparationDuration']) - int(time.time()))
+				startTime = self.sec2tme((tourneydata['createTime'] + tourneydata['prepTime']) - int(time.time()))
 				embed.add_field(name="Starts In", value=startTime, inline=True)
 
-			endTime = self.sec2tme((tourneydata['createTime'] + tourneydata['preparationDuration'] + tourneydata['duration']) - int(time.time()))
+			endTime = self.sec2tme((tourneydata['createTime'] + tourneydata['prepTime'] + tourneydata['duration']) - int(time.time()))
 			embed.add_field(name="Ends In", value=endTime, inline=True)
 
 			embed.add_field(name="Top prize", value="<:tournamentcards:380832770454192140> " + str(cards) + "	 <:coin:380832316932489268> " +  str(coins), inline=True)

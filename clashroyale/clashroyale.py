@@ -212,19 +212,19 @@ class clashroyale:
 		try:
 			tourneydata = requests.get('https://api.royaleapi.com/tournaments/{}'.format(tag), headers=self.getAuth(), timeout=10).json()
 
-			maxCapacity = tourneydata['maxCapacity']
-			cards = self.getCards(maxCapacity)
-			coins = self.getCoins(maxCapacity)
+			maxPlayers = tourneydata['maxPlayers']
+			cards = self.getCards(maxPlayers)
+			coins = self.getCoins(maxPlayers)
 
 			embed=discord.Embed(title="Click this link to join the Tournament in Clash Royale!", url="https://legendclans.com/tournaments?id={}&pass={}".format(tag, password), color=0xFAA61A)
 			embed.set_thumbnail(url='https://statsroyale.com/images/tournament.png')
 
 			embed.set_author(name=tourneydata['name']+" (#"+tourneydata['tag']+")")
 
-			embed.add_field(name="Players", value=str(tourneydata['playerCount']) + "/" + str(maxCapacity), inline=True)
+			embed.add_field(name="Players", value=str(tourneydata['currentPlayers']) + "/" + str(maxPlayers), inline=True)
 			embed.add_field(name="Status", value=tourneydata['status'].title(), inline=True)
 
-			if tourneydata['type'] == "passwordProtected":
+			if tourneydata['open']:
 				if password is not None:
 					embed.add_field(name="Password", value=password, inline=True)
 				else:
@@ -234,10 +234,10 @@ class clashroyale:
 			if tourneydata['status'] != "ended":
 
 				if tourneydata['status'] != "inProgress":
-					startTime = self.sec2tme((tourneydata['createTime'] + tourneydata['preparationDuration']) - int(time.time()))
+					startTime = self.sec2tme((tourneydata['createTime'] + tourneydata['prepTime']) - int(time.time()))
 					embed.add_field(name="Starts In", value=startTime, inline=True)
 
-				endTime = self.sec2tme((tourneydata['createTime'] + tourneydata['preparationDuration'] + tourneydata['duration']) - int(time.time()))
+				endTime = self.sec2tme((tourneydata['createTime'] + tourneydata['prepTime'] + tourneydata['duration']) - int(time.time()))
 				embed.add_field(name="Ends In", value=endTime, inline=True)
 
 
