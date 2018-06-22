@@ -47,7 +47,7 @@ To install a cog on your bot instance:
 * [AtomToast](https://github.com/AtomToast)
 * [SML](https://github.com/smlbiobot)
 * [RED](https://github.com/Cog-Creators/Red-DiscordBot)
-* [CR-API](https://github.com/cr-api/cr-api)
+* [RoyaleAPI](https://github.com/royaleapi)
 * [Bobloy](https://github.com/bobloy)
 * [Karthik Suresh](https://github.com/karthiks2601)
 * [Joshua](https://github.com/yeongjoshua)
