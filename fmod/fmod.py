@@ -980,14 +980,17 @@ class fmod:
                             logchannel = self.settingsload[server.id]["Log Channel"]
                             logchannel = discord.utils.get(server.channels, name = logchannel)
                             messageid = data['Message ID']
+
+                            await self.bot.say("Warning deleted!")
+
                             try:
                                 embed2 = await self.bot.get_message(logchannel, messageid)
+                                newembed = discord.Embed(title='Warning Revoked', color=0x00ff40, description='The warning for **{}** has been revoked by **{}** for the reason **{}**.'.format(user, ctx.message.author, reason))
+                                await self.bot.edit_message(embed2, embed=newembed)
+                                await self.bot.clear_reactions(embed2)
                             except discord.NotFound:
                                 await self.bot.say("Log Message is not found. If you changed the log channel you will need to react to the message there")
-                            newembed = discord.Embed(title='Warning Revoked', color=0x00ff40, description='The warning for **{}** has been revoked by **{}** for the reason **{}**.'.format(user, ctx.message.author, reason))
-                            await self.bot.edit_message(embed2, embed=newembed)
-                            await self.bot.clear_reactions(embed2)
-                            await self.bot.say("Warning deleted!")
+                            
                             return
             except:
                 continue
