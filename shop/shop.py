@@ -499,7 +499,64 @@ class shop:
             await self.bot.say("please contact @GR8#7968 to purchase it for you.")
         else:
             await self.bot.say("You do not have enough credits to buy Nitro.")
+    
+    @buy.command(pass_context=True, name="9")
+    async def buy_9(self, ctx, country):
 
+        server = ctx.message.server
+        author = ctx.message.author
+        legendServer = ["374596069989810176"]
+
+        if server.id not in legendServer:
+            await self.bot.say("This command can only be executed in the LeGeND Family Server")
+            return
+        clist = ''
+        world_cup_flare = {'russia':'🇷🇺','brazil':'🇧🇷','japan':'🇯🇵','iran':'🇮🇷','mexico':'🇲🇽','belgium':'🇧🇪','korea':'🇰🇷','saudi-arabia':'🇸🇦'
+                           ,'germany':'🇩🇪','england':'🇬🇧','spain':'🇪🇸','nigeria':'🇳🇬','costa-rica':'🇨🇷','poland':'🇵🇱','egypt':'🇪🇬','iceland':'🇮🇸'
+                           ,'serbia':'🇷🇸','portugal':'🇵🇹','france':'🇫🇷','uruguay':'🇺🇾','argentina':'🇦🇷','panama':'🇵🇦','colombia':'🇨🇴','senegal':'🇸🇳'
+                           ,'morocco':'🇲🇦','tunisia':'🇹🇳','switzerland':'🇨🇭','croatia':'🇭🇷','sweden':'🇸🇪','denmark':'🇩🇰','australia':'🇦🇺','peru':'🇵🇪'
+                          }
+        for key,value in world_cup_flare.items():
+            clist = clist + value + ' ' + key.capitalize()+ '\n'
+        try:
+            country=world_cup_flare[country]
+        except KeyError:
+            await self.bot.say("**{}** is not participating in FIFA World Cup 2018, select from the following options:\n{}".format(country.upper(),clist))
+            return
+                          
+        await self.updateClash()
+        await self.bot.type()
+        profiletag = self.tags[author.id]['tag']
+        profiledata = requests.get('https://api.royaleapi.com/player/{}?exclude=games,currentDeck,cards,battles,achievements'.format(profiletag), headers=self.getAuth(), timeout=10).json()
+        if profiledata['clan'] is None:
+            clantag = ""
+            clanname = ""
+        else: 
+            clantag = profiledata['clan']['tag']
+            clanname = profiledata['clan']['name']
+        ign = profiledata['name']
+        membership = False
+        for clankey in self.clanArray():
+            if self.clans[clankey]['tag'] == clantag:
+                membership = True
+                savekey = clankey
+                break
+
+        if ign is None:
+            await self.bot.say("Error, Cannot add emoji.")
+        else:
+            try:
+                if membership:
+                    newclanname = self.clans[savekey]['nickname']
+                    newname = "{} {} | {}".format(ign, country, newclanname)
+                else:
+                    newname = "{} {} | Guest ".format(ign, country)
+                await self.bot.change_nickname(author, newname)
+            except discord.HTTPException:
+                await self.bot.say("I don’t have permission to change nick for this user.")
+            else:
+                await self.bot.say("Nickname changed to ** {} **\n".format(newname))
+                    
 def check_files():
     f = "cogs/tags.json"
     if not fileIO(f, "check"):
