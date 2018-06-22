@@ -934,16 +934,11 @@ class fmod:
                         continuemsg = await self.bot.wait_for_message(channel=channel, author=ctx.message.author)
                         if 'yes' in continuemsg.content:
                             user = discord.utils.get(server.members, id = mid)
-                            await self.bot.say("Warning deleted!")
                             if data['Warning Number'] == 'Channel Denied':
                                 role = self.settingsload[server.id]['Denied Role']
                                 role = discord.utils.get(server.roles, name = role)
                                 await self.bot.remove_roles(user,role)
                                 await self.bot.say("The denied role has been removed from this user!")
-                            for role in user.server.roles:
-                                if role.name == role:
-                                    await self.bot.remove_roles(user,role2)
-                                    break
                             else:
                                 count = self.warningsload[server.id][mid]["Count"]
                                 count = int(count)-1
@@ -974,7 +969,7 @@ class fmod:
                                                                      poop_role)
                                         except discord.errors.Forbidden:
                                             await self.bot.say("No permission to add roles") 
-                            embed = discord.Embed(title='Warning Revoked by {}'.format(ctx.message.author), description = revokemessage, color="0x00ff40")
+                            embed = discord.Embed(title='Warning Revoked by {}'.format(ctx.message.author), description = revokemessage, color=0x00ff40)
                             embed.add_field(name = 'Reason:', value = reason)
                             embed.set_footer(text=credits, icon_url=creditIcon)
                             channel = await self.bot.start_private_message(user)
@@ -989,11 +984,11 @@ class fmod:
                                 embed2 = await self.bot.get_message(logchannel, messageid)
                             except discord.NotFound:
                                 await self.bot.say("Log Message is not found. If you changed the log channel you will need to react to the message there")
-                            newembed = discord.Embed(title='Warning Revoked', color="0x00ff40", description='The warning for **{}** has been revoked by **{}** for the reason **{}**.'.format(user, ctx.message.author, reason))
+                            newembed = discord.Embed(title='Warning Revoked', color=0x00ff40, description='The warning for **{}** has been revoked by **{}** for the reason **{}**.'.format(user, ctx.message.author, reason))
                             await self.bot.edit_message(embed2, embed=newembed)
                             await self.bot.clear_reactions(embed2)
+                            await self.bot.say("Warning deleted!")
                             return
-                    
             except:
                 continue
         await self.bot.say("This warning was not found. Please make sure you typed it correctly!")
