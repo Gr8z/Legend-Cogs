@@ -51,3 +51,4 @@ To install a cog on your bot instance:
 * [Bobloy](https://github.com/bobloy)
 * [Karthik Suresh](https://github.com/karthiks2601)
 * [Joshua](https://github.com/yeongjoshua)
+* [SauravAnchlia](https://github.com/SauravAnchlia)
