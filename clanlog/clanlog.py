@@ -183,7 +183,7 @@ class Clanlog:
 
     @history.command(pass_context=True, no_pm=True)
     async def discord(self, ctx):
-        """Graph with clash member count history"""
+        """Graph with discord user count history"""
         try:
             channel = ctx.message.channel
             await self.bot.send_typing(channel)
