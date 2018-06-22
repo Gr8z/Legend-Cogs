@@ -53,7 +53,7 @@ class tournament:
 
 		global lastTag
 		try:
-			openTourney = requests.get('https://api.royaleapi.com/tournaments/joinable', headers=self.getAuth(), timeout=10).json()
+			openTourney = requests.get('https://api.royaleapi.com/tournaments/open', headers=self.getAuth(), timeout=10).json()
 		except:
 			return None
 
@@ -83,7 +83,7 @@ class tournament:
 	async def getRandomTourney(self):
 
 		try:
-			openTourney = requests.get('https://api.royaleapi.com/tournaments/joinable', headers=self.getAuth(), timeout=10).json()
+			openTourney = requests.get('https://api.royaleapi.com/tournaments/open', headers=self.getAuth(), timeout=10).json()
 		except:
 			return None
 
