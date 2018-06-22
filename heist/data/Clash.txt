@@ -17,6 +17,9 @@
 |Good| "The baby dragon's fumes hid {0} while they were stealing the gold. +750 credits", 750
 |Good| "{0} brought sleeping gas for the guards. +500 credits", 500
 |Good| "{0} found a miner's tunnel! +2000 credits", 2000
+|Good| "{0} released the Royal Hogs to distract the guards +500 credits.", 500
+|Good| "{0} cloned the crew to confuse the guardsmen +250 credits.", 250
+|Good| "{0} used a Rage spell to run past everyone and escaped +20 credits.", 20
 
 |Bad| "A butterfly brought P.E.K.K.A. to {0}.", "Dead"
 |Bad| "The Magic Archer took out {0} from far away. Where did he come from?", "Dead"
@@ -73,6 +76,14 @@
 |Bad| "Zappies stunned {0} and captured them.", "Apprehended"
 |Bad| "The Hunter hunted down {0}.", "Apprehended"
 |Bad| "The Royal Ghost jump-scared {0}.", "Apprehended"
+|Bad| "{0} was buried in a Giant Snowball.", "Apprehended"
+|Bad| "{0} was trampled by the Royal Hogs.", "Apprehended"
+|Bad| "Rascals trapped {0} in bubble gum.", "Apprehended"
+|Bad| "Battle Ram smashed {0} out of the way.", "Apprehended"
+|Bad| "The Cannon shot {0}.", "Dead"
+|Bad| "Fire Spirits gave a warm hug to {0}.", "Apprehended"
+|Bad| "{0} was poisoned.", "Dead"
+
 
 Jail = dungeon
 OOB = out on bail
