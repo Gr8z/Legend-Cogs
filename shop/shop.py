@@ -519,7 +519,7 @@ class shop:
         for key,value in world_cup_flare.items():
             clist = clist + value + ' ' + key.capitalize()+ '\n'
         try:
-            country=world_cup_flare[country]
+            country=world_cup_flare[country.lower()]
         except KeyError:
             await self.bot.say("**{}** is not participating in FIFA World Cup 2018, select from the following options:\n{}".format(country.upper(),clist))
             return
