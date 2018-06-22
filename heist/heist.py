@@ -1,5 +1,3 @@
-#  Heist was created by Redjumpman for Redbot
-
 # Standard Library
 import asyncio
 import bisect
