@@ -224,7 +224,7 @@ class clashroyale:
 			embed.add_field(name="Players", value=str(tourneydata['currentPlayers']) + "/" + str(maxPlayers), inline=True)
 			embed.add_field(name="Status", value=tourneydata['status'].title(), inline=True)
 
-			if tourneydata['open']:
+			if not tourneydata['open']:
 				if password is not None:
 					embed.add_field(name="Password", value=password, inline=True)
 				else:
