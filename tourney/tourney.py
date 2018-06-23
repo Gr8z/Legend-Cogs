@@ -62,8 +62,9 @@ class tournament:
 			tag = tourney['tag']
 			joined = tourney['currentPlayers']
 			maxplayers = tourney['maxPlayers']
+			createTime = tourney['createTime']
 
-			if ((maxplayers > 50) and ((joined + 4) < maxplayers) and (tag != lastTag)):
+			if (((int(time.time()) - createTime) < 10800) and (maxplayers > 50) and ((joined + 4) < maxplayers) and (tag != lastTag)):
 
 				try:
 					tourneyAPI = requests.get('https://api.royaleapi.com/tournaments/{}'.format(tag), headers=self.getAuth(), timeout=10).json()
@@ -92,8 +93,9 @@ class tournament:
 			tag = tourney['tag']
 			joined = tourney['currentPlayers']
 			maxplayers = tourney['maxPlayers']
+			createTime = tourney['createTime']
 
-			if ((joined + 1) < maxplayers):
+			if (((int(time.time()) - createTime) < 10800) and ((joined + 1) < maxplayers)):
 
 				try:
 					tourneyAPI = requests.get('https://api.royaleapi.com/tournaments/{}'.format(tag), headers=self.getAuth(), timeout=10).json()
