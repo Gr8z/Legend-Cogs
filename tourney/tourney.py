@@ -73,8 +73,7 @@ class tournament:
 					return None
 
 				if ((maxplayers > 50) and ((joined + 4) < maxplayers) and  (tourneyAPI['status'] != "ended") and (tourneyAPI['open'])):
-					tourneyAPI['tag'] = tag
-					
+					lastTag = tag
 					return tourneyAPI
 
 		return None
@@ -104,8 +103,6 @@ class tournament:
 					return None
 
 				if ((joined < maxplayers) and  (tourneyAPI['status'] != "ended") and (tourneyAPI['open'])):
-					tourneyAPI['tag'] = tag
-					
 					return tourneyAPI
 
 		return None
