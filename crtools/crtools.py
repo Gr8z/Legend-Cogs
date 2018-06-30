@@ -52,7 +52,7 @@ class Tags():
 	async def getUser(self, serverUsers, tag):
 		"""Get User from CR Tag"""
 		for user in serverUsers:
-			if user.id in in self.tags:
+			if user.id in self.tags:
 				player_tag = self.tags[user.id]['tag']
 
 				if player_tag == await self.formatTag(tag):
