@@ -239,7 +239,7 @@ class legend:
 
         try:
             await self.bot.type()
-            clans = requests.get('https://api.royaleapi.com/clan/'+(await clans.tagsClans())+'?exclude=members', headers=self.token, timeout=25).json()
+            clandata = requests.get('https://api.royaleapi.com/clan/'+(await clans.tagsClans())+'?exclude=members', headers=self.token, timeout=25).json()
         except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
                 await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
                 return
@@ -247,7 +247,7 @@ class legend:
                 await self.bot.say(e)
                 return
                 
-        clans = sorted(clans, key=lambda clanned: (clanned['requiredScore'], clanned['score']), reverse=True)
+        clandata = sorted(clandata, key=lambda clanned: (clanned['requiredScore'], clanned['score']), reverse=True)
        
         embed=discord.Embed(color=0xFAA61A)
         if "url" in self.settings and "family" in self.settings:
@@ -260,13 +260,13 @@ class legend:
         foundClan = False
         totalMembers = 0
         totalWaiting = 0
-        for x in range(0, len(clans)):
+        for x in range(0, len(clandata)):
             numWaiting = 0
             personalbest = 0
             bonustitle = None
             
             for clankey in clans.keysClans():
-                if await clans.getClanData(clankey, 'tag') == clans[x]['tag']:
+                if await clans.getClanData(clankey, 'tag') == clandata[x]['tag']:
                     numWaiting = await clans.numWaiting(clankey)
                     personalbest = await clans.getClanData(clankey, 'personalbest')
                     bonustitle = await clans.getClanData(clankey, 'bonustitle')
@@ -280,27 +280,27 @@ class legend:
             else:
                 title = ""
 
-            totalMembers += clans[x]['memberCount']
-            if clans[x]['memberCount'] < 50:
-                showMembers = str(clans[x]['memberCount']) + "/50"
+            totalMembers += clandata[x]['memberCount']
+            if clandata[x]['memberCount'] < 50:
+                showMembers = str(clandata[x]['memberCount']) + "/50"
             else:
                 showMembers = "**FULL**   "
 
-            if str(clans[x]['type']) != 'invite only':
-                title += "["+str(clans[x]['type']).title()+"] "
+            if str(clandata[x]['type']) != 'invite only':
+                title += "["+str(clandata[x]['type']).title()+"] "
 
-            title += clans[x]['name'] + " (#" + clans[x]['tag'] + ") "
+            title += clandata[x]['name'] + " (#" + clandata[x]['tag'] + ") "
             
             if personalbest > 0:
                 title += "PB: "+str(personalbest)+"+  "
-                clans[x]['maxtrophies'] = personalbest
+                clandata[x]['maxtrophies'] = personalbest
             
             if bonustitle is not None:
                 title += bonustitle  
 
-            desc = "{} {}      <:crtrophy:448609948008579073> {}+     <:wartrophy:448609141796241408> {}   <:openlink:448611387040595979> [Open](https://legendclans.com/clanInfo/{})".format(emoji, showMembers, str(clans[x]['requiredScore']), str(warTrophies), clans[x]['tag'])
+            desc = "{} {}      <:crtrophy:448609948008579073> {}+     <:wartrophy:448609141796241408> {}   <:openlink:448611387040595979> [Open](https://legendclans.com/clanInfo/{})".format(emoji, showMembers, str(clandata[x]['requiredScore']), str(warTrophies), clandata[x]['tag'])
 
-            if (member is None) or ((clans[x]['requiredScore'] <= trophies) and (maxtrophies > personalbest) and (trophies - clans[x]['requiredScore'] < 1200) and (clans[x]['type'] != 'closed')):
+            if (member is None) or ((clandata[x]['requiredScore'] <= trophies) and (maxtrophies > personalbest) and (trophies - clandata[x]['requiredScore'] < 1200) and (clandata[x]['type'] != 'closed')):
                 foundClan = True
                 embed.add_field(name=title, value=desc, inline=False)
 
