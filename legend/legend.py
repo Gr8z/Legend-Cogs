@@ -1132,7 +1132,7 @@ class legend:
         try:
             await self.bot.type()
             profiletag = await tags.getTag(member.id)
-            profiledata = requests.get('https://api.royaleapi.com/player/{}?exclude=games,currentDeck,cards,achievements'.format(profiletag), headers=self.tokens, timeout=10).json()
+            profiledata = requests.get('https://api.royaleapi.com/player/{}?exclude=games,currentDeck,cards,achievements'.format(profiletag), headers=self.token, timeout=10).json()
             ign = profiledata['name']
         except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
