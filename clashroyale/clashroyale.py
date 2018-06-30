@@ -7,7 +7,7 @@ from __main__ import send_cmd_help
 import time
 
 try:
-    from crtools import auth, tags
+    from cogs.crtools import auth, tags
 except:
     raise RuntimeError("Can't load crtools. Do '[p]cog install Legend-Cogs crtools'.")
 

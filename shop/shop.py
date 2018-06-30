@@ -8,7 +8,7 @@ import json
 import math
 
 try:
-    from crtools import auth, tags, clans
+    from cogs.crtools import auth, tags, clans
 except:
     raise RuntimeError("Can't load crtools. Do '[p]cog install Legend-Cogs crtools'.")
 

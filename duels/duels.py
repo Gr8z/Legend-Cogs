@@ -13,7 +13,7 @@ import requests
 from operator import itemgetter, attrgetter
 
 try:
-    from crtools import auth, tags
+    from cogs.crtools import auth, tags
 except:
     raise RuntimeError("Can't load crtools. Do '[p]cog install Legend-Cogs crtools'.")
 

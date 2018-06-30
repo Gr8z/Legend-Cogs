@@ -17,7 +17,7 @@ import numpy as np
 from __main__ import send_cmd_help
 
 try:
-    from crtools import auth, clans
+    from cogs.crtools import auth, clans
 except:
     raise RuntimeError("Can't load crtools. Do '[p]cog install Legend-Cogs crtools'.")
 

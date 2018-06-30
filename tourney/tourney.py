@@ -8,7 +8,7 @@ import time
 import random
 
 try:
-    from crtools import auth
+    from cogs.crtools import auth
 except:
     raise RuntimeError("Can't load crtools. Do '[p]cog install Legend-Cogs crtools'.")
 

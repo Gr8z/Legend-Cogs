@@ -14,7 +14,7 @@ from PIL import Image
 from PIL import ImageDraw
 
 try:
-    from crtools import auth, clans
+    from cogs.crtools import auth, clans
 except:
     raise RuntimeError("Can't load crtools. Do '[p]cog install Legend-Cogs crtools'.")
 
