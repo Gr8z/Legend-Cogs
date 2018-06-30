@@ -10,7 +10,7 @@ clans_path = "data/crtools/clans.json"
 default_clans = {'defualt':{'tag': '', 'role': '', 'role_id': '', 'name': '', 'nickname': '', 'discord': '', 'waiting': [], 'members': [], 'bonustitle': '', 
 				'personalbest': 0, 'warTrophies': 0, 'approval': False, 'log_channel': False, 'emoji': ''}}
 
-class tags:
+class Tags():
 	"""Tags Management"""
 	def __init__(self):
 		self.tags = dataIO.load_json(tags_path)
@@ -60,7 +60,7 @@ class tags:
 		except KeyError:
 			return None
 
-class auth:
+class Auth():
 	"""RoyaleAPI key management"""
 	def __init__(self):
 		self.auth = dataIO.load_json(auth_path)
@@ -75,7 +75,7 @@ class auth:
 		"""Get RoyaleAPI Token"""
 		return {"auth" : self.auth['token']}
 
-class clans:
+class Clans():
 	"""Clan Family Management"""
 	def __init__(self):
 		self.clans = dataIO.load_json(clans_path)
@@ -320,3 +320,7 @@ def setup(bot):
 	check_files()
 	check_auth()
 	bot.add_cog(crtools(bot))
+
+tags = Tags()
+auth = Auth()
+clans = Clans()
