@@ -213,83 +213,83 @@ class crtools:
 		auth.addToken(key)
 		await self.bot.say("RoyaleAPI Token set")
 
-    @commands.group(pass_context=True)
-    @checks.mod_or_permissions(administrator=True)
-    async def clans(self, ctx):
-        """Base command for managing clash royale clans. [p]help clans for details"""
-        if ctx.invoked_subcommand is None:
-            await self.bot.send_cmd_help(ctx)
+	@commands.group(pass_context=True)
+	@checks.mod_or_permissions(administrator=True)
+	async def clans(self, ctx):
+		"""Base command for managing clash royale clans. [p]help clans for details"""
+		if ctx.invoked_subcommand is None:
+			await self.bot.send_cmd_help(ctx)
 
-    @clans.command(pass_context=True, name="delete")
-    @checks.is_owner()
-    async def clans_delete(self, ctx, clankey):
-        """Remove a clan from tracking"""
-        clankey = clankey.lower()
-        if await clans.delClan(clankey):
-            await self.bot.say("Success")
-            return
-        else:
-            await self.bot.say("Failed")
-    
-    @clans.command(pass_context=True, name="pb")
-    async def clans_pb(self, ctx, clankey, pb: int):
-        """Set a Personal Best requirement for a clan"""
-        clankey = clankey.lower()
-        try:
-            await clans.setPBTrophies(clankey, pb)
-        except KeyError:
-            await self.bot.say("Please use a valid clanname: {}".format(await clans.namesClans()))
-            return 
-           
-        await self.bot.say("Success")
+	@clans.command(pass_context=True, name="delete")
+	@checks.is_owner()
+	async def clans_delete(self, ctx, clankey):
+		"""Remove a clan from tracking"""
+		clankey = clankey.lower()
+		if await clans.delClan(clankey):
+			await self.bot.say("Success")
+			return
+		else:
+			await self.bot.say("Failed")
+	
+	@clans.command(pass_context=True, name="pb")
+	async def clans_pb(self, ctx, clankey, pb: int):
+		"""Set a Personal Best requirement for a clan"""
+		clankey = clankey.lower()
+		try:
+			await clans.setPBTrophies(clankey, pb)
+		except KeyError:
+			await self.bot.say("Please use a valid clanname: {}".format(await clans.namesClans()))
+			return 
+		   
+		await self.bot.say("Success")
 
-    @clans.command(pass_context=True, name="bonus")
-    async def clans_bonus(self, ctx, clankey, *bonus):
-        """Add bonus information to title of clan (i.e. Age: 21+)"""
-        clankey = clankey.lower()
-        try:
-            await clans.setBonus(clankey, bonus)
-        except KeyError:
-            await self.bot.say("Please use a valid clanname: {}".format(await clans.namesClans()))
-            return 
-        
-        await self.bot.say("Success")      
+	@clans.command(pass_context=True, name="bonus")
+	async def clans_bonus(self, ctx, clankey, *bonus):
+		"""Add bonus information to title of clan (i.e. Age: 21+)"""
+		clankey = clankey.lower()
+		try:
+			await clans.setBonus(clankey, bonus)
+		except KeyError:
+			await self.bot.say("Please use a valid clanname: {}".format(await clans.namesClans()))
+			return 
+		
+		await self.bot.say("Success")	  
 
-    @clans.command(pass_context=True, name="log")
-    async def clans_log(self, ctx, clankey, channel : discord.Channel):
-        """Set Clan's Log channel to track in's and outs"""
-        clankey = clankey.lower()
-        try:
-            server = ctx.message.server
+	@clans.command(pass_context=True, name="log")
+	async def clans_log(self, ctx, clankey, channel : discord.Channel):
+		"""Set Clan's Log channel to track in's and outs"""
+		clankey = clankey.lower()
+		try:
+			server = ctx.message.server
 
-            if not server.get_member(self.bot.user.id).permissions_in(channel).send_messages:
-                await self.bot.say("I do not have permissions to send messages to {0.mention}".format(channel))
-                return
+			if not server.get_member(self.bot.user.id).permissions_in(channel).send_messages:
+				await self.bot.say("I do not have permissions to send messages to {0.mention}".format(channel))
+				return
 
-            if channel is None:
-                await self.bot.say("I can't find the specified channel. It might have been deleted.")
+			if channel is None:
+				await self.bot.say("I can't find the specified channel. It might have been deleted.")
 
-            await clans.setLogChannel(clankey, channel.id)
+			await clans.setLogChannel(clankey, channel.id)
 
-            await self.bot.send_message(channel, "I will now send log messages to {0.mention}".format(channel))
-            await self.bot.say("Clash log channel for {} is now set to {}".format(clankey, channel))
+			await self.bot.send_message(channel, "I will now send log messages to {0.mention}".format(channel))
+			await self.bot.say("Clash log channel for {} is now set to {}".format(clankey, channel))
 
-        except KeyError:
-            await self.bot.say("Please use a valid clanname: {}".format(await clans.namesClans()))
-            return 
-        except discord.errors.Forbidden:
-            await self.bot.say("No permission to send messages to that channel")
-        
+		except KeyError:
+			await self.bot.say("Please use a valid clanname: {}".format(await clans.namesClans()))
+			return 
+		except discord.errors.Forbidden:
+			await self.bot.say("No permission to send messages to that channel")
+		
 
-    @clans.command(pass_context=True, name="private")
-    async def clans_private(self, ctx, clankey):
-        """Toggle Private approval of new recruits"""
-        clankey = clankey.lower()
-        try:
-            await self.bot.say("Private Approval now is set to " + str(await clans.togglePrivate(clankey)))
-        except KeyError:
-            await self.bot.say("Please use a valid clanname: {}".format(await clans.namesClans()))
-            return 
+	@clans.command(pass_context=True, name="private")
+	async def clans_private(self, ctx, clankey):
+		"""Toggle Private approval of new recruits"""
+		clankey = clankey.lower()
+		try:
+			await self.bot.say("Private Approval now is set to " + str(await clans.togglePrivate(clankey)))
+		except KeyError:
+			await self.bot.say("Please use a valid clanname: {}".format(await clans.namesClans()))
+			return 
 
 def check_folders():
 	if not os.path.exists("data/crtools"):
