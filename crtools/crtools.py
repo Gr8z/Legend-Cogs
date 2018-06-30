@@ -242,7 +242,7 @@ class crtools:
 		"""Add bonus information to title of clan (i.e. Age: 21+)"""
 		clankey = clankey.lower()
 		try:
-			await clans.setBonus(clankey, bonus)
+			await clans.setBonus(clankey, " ".join(bonus))
 		except KeyError:
 			await self.bot.say("Please use a valid clanname: {}".format(await clans.namesClans()))
 			return 
