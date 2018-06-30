@@ -151,7 +151,7 @@ class clans:
 
 	async def delWaitingMember(self, clankey, memberID):
 		"""Remove a user to a clan's waiting list"""
-		if memberID in self.clans[clankey]['waiting']
+		if memberID in self.clans[clankey]['waiting']:
 			self.clans[clankey]['waiting'].remove(memberID)
 			dataIO.save_json(clans_path, self.clans)
 
