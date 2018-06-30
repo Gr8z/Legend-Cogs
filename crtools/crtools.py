@@ -51,14 +51,13 @@ class Tags():
 
 	async def getUser(self, serverUsers, tag):
 		"""Get User from CR Tag"""
-		try:
-			for user in serverUsers:
+		for user in serverUsers:
+			if user.id in in self.tags:
 				player_tag = self.tags[user.id]['tag']
 
 				if player_tag == await self.formatTag(tag):
 					return user
-		except KeyError:
-			return None
+		return None
 
 class Auth():
 	"""RoyaleAPI key management"""
