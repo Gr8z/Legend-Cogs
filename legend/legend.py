@@ -515,6 +515,7 @@ class legend:
         if membership:
 
             try:
+                savekey = await clans.getClanKey(clantag)
                 invite = await clans.getClanData(savekey, 'discord')
                 if invite is not None:
                     joinLink = "https://discord.gg/" + str(invite)
