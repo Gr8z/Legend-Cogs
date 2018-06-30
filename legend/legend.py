@@ -881,7 +881,7 @@ class legend:
 
         for index, player_tag in enumerate(cr_members_tag):
             try:
-                dc_member = await tags.getUser(server.members, cr_members_tag)
+                dc_member = await tags.getUser(server.members, player_tag)
                 
                 if role not in dc_member.roles:
                     d_members_without_role.append(dc_member.display_name)
