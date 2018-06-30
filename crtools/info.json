@@ -1,0 +1,10 @@
+{
+    "AUTHOR" : "GR8",
+    "INSTALL_MSG" : "Clash Royale Discord Tools added, please add your RoyaleAPI token using [p]settoken",
+    "NAME" : "crtools",
+    "SHORT" : "Clash Royale Discord Tools",
+    "DESCRIPTION" : "Various tools to integrate Clash Royale into discord.",
+    "TAGS" : ["tags", "management", "clashroyale", "link","crtools"],
+    "REQUIREMENTS" : [],
+    "HIDDEN" : false
+}

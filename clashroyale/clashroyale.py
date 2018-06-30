@@ -6,23 +6,21 @@ import os
 from __main__ import send_cmd_help
 import time
 
+try:
+    from crtools import auth, tags
+except:
+    raise RuntimeError("Can't load crtools. Do '[p]cog install Legend-Cogs crtools'.")
+
 BOTCOMMANDER_ROLES =  ["Family Representative", "Clan Manager", "Clan Deputy", "Co-Leader", "Hub Officer", "admin"]
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
-
-clash = os.path.join("cogs", "tags.json")
-auth = os.path.join("cogs", "auth.json")
 
 class clashroyale:
 	"""Live statistics for Clash Royale"""
 
 	def __init__(self, bot):
 		self.bot = bot
-		self.clash = dataIO.load_json(clash)
-		self.auth = dataIO.load_json(auth)
-
-	def getAuth(self):
-		return {"auth" : self.auth['token']}
+		self.token = auth.getToken()
 
 	# Converts maxPlayers to Cards
 	def getCards(self, maxPlayers):
@@ -60,12 +58,12 @@ class clashroyale:
 			if member is None:
 				member = ctx.message.author
 
-			profiletag = self.clash[member.id]['tag']
+			profiletag = await tags.getTag(member.id)
 
 			await self.bot.type()
 
 			try:
-				profiledata = requests.get('https://api.royaleapi.com/player/{}?exclude=currentDeck,cards,battles,achievements'.format(profiletag), headers=self.getAuth(), timeout=10).json()
+				profiledata = requests.get('https://api.royaleapi.com/player/{}?exclude=currentDeck,cards,battles,achievements'.format(profiletag), headers=self.token, timeout=10).json()
 			except:
 				await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 				return
@@ -114,12 +112,12 @@ class clashroyale:
 			if member is None:
 				member = ctx.message.author
 
-			profiletag = self.clash[member.id]['tag']
+			profiletag = await tags.getTag(member.id)
 
 			await self.bot.type()
 
 			try:
-				profiledata = requests.get('https://api.royaleapi.com/player/{}/chests'.format(profiletag), headers=self.getAuth(), timeout=10).json()
+				profiledata = requests.get('https://api.royaleapi.com/player/{}/chests'.format(profiletag), headers=self.token, timeout=10).json()
 			except:
 				await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 				return
@@ -150,12 +148,12 @@ class clashroyale:
 			if member is None:
 				member = ctx.message.author
 
-			profiletag = self.clash[member.id]['tag']
+			profiletag = await tags.getTag(member.id)
 
 			await self.bot.type()
 
 			try:
-				profiledata = requests.get('https://api.royaleapi.com/player/{}?keys=deckLink'.format(profiletag), headers=self.getAuth(), timeout=10).json()
+				profiledata = requests.get('https://api.royaleapi.com/player/{}?keys=deckLink'.format(profiletag), headers=self.token, timeout=10).json()
 				deckLink = profiledata['deckLink']
 			except:
 				await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
@@ -177,7 +175,7 @@ class clashroyale:
 		await self.bot.type()
 
 		try:
-			clandata = requests.get('https://api.royaleapi.com/clan/{}'.format(clantag), headers=self.getAuth(), timeout=10).json()
+			clandata = requests.get('https://api.royaleapi.com/clan/{}'.format(clantag), headers=self.token, timeout=10).json()
 
 			embed=discord.Embed(title=clandata['name'] + " (#" + clandata['tag'] + ")", url="https://legendclans.com/clanInfo/{}".format(clandata['tag']), description=clandata['description'], color=0xFAA61A)
 			embed.set_thumbnail(url=clandata['badge']['image'])
@@ -200,17 +198,16 @@ class clashroyale:
 
 		await self.bot.type()
 
-		tag = tag.strip('#').upper().replace('O', '0')
-		check = ['P', 'Y', 'L', 'Q', 'G', 'R', 'J', 'C', 'U', 'V', '0', '2', '8', '9']
+		tag = await tags.formatTag(tag)
 
-		if any(i not in check for i in tag):
+		if not await tags.verifyTag(tag):
 			await self.bot.say("The ID you provided has invalid characters. Please try again.")
 			return
 
 		await self.bot.delete_message(ctx.message)
 
 		try:
-			tourneydata = requests.get('https://api.royaleapi.com/tournaments/{}'.format(tag), headers=self.getAuth(), timeout=10).json()
+			tourneydata = requests.get('https://api.royaleapi.com/tournaments/{}'.format(tag), headers=self.token, timeout=10).json()
 
 			maxPlayers = tourneydata['maxPlayers']
 			cards = self.getCards(maxPlayers)
@@ -263,10 +260,9 @@ class clashroyale:
 		server = ctx.message.server
 		author = ctx.message.author
 
-		profiletag = profiletag.strip('#').upper().replace('O', '0')
-		check = ['P', 'Y', 'L', 'Q', 'G', 'R', 'J', 'C', 'U', 'V', '0', '2', '8', '9']
+		profiletag = await tags.formatTag(profiletag)
 
-		if any(i not in check for i in profiletag):
+		if not await tags.verifyTag(profiletag):
 			await self.bot.say("The ID you provided has invalid characters. Please try again.")
 			return
 
@@ -292,19 +288,14 @@ class clashroyale:
 			member = ctx.message.author
 
 		try:
-			profiledata = requests.get('https://api.royaleapi.com/player/{}'.format(profiletag), headers=self.getAuth(), timeout=10).json()
+			profiledata = requests.get('https://api.royaleapi.com/player/{}'.format(profiletag), headers=self.token, timeout=10).json()
 
-			for key, value in self.clash.items():
-				if profiletag == self.clash[key]['tag']:
-					user = discord.utils.get(ctx.message.server.members, id = key)
-					try:
-						await self.bot.say("Error, This Player ID is already linked with **" + user.display_name + "**")
-						return
-					except:
-						pass
+			checkUser = await tags.getUser(server.members, profiletag)
+			if checkUser is not None:
+				await self.bot.say("Error, This Player ID is already linked with **" + checkUser.display_name + "**")
+				return
 
-			self.clash.update({member.id: {'tag': profiletag}})
-			dataIO.save_json('cogs/tags.json', self.clash)
+			await tags.linkTag(profiletag, member.id)
 
 			embed = discord.Embed(color=discord.Color.green())
 			avatar = member.avatar_url if member.avatar else member.default_avatar_url
@@ -313,29 +304,5 @@ class clashroyale:
 		except:
 			await self.bot.say("We cannot find your ID in our database, please try again.")
 
-def check_folders():
-	if not os.path.exists("data/clashroyale"):
-		print("Creating data/clashroyale folder...")
-		os.makedirs("data/clashroyale")
-
-def check_files():
-	f = "cogs/tags.json"
-	if not fileIO(f, "check"):
-		print("Creating empty tags.json...")
-		fileIO(f, "save", {"0" : {"tag" : "DONOTREMOVE"}})
-	f = "cogs/auth.json"
-	if not fileIO(f, "check"):
-		print("enter your RoyaleAPI token in auth.json...")
-		fileIO(f, "save", {"token" : "enter your RoyaleAPI token here!"})
-
-def check_auth():
-	c = dataIO.load_json('cogs/auth.json')
-	if 'token' not in c:
-		c['token'] = ""
-	dataIO.save_json('cogs/auth.json', c)
-
 def setup(bot):
-	#check_folders()
-	check_files()
-	check_auth()
 	bot.add_cog(clashroyale(bot))

@@ -13,41 +13,6 @@ class academy:
 
     def __init__(self, bot):
         self.bot = bot
-        self.tags = dataIO.load_json('cogs/tags.json')
-        self.clans = dataIO.load_json('cogs/clans.json')
-        self.auth = dataIO.load_json('cogs/auth.json')
-
-    def getAuth(self):
-        return {"auth" : self.auth['token']}
-
-    async def updateClash(self):
-        self.tags = dataIO.load_json('cogs/tags.json')
-
-    async def _add_roles(self, member, role_names):
-        """Add roles"""
-        server = member.server
-        roles = [discord.utils.get(server.roles, name=role_name) for role_name in role_names]
-        try:
-            await self.bot.add_roles(member, *roles)
-        except discord.Forbidden:
-            raise
-        except discord.HTTPException:
-            raise
-
-    async def _remove_roles(self, member, role_names):
-        """Remove roles"""
-        server = member.server
-        roles = [discord.utils.get(server.roles, name=role_name) for role_name in role_names]
-        try:
-            await self.bot.remove_roles(member, *roles)
-        except:
-            pass
-            
-    def clanArray(self):
-        return self.clans.keys()
-
-    def numClans(self):
-        return len(self.clans.keys())
         
     @commands.command(pass_context=True)
     @commands.has_any_role(*BOTCOMMANDER_ROLES)

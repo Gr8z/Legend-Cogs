@@ -12,6 +12,11 @@ import time
 import requests
 from operator import itemgetter, attrgetter
 
+try:
+    from crtools import auth, tags
+except:
+    raise RuntimeError("Can't load crtools. Do '[p]cog install Legend-Cogs crtools'.")
+
 settings_path = "data/duels/settings.json"
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
@@ -22,12 +27,8 @@ class duels:
     def __init__(self, bot):
         self.bot = bot
         self.settings = dataIO.load_json(settings_path)
-        self.tags = dataIO.load_json('cogs/tags.json')
-        self.auth = dataIO.load_json('cogs/auth.json')
+        self.token = auth.getToken()
         self.active = False
-
-    async def updateClash(self):
-        self.tags = dataIO.load_json('cogs/tags.json')
 
      # Check if there is an account made.
     def account_check(self, id):
@@ -43,9 +44,6 @@ class duels:
                 return False
         else:
             return False
-
-    def getAuth(self):
-        return {"auth" : self.auth['token']}
 
     def bank_check(self, user, amount):
         bank = self.bot.get_cog('Economy').bank
@@ -95,17 +93,16 @@ class duels:
             await self.bot.say("You need to first open a bank account using ``{}bank register``".format(ctx.prefix))
             return
 
-        await self.updateClash()
-
         if self.account_check(author.id) is False:
 
-            if author.id in self.tags:
+            player_tag = await tags.getTag(author.id)
+            if player_tag is not None:
                 self.settings["USERS"][author.id] = {
                     "WON" : 0,
                     "DUELID" : "0",
                     "ID" : author.id,
                     "NAME" : author.display_name,
-                    "TAG" : self.tags[author.id]['tag']
+                    "TAG" : player_tag
                 }
                 fileIO(settings_path, "save", self.settings)
 
@@ -153,7 +150,7 @@ class duels:
         await self.bot.type()
 
         try:
-            profiledata = requests.get('https://api.royaleapi.com/player/{}'.format(duelPlayer['TAG']), headers=self.getAuth(), timeout=10).json()
+            profiledata = requests.get('https://api.royaleapi.com/player/{}'.format(duelPlayer['TAG']), headers=self.token, timeout=10).json()
             
             self.active = True
 
@@ -276,7 +273,7 @@ class duels:
             return
 
         try:
-            profiledata = requests.get('https://api.royaleapi.com/player/{},{}?keys=stats'.format(self.settings['USERS'][duelPlayers[0]]["TAG"], self.settings['USERS'][author.id]["TAG"]), headers=self.getAuth(), timeout=10).json()
+            profiledata = requests.get('https://api.royaleapi.com/player/{},{}?keys=stats'.format(self.settings['USERS'][duelPlayers[0]]["TAG"], self.settings['USERS'][author.id]["TAG"]), headers=self.token, timeout=10).json()
 
             if (profiledata[0]['stats']['maxTrophies'] + 600) < profiledata[1]['stats']['maxTrophies']:
                 await self.bot.say("Sorry, your trophies are too high for this duel.")
@@ -337,7 +334,7 @@ class duels:
         await self.bot.type()
 
         try:
-            profiledata = requests.get('https://api.royaleapi.com/player/{}/battles'.format(duelPlayer['TAG']), headers=self.getAuth(), timeout=10).json()
+            profiledata = requests.get('https://api.royaleapi.com/player/{}/battles'.format(duelPlayer['TAG']), headers=self.token, timeout=10).json()
         except:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
@@ -447,14 +444,6 @@ def check_files():
     if not fileIO(f, "check"):
         print("Creating duels settings.json...")
         fileIO(f, {"CONFIG" : {}, "USERS" : {},"DUELS" : {}})
-    f = "cogs/tags.json"
-    if not fileIO(f, "check"):
-        print("Creating empty tags.json...")
-        fileIO(f, "save", {"0" : {"tag" : "DONOTREMOVE"}})
-    f = "cogs/auth.json"
-    if not fileIO(f, "check"):
-        print("enter your RoyaleAPI token in auth.json...")
-        fileIO(f, "save", {"token" : "enter your RoyaleAPI token here!"})
 
 def setup(bot):
     check_folders()

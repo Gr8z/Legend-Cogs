@@ -7,6 +7,11 @@ from .utils.dataIO import dataIO, fileIO
 import time
 import random
 
+try:
+    from crtools import auth
+except:
+    raise RuntimeError("Can't load crtools. Do '[p]cog install Legend-Cogs crtools'.")
+
 lastTag = '0'
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
@@ -17,9 +22,7 @@ class tournament:
 	def __init__(self, bot):
 		self.bot = bot
 		self.auth = dataIO.load_json('cogs/auth.json')
-
-	def getAuth(self):
-		return {"auth" : self.auth['token']}
+		self.token = auth.getToken()
 
 	# Converts maxPlayers to Cards
 	def getCards(self, maxPlayers):
@@ -53,7 +56,7 @@ class tournament:
 
 		global lastTag
 		try:
-			openTourney = requests.get('https://api.royaleapi.com/tournaments/joinable', headers=self.getAuth(), timeout=10).json()
+			openTourney = requests.get('https://api.royaleapi.com/tournaments/joinable', headers=self.token, timeout=10).json()
 		except:
 			return None
 
@@ -67,7 +70,7 @@ class tournament:
 			if (((int(time.time()) - createTime) < 10800) and (maxplayers > 50) and ((joined + 4) < maxplayers) and (tag != lastTag)):
 
 				try:
-					tourneyAPI = requests.get('https://api.royaleapi.com/tournaments/{}'.format(tag), headers=self.getAuth(), timeout=10).json()
+					tourneyAPI = requests.get('https://api.royaleapi.com/tournaments/{}'.format(tag), headers=self.token, timeout=10).json()
 					joined = tourneyAPI['currentPlayers']
 					maxplayers = tourneyAPI['maxPlayers']
 				except:
@@ -83,7 +86,7 @@ class tournament:
 	async def getRandomTourney(self):
 
 		try:
-			openTourney = requests.get('https://api.royaleapi.com/tournaments/joinable', headers=self.getAuth(), timeout=10).json()
+			openTourney = requests.get('https://api.royaleapi.com/tournaments/joinable', headers=self.token, timeout=10).json()
 		except:
 			return None
 
@@ -98,7 +101,7 @@ class tournament:
 			if (((int(time.time()) - createTime) < 10800) and ((joined + 1) < maxplayers)):
 
 				try:
-					tourneyAPI = requests.get('https://api.royaleapi.com/tournaments/{}'.format(tag), headers=self.getAuth(), timeout=10).json()
+					tourneyAPI = requests.get('https://api.royaleapi.com/tournaments/{}'.format(tag), headers=self.token, timeout=10).json()
 					joined = tourneyAPI['currentPlayers']
 					maxplayers = tourneyAPI['maxPlayers']
 				except:
@@ -185,23 +188,8 @@ class tournament:
 			await self.bot.say("Found nothing, please try again after a few minutes!")
 			return
 
-def check_files():
-	f = "cogs/auth.json"
-	if not fileIO(f, "check"):
-		print("enter your RoyaleAPI token in auth.json...")
-		fileIO(f, "save", {"token" : "enter your RoyaleAPI token here!"})
-
-def check_auth():
-	c = dataIO.load_json('cogs/auth.json')
-	if 'token' not in c:
-		c['token'] = ""
-	dataIO.save_json('cogs/auth.json', c)
-
-
 def setup(bot):
 	n = tournament(bot)
-	check_files()
-	check_auth()
 	loop = asyncio.get_event_loop()
 	loop.create_task(n.checkTourney())
 	bot.add_cog(n)

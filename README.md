@@ -28,6 +28,7 @@ If you want to see this bot in action, join the LeGeND Family Discord at [discor
  * **fmod** - Advanced Warning system by RSNFreud.
  * **stats** - Count Server Statistics on a Voice Channel.
  * **logging** - log messages and reactions to a database.
+ * **crtools** - Clash Royale Tools required for most CR cogs to work.
 
 ## Installation
 

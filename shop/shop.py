@@ -7,21 +7,19 @@ import asyncio
 import json
 import math
 
+try:
+    from crtools import auth, tags, clans
+except:
+    raise RuntimeError("Can't load crtools. Do '[p]cog install Legend-Cogs crtools'.")
+
 class shop:
     """Legend Family Shop for credits"""
 
     def __init__(self, bot):
         self.bot = bot
         self.banks = dataIO.load_json('data/economy/bank.json')
-        self.tags = dataIO.load_json('cogs/tags.json')
-        self.clans = dataIO.load_json('cogs/clans.json')
-        self.auth = dataIO.load_json('cogs/auth.json')
+        self.token = auth.getToken()
 
-    def getAuth(self):
-        return {"auth" : self.auth['token']}
-
-    async def updateClash(self):
-        self.tags = dataIO.load_json('cogs/tags.json')
 
     async def updateBank(self):
         self.banks = dataIO.load_json('data/economy/bank.json')
@@ -86,12 +84,6 @@ class shop:
         else:
             return False
 
-    def clanArray(self):
-        return self.clans.keys()
-
-    def numClans(self):
-        return len(self.clans.keys())
-
     def bank_check(self, user, amount):
         bank = self.bot.get_cog('Economy').bank
         if bank.account_exists(user):
@@ -109,15 +101,14 @@ class shop:
 
         server = ctx.message.server
         author = ctx.message.author
-        
-        await self.updateClash()
+
         await self.updateBank()
 
         bank = self.bot.get_cog('Economy').bank
         banks = list(self.banks['374596069989810176'])
 
         try:
-            clans = requests.get('https://api.royaleapi.com/clan/'+','.join(self.clans[clan]["tag"] for clan in self.clans), headers=self.getAuth(), timeout=20).json()
+            clans = requests.get('https://api.royaleapi.com/clan/' + (await clans.tagsClans()), headers=self.token, timeout=20).json()
         except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
@@ -133,7 +124,7 @@ class shop:
 
                 for key in range(0,len(banks)):
                     try:
-                        if (clan_donations > 0) and (clan_tag == self.tags[banks[key]]['tag']):
+                        if (clan_donations > 0) and (clan_tag == await tags.getTag(banks[key])):
 
                             try:
                                 user = discord.utils.get(ctx.message.server.members, id = banks[key])
@@ -180,23 +171,21 @@ class shop:
 
         server = ctx.message.server
         author = ctx.message.author
-        
-        await self.updateClash()
+
         await self.updateBank()
 
         bank = self.bot.get_cog('Economy').bank
         #banks = list(self.banks['363728974821457921']) # Test Server
         banks = list(self.banks['374596069989810176'])
 
-        tag = tag.strip('#').upper().replace('O', '0')
-        check = ['P', 'Y', 'L', 'Q', 'G', 'R', 'J', 'C', 'U', 'V', '0', '2', '8', '9']
+        tag = await tags.formatTag(tag)
 
-        if any(i not in check for i in tag):
+        if not await tags.verifyTag(tag):
             await self.bot.say("The ID you provided has invalid characters. Please try again.")
             return
 
         try:
-            tourney = requests.get('https://api.royaleapi.com/tournaments/'+tag, headers=self.getAuth(), timeout=10).json()
+            tourney = requests.get('https://api.royaleapi.com/tournaments/'+tag, headers=self.token, timeout=10).json()
         except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
@@ -211,7 +200,7 @@ class shop:
 
             for key in range(0,len(banks)):
                 try:
-                    if (tourney_score > 0) and (tourney_tag == self.tags[banks[key]]['tag']):
+                    if (tourney_score > 0) and (tourney_tag == await tags.getTag(banks[key])):
 
                         try:
                             user = discord.utils.get(ctx.message.server.members, id = banks[key])
@@ -326,10 +315,9 @@ class shop:
         if self.bank_check(author, 80000):
 
             try:
-                await self.updateClash()
                 await self.bot.type()
-                profiletag = self.tags[author.id]['tag']
-                profiledata = requests.get('https://api.royaleapi.com/player/{}?exclude=games,currentDeck,cards,battles,achievements'.format(profiletag), headers=self.getAuth(), timeout=10).json()
+                profiletag = await tags.getTag(author.id)
+                profiledata = requests.get('https://api.royaleapi.com/player/{}?exclude=games,currentDeck,cards,battles,achievements'.format(profiletag), headers=self.token, timeout=10).json()
                 if profiledata['clan'] is None:
                     clantag = ""
                     clanname = ""
@@ -347,19 +335,15 @@ class shop:
                 await self.bot.say("You must assosiate a tag with this member first using ``!save #tag @member``")
                 return
 
-            membership = False
-            for clankey in self.clanArray():
-                if self.clans[clankey]['tag'] == clantag:
-                    membership = True
-                    savekey = clankey
-                    break
+            membership = await clans.verifyMembership(clantag)
 
             if ign is None:
                 await self.bot.say("Error, Cannot add emoji.")
             else:
                 try:
                     if membership:
-                        newclanname = self.clans[savekey]['nickname']
+                        savekey = await clans.getClanKey(clantag)
+                        newclanname = await clans.getClan(savekey)['nickname']
                         newname = "{} {} | {}".format(ign, emoji, newclanname)
                     else:
                         newname = "{} | Guest {}".format(ign, emoji)
@@ -524,10 +508,9 @@ class shop:
             await self.bot.say("**{}** is not participating in FIFA World Cup 2018, select from the following options:\n{}".format(country.upper(),clist))
             return
                           
-        await self.updateClash()
         await self.bot.type()
-        profiletag = self.tags[author.id]['tag']
-        profiledata = requests.get('https://api.royaleapi.com/player/{}?exclude=games,currentDeck,cards,battles,achievements'.format(profiletag), headers=self.getAuth(), timeout=10).json()
+        profiletag = await tags.getTag(author.id)
+        profiledata = requests.get('https://api.royaleapi.com/player/{}?exclude=games,currentDeck,cards,battles,achievements'.format(profiletag), headers=self.token, timeout=10).json()
         if profiledata['clan'] is None:
             clantag = ""
             clanname = ""
@@ -535,19 +518,16 @@ class shop:
             clantag = profiledata['clan']['tag']
             clanname = profiledata['clan']['name']
         ign = profiledata['name']
-        membership = False
-        for clankey in self.clanArray():
-            if self.clans[clankey]['tag'] == clantag:
-                membership = True
-                savekey = clankey
-                break
+
+        membership = await clans.verifyMembership(clantag)
 
         if ign is None:
             await self.bot.say("Error, Cannot add emoji.")
         else:
             try:
                 if membership:
-                    newclanname = self.clans[savekey]['nickname']
+                    savekey = await clans.getClanKey(clantag)
+                    newclanname = await clans.getClan(savekey)['nickname']
                     newname = "{} {} | {}".format(ign, country, newclanname)
                 else:
                     newname = "{} {} | Guest ".format(ign, country)
@@ -557,22 +537,5 @@ class shop:
             else:
                 await self.bot.say("Nickname changed to ** {} **\n".format(newname))
                     
-def check_files():
-    f = "cogs/tags.json"
-    if not fileIO(f, "check"):
-        print("Creating empty tags.json...")
-        fileIO(f, "save", {"0" : {"tag" : "DONOTREMOVE"}})
-
-    f = "cogs/clans.json"
-    if not fileIO(f, "check"):
-        print("Creating empty clans.json...")
-        fileIO(f, "save", {})
-
-    f = "cogs/auth.json"
-    if not fileIO(f, "check"):
-        print("enter your RoyaleAPI token in auth.json...")
-        fileIO(f, "save", {"token" : "enter your RoyaleAPI token here!"})
-
 def setup(bot):
-    check_files()
     bot.add_cog(shop(bot))

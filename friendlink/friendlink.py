@@ -8,6 +8,11 @@ import urllib.parse as urlparse
 import requests
 import json
 
+try:
+    from crtools import auth
+except:
+    raise RuntimeError("Can't load crtools. Do '[p]cog install Legend-Cogs crtools'.")
+
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
 
@@ -17,10 +22,7 @@ class friendlink:
     def __init__(self, bot):
         self.bot = bot
         self.regex = re.compile(r"<?(https?:\/\/)?(www\.)?(link\.clashroyale\.com\/invite\/friend)\b([-a-zA-Z0-9/]*)>?")
-        self.auth = dataIO.load_json('cogs/auth.json')
-
-    def getAuth(self):
-        return {"auth" : self.auth['token']}
+        self.token = auth.getToken()
 
     async def friend_link(self, message):
 
@@ -34,7 +36,7 @@ class friendlink:
             platform = urlparse.parse_qs(parsed.query)['platform'][0]
 
             try:
-                profiledata = requests.get('https://api.royaleapi.com/player/{}'.format(profiletag), headers=self.getAuth(), timeout=10).json()
+                profiledata = requests.get('https://api.royaleapi.com/player/{}'.format(profiletag), headers=self.token, timeout=10).json()
             except:
                 return
 
@@ -73,12 +75,5 @@ class friendlink:
 
         await self.friend_link(message)
 
-def check_files():
-    f = "cogs/auth.json"
-    if not fileIO(f, "check"):
-        print("enter your RoyaleAPI token in auth.json...")
-        fileIO(f, "save", {"token" : "enter your RoyaleAPI token here!"})
-
 def setup(bot):
-    check_files()
     bot.add_cog(friendlink(bot))

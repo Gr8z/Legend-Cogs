@@ -13,6 +13,11 @@ from PIL import ImageFont
 from PIL import Image
 from PIL import ImageDraw
 
+try:
+    from crtools import auth, clans
+except:
+    raise RuntimeError("Can't load crtools. Do '[p]cog install Legend-Cogs crtools'.")
+
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
 
@@ -21,17 +26,7 @@ class warlog:
 
     def __init__(self, bot):
         self.bot = bot
-        self.auth = dataIO.load_json('cogs/auth.json')
-        self.clans = dataIO.load_json('cogs/clans.json')
-
-    def getAuth(self):
-        return {"auth" : self.auth['token']}
-    
-    def save_clans(self):
-        dataIO.save_json('cogs/clans.json', self.clans)
-
-    def update_clans(self):
-        self.clans = dataIO.load_json('cogs/clans.json')
+        self.token = auth.getToken()
 
     async def getLeague(self, trophies):
         
@@ -90,12 +85,10 @@ class warlog:
 
     async def getWarData(self, channel):
 
-        self.update_clans()
-
-        for clankey in self.clans.keys():
+        for clankey in clans.keysClans():
 
             try:
-                clandata = requests.get('https://api.royaleapi.com/clan/{}/warlog'.format(self.clans[clankey]['tag']), headers=self.getAuth(), timeout=10).json()
+                clandata = requests.get('https://api.royaleapi.com/clan/{}/warlog'.format(await clans.getClanData(clankey, 'tag')), headers=self.token, timeout=10).json()
             except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
                 return
             except requests.exceptions.RequestException as e:
@@ -103,10 +96,10 @@ class warlog:
                 return
 
             standings = clandata[0]['standings']
-            clanRank = await self.findRank(standings, "tag", self.clans[clankey]['tag'])
+            clanRank = await self.findRank(standings, "tag", await clans.getClanData(clankey, 'tag'))
             warTrophies = standings[clanRank]['warTrophies']
 
-            if self.clans[clankey]['warTrophies'] != warTrophies:
+            if await clans.getClan(clankey)['warTrophies'] != warTrophies:
 
                 clanLeague = await self.getLeague(warTrophies)
 
@@ -118,8 +111,7 @@ class warlog:
                     f.seek(0)
                     await self.bot.send_file(channel, f, filename=filename)
 
-                self.clans[clankey]['warTrophies'] = warTrophies
-                self.save_clans()
+                clans.setWarTrophies(clankey, warTrophies)
 
             await asyncio.sleep(1)
 
@@ -130,21 +122,5 @@ class warlog:
         channel = ctx.message.channel
         await self.getWarData(channel)
 
-
-def check_clans():
-    c = dataIO.load_json('cogs/clans.json')
-    for clankey in c.keys():
-        if 'members' not in c[clankey]:
-            c[clankey]['members'] = []  
-    dataIO.save_json('cogs/clans.json', c)
-
-def check_files():
-    f = "cogs/auth.json"
-    if not fileIO(f, "check"):
-        print("enter your RoyaleAPI token in auth.json...")
-        fileIO(f, "save", {"token" : "enter your RoyaleAPI token here!"})
-
 def setup(bot):
-    check_files()
-    check_clans()
     bot.add_cog(warlog(bot))

@@ -16,28 +16,23 @@ import operator
 import numpy as np
 from __main__ import send_cmd_help
 
+try:
+    from crtools import auth, clans
+except:
+    raise RuntimeError("Can't load crtools. Do '[p]cog install Legend-Cogs crtools'.")
+
 class Clanlog:
     """Clan Log cog for LeGeND family"""
 
     def __init__(self, bot):
         self.bot = bot
-        self.auth = dataIO.load_json('cogs/auth.json')
-        self.clans = dataIO.load_json('cogs/clans.json')
+        self.token = auth.getToken()
         self.member_log = dataIO.load_json('data/clanlog/member_log.json')
         self.discord_log = dataIO.load_json('data/clanlog/discord_log.json')
         self.last_count = 0
         
-    def getAuth(self):
-        return {"auth" : self.auth['token']}
-    
-    def save_clans(self):
-        dataIO.save_json('cogs/clans.json', self.clans)
-        
     def save_member_log(self):
         dataIO.save_json('data/clanlog/member_log.json', self.member_log)
-        
-    def update_clans(self):
-        self.clans = dataIO.load_json('cogs/clans.json')
     
     def update_member_log(self):
         self.member_log = dataIO.load_json('data/clanlog/member_log.json')
@@ -50,11 +45,10 @@ class Clanlog:
     async def clanlog(self, ctx):
         """Notifies whenever someone leaves or joins"""
         try:
-            self.update_clans()
-            old_clans = deepcopy(self.clans)
+            old_clans = deepcopy(await clans.getClans())
             
-            clan_keys = list(self.clans.keys())
-            clan_requests = requests.get("https://api.royaleapi.com/clan/{}".format(','.join(self.clans[clan]["tag"] for clan in self.clans)), headers=self.getAuth(), timeout = 60).json()
+            clan_keys = list(clans.keysClans())
+            clan_requests = requests.get("https://api.royaleapi.com/clan/{}".format(await clans.tagsClans()), headers=self.token, timeout = 60).json()
             
             count = 0
             for i in range(len(clan_requests)):
@@ -62,8 +56,7 @@ class Clanlog:
                 one_clan = []
                 for member in clan_requests[i]["members"]:
                     one_clan.append({"name" : member["name"], "tag" : member["tag"]})
-                self.clans[clan_keys[i]]["members"] = one_clan 
-            self.save_clans()
+                await clans.setMemberList(clan_keys[i], one_clan)
             
             if self.last_count != count:
                 self.update_member_log()
@@ -81,34 +74,34 @@ class Clanlog:
                     
             for clankey in old_clans.keys():
                 for member in old_clans[clankey]["members"]:
-                    if member not in self.clans[clankey]["members"]:
+                    if member not in await clans.getClanData(clankey, 'members'):
                         title = "{} (#{})".format(member["name"], member["tag"])
                         desc = "left **{}**".format(old_clans[clankey]["name"])
                         embed_left = discord.Embed(title = title, url = "https://royaleapi.com/player/{}".format(member["tag"]), description=desc, color=0xff0000)
                         if server.id == "374596069989810176":
-                            if self.clans[clankey]["log_channel"] is not None:
+                            if await clans.getClanData(clankey, 'log_channel')  is not None:
                                 try:
-                                    await self.bot.send_message(discord.Object(id=self.clans[clankey]["log_channel"]),embed = embed_left)
+                                    await self.bot.send_message(discord.Object(id=await clans.getClanData(clankey, 'log_channel')),embed = embed_left)
                                 except discord.errors.NotFound:
-                                    await self.bot.say("<#{}> NOT FOUND".format(self.clans[clankey]["log_channel"]))
+                                    await self.bot.say("<#{}> NOT FOUND".format(await clans.getClanData(clankey, 'log_channel')))
                                 except discord.errors.Forbidden:
-                                    await self.bot.say("No Permission to send messages in <#{}>".format(self.clans[clankey]["log_channel"]))
+                                    await self.bot.say("No Permission to send messages in <#{}>".format(await clans.getClanData(clankey, 'log_channel')))
                         await self.bot.say(embed = embed_left)
           
-            for clankey in self.clans.keys():
-                for member in self.clans[clankey]["members"]:
+            for clankey in clans.keysClans():
+                for member in await clans.getClanData(clankey, 'members'):
                     if member not in old_clans[clankey]["members"]:
                         title = "{} (#{})".format(member["name"], member["tag"])
                         desc = "joined **{}**".format(old_clans[clankey]["name"])
                         embed_join = discord.Embed(title = title, url = "https://royaleapi.com/player/{}".format(member["tag"]), description=desc, color=0x00ff40)
                         if server.id == "374596069989810176":
-                            if self.clans[clankey]["log_channel"] is not None:
+                            if await clans.getClanData(clankey, 'log_channel') is not None:
                                 try:
-                                    await self.bot.send_message(discord.Object(id=self.clans[clankey]["log_channel"]),embed = embed_join)
+                                    await self.bot.send_message(discord.Object(id=await clans.getClanData(clankey, 'log_channel')),embed = embed_join)
                                 except discord.errors.NotFound:
-                                    await self.bot.say("<#{}> NOT FOUND".format(self.clans[clankey]["log_channel"]))
+                                    await self.bot.say("<#{}> NOT FOUND".format(await clans.getClanData(clankey, 'log_channel')))
                                 except discord.errors.Forbidden:
-                                    await self.bot.say("No Permission to send messages in <#{}>".format(self.clans[clankey]["log_channel"]))
+                                    await self.bot.say("No Permission to send messages in <#{}>".format(await clans.getClanData(clankey, 'log_channel')))
                         await self.bot.say(embed = embed_join)
                         
         except(requests.exceptions.Timeout, json.decoder.JSONDecodeError, KeyError):
@@ -119,16 +112,14 @@ class Clanlog:
     async def clanlogdownload(self):
         """Downloads data to prevent clanlog from sending too many messages"""
         try:
-            self.update_clans()
-            clan_keys = list(self.clans.keys())
-            clan_requests = requests.get("https://api.royaleapi.com/clan/{}".format(','.join(self.clans[clan]["tag"] for clan in self.clans)), headers=self.getAuth(), timeout = 60).json()
+            clan_keys = list(clans.keysClans())
+            clan_requests = requests.get("https://api.royaleapi.com/clan/{}".format(await clans.tagsClans()), headers=self.token, timeout = 60).json()
             
             for i in range(len(clan_requests)):
                 one_clan = []
                 for member in clan_requests[i]["members"]:
                     one_clan.append({"name" : member["name"], "tag" : member["tag"]})
-                self.clans[clan_keys[i]]["members"] = one_clan
-            self.save_clans()  
+                await clans.setMemberList(clan_keys[i], one_clan)
             await self.bot.say("Downloaded.")
             
         except(requests.exceptions.Timeout, json.decoder.JSONDecodeError, KeyError):
@@ -221,20 +212,7 @@ class Clanlog:
 
         except (IndexError):
             await self.bot.say("Clanlog command needs to collect more data!")
-        
-def check_clans():
-    c = dataIO.load_json('cogs/clans.json')
-    for clankey in c.keys():
-        if 'members' not in c[clankey]:
-            c[clankey]['members'] = []  
-    dataIO.save_json('cogs/clans.json', c)
-            
-def check_auth():
-    c = dataIO.load_json('cogs/auth.json')
-    if 'token' not in c:
-        c['token'] = ""
-    dataIO.save_json('cogs/auth.json', c)
-    
+                
 def check_files():
     f = "data/clanlog/member_log.json"
     if not fileIO(f, "check"):
@@ -247,9 +225,6 @@ def check_folders():
         os.makedirs("data/clanlog")
         
 def setup(bot):
-    check_auth()
-    check_clans()
     check_folders()
     check_files()
     bot.add_cog(Clanlog(bot))
-
