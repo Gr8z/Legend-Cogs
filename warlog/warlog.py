@@ -99,7 +99,7 @@ class warlog:
             clanRank = await self.findRank(standings, "tag", await clans.getClanData(clankey, 'tag'))
             warTrophies = standings[clanRank]['warTrophies']
 
-            if await clans.getClan(clankey)['warTrophies'] != warTrophies:
+            if await clans.getClanData(clankey, 'warTrophies') != warTrophies:
 
                 clanLeague = await self.getLeague(warTrophies)
 

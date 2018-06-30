@@ -343,7 +343,7 @@ class shop:
                 try:
                     if membership:
                         savekey = await clans.getClanKey(clantag)
-                        newclanname = await clans.getClan(savekey)['nickname']
+                        newclanname = await clans.getClanData(clankey, 'nickname')
                         newname = "{} {} | {}".format(ign, emoji, newclanname)
                     else:
                         newname = "{} | Guest {}".format(ign, emoji)
@@ -527,7 +527,7 @@ class shop:
             try:
                 if membership:
                     savekey = await clans.getClanKey(clantag)
-                    newclanname = await clans.getClan(savekey)['nickname']
+                    newclanname = await clans.getClanData(clankey, 'nickname')
                     newname = "{} {} | {}".format(ign, country, newclanname)
                 else:
                     newname = "{} {} | Guest ".format(ign, country)

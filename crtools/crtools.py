@@ -54,7 +54,6 @@ class Tags():
 		for user in serverUsers:
 			if user.id in self.tags:
 				player_tag = self.tags[user.id]['tag']
-
 				if player_tag == await self.formatTag(tag):
 					return user
 		return None
@@ -82,10 +81,6 @@ class Clans():
 	async def getClans(self):
 		"""Return clan array"""
 		return self.clans
-
-	async def getClan(self, clankey):
-		"""Return clan array"""
-		return self.clans[clankey]
 
 	async def getClanData(self, clankey, data):
 		"""Return clan array"""
