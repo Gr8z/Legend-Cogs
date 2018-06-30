@@ -51,11 +51,12 @@ class tags:
 
 	async def getUser(self, serverUsers, tag):
 		"""Get User from CR Tag"""
-		for user in serverUsers:
-			player_tag = self.tags[user.id]['tag']
+		try:
+			for user in serverUsers:
+				player_tag = self.tags[user.id]['tag']
 
-			if player_tag == await self.formatTag(tag):
-				return user
+				if player_tag == await self.formatTag(tag):
+					return user
 		except KeyError:
 			return None
 
