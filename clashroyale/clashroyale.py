@@ -127,7 +127,8 @@ class clashroyale:
 		embed.add_field(name="Upcoming Chests", value=valuechestText, inline=False)
 		embed.add_field(name="Special Chests", value=chest1+chest2+chest3+chest4+chest5, inline=False)
 		embed.set_footer(text=credits, icon_url=creditIcon)
-			await self.bot.say(embed=embed)
+		
+		await self.bot.say(embed=embed)
 
 	@commands.command(pass_context=True, aliases=['clashdeck'])
 	async def clashDeck(self, ctx, member: discord.Member = None):

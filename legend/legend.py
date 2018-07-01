@@ -1187,8 +1187,6 @@ class legend:
             return
 
         clanwar_dict = {}
-        
-        for y in range(0, len(tourney['members'])):
         for member in tourney.members:
 
             tourney_score = member.score
