@@ -55,7 +55,7 @@ class Clanlog:
             one_clan = []
             for member in clan.members:
                 one_clan.append({"name" : member.name, "tag" : member.tag})
-            await self.clans.setMemberList(self.clans.getClanKey(clan.tag), one_clan)
+            await self.clans.setMemberList(await self.clans.getClanKey(clan.tag), one_clan)
         
         if self.last_count != count:
             self.update_member_log()
@@ -117,7 +117,7 @@ class Clanlog:
              one_clan = []
              for member in clan.members:
                  one_clan.append({"name" : member.name, "tag" : member.tag})
-             await self.clans.setMemberList(self.clans.getClanKey(clan.tag), one_clan)
+             await self.clans.setMemberList(await self.clans.getClanKey(clan.tag), one_clan)
         await self.bot.say("Downloaded.")
             
         
