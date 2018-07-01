@@ -826,7 +826,7 @@ class legend:
         cr_members_tag = []
         cr_members_trophy = []
         for member in clandata.members:
-            cr_members_name.append(member[x]['name'])
+            cr_members_name.append(member['name'])
             cr_members_tag.append(member['tag'])
             cr_members_trophy.append(member['trophies'])
 
