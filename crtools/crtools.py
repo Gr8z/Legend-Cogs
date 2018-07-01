@@ -74,6 +74,7 @@ class clans:
 	"""Clan Family Management"""
 	def __init__(self):
 		self.clans = dataIO.load_json(clans_path)
+		self.tags = tags()
 
 	async def getClans(self):
 		"""Return clan array"""
@@ -108,7 +109,7 @@ class clans:
 
 	async def verifyMembership(self, clantag):
 		"""Check if a clan is part of the family"""
-		clantag = await tags.formatTag(clantag)
+		clantag = await self.tags.formatTag(clantag)
 		for clankey in self.keysClans():
 			if self.clans[clankey]['tag'] == clantag:
 				return True
@@ -116,7 +117,7 @@ class clans:
 
 	async def getClanKey(self, clantag):
 		"""Get a clan key from a clan tag."""
-		clantag = await tags.formatTag(clantag)
+		clantag = await self.tags.formatTag(clantag)
 		for clankey in self.keysClans():
 			if self.clans[clankey]['tag'] == clantag:
 				return clankey
