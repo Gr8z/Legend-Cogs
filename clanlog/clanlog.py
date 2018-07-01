@@ -45,7 +45,7 @@ class Clanlog:
         clan_keys = list(self.clans.keysClans())
 
         try:
-            clan_requests = await self.clash.get_clan(await self.clans.tagsClans())
+            clan_requests = await self.clash.get_clan(*await self.clans.tagsClans())
         except clashroyale.RequestError:
             print("CLANLOG: Cannot reach Clash Royale Servers.")
             return
@@ -110,7 +110,7 @@ class Clanlog:
         """Downloads data to prevent clanlog from sending too many messages"""
         try:
             clan_keys = list(self.clans.keysClans())
-            clan_requests = await self.clash.get_clan(await self.clans.tagsClans())
+            clan_requests = await self.clash.get_clan(*await self.clans.tagsClans())
         except clashroyale.RequestError:
             await self.bot.say("Cannot reach Clash Royale servers. Try again later!")
             return

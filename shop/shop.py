@@ -104,7 +104,7 @@ class shop:
         banks = list(self.banks['374596069989810176'])
 
         try:
-            clans = await self.clash.get_clan(await self.clans.tagsClans())
+            clans = await self.clash.get_clan(*await self.clans.tagsClans())
         except clashroyale.RequestError:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
