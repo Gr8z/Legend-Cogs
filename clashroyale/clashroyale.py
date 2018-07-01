@@ -228,7 +228,7 @@ class clashroyale:
 			embed.add_field(name="Ends In", value=endTime, inline=True)
 
 
-		embed.add_field(name="Hosted By", value=tourneydata.creater.name, inline=True)
+		embed.add_field(name="Hosted By", value=tourneydata.creator.name, inline=True)
 		embed.add_field(name="Top prize", value="<:tournamentcards:380832770454192140> " + str(cards) + "	 <:coin:380832316932489268> " +  str(coins), inline=True)
 		embed.set_footer(text=credits, icon_url=creditIcon)
 		
