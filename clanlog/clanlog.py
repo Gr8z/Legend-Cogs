@@ -69,7 +69,7 @@ class Clanlog:
             
             server = ctx.message.server
                     
-            for clankey in old_self.clans.keys():
+            for clankey in old_clans.keys():
                 for member in old_clans[clankey]["members"]:
                     if member not in await self.clans.getClanData(clankey, 'members'):
                         title = "{} (#{})".format(member["name"], member["tag"])
