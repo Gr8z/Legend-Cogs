@@ -195,7 +195,7 @@ class clashroyale:
 
 		try:
 			tourneydata = await self.clash.get_tournament(tag)
-		except clashroyale.RequestError
+		except clashroyale.RequestError:
 			await self.bot.say("Error: Tournament not found. Please double check your #TAG")
 			return
 
