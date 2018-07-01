@@ -758,8 +758,10 @@ class legend:
             await self.bot.type()
             profiletag = await self.tags.getTag(member.id)
             profiledata = await self.clash.get_player(profiletag, exclude=["games","currentDeck","cards","achievements"])
-            clantag = profiledata.clan.tag
-            clanname = profiledata.clan.name
+            if profiledata.clan is None:
+                clantag = "none"
+            else: 
+                clantag = profiledata.clan.tag
             ign = profiledata.name
         except clashroyale.RequestError:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
