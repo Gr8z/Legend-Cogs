@@ -213,7 +213,7 @@ class clashroyale:
 
 		if not tourneydata.open:
 			if password is not None:
-				embed.add_field(name="Password", value=password, inline=True)
+				embed.add_field(name="Password", value="```{}```".format(password), inline=True)
 			else:
 				await self.bot.say("Error: Please enter a tournament password.")
 				return
