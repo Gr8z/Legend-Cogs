@@ -16,17 +16,14 @@ import operator
 import numpy as np
 from __main__ import send_cmd_help
 
-try:
-    from cogs.crtools import auth, clans
-except:
-    raise RuntimeError("Can't load crtools. Do '[p]cog install Legend-Cogs crtools'.")
-
 class Clanlog:
     """Clan Log cog for LeGeND family"""
 
     def __init__(self, bot):
         self.bot = bot
-        self.token = auth.getToken()
+        self.auth = self.bot.get_cog('crtools').auth
+        self.clans = self.bot.get_cog('crtools').clans
+        self.token = self.auth.getToken()
         self.member_log = dataIO.load_json('data/clanlog/member_log.json')
         self.discord_log = dataIO.load_json('data/clanlog/discord_log.json')
         self.last_count = 0
@@ -45,10 +42,10 @@ class Clanlog:
     async def clanlog(self, ctx):
         """Notifies whenever someone leaves or joins"""
         try:
-            old_clans = deepcopy(await clans.getClans())
+            old_clans = deepcopy(await self.clans.getClans())
             
-            clan_keys = list(clans.keysClans())
-            clan_requests = requests.get("https://api.royaleapi.com/clan/{}".format(await clans.tagsClans()), headers=self.token, timeout = 60).json()
+            clan_keys = list(self.clans.keysClans())
+            clan_requests = requests.get("https://api.royaleapi.com/clan/{}".format(await self.clans.tagsClans()), headers=self.token, timeout = 60).json()
             
             count = 0
             for i in range(len(clan_requests)):
@@ -56,7 +53,7 @@ class Clanlog:
                 one_clan = []
                 for member in clan_requests[i]["members"]:
                     one_clan.append({"name" : member["name"], "tag" : member["tag"]})
-                await clans.setMemberList(clan_keys[i], one_clan)
+                await self.clans.setMemberList(clan_keys[i], one_clan)
             
             if self.last_count != count:
                 self.update_member_log()
@@ -72,36 +69,36 @@ class Clanlog:
             
             server = ctx.message.server
                     
-            for clankey in old_clans.keys():
+            for clankey in old_self.clans.keys():
                 for member in old_clans[clankey]["members"]:
-                    if member not in await clans.getClanData(clankey, 'members'):
+                    if member not in await self.clans.getClanData(clankey, 'members'):
                         title = "{} (#{})".format(member["name"], member["tag"])
                         desc = "left **{}**".format(old_clans[clankey]["name"])
                         embed_left = discord.Embed(title = title, url = "https://royaleapi.com/player/{}".format(member["tag"]), description=desc, color=0xff0000)
                         if server.id == "374596069989810176":
-                            if await clans.getClanData(clankey, 'log_channel')  is not None:
+                            if await self.clans.getClanData(clankey, 'log_channel')  is not None:
                                 try:
-                                    await self.bot.send_message(discord.Object(id=await clans.getClanData(clankey, 'log_channel')),embed = embed_left)
+                                    await self.bot.send_message(discord.Object(id=await self.clans.getClanData(clankey, 'log_channel')),embed = embed_left)
                                 except discord.errors.NotFound:
-                                    await self.bot.say("<#{}> NOT FOUND".format(await clans.getClanData(clankey, 'log_channel')))
+                                    await self.bot.say("<#{}> NOT FOUND".format(await self.clans.getClanData(clankey, 'log_channel')))
                                 except discord.errors.Forbidden:
-                                    await self.bot.say("No Permission to send messages in <#{}>".format(await clans.getClanData(clankey, 'log_channel')))
+                                    await self.bot.say("No Permission to send messages in <#{}>".format(await self.clans.getClanData(clankey, 'log_channel')))
                         await self.bot.say(embed = embed_left)
           
-            for clankey in clans.keysClans():
-                for member in await clans.getClanData(clankey, 'members'):
+            for clankey in self.clans.keysClans():
+                for member in await self.clans.getClanData(clankey, 'members'):
                     if member not in old_clans[clankey]["members"]:
                         title = "{} (#{})".format(member["name"], member["tag"])
                         desc = "joined **{}**".format(old_clans[clankey]["name"])
                         embed_join = discord.Embed(title = title, url = "https://royaleapi.com/player/{}".format(member["tag"]), description=desc, color=0x00ff40)
                         if server.id == "374596069989810176":
-                            if await clans.getClanData(clankey, 'log_channel') is not None:
+                            if await self.clans.getClanData(clankey, 'log_channel') is not None:
                                 try:
-                                    await self.bot.send_message(discord.Object(id=await clans.getClanData(clankey, 'log_channel')),embed = embed_join)
+                                    await self.bot.send_message(discord.Object(id=await self.clans.getClanData(clankey, 'log_channel')),embed = embed_join)
                                 except discord.errors.NotFound:
-                                    await self.bot.say("<#{}> NOT FOUND".format(await clans.getClanData(clankey, 'log_channel')))
+                                    await self.bot.say("<#{}> NOT FOUND".format(await self.clans.getClanData(clankey, 'log_channel')))
                                 except discord.errors.Forbidden:
-                                    await self.bot.say("No Permission to send messages in <#{}>".format(await clans.getClanData(clankey, 'log_channel')))
+                                    await self.bot.say("No Permission to send messages in <#{}>".format(await self.clans.getClanData(clankey, 'log_channel')))
                         await self.bot.say(embed = embed_join)
                         
         except(requests.exceptions.Timeout, json.decoder.JSONDecodeError, KeyError):
@@ -112,14 +109,14 @@ class Clanlog:
     async def clanlogdownload(self):
         """Downloads data to prevent clanlog from sending too many messages"""
         try:
-            clan_keys = list(clans.keysClans())
-            clan_requests = requests.get("https://api.royaleapi.com/clan/{}".format(await clans.tagsClans()), headers=self.token, timeout = 60).json()
+            clan_keys = list(self.clans.keysClans())
+            clan_requests = requests.get("https://api.royaleapi.com/clan/{}".format(await self.clans.tagsClans()), headers=self.token, timeout = 60).json()
             
             for i in range(len(clan_requests)):
                 one_clan = []
                 for member in clan_requests[i]["members"]:
                     one_clan.append({"name" : member["name"], "tag" : member["tag"]})
-                await clans.setMemberList(clan_keys[i], one_clan)
+                await self.clans.setMemberList(clan_keys[i], one_clan)
             await self.bot.say("Downloaded.")
             
         except(requests.exceptions.Timeout, json.decoder.JSONDecodeError, KeyError):

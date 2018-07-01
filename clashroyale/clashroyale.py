@@ -6,11 +6,6 @@ import os
 from __main__ import send_cmd_help
 import time
 
-try:
-    from cogs.crtools import auth, tags
-except:
-    raise RuntimeError("Can't load crtools. Do '[p]cog install Legend-Cogs crtools'.")
-
 BOTCOMMANDER_ROLES =  ["Family Representative", "Clan Manager", "Clan Deputy", "Co-Leader", "Hub Officer", "admin"]
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
@@ -20,7 +15,9 @@ class clashroyale:
 
 	def __init__(self, bot):
 		self.bot = bot
-		self.token = auth.getToken()
+		self.auth = self.bot.get_cog('crtools').auth
+		self.tags = self.bot.get_cog('crtools').tags
+		self.token = self.auth.getToken()
 
 	# Converts maxPlayers to Cards
 	def getCards(self, maxPlayers):
@@ -58,7 +55,7 @@ class clashroyale:
 			if member is None:
 				member = ctx.message.author
 
-			profiletag = await tags.getTag(member.id)
+			profiletag = await self.tags.getTag(member.id)
 
 			await self.bot.type()
 
@@ -112,7 +109,7 @@ class clashroyale:
 			if member is None:
 				member = ctx.message.author
 
-			profiletag = await tags.getTag(member.id)
+			profiletag = await self.tags.getTag(member.id)
 
 			await self.bot.type()
 
@@ -138,6 +135,7 @@ class clashroyale:
 			await self.bot.say(embed=embed)
 
 		except:
+			raise
 			await self.bot.say("You need to first save your profile using ``!save #GAMETAG``")
 
 	@commands.command(pass_context=True, aliases=['clashdeck'])
@@ -148,7 +146,7 @@ class clashroyale:
 			if member is None:
 				member = ctx.message.author
 
-			profiletag = await tags.getTag(member.id)
+			profiletag = await self.tags.getTag(member.id)
 
 			await self.bot.type()
 
@@ -198,9 +196,9 @@ class clashroyale:
 
 		await self.bot.type()
 
-		tag = await tags.formatTag(tag)
+		tag = await self.tags.formatTag(tag)
 
-		if not await tags.verifyTag(tag):
+		if not await self.tags.verifyTag(tag):
 			await self.bot.say("The ID you provided has invalid characters. Please try again.")
 			return
 
@@ -260,9 +258,9 @@ class clashroyale:
 		server = ctx.message.server
 		author = ctx.message.author
 
-		profiletag = await tags.formatTag(profiletag)
+		profiletag = await self.tags.formatTag(profiletag)
 
-		if not await tags.verifyTag(profiletag):
+		if not await self.tags.verifyTag(profiletag):
 			await self.bot.say("The ID you provided has invalid characters. Please try again.")
 			return
 
@@ -290,12 +288,12 @@ class clashroyale:
 		try:
 			profiledata = requests.get('https://api.royaleapi.com/player/{}'.format(profiletag), headers=self.token, timeout=10).json()
 
-			checkUser = await tags.getUser(server.members, profiletag)
+			checkUser = await self.tags.getUser(server.members, profiletag)
 			if checkUser is not None:
 				await self.bot.say("Error, This Player ID is already linked with **" + checkUser.display_name + "**")
 				return
 
-			await tags.linkTag(profiletag, member.id)
+			await self.tags.linkTag(profiletag, member.id)
 
 			embed = discord.Embed(color=discord.Color.green())
 			avatar = member.avatar_url if member.avatar else member.default_avatar_url

@@ -12,11 +12,6 @@ import time
 import requests
 from operator import itemgetter, attrgetter
 
-try:
-    from cogs.crtools import auth, tags
-except:
-    raise RuntimeError("Can't load crtools. Do '[p]cog install Legend-Cogs crtools'.")
-
 settings_path = "data/duels/settings.json"
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
@@ -27,7 +22,9 @@ class duels:
     def __init__(self, bot):
         self.bot = bot
         self.settings = dataIO.load_json(settings_path)
-        self.token = auth.getToken()
+        self.auth = self.bot.get_cog('crtools').auth
+        self.tags = self.bot.get_cog('crtools').tags
+        self.token = self.auth.getToken()
         self.active = False
 
      # Check if there is an account made.
@@ -95,7 +92,7 @@ class duels:
 
         if self.account_check(author.id) is False:
 
-            player_tag = await tags.getTag(author.id)
+            player_tag = await self.tags.getTag(author.id)
             if player_tag is not None:
                 self.settings["USERS"][author.id] = {
                     "WON" : 0,
@@ -329,7 +326,7 @@ class duels:
         playerTags = []
 
         for player in duelPlayers:
-            playerTags.append(self.settings['USERS'][player]["TAG"])
+            playerself.tags.append(self.settings['USERS'][player]["TAG"])
 
         await self.bot.type()
 

@@ -13,11 +13,6 @@ from PIL import ImageFont
 from PIL import Image
 from PIL import ImageDraw
 
-try:
-    from cogs.crtools import auth, clans
-except:
-    raise RuntimeError("Can't load crtools. Do '[p]cog install Legend-Cogs crtools'.")
-
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
 
@@ -26,7 +21,9 @@ class warlog:
 
     def __init__(self, bot):
         self.bot = bot
-        self.token = auth.getToken()
+        self.auth = self.bot.get_cog('crtools').auth
+        self.clans = self.bot.get_cog('crtools').clans
+        self.token = self.auth.getToken()
 
     async def getLeague(self, trophies):
         
@@ -85,10 +82,10 @@ class warlog:
 
     async def getWarData(self, channel):
 
-        for clankey in clans.keysClans():
+        for clankey in self.clans.keysClans():
 
             try:
-                clandata = requests.get('https://api.royaleapi.com/clan/{}/warlog'.format(await clans.getClanData(clankey, 'tag')), headers=self.token, timeout=10).json()
+                clandata = requests.get('https://api.royaleapi.com/clan/{}/warlog'.format(await self.clans.getClanData(clankey, 'tag')), headers=self.token, timeout=10).json()
             except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
                 return
             except requests.exceptions.RequestException as e:
@@ -96,10 +93,10 @@ class warlog:
                 return
 
             standings = clandata[0]['standings']
-            clanRank = await self.findRank(standings, "tag", await clans.getClanData(clankey, 'tag'))
+            clanRank = await self.findRank(standings, "tag", await self.clans.getClanData(clankey, 'tag'))
             warTrophies = standings[clanRank]['warTrophies']
 
-            if await clans.getClanData(clankey, 'warTrophies') != warTrophies:
+            if await self.clans.getClanData(clankey, 'warTrophies') != warTrophies:
 
                 clanLeague = await self.getLeague(warTrophies)
 
@@ -111,7 +108,7 @@ class warlog:
                     f.seek(0)
                     await self.bot.send_file(channel, f, filename=filename)
 
-                clans.setWarTrophies(clankey, warTrophies)
+                self.clans.setWarTrophies(clankey, warTrophies)
 
             await asyncio.sleep(1)
 

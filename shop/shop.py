@@ -5,12 +5,6 @@ from .utils.dataIO import dataIO, fileIO
 from cogs.utils import checks
 import asyncio
 import json
-import math
-
-try:
-    from cogs.crtools import auth, tags, clans
-except:
-    raise RuntimeError("Can't load crtools. Do '[p]cog install Legend-Cogs crtools'.")
 
 class shop:
     """Legend Family Shop for credits"""
@@ -18,7 +12,10 @@ class shop:
     def __init__(self, bot):
         self.bot = bot
         self.banks = dataIO.load_json('data/economy/bank.json')
-        self.token = auth.getToken()
+        self.auth = self.bot.get_cog('crtools').auth
+        self.tags = self.bot.get_cog('crtools').tags
+        self.clans = self.bot.get_cog('crtools').clans
+        self.token = self.auth.getToken()
 
 
     async def updateBank(self):
@@ -108,7 +105,7 @@ class shop:
         banks = list(self.banks['374596069989810176'])
 
         try:
-            clans = requests.get('https://api.royaleapi.com/clan/' + (await clans.tagsClans()), headers=self.token, timeout=20).json()
+            clans = requests.get('https://api.royaleapi.com/clan/' + (await self.clans.tagsClans()), headers=self.token, timeout=20).json()
         except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
@@ -124,7 +121,7 @@ class shop:
 
                 for key in range(0,len(banks)):
                     try:
-                        if (clan_donations > 0) and (clan_tag == await tags.getTag(banks[key])):
+                        if (clan_donations > 0) and (clan_tag == await self.tags.getTag(banks[key])):
 
                             try:
                                 user = discord.utils.get(ctx.message.server.members, id = banks[key])
@@ -178,9 +175,9 @@ class shop:
         #banks = list(self.banks['363728974821457921']) # Test Server
         banks = list(self.banks['374596069989810176'])
 
-        tag = await tags.formatTag(tag)
+        tag = await self.tags.formatTag(tag)
 
-        if not await tags.verifyTag(tag):
+        if not await self.tags.verifyTag(tag):
             await self.bot.say("The ID you provided has invalid characters. Please try again.")
             return
 
@@ -200,7 +197,7 @@ class shop:
 
             for key in range(0,len(banks)):
                 try:
-                    if (tourney_score > 0) and (tourney_tag == await tags.getTag(banks[key])):
+                    if (tourney_score > 0) and (tourney_tag == await self.tags.getTag(banks[key])):
 
                         try:
                             user = discord.utils.get(ctx.message.server.members, id = banks[key])
@@ -316,7 +313,7 @@ class shop:
 
             try:
                 await self.bot.type()
-                profiletag = await tags.getTag(author.id)
+                profiletag = await self.tags.getTag(author.id)
                 profiledata = requests.get('https://api.royaleapi.com/player/{}?exclude=games,currentDeck,cards,battles,achievements'.format(profiletag), headers=self.token, timeout=10).json()
                 if profiledata['clan'] is None:
                     clantag = ""
@@ -335,15 +332,15 @@ class shop:
                 await self.bot.say("You must assosiate a tag with this member first using ``!save #tag @member``")
                 return
 
-            membership = await clans.verifyMembership(clantag)
+            membership = await self.clans.verifyMembership(clantag)
 
             if ign is None:
                 await self.bot.say("Error, Cannot add emoji.")
             else:
                 try:
                     if membership:
-                        savekey = await clans.getClanKey(clantag)
-                        newclanname = await clans.getClanData(clankey, 'nickname')
+                        savekey = await self.clans.getClanKey(clantag)
+                        newclanname = await self.clans.getClanData(clankey, 'nickname')
                         newname = "{} {} | {}".format(ign, emoji, newclanname)
                     else:
                         newname = "{} | Guest {}".format(ign, emoji)
@@ -509,7 +506,7 @@ class shop:
             return
                           
         await self.bot.type()
-        profiletag = await tags.getTag(author.id)
+        profiletag = await self.tags.getTag(author.id)
         profiledata = requests.get('https://api.royaleapi.com/player/{}?exclude=games,currentDeck,cards,battles,achievements'.format(profiletag), headers=self.token, timeout=10).json()
         if profiledata['clan'] is None:
             clantag = ""
@@ -519,15 +516,15 @@ class shop:
             clanname = profiledata['clan']['name']
         ign = profiledata['name']
 
-        membership = await clans.verifyMembership(clantag)
+        membership = await self.clans.verifyMembership(clantag)
 
         if ign is None:
             await self.bot.say("Error, Cannot add emoji.")
         else:
             try:
                 if membership:
-                    savekey = await clans.getClanKey(clantag)
-                    newclanname = await clans.getClanData(clankey, 'nickname')
+                    savekey = await self.clans.getClanKey(clantag)
+                    newclanname = await self.clans.getClanData(clankey, 'nickname')
                     newname = "{} {} | {}".format(ign, country, newclanname)
                 else:
                     newname = "{} {} | Guest ".format(ign, country)

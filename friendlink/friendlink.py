@@ -8,11 +8,6 @@ import urllib.parse as urlparse
 import requests
 import json
 
-try:
-    from cogs.crtools import auth
-except:
-    raise RuntimeError("Can't load crtools. Do '[p]cog install Legend-Cogs crtools'.")
-
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
 
@@ -22,7 +17,8 @@ class friendlink:
     def __init__(self, bot):
         self.bot = bot
         self.regex = re.compile(r"<?(https?:\/\/)?(www\.)?(link\.clashroyale\.com\/invite\/friend)\b([-a-zA-Z0-9/]*)>?")
-        self.token = auth.getToken()
+        self.auth = self.bot.get_cog('crtools').auth
+        self.token = self.auth.getToken()
 
     async def friend_link(self, message):
 

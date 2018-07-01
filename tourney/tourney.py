@@ -7,11 +7,6 @@ from .utils.dataIO import dataIO, fileIO
 import time
 import random
 
-try:
-    from cogs.crtools import auth
-except:
-    raise RuntimeError("Can't load crtools. Do '[p]cog install Legend-Cogs crtools'.")
-
 lastTag = '0'
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
@@ -21,8 +16,8 @@ class tournament:
 
 	def __init__(self, bot):
 		self.bot = bot
-		self.auth = dataIO.load_json('cogs/auth.json')
-		self.token = auth.getToken()
+		self.auth = self.bot.get_cog('crtools').auth
+		self.token = self.auth.getToken()
 
 	# Converts maxPlayers to Cards
 	def getCards(self, maxPlayers):
