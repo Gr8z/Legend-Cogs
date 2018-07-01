@@ -42,8 +42,6 @@ class Clanlog:
         """Notifies whenever someone leaves or joins"""
         
         old_clans = deepcopy(await self.clans.getClans())
-        
-        clan_keys = list(self.clans.keysClans())
 
         try:
             clan_requests = await self.clash.get_clan(*await self.clans.tagsClans())
@@ -57,7 +55,7 @@ class Clanlog:
             one_clan = []
             for member in clan.members:
                 one_clan.append({"name" : member.name, "tag" : member.tag})
-            await self.clans.setMemberList(clan_keys[i], one_clan)
+            await self.clans.setMemberList(self.clans.getClanKey(clan.tag), one_clan)
         
         if self.last_count != count:
             self.update_member_log()
@@ -110,7 +108,6 @@ class Clanlog:
     async def clanlogdownload(self):
         """Downloads data to prevent clanlog from sending too many messages"""
         try:
-            clan_keys = list(self.clans.keysClans())
             clan_requests = await self.clash.get_clan(*await self.clans.tagsClans())
         except clashroyale.RequestError:
             await self.bot.say("Cannot reach Clash Royale servers. Try again later!")
@@ -120,7 +117,7 @@ class Clanlog:
              one_clan = []
              for member in clan.members:
                  one_clan.append({"name" : member.name, "tag" : member.tag})
-             await self.clans.setMemberList(clan_keys[i], one_clan)
+             await self.clans.setMemberList(self.clans.getClanKey(clan.tag), one_clan)
         await self.bot.say("Downloaded.")
             
         
