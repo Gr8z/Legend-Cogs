@@ -5,6 +5,7 @@ from cogs.utils import checks
 import asyncio
 import json
 import clashroyale
+import math
 
 class shop:
     """Legend Family Shop for credits"""
