@@ -1,10 +1,10 @@
 import discord
 from discord.ext import commands
-import requests
 from .utils.dataIO import dataIO, fileIO
 from cogs.utils import checks
 import asyncio
 import json
+import clashroyale
 
 class shop:
     """Legend Family Shop for credits"""
@@ -15,8 +15,7 @@ class shop:
         self.auth = self.bot.get_cog('crtools').auth
         self.tags = self.bot.get_cog('crtools').tags
         self.clans = self.bot.get_cog('crtools').clans
-        self.token = self.auth.getToken()
-
+        self.clash = clashroyale.Client(self.auth.getToken(), is_async=True)
 
     async def updateBank(self):
         self.banks = dataIO.load_json('data/economy/bank.json')
@@ -105,19 +104,15 @@ class shop:
         banks = list(self.banks['374596069989810176'])
 
         try:
-            clans = requests.get('https://api.royaleapi.com/clan/' + (await self.clans.tagsClans()), headers=self.token, timeout=20).json()
-        except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
+            clans = await self.clash.get_clan(await self.clans.tagsClans())
+        except clashroyale.RequestError:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
-        except requests.exceptions.RequestException as e:
-            await self.bot.say(e)
-            return
         
-        for x in range(0, len(clans)):
-            for y in range(0, len(clans[x]['members'])):
-
-                clan_tag = clans[x]['members'][y]['tag']
-                clan_donations = clans[x]['members'][y]['donations']
+        for clan in clans:
+            for member in clan.members:
+                clan_tag = member.tag
+                clan_donations = member.donations
 
                 for key in range(0,len(banks)):
                     try:
@@ -182,18 +177,15 @@ class shop:
             return
 
         try:
-            tourney = requests.get('https://api.royaleapi.com/tournaments/'+tag, headers=self.token, timeout=10).json()
-        except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
+            tourney = await self.clash.get_tournament(tag)
+        except clashroyale.RequestError:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
-        except requests.exceptions.RequestException as e:
-            await self.bot.say(e)
-            return
         
-        for y in range(0, len(tourney['members'])):
+        for member in tourney.members:
 
-            tourney_tag = tourney['members'][y]['tag']
-            tourney_score = tourney['members'][y]['score']
+            tourney_tag = tourney.members.tag
+            tourney_score = tourney.members.score
 
             for key in range(0,len(banks)):
                 try:
@@ -229,9 +221,9 @@ class shop:
                             await self.bot.say("{} - ({} trophies)".format(user.display_name, tourney_score))
 
                             if BonusMult > 1:
-                                await self.bot.send_message(user,"Hello {}, take these credits*({}% Bonus)* for the **{}** trophies you contributed to your clan in **{}**. (+{} credits!)".format(user.name, perc, str(tourney_score), tourney['name'], str(amount) ))
+                                await self.bot.send_message(user,"Hello {}, take these credits*({}% Bonus)* for the **{}** trophies you contributed to your clan in **{}**. (+{} credits!)".format(user.name, perc, str(tourney_score), tourney.name, str(amount) ))
                             else:
-                                await self.bot.send_message(user,"Hello {}, take these credits for the **{}** trophies you contributed to your clan in **{}**. (+{} credits!)".format(user.name, str(tourney_score), tourney['name'], str(amount) ))
+                                await self.bot.send_message(user,"Hello {}, take these credits for the **{}** trophies you contributed to your clan in **{}**. (+{} credits!)".format(user.name, str(tourney_score), tourney.name, str(amount) ))
                         except Exception as e:
                             await self.bot.say(e)
                 except:
@@ -314,21 +306,19 @@ class shop:
             try:
                 await self.bot.type()
                 profiletag = await self.tags.getTag(author.id)
-                profiledata = requests.get('https://api.royaleapi.com/player/{}?exclude=games,currentDeck,cards,battles,achievements'.format(profiletag), headers=self.token, timeout=10).json()
-                if profiledata['clan'] is None:
+                profiledata = await self.clash.get_player(profiletag)
+
+                if profiledata.clan is None:
                     clantag = ""
                     clanname = ""
                 else: 
-                    clantag = profiledata['clan']['tag']
-                    clanname = profiledata['clan']['name']
-                ign = profiledata['name']
-            except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
+                    clantag = profiledata.clan.tag
+                    clanname = profiledata.clan.name
+                ign = profiledata.name
+            except clashroyale.RequestError:
                 await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
                 return
-            except requests.exceptions.RequestException as e:
-                await self.bot.say(e)
-                return
-            except:
+            except KeyError:
                 await self.bot.say("You must assosiate a tag with this member first using ``!save #tag @member``")
                 return
 
@@ -505,16 +495,24 @@ class shop:
             await self.bot.say("**{}** is not participating in FIFA World Cup 2018, select from the following options:\n{}".format(country.upper(),clist))
             return
                           
-        await self.bot.type()
-        profiletag = await self.tags.getTag(author.id)
-        profiledata = requests.get('https://api.royaleapi.com/player/{}?exclude=games,currentDeck,cards,battles,achievements'.format(profiletag), headers=self.token, timeout=10).json()
-        if profiledata['clan'] is None:
-            clantag = ""
-            clanname = ""
-        else: 
-            clantag = profiledata['clan']['tag']
-            clanname = profiledata['clan']['name']
-        ign = profiledata['name']
+        try:
+            await self.bot.type()
+            profiletag = await self.tags.getTag(author.id)
+            profiledata = await self.clash.get_player(profiletag)
+
+            if profiledata.clan is None:
+                clantag = ""
+                clanname = ""
+            else: 
+                clantag = profiledata.clan.tag
+                clanname = profiledata.clan.name
+            ign = profiledata.name
+        except clashroyale.RequestError:
+            await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
+            return
+        except KeyError:
+            await self.bot.say("You must assosiate a tag with this member first using ``!save #tag @member``")
+            return
 
         membership = await self.clans.verifyMembership(clantag)
 

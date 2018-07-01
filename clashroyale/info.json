@@ -5,6 +5,6 @@
     "SHORT" : "Statistics for Clash Royale",
     "DESCRIPTION" : "Check your profile, clan and chest cycle for Clash Royale.",
     "TAGS" : ["clashroyale", "clashProfile", "clan", "offers", "chests"],
-    "REQUIREMENTS" : ["json","requests","os"],
+    "REQUIREMENTS" : ["clashroyale","os"],
     "HIDDEN" : false
 }

@@ -1,11 +1,11 @@
 import discord
 from discord.ext import commands
 from random import randint
-import requests
 import asyncio
 from .utils.dataIO import dataIO, fileIO
 import time
 import random
+import clashroyale
 
 lastTag = '0'
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
@@ -17,7 +17,7 @@ class tournament:
 	def __init__(self, bot):
 		self.bot = bot
 		self.auth = self.bot.get_cog('crtools').auth
-		self.token = self.auth.getToken()
+		self.clash = clashroyale.Client(self.auth.getToken(), is_async=True)
 
 	# Converts maxPlayers to Cards
 	def getCards(self, maxPlayers):
@@ -51,27 +51,27 @@ class tournament:
 
 		global lastTag
 		try:
-			openTourney = requests.get('https://api.royaleapi.com/tournaments/joinable', headers=self.token, timeout=10).json()
-		except:
+			openTourney = await self.clash.get_joinable_tournaments()
+		except clashroyale.RequestError:
 			return None
 
 		for tourney in openTourney:
 
-			tag = tourney['tag']
-			joined = tourney['currentPlayers']
-			maxplayers = tourney['maxPlayers']
-			createTime = tourney['createTime']
+			tag = tourney.tag
+			joined = tourney.current_players
+			maxplayers = tourney.max_players
+			createTime = tourney.create_time
 
 			if (((int(time.time()) - createTime) < 10800) and (maxplayers > 50) and ((joined + 4) < maxplayers) and (tag != lastTag)):
 
 				try:
-					tourneyAPI = requests.get('https://api.royaleapi.com/tournaments/{}'.format(tag), headers=self.token, timeout=10).json()
-					joined = tourneyAPI['currentPlayers']
-					maxplayers = tourneyAPI['maxPlayers']
-				except:
+					tourneyAPI = await self.clash.get_tournament(tag)
+					joined = tourneyAPI.current_players
+					maxplayers = tourneyAPI.max_players
+				except clashroyale.RequestError:
 					return None
 
-				if ((maxplayers > 50) and ((joined + 4) < maxplayers) and  (tourneyAPI['status'] != "ended") and (tourneyAPI['open'])):
+				if ((maxplayers > 50) and ((joined + 4) < maxplayers) and  (tourneyAPI.status != "ended") and (tourneyAPI.open)):
 					lastTag = tag
 					return tourneyAPI
 
@@ -81,28 +81,28 @@ class tournament:
 	async def getRandomTourney(self):
 
 		try:
-			openTourney = requests.get('https://api.royaleapi.com/tournaments/joinable', headers=self.token, timeout=10).json()
-		except:
+			openTourney = await self.clash.get_joinable_tournaments()
+		except clashroyale.RequestError:
 			return None
 
 		#random.shuffle(openTourney)
 		for tourney in openTourney:
 
-			tag = tourney['tag']
-			joined = tourney['currentPlayers']
-			maxplayers = tourney['maxPlayers']
-			createTime = tourney['createTime']
+			tag = tourney.tag
+			joined = tourney.current_players
+			maxplayers = tourney.max_players
+			createTime = tourney.create_time
 
 			if (((int(time.time()) - createTime) < 10800) and ((joined + 1) < maxplayers)):
 
 				try:
-					tourneyAPI = requests.get('https://api.royaleapi.com/tournaments/{}'.format(tag), headers=self.token, timeout=10).json()
-					joined = tourneyAPI['currentPlayers']
-					maxplayers = tourneyAPI['maxPlayers']
-				except:
+					tourneyAPI = await self.clash.get_tournament(tag)
+					joined = tourneyAPI.current_players
+					maxplayers = tourneyAPI.max_players
+				except clashroyale.RequestError:
 					return None
 
-				if ((joined < maxplayers) and  (tourneyAPI['status'] != "ended") and (tourneyAPI['open'])):
+				if ((joined < maxplayers) and  (tourneyAPI.status != "ended") and (tourneyAPI.open)):
 					return tourneyAPI
 
 		return None
@@ -120,23 +120,23 @@ class tournament:
 		while self is self.bot.get_cog("tournament"):
 			tourneydata = await self.getTopTourney()
 			if tourneydata is not None:
-				maxPlayers = tourneydata['maxPlayers']
+				maxPlayers = tourneydata.max_players
 				cards = self.getCards(maxPlayers)
 				coins = self.getCoins(maxPlayers)
 
-				embed=discord.Embed(title="Click this link to join the Tournament in Clash Royale!", url="https://legendclans.com/tournaments?id={}".format(tourneydata['tag']), color=0xFAA61A)
+				embed=discord.Embed(title="Click this link to join the Tournament in Clash Royale!", url="https://legendclans.com/tournaments?id={}".format(tourneydata.tag), color=0xFAA61A)
 				embed.set_thumbnail(url='https://statsroyale.com/images/tournament.png')
 
-				embed.set_author(name=tourneydata['name']+" (#"+tourneydata['tag']+")")
+				embed.set_author(name=tourneydata.name+" (#"+tourneydata.tag+")")
 
-				embed.add_field(name="Players", value=str(tourneydata['currentPlayers']) + "/" + str(maxPlayers), inline=True)
-				embed.add_field(name="Status", value=tourneydata['status'].title(), inline=True)
+				embed.add_field(name="Players", value=str(tourneydata.current_players) + "/" + str(maxPlayers), inline=True)
+				embed.add_field(name="Status", value=tourneydata.status.title(), inline=True)
 
-				if tourneydata['status'] != "inProgress":
-					startTime = self.sec2tme((tourneydata['createTime'] + tourneydata['prepTime']) - int(time.time()))
+				if tourneydata.status != "inProgress":
+					startTime = self.sec2tme((tourneydata.create_time + tourneydata.prep_time) - int(time.time()))
 					embed.add_field(name="Starts In", value=startTime, inline=True)
 
-				endTime = self.sec2tme((tourneydata['createTime'] + tourneydata['prepTime'] + tourneydata['duration']) - int(time.time()))
+				endTime = self.sec2tme((tourneydata.create_time + tourneydata.prep_time + tourneydata.duration) - int(time.time()))
 				embed.add_field(name="Ends In", value=endTime, inline=True)
 
 				embed.add_field(name="Top prize", value="<:tournamentcards:380832770454192140> " + str(cards) + "	 <:coin:380832316932489268> " +  str(coins), inline=True)
@@ -157,23 +157,23 @@ class tournament:
 		tourneydata = await self.getRandomTourney()
 		
 		if tourneydata is not None:
-			maxPlayers = tourneydata['maxPlayers']
+			maxPlayers = tourneydata.max_players
 			cards = self.getCards(maxPlayers)
 			coins = self.getCoins(maxPlayers)
 
-			embed=discord.Embed(title="Click this link to join the Tournament in Clash Royale!", url="https://legendclans.com/tournaments?id={}".format(tourneydata['tag']), color=0xFAA61A)
+			embed=discord.Embed(title="Click this link to join the Tournament in Clash Royale!", url="https://legendclans.com/tournaments?id={}".format(tourneydata.tag), color=0xFAA61A)
 			embed.set_thumbnail(url='https://statsroyale.com/images/tournament.png')
 
-			embed.set_author(name=tourneydata['name']+" (#"+tourneydata['tag']+")")
+			embed.set_author(name=tourneydata.name+" (#"+tourneydata.tag+")")
 
-			embed.add_field(name="Players", value=str(tourneydata['currentPlayers']) + "/" + str(maxPlayers), inline=True)
-			embed.add_field(name="Status", value=tourneydata['status'].title(), inline=True)
+			embed.add_field(name="Players", value=str(tourneydata.current_players) + "/" + str(maxPlayers), inline=True)
+			embed.add_field(name="Status", value=tourneydata.status.title(), inline=True)
 
-			if tourneydata['status'] != "inProgress":
-				startTime = self.sec2tme((tourneydata['createTime'] + tourneydata['prepTime']) - int(time.time()))
+			if tourneydata.status != "inProgress":
+				startTime = self.sec2tme((tourneydata.create_time + tourneydata.prep_time) - int(time.time()))
 				embed.add_field(name="Starts In", value=startTime, inline=True)
 
-			endTime = self.sec2tme((tourneydata['createTime'] + tourneydata['prepTime'] + tourneydata['duration']) - int(time.time()))
+			endTime = self.sec2tme((tourneydata.create_time + tourneydata.prep_time + tourneydata.duration) - int(time.time()))
 			embed.add_field(name="Ends In", value=endTime, inline=True)
 
 			embed.add_field(name="Top prize", value="<:tournamentcards:380832770454192140> " + str(cards) + "	 <:coin:380832316932489268> " +  str(coins), inline=True)

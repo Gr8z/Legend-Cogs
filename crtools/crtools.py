@@ -25,7 +25,7 @@ class tags:
 		return True
 
 	async def formatTag(self, tag):
-		"""Sanize and format CR Tag"""
+		"""Sanitize and format CR Tag"""
 		return tag.strip('#').upper().replace('O', '0')
 
 	async def linkTag(self, tag, userID):
@@ -44,10 +44,7 @@ class tags:
 
 	async def getTag(self, userID):
 		"""Get a user's CR Tag"""
-		try:
-			return self.tags[userID]['tag']
-		except KeyError:
-			return None
+		return self.tags[userID]['tag']
 
 	async def getUser(self, serverUsers, tag):
 		"""Get User from CR Tag"""
@@ -71,7 +68,7 @@ class auth:
 
 	def getToken(self):
 		"""Get RoyaleAPI Token"""
-		return {"auth" : self.auth['token']}
+		return self.auth['token']
 
 class clans:
 	"""Clan Family Management"""
@@ -100,12 +97,12 @@ class clans:
 
 	async def tagsClans(self):
 		"""Get tags of all the clans"""
-		return ",".join(self.clans[clan]["tag"] for clan in self.clans)
+		return [self.clans[clan]["tag"] for clan in self.clans]
 
 	async def rolesClans(self):
 		"""Get roles of all the clans"""
 		roles = ["Member"]
-		for x in self.c:
+		for x in self.clans:
 			roles.append(self.clans[x]['role'])
 		return roles
 

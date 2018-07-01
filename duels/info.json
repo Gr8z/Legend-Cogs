@@ -5,6 +5,6 @@
     "SHORT" : "play a 1v1 duel with your friends and bet on the winner.",
     "DESCRIPTION" : "Clash Royale 1v1 duels with bets.",
     "TAGS" : ["duel", "clashroyale", "betting", "1v1"],
-    "REQUIREMENTS" : [],
+    "REQUIREMENTS" : ["clashroyale"],
     "HIDDEN" : false
 }

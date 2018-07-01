@@ -1,6 +1,4 @@
 import discord
-import requests
-import json
 import os
 from discord.ext import commands
 from cogs.utils import checks
@@ -15,6 +13,7 @@ from datetime import datetime as dt
 import operator
 import numpy as np
 from __main__ import send_cmd_help
+import clashroyale
 
 class Clanlog:
     """Clan Log cog for LeGeND family"""
@@ -22,8 +21,7 @@ class Clanlog:
     def __init__(self, bot):
         self.bot = bot
         self.auth = self.bot.get_cog('crtools').auth
-        self.clans = self.bot.get_cog('crtools').clans
-        self.token = self.auth.getToken()
+        self.clash = clashroyale.Client(self.auth.getToken(), is_async=True)
         self.member_log = dataIO.load_json('data/clanlog/member_log.json')
         self.discord_log = dataIO.load_json('data/clanlog/discord_log.json')
         self.last_count = 0
@@ -41,68 +39,70 @@ class Clanlog:
     @commands.command(pass_context=True, no_pm=True)
     async def clanlog(self, ctx):
         """Notifies whenever someone leaves or joins"""
+        
+        old_clans = deepcopy(await self.clans.getClans())
+        
+        clan_keys = list(self.clans.keysClans())
+
         try:
-            old_clans = deepcopy(await self.clans.getClans())
-            
-            clan_keys = list(self.clans.keysClans())
-            clan_requests = requests.get("https://api.royaleapi.com/clan/{}".format(await self.clans.tagsClans()), headers=self.token, timeout = 60).json()
-            
-            count = 0
-            for i in range(len(clan_requests)):
-                count = count + len(clan_requests[i]["members"])
-                one_clan = []
-                for member in clan_requests[i]["members"]:
-                    one_clan.append({"name" : member["name"], "tag" : member["tag"]})
-                await self.clans.setMemberList(clan_keys[i], one_clan)
-            
-            if self.last_count != count:
-                self.update_member_log()
-                current_time = get_time()   
-                self.member_log[str(current_time)] = count
-                self.last_count = count
-                
-                saved_times = list(self.member_log.keys())
-                for time in saved_times:
-                    if (current_time - float(time)) > 2678400:#one month
-                        self.member_log.pop(time, None)
-                self.save_member_log()
-            
-            server = ctx.message.server
-                    
-            for clankey in old_clans.keys():
-                for member in old_clans[clankey]["members"]:
-                    if member not in await self.clans.getClanData(clankey, 'members'):
-                        title = "{} (#{})".format(member["name"], member["tag"])
-                        desc = "left **{}**".format(old_clans[clankey]["name"])
-                        embed_left = discord.Embed(title = title, url = "https://royaleapi.com/player/{}".format(member["tag"]), description=desc, color=0xff0000)
-                        if server.id == "374596069989810176":
-                            if await self.clans.getClanData(clankey, 'log_channel')  is not None:
-                                try:
-                                    await self.bot.send_message(discord.Object(id=await self.clans.getClanData(clankey, 'log_channel')),embed = embed_left)
-                                except discord.errors.NotFound:
-                                    await self.bot.say("<#{}> NOT FOUND".format(await self.clans.getClanData(clankey, 'log_channel')))
-                                except discord.errors.Forbidden:
-                                    await self.bot.say("No Permission to send messages in <#{}>".format(await self.clans.getClanData(clankey, 'log_channel')))
-                        await self.bot.say(embed = embed_left)
-          
-            for clankey in self.clans.keysClans():
-                for member in await self.clans.getClanData(clankey, 'members'):
-                    if member not in old_clans[clankey]["members"]:
-                        title = "{} (#{})".format(member["name"], member["tag"])
-                        desc = "joined **{}**".format(old_clans[clankey]["name"])
-                        embed_join = discord.Embed(title = title, url = "https://royaleapi.com/player/{}".format(member["tag"]), description=desc, color=0x00ff40)
-                        if server.id == "374596069989810176":
-                            if await self.clans.getClanData(clankey, 'log_channel') is not None:
-                                try:
-                                    await self.bot.send_message(discord.Object(id=await self.clans.getClanData(clankey, 'log_channel')),embed = embed_join)
-                                except discord.errors.NotFound:
-                                    await self.bot.say("<#{}> NOT FOUND".format(await self.clans.getClanData(clankey, 'log_channel')))
-                                except discord.errors.Forbidden:
-                                    await self.bot.say("No Permission to send messages in <#{}>".format(await self.clans.getClanData(clankey, 'log_channel')))
-                        await self.bot.say(embed = embed_join)
-                        
-        except(requests.exceptions.Timeout, json.decoder.JSONDecodeError, KeyError):
+            clan_requests = await self.clash.get_clan(await self.clans.tagsClans())
+        except clashroyale.RequestError:
             print("CLANLOG: Cannot reach Clash Royale Servers.")
+            return
+
+        count = 0
+        for clan in clan_requests:
+            count = count + len(clan.members)
+            one_clan = []
+            for member in clan.members:
+                one_clan.append({"name" : member.name, "tag" : member.tag})
+            await self.clans.setMemberList(clan_keys[i], one_clan)
+        
+        if self.last_count != count:
+            self.update_member_log()
+            current_time = get_time()   
+            self.member_log[str(current_time)] = count
+            self.last_count = count
+            
+            saved_times = list(self.member_log.keys())
+            for time in saved_times:
+                if (current_time - float(time)) > 2678400:#one month
+                    self.member_log.pop(time, None)
+            self.save_member_log()
+        
+        server = ctx.message.server
+                
+        for clankey in old_clans.keys():
+            for member in old_clans[clankey]["members"]:
+                if member not in await self.clans.getClanData(clankey, 'members'):
+                    title = "{} (#{})".format(member["name"], member["tag"])
+                    desc = "left **{}**".format(old_clans[clankey]["name"])
+                    embed_left = discord.Embed(title = title, url = "https://royaleapi.com/player/{}".format(member["tag"]), description=desc, color=0xff0000)
+                    if server.id == "374596069989810176":
+                        if await self.clans.getClanData(clankey, 'log_channel')  is not None:
+                            try:
+                                await self.bot.send_message(discord.Object(id=await self.clans.getClanData(clankey, 'log_channel')),embed = embed_left)
+                            except discord.errors.NotFound:
+                                await self.bot.say("<#{}> NOT FOUND".format(await self.clans.getClanData(clankey, 'log_channel')))
+                            except discord.errors.Forbidden:
+                                await self.bot.say("No Permission to send messages in <#{}>".format(await self.clans.getClanData(clankey, 'log_channel')))
+                    await self.bot.say(embed = embed_left)
+        
+        for clankey in self.clans.keysClans():
+            for member in await self.clans.getClanData(clankey, 'members'):
+                if member not in old_clans[clankey]["members"]:
+                    title = "{} (#{})".format(member["name"], member["tag"])
+                    desc = "joined **{}**".format(old_clans[clankey]["name"])
+                    embed_join = discord.Embed(title = title, url = "https://royaleapi.com/player/{}".format(member["tag"]), description=desc, color=0x00ff40)
+                    if server.id == "374596069989810176":
+                        if await self.clans.getClanData(clankey, 'log_channel') is not None:
+                            try:
+                                await self.bot.send_message(discord.Object(id=await self.clans.getClanData(clankey, 'log_channel')),embed = embed_join)
+                            except discord.errors.NotFound:
+                                await self.bot.say("<#{}> NOT FOUND".format(await self.clans.getClanData(clankey, 'log_channel')))
+                            except discord.errors.Forbidden:
+                                await self.bot.say("No Permission to send messages in <#{}>".format(await self.clans.getClanData(clankey, 'log_channel')))
+                    await self.bot.say(embed = embed_join)
     
     @checks.is_owner()    
     @commands.command(no_pm=True)
@@ -110,17 +110,19 @@ class Clanlog:
         """Downloads data to prevent clanlog from sending too many messages"""
         try:
             clan_keys = list(self.clans.keysClans())
-            clan_requests = requests.get("https://api.royaleapi.com/clan/{}".format(await self.clans.tagsClans()), headers=self.token, timeout = 60).json()
-            
-            for i in range(len(clan_requests)):
-                one_clan = []
-                for member in clan_requests[i]["members"]:
-                    one_clan.append({"name" : member["name"], "tag" : member["tag"]})
-                await self.clans.setMemberList(clan_keys[i], one_clan)
-            await self.bot.say("Downloaded.")
-            
-        except(requests.exceptions.Timeout, json.decoder.JSONDecodeError, KeyError):
+            clan_requests = await self.clash.get_clan(await self.clans.tagsClans())
+        except clashroyale.RequestError:
             await self.bot.say("Cannot reach Clash Royale servers. Try again later!")
+            return
+            
+        for clan in clan_requests:
+             one_clan = []
+             for member in clan.members:
+                 one_clan.append({"name" : member.name, "tag" : member.tag})
+             await self.clans.setMemberList(clan_keys[i], one_clan)
+        await self.bot.say("Downloaded.")
+            
+        
 
     @commands.group(pass_context=True, no_pm=True)
     async def history(self, ctx):

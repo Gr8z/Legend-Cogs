@@ -5,6 +5,6 @@
     "SHORT" : "Announce war results in a channel for one or more clans.",
     "DESCRIPTION" : "Clash Royale Clan War log.",
     "TAGS" : ["royaleapi", "clashroyale", "clanwar", "warlog"],
-    "REQUIREMENTS" : ["Pillow"],
+    "REQUIREMENTS" : ["Pillow","clashroyale"],
     "HIDDEN" : false
 }

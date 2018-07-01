@@ -5,13 +5,12 @@ from .utils.dataIO import dataIO, fileIO
 from __main__ import send_cmd_help
 import os
 import io
-import requests
-import json
 import asyncio
 import PIL
 from PIL import ImageFont
 from PIL import Image
 from PIL import ImageDraw
+import clashroyale
 
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
@@ -23,7 +22,7 @@ class warlog:
         self.bot = bot
         self.auth = self.bot.get_cog('crtools').auth
         self.clans = self.bot.get_cog('crtools').clans
-        self.token = self.auth.getToken()
+        self.clash = clashroyale.Client(self.auth.getToken(), is_async=True)
 
     async def getLeague(self, trophies):
         
@@ -85,22 +84,19 @@ class warlog:
         for clankey in self.clans.keysClans():
 
             try:
-                clandata = requests.get('https://api.royaleapi.com/clan/{}/warlog'.format(await self.clans.getClanData(clankey, 'tag')), headers=self.token, timeout=10).json()
-            except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
-                return
-            except requests.exceptions.RequestException as e:
-                print(e)
+                clandata = await self.clash.get_clan_war_log(await self.clans.getClanData(clankey, 'tag'))
+            except clashroyale.RequestError:
                 return
 
-            standings = clandata[0]['standings']
+            standings = clandata[0].standings
             clanRank = await self.findRank(standings, "tag", await self.clans.getClanData(clankey, 'tag'))
-            warTrophies = standings[clanRank]['warTrophies']
+            warTrophies = standings[clanRank].war_trophies
 
             if await self.clans.getClanData(clankey, 'warTrophies') != warTrophies:
 
                 clanLeague = await self.getLeague(warTrophies)
 
-                image = await self.genImage(clanLeague, str(warTrophies), str(clanRank+1), standings[clanRank]['name'], str(standings[clanRank]['participants']), str(standings[clanRank]['wins']), str(standings[clanRank]['crowns']))
+                image = await self.genImage(clanLeague, str(warTrophies), str(clanRank+1), standings[clanRank].name, str(standings[clanRank].participants), str(standings[clanRank].wins), str(standings[clanRank].crowns))
                 filename = "warlog-{}.png".format(clankey)
 
                 with io.BytesIO() as f:

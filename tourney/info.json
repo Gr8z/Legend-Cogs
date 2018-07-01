@@ -5,6 +5,6 @@
     "SHORT" : "Search and look for new Tournaments in clash royale",
     "DESCRIPTION" : "Uses statsroyale to look for open Tournaments and announces them in a channel.",
     "TAGS" : ["clashroyale", "legend","management", "Tournaments"],
-    "REQUIREMENTS" : ["json","requests","os","asyncio","random", "time"],
+    "REQUIREMENTS" : ["clashroyale","os","asyncio","random", "time"],
     "HIDDEN" : false
 }

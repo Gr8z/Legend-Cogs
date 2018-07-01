@@ -5,6 +5,6 @@
     "SHORT" : "Clan management tools for Legend Family",
     "DESCRIPTION" : "Check available clans, add tags, change nickname, see top members from family.",
     "TAGS" : ["clashroyale", "legend","management", "topmembers"],
-    "REQUIREMENTS" : ["json","requests","os","asyncio"],
+    "REQUIREMENTS" : ["clashroyale","os","asyncio"],
     "HIDDEN" : false
 }

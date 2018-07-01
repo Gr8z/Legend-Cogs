@@ -5,8 +5,7 @@ import os
 import asyncio
 import re
 import urllib.parse as urlparse
-import requests
-import json
+import clashroyale
 
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
@@ -18,7 +17,7 @@ class friendlink:
         self.bot = bot
         self.regex = re.compile(r"<?(https?:\/\/)?(www\.)?(link\.clashroyale\.com\/invite\/friend)\b([-a-zA-Z0-9/]*)>?")
         self.auth = self.bot.get_cog('crtools').auth
-        self.token = self.auth.getToken()
+        self.clash = clashroyale.Client(self.auth.getToken(), is_async=True)
 
     async def friend_link(self, message):
 
@@ -32,23 +31,23 @@ class friendlink:
             platform = urlparse.parse_qs(parsed.query)['platform'][0]
 
             try:
-                profiledata = requests.get('https://api.royaleapi.com/player/{}'.format(profiletag), headers=self.token, timeout=10).json()
-            except:
+                profiledata = await self.clash.get_player(profiletag)
+            except clashroyale.RequestError:
                 return
 
-            if profiledata['clan'] is None:
+            if profiledata.clan is None:
                 clanurl = "https://i.imgur.com/4EH5hUn.png"
             else:
-                clanurl = profiledata['clan']['badge']['image']
+                clanurl = profiledata.clan.badge.image
 
             embed=discord.Embed(title='Click this link to add as friend in Clash Royale!', url=url[0], color=0x0080ff)
-            embed.set_author(name=profiledata['name'] + " (#"+profiledata['tag']+")", icon_url=clanurl)
+            embed.set_author(name=profiledata.name + " (#"+profiledata.tag+")", icon_url=clanurl)
             embed.set_thumbnail(url="https://imgur.com/C9rLoeh.jpg")
             embed.add_field(name="User", value=message.author.mention, inline=True)
-            embed.add_field(name="Trophies", value=profiledata['trophies'], inline=True)
-            if profiledata['clan'] is not None:
-                embed.add_field(name="Clan", value=profiledata['clan']['name'], inline=True)
-            embed.add_field(name="Arena", value=profiledata['arena']['name'], inline=True)
+            embed.add_field(name="Trophies", value=profiledata.trophies, inline=True)
+            if profiledata.clan is not None:
+                embed.add_field(name="Clan", value=profiledata.clan.name, inline=True)
+            embed.add_field(name="Arena", value=profiledata.arena.name, inline=True)
             embed.set_footer(text=credits, icon_url=creditIcon)
 
             await self.bot.send_message(message.channel, embed=embed)

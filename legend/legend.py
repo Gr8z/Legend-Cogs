@@ -1,7 +1,5 @@
 import discord
 from discord.ext import commands
-import requests
-import json
 import os
 from .utils.dataIO import dataIO, fileIO
 from cogs.utils import checks
@@ -12,6 +10,7 @@ import string
 import datetime
 import time
 from collections import OrderedDict
+import clashroyale
 
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
@@ -146,7 +145,7 @@ class legend:
         self.auth = self.bot.get_cog('crtools').auth
         self.tags = self.bot.get_cog('crtools').tags
         self.clans = self.bot.get_cog('crtools').clans
-        self.token = self.auth.getToken()
+        self.clash = clashroyale.Client(self.auth.getToken(), is_async=True)
         self.welcome = dataIO.load_json('data/legend/welcome.json')
         self.bank = dataIO.load_json('data/economy/bank.json')
         self.seen = dataIO.load_json('data/seen/seen.json')
@@ -206,6 +205,7 @@ class legend:
     async def legend(self, ctx, member: discord.Member = None):
         """ Show Legend clans, can also show clans based on a member's trophies"""
 
+        await self.bot.type()
         if member is None:
             trophies = 9999
             maxtrophies = 9999
@@ -214,39 +214,31 @@ class legend:
             try:
                 await self.bot.type()
                 profiletag = await self.tags.getTag(member.id)
-                profiledata = requests.get('https://api.royaleapi.com/player/{}?exclude=games,currentDeck,cards,battles,achievements'.format(profiletag), headers=self.token, timeout=10).json()
-                trophies = profiledata['trophies']
-                maxtrophies = profiledata['stats']['maxTrophies']
+                profiledata = await self.clash.get_player(profiletag)
+                trophies = profiledata.trophies
+                maxtrophies = profiledata.stats.max_trophies
 
-                if profiledata['clan'] is None:
+                if profiledata.clan is None:
                     clanname = "*None*"
                 else: 
-                    clanname = profiledata['clan']['name']
+                    clanname = profiledata.clan.name
 
-                ign = profiledata['name']
+                ign = profiledata.name
                 maxmembers = 50
-            except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
+            except clashroyale.RequestError:
                 await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
                 return
-            except requests.exceptions.RequestException as e:
-                await self.bot.say(e)
-                return
-            except:
-                print("TAG: " +profiletag)
+            except KeyError:
                 await self.bot.say("You must assosiate a tag with this member first using ``!save #tag @member``")
                 return
 
         try:
-            await self.bot.type()
-            clandata = requests.get('https://api.royaleapi.com/clan/'+(await self.clans.tagsClans())+'?exclude=members', headers=self.token, timeout=25).json()
-        except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
-                await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
-                return
-        except requests.exceptions.RequestException as e:
-                await self.bot.say(e)
-                return
+            clandata = await self.clash.get_clan(await self.clans.tagsClans(), excludes=["members"])
+        except clashroyale.RequestError:
+            await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
+            return
                 
-        clandata = sorted(clandata, key=lambda clanned: (clanned['requiredScore'], clanned['score']), reverse=True)
+        clandata = sorted(clandata, key=lambda x: (x.required_score, x.score), reverse=True)
        
         embed=discord.Embed(color=0xFAA61A)
         if "url" in self.settings and "family" in self.settings:
@@ -259,13 +251,13 @@ class legend:
         foundClan = False
         totalMembers = 0
         totalWaiting = 0
-        for x in range(0, len(clandata)):
+        for clan in clandata:
             numWaiting = 0
             personalbest = 0
             bonustitle = None
             
             for clankey in self.clans.keysClans():
-                if await self.clans.getClanData(clankey, 'tag') == clandata[x]['tag']:
+                if await self.clans.getClanData(clankey, 'tag') == clan.tag:
                     numWaiting = await self.clans.numWaiting(clankey)
                     personalbest = await self.clans.getClanData(clankey, 'personalbest')
                     bonustitle = await self.clans.getClanData(clankey, 'bonustitle')
@@ -279,27 +271,27 @@ class legend:
             else:
                 title = ""
 
-            totalMembers += clandata[x]['memberCount']
-            if clandata[x]['memberCount'] < 50:
-                showMembers = str(clandata[x]['memberCount']) + "/50"
+            totalMembers += clan.member_count
+            if clan.member_count < 50:
+                showMembers = str(clan.member_count) + "/50"
             else:
                 showMembers = "**FULL**   "
 
-            if str(clandata[x]['type']) != 'invite only':
-                title += "["+str(clandata[x]['type']).title()+"] "
+            if str(clan.type) != 'invite only':
+                title += "["+str(clan.type).title()+"] "
 
-            title += clandata[x]['name'] + " (#" + clandata[x]['tag'] + ") "
+            title += clan.name + " (#" + clan.tag + ") "
             
             if personalbest > 0:
                 title += "PB: "+str(personalbest)+"+  "
-                clandata[x]['maxtrophies'] = personalbest
+                clan.max_trophies = personalbest
             
             if bonustitle is not None:
                 title += bonustitle  
 
-            desc = "{} {}      <:crtrophy:448609948008579073> {}+     <:wartrophy:448609141796241408> {}   <:openlink:448611387040595979> [Open](https://legendself.clans.com/clanInfo/{})".format(emoji, showMembers, str(clandata[x]['requiredScore']), str(warTrophies), clandata[x]['tag'])
+            desc = "{} {}      <:crtrophy:448609948008579073> {}+     <:wartrophy:448609141796241408> {}   <:openlink:448611387040595979> [Open](https://legendclans.com/clanInfo/{})".format(emoji, showMembers, str(clan.required_score), str(warTrophies), clan.tag)
 
-            if (member is None) or ((clandata[x]['requiredScore'] <= trophies) and (maxtrophies > personalbest) and (trophies - clandata[x]['requiredScore'] < 1200) and (clandata[x]['type'] != 'closed')):
+            if (member is None) or ((clan.required_score <= trophies) and (maxtrophies > personalbest) and (trophies - clan.required_score < 1200) and (clan.type != 'closed')):
                 foundClan = True
                 embed.add_field(name=title, value=desc, inline=False)
 
@@ -340,23 +332,21 @@ class legend:
         try:
             await self.bot.type()
             profiletag = await self.tags.getTag(member.id)
-            profiledata = requests.get('https://api.royaleapi.com/player/{}?exclude=games,currentDeck,cards,battles,achievements'.format(profiletag), headers=self.token, timeout=10).json()
-            clandata = requests.get('https://api.royaleapi.com/clan/{}'.format(clan_tag), headers=self.token, timeout=10).json()
-            ign = profiledata['name']
-            if profiledata['clan'] is None:
+            profiledata = await self.clash.get_player(profiletag, excludes=["games","currentDeck","cards","achievements"])
+            clandata = await self.clash.get_clan(clan_tag)
+
+            ign = profiledata.name
+            if profiledata.clan is None:
                 leftClan = True
                 clantag = ""
                 clanname = ""
             else: 
-                clantag = profiledata['clan']['tag']
-                clanname = profiledata['clan']['name']
-        except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
-            await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
-            return
-        except requests.exceptions.RequestException as e:
-            await self.bot.say(e)
-            return
-        except:
+                clantag = profiledata.clan.tag
+                clanname = profiledata.clan.name
+        except clashroyale.RequestError:
+                await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
+                return
+        except KeyError:
             await self.bot.say("You must assosiate a tag with this member first using ``!save #tag @member``")
             return
 
@@ -364,18 +354,18 @@ class legend:
 
         if membership:
 
-            trophies = profiledata['trophies']
-            maxtrophies = profiledata['stats']['maxTrophies']
+            trophies = profiledata.trophies
+            maxtrophies = profiledata.stats.max_trophies
 
-            if (clandata['memberCount'] == 50):
+            if (clandata.member_count == 50):
                 await self.bot.say("Approval failed, the clan is Full.")
                 return
 
-            if ((trophies < clandata['requiredScore']) and (maxtrophies < clan_pb)):
+            if ((trophies < clandata.required_score) and (maxtrophies < clan_pb)):
                 await self.bot.say("Approval failed, you don't meet the trophy requirements.")
                 return
 
-            if (clandata['type'] == "closed"):
+            if (clandata.type == "closed"):
                 await self.bot.say("Approval failed, the clan is currently closed.")
                 return
 
@@ -404,7 +394,7 @@ class legend:
 
             if await self.clans.numWaiting(clankey)  > 0:
                 if await self.clans.checkWaitingMember(clankey, member.id):
-                    canWait = (50 - clandata['memberCount']) -1
+                    canWait = (50 - clandata.member_count) -1
 
                     if await self.clans.getWaitingIndex(clankey, member.id) > canWait:
                         await self.bot.say("Approval failed, you are not first in queue for the waiting list on this server.")
@@ -430,7 +420,7 @@ class legend:
                     "Congratulations, You have been approved to join **"+ clan_name + " (#" + clan_tag + ")**.\n\n\n" +
                     "Your **RECRUIT CODE** is: ``" + recruitCode + "`` \n"+
                     "Send this code in the join request message.\n\n"+
-                    "Click this link to join the clan: https://legendself.clans.com/clanInfo/"+ clan_tag +"\n\n" +
+                    "Click this link to join the clan: https://legendclans.com/clanInfo/"+ clan_tag +"\n\n" +
                     "That's it! Now wait for your clan leadership to accept you. \n" +
                     "If you do not see a 'request to join' button, make sure you leave your current clan and check the trophy requirements. \n\n" + 
                     "**IMPORTANT**: Once your clan leadership has accepted your request, let a staff member in discord know that you have been accepted. They will then unlock all the member channels for you."
@@ -478,22 +468,19 @@ class legend:
         try:
             await self.bot.type()
             profiletag = await self.tags.getTag(member.id)
-            profiledata = requests.get('https://api.royaleapi.com/player/{}?exclude=games,currentDeck,cards,battles,achievements'.format(profiletag), headers=self.token, timeout=10).json()
-            if profiledata['clan'] is None:
+            profiledata = await self.clash.get_player(profiletag, excludes=["games","currentDeck","cards","achievements"])
+            if profiledata.clan is None:
                 clantag = ""
                 clanname = ""
             else: 
-                clantag = profiledata['clan']['tag']
-                clanname = profiledata['clan']['name']
+                clantag = profiledata.clan.tag
+                clanname = profiledata.clan.name
 
-            ign = profiledata['name']
-        except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
+            ign = profiledata.name
+        except clashroyale.RequestError:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
-        except requests.exceptions.RequestException as e:
-            await self.bot.say(e)
-            return
-        except:
+        except KeyError:
             await self.bot.say("You must assosiate a tag with this member first using ``!save #tag @member``")
             return
 
@@ -638,31 +625,27 @@ class legend:
         try:
             await self.bot.type()
             profiletag = await self.tags.getTag(member.id)
-            profiledata = requests.get('https://api.royaleapi.com/player/{}?exclude=games,currentDeck,cards,battles,achievements'.format(profiletag), headers=self.token, timeout=10).json()
-            clandata = requests.get('https://api.royaleapi.com/clan/{}'.format(clan_tag), headers=self.token, timeout=10).json()
-            ign = profiledata['name']
-            if profiledata['clan'] is None:
+            profiledata = await self.clash.get_player(profiletag, excludes=["games","currentDeck","cards","achievements"])
+            clandata = await self.clash.get_clan(clan_tag)
+            if profiledata.clan is None:
                 clantag = ""
                 clanname = ""
             else: 
-                clantag = profiledata['clan']['tag']
-                clanname = profiledata['clan']['name']
-        except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
-            await self.bot.say("Warning: cannot reach Clash Royale Servers. Using offline waiting list.")
-            offline = True
-        except requests.exceptions.RequestException as e:
-            await self.bot.say(e)
+                clantag = profiledata.clan.tag
+                clanname = profiledata.clan.name
+            ign = profiledata.name
+        except clashroyale.RequestError:
+            await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
-        except:
+        except KeyError:
             await self.bot.say("You must assosiate a tag with this member first using ``!save #tag @member``")
             return
 
-
         if not offline:
-            trophies = profiledata['trophies']
-            maxtrophies = profiledata['stats']['maxTrophies']
+            trophies = profiledata.trophies
+            maxtrophies = profiledata.stats.max_trophies
 
-            if ((trophies < clandata['requiredScore']) and (maxtrophies < clan_pb)):
+            if ((trophies < clandata.required_score) and (maxtrophies < clan_pb)):
                 await self.bot.say("Cannot add you to the waiting list, you don't meet the trophy requirements.")
                 return
 
@@ -774,17 +757,14 @@ class legend:
         try:
             await self.bot.type()
             profiletag = await self.tags.getTag(member.id)
-            profiledata = requests.get('https://api.royaleapi.com/player/{}?exclude=games,currentDeck,cards,achievements'.format(profiletag), headers=self.token, timeout=10).json()
-            clantag = profiledata['clan']['tag']
-            clanname = profiledata['clan']['name']
-            ign = profiledata['name']
-        except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
+            profiledata = await self.clash.get_player(profiletag, excludes=["games","currentDeck","cards","achievements"])
+            clantag = profiledata.clan.tag
+            clanname = profiledata.clan.name
+            ign = profiledata.name
+        except clashroyale.RequestError:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
-        except requests.exceptions.RequestException as e:
-            await self.bot.say(e)
-            return
-        except:
+        except KeyError:
             await self.bot.say("You must assosiate a tag with this member first using ``!save #tag @member``")
             return
 
@@ -806,7 +786,7 @@ class legend:
                 else:
                      await self.bot.say("Nickname changed to ** {} **\n".format(newname))
         else:
-            await self.bot.say("You are not even in any of our clans, what are you doing here?")
+            await self.bot.say("This command is only available for family members.")
 
     @commands.command(pass_context=True, no_pm=True)
     @commands.has_any_role(*BOTCOMMANDER_ROLES)
@@ -835,8 +815,8 @@ class legend:
         await self.bot.type()
 
         try:
-            clandata = requests.get('https://api.royaleapi.com/clan/{}'.format(clan_tag), headers=self.token, timeout=10).json()
-        except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
+            clandata = await self.clash.get_clan(clan_tag)
+        except clashroyale.RequestError:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
  
@@ -845,10 +825,10 @@ class legend:
         cr_members_name = []
         cr_members_tag = []
         cr_members_trophy = []
-        for x in range(0, len(clandata['members'])):
-            cr_members_name.append(clandata['members'][x]['name'])
-            cr_members_tag.append(clandata['members'][x]['tag'])
-            cr_members_trophy.append(clandata['members'][x]['trophies'])
+        for member in clandata.members:
+            cr_members_name.append(member[x]['name'])
+            cr_members_tag.append(member['tag'])
+            cr_members_trophy.append(member['trophies'])
 
         role = discord.utils.get(server.roles, name=clan_role)
         d_members = [m for m in server.members if role in m.roles]
@@ -892,15 +872,15 @@ class legend:
                 cr_members_with_no_player_tag.append(cr_members_name[index])
                 continue
 
-        clanReq = clandata['requiredScore']
+        clanReq = clandata.required_score
         for index, player_trophy in enumerate(cr_members_trophy):
             if player_trophy < clanReq:
                 cr_members_with_less_trophies.append(cr_members_name[index])
 
-        cr_clanSettings.append(clandata['badge']['id'] == 16000002)
-        cr_clanSettings.append(clandata['location']['name'] == "International")
-        cr_clanSettings.append("Legend Family🔥14 Clans🔥Legendself.clans.com🔥Events & Prizes🔥Apply at legendself.clans.com/discord🔥" in clandata['description'])
-        cr_clanSettings.append(clandata['type'] != "closed")
+        cr_clanSettings.append(clandata.badge.id == 16000002)
+        cr_clanSettings.append(clandata.location.name == "International")
+        cr_clanSettings.append("Legend Family🔥14 Clans🔥Legendclans.com🔥Events & Prizes🔥Apply at legendclans.com/discord🔥" in clandata.description)
+        cr_clanSettings.append(clandata.type != "closed")
 
         message = ""
 
@@ -1107,20 +1087,21 @@ class legend:
         
         await self.bot.type()
         try:
-            topclans = requests.get("https://api.royaleapi.com/top/clans/_int", headers=self.token, timeout = 10).json()
+            topclans = await self.clash.get_top_clans(country_key='_int')
             msg = "```python\n"
         
             for x in range(10):
-                msg += ((str(topclans[x]["rank"]) + ".").ljust(4) + topclans[x]["name"] + "\n")
+                msg += ((str(topclans[x].rank) + ".").ljust(4) + topclans[x].name + "\n")
             for i in range(10, len(topclans)):
                 for j in self.clans.keysClans():
-                    if topclans[i]["tag"] == await self.clans.getClanData(j, 'tag'):
-                        msg += ((str(topclans[i]["rank"]) + ".").ljust(4) + topclans[i]["name"] + "\n")    
+                    if topclans[i].tag == await self.clans.getClanData(j, 'tag'):
+                        msg += ((str(topclans[i].rank) + ".").ljust(4) + topclans[i].name + "\n")    
             msg += "```"
         
             await self.bot.say("**Top clans in Local International Leaderboard**" + msg)
-        except:
+        except clashroyale.RequestError:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
+            return
 
     @commands.command(pass_context=True, no_pm=True)
     @commands.has_any_role(*BOTCOMMANDER_ROLES)
@@ -1132,15 +1113,12 @@ class legend:
         try:
             await self.bot.type()
             profiletag = await self.tags.getTag(member.id)
-            profiledata = requests.get('https://api.royaleapi.com/player/{}?exclude=games,currentDeck,cards,achievements'.format(profiletag), headers=self.token, timeout=10).json()
-            ign = profiledata['name']
-        except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
+            profiledata = await self.clash.get_player(profiletag, excludes=["games","currentDeck","cards","achievements"])
+            ign = profiledata.name
+        except clashroyale.RequestError:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
-        except requests.exceptions.RequestException as e:
-            await self.bot.say(e)
-            return
-        except:
+        except KeyError:
             await self.bot.say("You must assosiate a tag with this member first using ``!save #tag @member``")
             return
 
@@ -1188,91 +1166,6 @@ class legend:
         await self.bot.say(datetime.datetime.now(datetime.timezone.utc).strftime("%H:%M GMT"))
 
     @commands.command(pass_context=True, no_pm=True)
-    async def mm5(self, ctx):
-        """ Enter the Qualifier stage for Monthly Mayhem 5"""
-
-        server = ctx.message.server
-        member = ctx.message.author
-        channel = ctx.message.channel
-
-        await self.bot.say("Sorry big boi, its too late to register now, see you next Month.")
-        return
-
-        legendServer = ["393045385662431251"]
-
-        if server.id not in legendServer:
-            await self.bot.say("This command can only be executed in the Titan Monthly Mayhem Server: https://discord.gg/ZmeubX7")
-            return
-
-        if channel.name != "bot-spam":
-            await self.bot.say("You cannot run this command in this channel. Please run this command at #bot-spam")
-            return
-
-        try:
-            await self.bot.type()
-            profiletag = await self.tags.getTag(member.id)
-            profiledata = requests.get('https://api.royaleapi.com/player/{}?exclude=games,currentDeck,cards,battles,achievements'.format(profiletag), headers=self.token, timeout=10).json()
-            if profiledata['clan'] is None:
-                clantag = ""
-                clanname = ""
-            else: 
-                clantag = profiledata['clan']['tag']
-                clanname = profiledata['clan']['name']
-            ign = profiledata['name']
-        except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
-            await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
-            return
-        except requests.exceptions.RequestException as e:
-            await self.bot.say(e)
-            return
-        except:
-            await self.bot.say("You must assosiate a tag with this member first using ``!save #tag @member``")
-            return
-
-        membership = await self.clans.verifyMembership(clantag)
-
-        if membership:
-
-            if profiledata['stats']['level'] < 8:
-                await self.bot.say("You cannot join the Qualifier Stage as you are not yet level 8 in Clash Royale.")
-
-            await self.bot.say(member.mention + " Have you read and understood how the Monthly Mayhem 5 Qualifier will work and have read and noted the dates and times of the Qualifier tournaments? (Yes/No)")
-            answer = await self.bot.wait_for_message(timeout=30, author=ctx.message.author)
-            if answer is None:
-                await self.bot.say(member.mention + ' Ok then, I guess its time to read the announcement again.')
-                return
-            elif "yes" not in answer.content.lower():
-                await self.bot.say(member.mention + ' Registration failed.')
-                return
-    
-            mymessage = ""
-            if ign is None:
-                await self.bot.say("Cannot find IGN.")
-            else:
-                try:
-                    savekey = await self.clans.getClanKey(clantag)
-                    newclanname = await self.clans.getClanData(clankey, 'nickname')
-                    newname = ign + " | " + newclanname
-                    await self.bot.change_nickname(member, newname)
-                except discord.HTTPException:
-                    await self.bot.say("I don’t have permission to change nick for this user.")
-                    return
-                else:
-                    await self.bot.say("Welcome to Monthly Mayhem 5. Nickname changed to ** {} **\n".format(newname))
-
-            role = discord.utils.get(server.roles, name="MM5")
-            try:
-                await self.bot.add_roles(member, role)
-            except discord.Forbidden:
-                raise
-            except discord.HTTPException:
-                raise
-            await self.bot.say("{} Role Added to {}".format(role.name, member.display_name))
-
-        else:
-            await self.bot.say("You are not even in any of our clans, what are you doing here?")
-
-    @commands.command(pass_context=True, no_pm=True)
     async def cwstats(self, ctx, tag):
         """Tournament/Clanwar Statistics generator"""
 
@@ -1288,24 +1181,22 @@ class legend:
             return
 
         try:
-            tourney = requests.get('https://api.royaleapi.com/tournaments/'+tag, headers=self.token, timeout=10).json()
-        except (requests.exceptions.Timeout, json.decoder.JSONDecodeError):
+            tourney = await self.clash.get_tournament(tag)
+        except clashroyale.RequestError:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
-            return
-        except requests.exceptions.RequestException as e:
-            await self.bot.say(e)
             return
 
         clanwar_dict = {}
         
         for y in range(0, len(tourney['members'])):
+        for member in tourney.members:
 
-            tourney_score = tourney['members'][y]['score']
+            tourney_score = member.score
 
-            if 'clan' not in tourney['members'][y]:
+            if member.clan is None:
                 tourney_clan = "OTHERS"
             else:
-                tourney_clan = tourney['members'][y]['clan']['name']
+                tourney_clan = member.clan.name
 
             if tourney_clan not in clanwar_dict:
                 clanwar_dict[tourney_clan] = {}
@@ -1315,7 +1206,7 @@ class legend:
             clanwar_dict[tourney_clan]['score'] += tourney_score
             clanwar_dict[tourney_clan]['participants'] += 1
 
-        message =  "\n**{}**```{}\t{}\t{}\n".format(tourney['name'], "CLAN".ljust(17), "SCORE".ljust(9), "PARTICIPANTS")
+        message =  "\n**{}**```{}\t{}\t{}\n".format(tourney.name, "CLAN".ljust(17), "SCORE".ljust(9), "PARTICIPANTS")
         clanwar_dict = OrderedDict(sorted(clanwar_dict.items(), key=lambda x: x[1]['score'], reverse=True))
         for x in clanwar_dict:
             message += "{}\t{}\t{}\n".format(x.ljust(17), str(clanwar_dict[x]['score']).ljust(9), clanwar_dict[x]['participants'])
