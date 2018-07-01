@@ -184,8 +184,8 @@ class shop:
         
         for member in tourney.members:
 
-            tourney_tag = tourney.members.tag
-            tourney_score = tourney.members.score
+            tourney_tag = tourney.member.tag
+            tourney_score = tourney.member.score
 
             for key in range(0,len(banks)):
                 try:
