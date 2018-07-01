@@ -326,7 +326,7 @@ class duels:
         playerTags = []
 
         for player in duelPlayers:
-            playerself.tags.append(self.settings['USERS'][player]["TAG"])
+            playertags.append(self.settings['USERS'][player]["TAG"])
 
         await self.bot.type()
 
