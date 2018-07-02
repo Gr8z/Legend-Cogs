@@ -11,6 +11,7 @@ import datetime
 import time
 from collections import OrderedDict
 import clashroyale
+import requests
 
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
