@@ -146,7 +146,7 @@ class clashroyale:
 			await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 			return
 		except KeyError:
-			await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
+			await self.bot.say("You need to first save your profile using ``!save #GAMETAG``")
 			return
 
 		message = ctx.message
