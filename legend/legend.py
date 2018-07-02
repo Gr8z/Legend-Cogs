@@ -17,14 +17,19 @@ credits = "Bot by GR8 | Titan"
 BOTCOMMANDER_ROLES =  ["Family Representative", "Clan Manager", "Clan Deputy", "Co-Leader", "Hub Officer", "admin"]
 
 rules_text = """**Here are some Legend Family Discord server rules.**\n
+• No Hateful, obscene, offensive, racist, sexual or violent words allowed in chat or images.
 • Respect others' opinions. If you disagree, please do so in a constructive manner. 
 • This is an English only server, please use any other languages in a private message.
 • Do not spam, and avoid ever using @myclanname without permission from clan managers or deputies.
 • No advertisement of any kind, e.g. clans, websites, discord invites.
-• Use #bot-spam for bot features, e.g. **!deck** or **!payday**
+• Use #bot-spam for bot features, e.g. !deck or !payday
+• Obtaining credits or reputations using unethical ways like cheating or trading is strictly forbidden
 • Respect and do not subvert moderators and managers.
 • A good rule is to talk to people as if you were talking to them face to face.
 • There are more rules that vary from clan to clan. Ask your clan leader for the rules of your clan.\n
+**Clan Transfer**\n
+• If you are transferring from one Legend Family clan to another, please contact your destination clan's clan leader first, and wait for the all clear from that clan leader. We are all for members being wherever they want to be, but it helps us keep track of what is going on, and helps us make sure you get accepted.
+• If you are leaving the clan for another reason, please talk with your leader first when possible. As a clan leader it helps to know if you're leaving for good, if you're leaving to do 2v2 with a few friends for a while, or if you're leaving for an eSport event.\n
 **Violation of these roles will lead to punishment including temporary guest role reduced access, temporary kick from server, or permanent kick from server, depending on the severity and/or frequency of the offense**"""
 
 commands_text =  """Here are some of the Legend Family Bot commands, you can use them in the #bot-spam channel.\n
@@ -34,6 +39,7 @@ commands_text =  """Here are some of the Legend Family Bot commands, you can use
 **!topmembers** - shows the top ranked players in our family.
 **!payday** - receive your 300 credits every 30 minutes.
 **!heist** - Play a heist with a crew in #heist channel.
+**!duel** - Challenge someone for a duel and win credits in #duels channel.
 **!buy** - Take a look at what you can purchase with your credits.
 **!balance** - To check your current bank balance.
 **!profile** - view your server profile.
@@ -52,21 +58,23 @@ info_text = """You will find several channels on our Discord Server\n
 **#global-chat**: to discuss about the game.
 **#tourneys**: Dozens of tournaments posted everyday. 
 **#news**: important info about family.
+**#giveaways**: Win Discord credits and game keys every day.
 **#deck-recommendation**: decks discussion.
 **#off-topic**: you can chat about anything unrelated to clash royale here.
-**#bots-spam**: play bot commands, You can mute the channels you don't need in DISCORD settings.
+**#bots-spam**: Use bot commands, You can mute the channels you don't need in DISCORD settings.
+**#heist**: Play Heist mini game with a crew and get lots of credits.
+**#duels**: Challenge or accept duel offers for a Clash Royale Battle.
+**#challenges**: Word and number challenge games with other members. Answer all the questions before any one else to win.
 **#friends-forever**: Post your Clash friend invite link or add others.
 """
 cw_info = """We organize **Legend Wars** every weekend, which aims to determine **which clan is the strongest**. 
 
-The **idea** is simple: A private tournament that anyone may join **within LeGeND and the alliance. **
+The **idea** is simple: A private tournament that anyone may join **within Legend Family and the alliance.**
 Score is calculated in a way that allows every participant to contribute to help their clan win.  We sum the earned tournament trophies of the members of each clan to calculate a clan score, clan with highest clan score is declared the **winner**! 
 
 There are 2 factors to win: convince more players to participate within your clan and earn more tournament trophies. Both are **equally important**. We publish tourneys and passwords at same time, so we give equal chances to each clan and player. 
 
-Every Sunday, there will be a **special Gizer Legend War** where various clans outside and inside the family will join a tournament and the top clan will recieve $5 from Gizer. 
-
-Each and every participant will recieve discord credits for getting trophies for their clan. The more trophies you can collect, the more credits you will get. Credits can used in LeGeND shop to buy various items.
+The Top player in each war will recieve $10. However, each and every participant will recieve discord credits for getting trophies for their clan. The more trophies you can collect, the more credits you will get. Credits can used in LeGeND shop to buy various items.
 
 **All clans** will be closed/full to avoid any leaks, nobody will be allowed to join.
 
@@ -78,7 +86,7 @@ Credits are a virtual currency in LeGeND Discord, you earn credits by playing in
 
 • Every 30 minutes, you can get free credits by typing !payday in #bot-spam channel.
 • Every Sunday, you receive something called a "Weekly Payout". Which converts all your week's clan donations into credits. So the more active you are in a clan, the more credits you get.
-• We have Legend Wars every weekend, participating in these clan wars also give you tons of credits according to your tournament trophies.
+• We have Legend Wars every weekend, participating in these wars also give you tons of credits according to your tournament trophies.
 • You can also win credits by playing #heist and #challenges.
 • You can play Clash Royale #duels to bet on your skills in friend battles.
 • Last but not least, you can get easy credits by just chatting on discord. The more you chat, the more credits you accumulate.
@@ -99,11 +107,12 @@ Please note that if you just lurk in the server and not participate for a long p
 https://discord.gg/CN47Tkx
 """
 
-coc_bs = """We also play **Clash of Clans**, and we would like to invite to you join our clans.
+coc_bs = """We also play **Clash of Clans** and **Brawl Stars**, we would like to invite to you join them if you play either of these supercell games.
 
-• **LeGeND Raiders! (#JQJRGVJU)** - https://discord.gg/BG7wMFw
+• Clash of Clans - **LeGeND Raiders! (#JQJRGVJU)** - https://discord.gg/BG7wMFw
+• Brawl Stars - **LeGeND Platoon! (#QVLUCGP)**
 
-You can send a request to join with the message "from LEGEND". Join the discord server when you are accepted.
+You can send a request to join with the message "from LEGEND". Let us know when you have joined so we can unlock clan channels for you.
 """
 
 social_info = """Stay Social! Come and follow us on these platforms to stay up to date on the latest news and announcements.
