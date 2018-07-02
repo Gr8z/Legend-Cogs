@@ -57,7 +57,7 @@ class clashroyale:
 		try:
 			profiletag = await self.tags.getTag(member.id)
 			profiledata = await self.clash.get_player(profiletag)
-		except clashroyale.RequestError:
+		except clashroyaleAPI.RequestError:
 			await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 			return
 		except KeyError:
@@ -107,7 +107,7 @@ class clashroyale:
 		try:
 			profiletag = await self.tags.getTag(member.id)
 			profiledata = await self.clash.get_player_chests(profiletag)
-		except clashroyale.RequestError:
+		except clashroyaleAPI.RequestError:
 			await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 			return
 		except KeyError:
@@ -142,7 +142,7 @@ class clashroyale:
 		try:
 			profiletag = await self.tags.getTag(member.id)
 			profiledata = await self.clash.get_player(profiletag, keys="deckLink")
-		except clashroyale.RequestError:
+		except clashroyaleAPI.RequestError:
 			await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 			return
 		except KeyError:
@@ -163,7 +163,7 @@ class clashroyale:
 
 		try:
 			clandata = await self.clash.get_clan(clantag)
-		except clashroyale.RequestError:
+		except clashroyaleAPI.RequestError:
 			await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 			return
 
@@ -195,7 +195,7 @@ class clashroyale:
 
 		try:
 			tourneydata = await self.clash.get_tournament(tag)
-		except clashroyale.RequestError:
+		except clashroyaleAPI.RequestError:
 			await self.bot.say("Error: Tournament not found. Please double check your #TAG")
 			return
 
