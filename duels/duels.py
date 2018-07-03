@@ -171,7 +171,6 @@ class duels:
         embed.set_footer(text=credits, icon_url=creditIcon)
 
         if privateDuel is None:
-
             role_name = "Duels"
             if role_name is not None:
                 duels_role = discord.utils.get(server.roles, name=role_name)
@@ -270,7 +269,7 @@ class duels:
             return
 
         try:
-            profiledata = await self.clash.get_player([self.settings['USERS'][duelPlayers[0]]["TAG"], self.settings['USERS'][author.id]["TAG"]], keys="stats")
+            profiledata = await self.clash.get_player(*[self.settings['USERS'][duelPlayers[0]]["TAG"], self.settings['USERS'][author.id]["TAG"]], keys="stats")
         except clashroyale.RequestError:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
