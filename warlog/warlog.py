@@ -104,7 +104,7 @@ class warlog:
                     f.seek(0)
                     await self.bot.send_file(channel, f, filename=filename)
 
-                self.clans.setWarTrophies(clankey, warTrophies)
+                await self.clans.setWarTrophies(clankey, warTrophies)
 
             await asyncio.sleep(1)
 
