@@ -11,6 +11,7 @@ from PIL import ImageFont
 from PIL import Image
 from PIL import ImageDraw
 import clashroyale
+import datetime
 
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
@@ -84,11 +85,12 @@ class warlog:
         for clankey in self.clans.keysClans():
 
             try:
-                clandata = await self.clash.get_clan_war_log(await self.clans.getClanData(clankey, 'tag'))
+                clanwars = await self.clash.get_clan_war_log(await self.clans.getClanData(clankey, 'tag'))
             except clashroyale.RequestError:
                 return
 
-            standings = clandata[0].standings
+            members - await self.clans.getClanData(clankey, 'members')
+            standings = clanwars[0].standings
             clanRank = await self.findRank(standings, "tag", await self.clans.getClanData(clankey, 'tag'))
             warTrophies = standings[clanRank].war_trophies
 
@@ -104,7 +106,20 @@ class warlog:
                     f.seek(0)
                     await self.bot.send_file(channel, f, filename=filename)
 
-                await self.clans.setWarTrophies(clankey, warTrophies)
+                sun = datetime.date.today() - datetime.timedelta(7 + (today.weekday() + 1) % 7 ).strftime('%s')
+
+                for member in members:
+                    WarDayWins = 0
+                    cardsEarned = 0
+                    for index, war in enumerate(clanwars):
+                        if index == 5:
+                            break
+                        if war.created_date > sun:
+                            for participant in war.participants:
+                                if participant.tag == member["tag"]:
+                                    WarDayWins += participant.wins
+                                    cardsEarned += participant.cardsEarned
+                    await self.clans.setWarstats(clankey, member.tag, WarDayWins, cardsEarned)
 
             await asyncio.sleep(1)
 

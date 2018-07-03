@@ -111,9 +111,12 @@ class shop:
             return
         
         for clan in clans:
+            clankey = await self.clans.getClanKey(clan.tag)
             for member in clan.members:
                 clan_tag = member.tag
                 clan_donations = member.donations
+                clan_wins = await self.clans.getMemberWins(clankey, clan_tag)
+                clan_cards = await self.clans.getMemberCards(clankey, clan_tag)
 
                 for key in range(0,len(banks)):
                     try:
@@ -126,22 +129,30 @@ class shop:
                                 epic = await self._is_epic(user)
                                 legendary = await self._is_legendary(user)
 
-                                perDonation = 25
+                                perDonation = 15
+                                perWin = 2000
+                                perCard = 1
                                 BonusMult = 1
 
                                 if rare:
                                     BonusMult = 1.2
                                     perDonation *= BonusMult
+                                    perWin *= BonusMult
+                                    perCard *= BonusMult
 
                                 if epic:
                                     BonusMult = 1.35
                                     perDonation *= BonusMult
+                                    perWin *= BonusMult
+                                    perCard *= BonusMult
 
                                 if legendary:
                                     BonusMult = 1.5
                                     perDonation *= BonusMult
+                                    perWin *= BonusMult
+                                    perCard *= BonusMult
 
-                                amount = math.ceil((clan_donations*perDonation))
+                                amount = math.ceil((clan_donations*perDonation) + (clan_wins*perWin) + (clan_cards*perCard))
                                 pay = bank.get_balance(user) + amount
                                 bank.set_credits(user, pay)
                                 perc = str(math.ceil((BonusMult-1)*100))
@@ -149,9 +160,9 @@ class shop:
                                 await self.bot.say("{} - ({} donations)".format(user.display_name, clan_donations))
 
                                 if BonusMult > 1:
-                                    await self.bot.send_message(user,"Hello {} , take these credits*({}% Bonus)* for the **{}** donations you contributed to your clan this week. (+{} credits!)".format(user.name, perc, str(clan_donations), str(amount)))
+                                    await self.bot.send_message(user,"Hello {} , take these credits*({}% Bonus)* for the **{}** donations, **{}** War Day Wins and **{}** Collection Day Cards you earned for your clan this week. (+{} credits!)".format(user.name, perc, str(clan_donations), str(clan_wins), str(clan_cards), str(amount)))
                                 else:
-                                    await self.bot.send_message(user,"Hello {} , take these credits for the **{}** donations you contributed to your clan this week. (+{} credits!)".format(user.name, str(clan_donations), str(amount)))
+                                    await self.bot.send_message(user,"Hello {} , take these credits for the **{}** donations, **{}** War Day Wins and **{}** Collection Day Cards you earned for your clan this week. you contributed to your clan this week. (+{} credits!)".format(user.name, str(clan_donations), str(clan_wins), str(clan_cards), str(amount)))
                             except Exception as e:
                                 await self.bot.say(e)
                     except:

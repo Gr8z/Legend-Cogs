@@ -36,12 +36,14 @@ class Clanlog:
     def update_discord_log(self):
         self.discord_log = dataIO.load_json('data/clanlog/discord_log.json')
    
-    @checks.is_owner()
+    @checks.mod_or_permissions(administrator=True)
     @commands.command(pass_context=True, no_pm=True)
-    async def clanlog(self, ctx):
-        """Notifies whenever someone leaves or joins"""
+    async def clanlog(self, ctx, download = None):
+        """Notifies whenever someone leaves or joins.
+        Run this command on a schedule, do [p]clanlog download on first use."""
         
         old_clans = deepcopy(await self.clans.getClans())
+        new_clans = deepcopy(old_clans)
 
         try:
             clan_requests = await self.clash.get_clan(*await self.clans.tagsClans())
@@ -52,11 +54,21 @@ class Clanlog:
         count = 0
         for clan in clan_requests:
             count = count + len(clan.members)
-            one_clan = []
+            clankey = await self.clans.getClanKey(clan.tag)
+            one_clan = {}
             for member in clan.members:
-                one_clan.append({"name" : member.name, "tag" : member.tag})
-            await self.clans.setMemberList(await self.clans.getClanKey(clan.tag), one_clan)
-        
+                one_clan[member.tag] = {}
+                one_clan[member.tag]["tag"] = member.tag
+                one_clan[member.tag]["name"] = member.name
+                one_clan[member.tag]["WarDayWins"] = 0
+                one_clan[member.tag]["cardsEarned"] = 0
+                if download is not None:
+                    await self.clans.addMember(clankey, member.name, member.tag)
+            new_clans[clankey]['members'] = one_clan
+
+        if download is not None:
+            return
+
         if self.last_count != count:
             self.update_member_log()
             current_time = get_time()   
@@ -73,10 +85,13 @@ class Clanlog:
                 
         for clankey in old_clans.keys():
             for member in old_clans[clankey]["members"]:
-                if member not in await self.clans.getClanData(clankey, 'members'):
+                if member not in new_clans[clankey]["members"]:
+                    await self.clans.delMember(member["tag"])
+
                     title = "{} (#{})".format(member["name"], member["tag"])
                     desc = "left **{}**".format(old_clans[clankey]["name"])
                     embed_left = discord.Embed(title = title, url = "https://royaleapi.com/player/{}".format(member["tag"]), description=desc, color=0xff0000)
+
                     if server.id == "374596069989810176":
                         if await self.clans.getClanData(clankey, 'log_channel')  is not None:
                             try:
@@ -85,14 +100,19 @@ class Clanlog:
                                 await self.bot.say("<#{}> NOT FOUND".format(await self.clans.getClanData(clankey, 'log_channel')))
                             except discord.errors.Forbidden:
                                 await self.bot.say("No Permission to send messages in <#{}>".format(await self.clans.getClanData(clankey, 'log_channel')))
+
                     await self.bot.say(embed = embed_left)
         
         for clankey in self.clans.keysClans():
-            for member in await self.clans.getClanData(clankey, 'members'):
+            for member in new_clans[clankey]["members"]:
                 if member not in old_clans[clankey]["members"]:
+                    await self.clans.addMember(clankey, member["name"], member["tag"])
+
                     title = "{} (#{})".format(member["name"], member["tag"])
                     desc = "joined **{}**".format(old_clans[clankey]["name"])
+
                     embed_join = discord.Embed(title = title, url = "https://royaleapi.com/player/{}".format(member["tag"]), description=desc, color=0x00ff40)
+
                     if server.id == "374596069989810176":
                         if await self.clans.getClanData(clankey, 'log_channel') is not None:
                             try:
@@ -101,25 +121,8 @@ class Clanlog:
                                 await self.bot.say("<#{}> NOT FOUND".format(await self.clans.getClanData(clankey, 'log_channel')))
                             except discord.errors.Forbidden:
                                 await self.bot.say("No Permission to send messages in <#{}>".format(await self.clans.getClanData(clankey, 'log_channel')))
+
                     await self.bot.say(embed = embed_join)
-    
-    @checks.is_owner()    
-    @commands.command(no_pm=True)
-    async def clanlogdownload(self):
-        """Downloads data to prevent clanlog from sending too many messages"""
-        try:
-            clan_requests = await self.clash.get_clan(*await self.clans.tagsClans())
-        except clashroyale.RequestError:
-            await self.bot.say("Cannot reach Clash Royale servers. Try again later!")
-            return
-            
-        for clan in clan_requests:
-             one_clan = []
-             for member in clan.members:
-                 one_clan.append({"name" : member.name, "tag" : member.tag})
-             await self.clans.setMemberList(await self.clans.getClanKey(clan.tag), one_clan)
-        await self.bot.say("Downloaded.")
-            
         
 
     @commands.group(pass_context=True, no_pm=True)
@@ -128,8 +131,8 @@ class Clanlog:
         if ctx.invoked_subcommand is None:
             await send_cmd_help(ctx)
 
-    @history.command(pass_context=True, no_pm=True)
-    async def clash(self, ctx):
+    @history.command(pass_context=True, no_pm=True, name="clash")
+    async def history_clash(self, ctx):
         """Graph with clash member count history"""
         try:
             channel = ctx.message.channel
@@ -169,8 +172,8 @@ class Clanlog:
         except (IndexError):
             await self.bot.say("Clanlog command needs to collect more data!")
 
-    @history.command(pass_context=True, no_pm=True)
-    async def discord(self, ctx):
+    @history.command(pass_context=True, no_pm=True, name="discord")
+    async def history_discord(self, ctx):
         """Graph with discord user count history"""
         try:
             channel = ctx.message.channel
