@@ -106,20 +106,21 @@ class warlog:
                     f.seek(0)
                     await self.bot.send_file(channel, f, filename=filename)
 
-                sun = datetime.date.today() - datetime.timedelta(7 + (today.weekday() + 1) % 7 ).strftime('%s')
+                sun = int((datetime.date.today() - datetime.timedelta(7 + (datetime.date.today().weekday() + 1) % 7 )).strftime('%s'))
 
-                for member in members:
+                for memberkey in self.clans.keysClanMembers():
                     WarDayWins = 0
                     cardsEarned = 0
+                    tag = await self.clans.getClanMemberData(clankey, 'tag')
                     for index, war in enumerate(clanwars):
                         if index == 5:
                             break
                         if war.created_date > sun:
                             for participant in war.participants:
-                                if participant.tag == member["tag"]:
+                                if participant.tag == tag:
                                     WarDayWins += participant.wins
                                     cardsEarned += participant.cardsEarned
-                    await self.clans.setWarstats(clankey, member.tag, WarDayWins, cardsEarned)
+                    await self.clans.setWarstats(clankey, tag, WarDayWins, cardsEarned)
 
             await asyncio.sleep(1)
 

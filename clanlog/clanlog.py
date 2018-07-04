@@ -84,7 +84,7 @@ class Clanlog:
         server = ctx.message.server
                 
         for clankey in old_clans.keys():
-            for member in old_clans[clankey]["members"]:
+            for member in old_clans[clankey]["members"].keys():
                 if member not in new_clans[clankey]["members"]:
                     await self.clans.delMember(clankey, member["tag"])
 
@@ -104,7 +104,7 @@ class Clanlog:
                     await self.bot.say(embed = embed_left)
         
         for clankey in self.clans.keysClans():
-            for member in new_clans[clankey]["members"]:
+            for member in new_clans[clankey]["members"].keys():
                 if member not in old_clans[clankey]["members"]:
                     await self.clans.addMember(clankey, member["name"], member["tag"])
 
