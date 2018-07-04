@@ -230,12 +230,12 @@ class crtools:
 
     @commands.group(pass_context=True)
     @checks.mod_or_permissions(administrator=True)
-    async def clans(self, ctx):
+    async def _clans(self, ctx):
         """Base command for managing clash royale clans. [p]help clans for details"""
         if ctx.invoked_subcommand is None:
             await self.bot.send_cmd_help(ctx)
 
-    @clans.command(pass_context=True, name="delete")
+    @_clans.command(pass_context=True, name="delete")
     @checks.is_owner()
     async def clans_delete(self, ctx, clankey):
         """Remove a clan from tracking"""
@@ -246,7 +246,7 @@ class crtools:
         else:
             await self.bot.say("Failed")
     
-    @clans.command(pass_context=True, name="pb")
+    @_clans.command(pass_context=True, name="pb")
     async def clans_pb(self, ctx, clankey, pb: int):
         """Set a Personal Best requirement for a clan"""
         clankey = clankey.lower()
@@ -258,7 +258,7 @@ class crtools:
            
         await self.bot.say("Success")
 
-    @clans.command(pass_context=True, name="bonus")
+    @_clans.command(pass_context=True, name="bonus")
     async def clans_bonus(self, ctx, clankey, *bonus):
         """Add bonus information to title of clan (i.e. Age: 21+)"""
         clankey = clankey.lower()
@@ -270,7 +270,7 @@ class crtools:
         
         await self.bot.say("Success")     
 
-    @clans.command(pass_context=True, name="log")
+    @_clans.command(pass_context=True, name="log")
     async def clans_log(self, ctx, clankey, channel : discord.Channel):
         """Set Clan's Log channel to track in's and outs"""
         clankey = clankey.lower()
@@ -296,7 +296,7 @@ class crtools:
             await self.bot.say("No permission to send messages to that channel")
         
 
-    @clans.command(pass_context=True, name="private")
+    @_clans.command(pass_context=True, name="private")
     async def clans_private(self, ctx, clankey):
         """Toggle Private approval of new recruits"""
         clankey = clankey.lower()
