@@ -86,11 +86,13 @@ class Clanlog:
         for clankey in old_clans.keys():
             for member in old_clans[clankey]["members"].keys():
                 if member not in new_clans[clankey]["members"]:
-                    await self.clans.delMember(clankey, member["tag"])
+                    memberName = old_clans[clankey]["members"][member]["tag"]
+                    memberTag = old_clans[clankey]["members"][member]["name"]
+                    await self.clans.delMember(clankey, memberTag)
 
-                    title = "{} (#{})".format(member["name"], member["tag"])
+                    title = "{} (#{})".format(memberName, memberTag)
                     desc = "left **{}**".format(old_clans[clankey]["name"])
-                    embed_left = discord.Embed(title = title, url = "https://royaleapi.com/player/{}".format(member["tag"]), description=desc, color=0xff0000)
+                    embed_left = discord.Embed(title = title, url = "https://royaleapi.com/player/{}".format(memberTag), description=desc, color=0xff0000)
 
                     if server.id == "374596069989810176":
                         if await self.clans.getClanData(clankey, 'log_channel')  is not None:
@@ -106,12 +108,14 @@ class Clanlog:
         for clankey in self.clans.keysClans():
             for member in new_clans[clankey]["members"].keys():
                 if member not in old_clans[clankey]["members"]:
-                    await self.clans.addMember(clankey, member["name"], member["tag"])
+                    memberName = new_clans[clankey]["members"][member]["tag"]
+                    memberTag = new_clans[clankey]["members"][member]["name"]
+                    await self.clans.addMember(clankey, memberName, memberTag)
 
-                    title = "{} (#{})".format(member["name"], member["tag"])
+                    title = "{} (#{})".format(memberName, memberTag)
                     desc = "joined **{}**".format(old_clans[clankey]["name"])
 
-                    embed_join = discord.Embed(title = title, url = "https://royaleapi.com/player/{}".format(member["tag"]), description=desc, color=0x00ff40)
+                    embed_join = discord.Embed(title = title, url = "https://royaleapi.com/player/{}".format(memberTag), description=desc, color=0x00ff40)
 
                     if server.id == "374596069989810176":
                         if await self.clans.getClanData(clankey, 'log_channel') is not None:
