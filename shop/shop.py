@@ -6,6 +6,11 @@ import asyncio
 import json
 import clashroyale
 import math
+import urllib
+from PIL import ImageFile, Image
+import re
+import os
+import aiohttp
 
 class shop:
     """Legend Family Shop for credits"""
@@ -17,6 +22,7 @@ class shop:
         self.tags = self.bot.get_cog('crtools').tags
         self.clans = self.bot.get_cog('crtools').clans
         self.clash = clashroyale.Client(self.auth.getToken(), is_async=True)
+        self.session = aiohttp.ClientSession()
 
     async def updateBank(self):
         self.banks = dataIO.load_json('data/economy/bank.json')
@@ -89,6 +95,37 @@ class shop:
             else:
                 return False
         else:
+            return False
+
+    async def getsizes(self, uri):
+        # get file size *and* image size (None if not known)
+        file = urllib.request.urlopen(uri)
+        size = file.headers.get("content-length")
+        if size: 
+            size = int(size)
+        p = ImageFile.Parser()
+        while True:
+            data = file.read(1024)
+            if not data:
+                break
+            p.feed(data)
+            if p.image:
+                return size, p.image.size
+                break
+        file.close()
+        return size, None
+
+    async def _valid_image_url(self, url):
+
+        try:
+            async with self.session.get(url) as r:
+                image = await r.content.read()
+            with open('data/leveler/test.jpg','wb') as f:
+                f.write(image)
+            image = Image.open('data/leveler/test.jpg').convert('RGBA')
+            os.remove('data/leveler/test.jpg')
+            return True
+        except:
             return False
 
     @commands.command(pass_context=True, no_pm=True)
@@ -276,9 +313,9 @@ class shop:
             await self.bot.say("You do not have enough credits to buy this item.")
 
     @buy.command(pass_context=True, name="2")
-    async def buy_2(self, ctx):
-
-
+    async def buy_2(self, ctx, imgurLink):
+        """Buy custom background for your profile, picture must be in JPG and 490x490px
+        Example command: !buy 2 https://i.imgur.com/2Oc5E9K.jpg"""
         server = ctx.message.server
         author = ctx.message.author
         legendServer = ["374596069989810176"]
@@ -288,7 +325,34 @@ class shop:
             return
 
         if self.bank_check(author, 75000):
-            await self.bot.say("please contact @GR8#7968 to purchase it for you.")
+            pattern = re.compile(r"<?(https?:\/\/)?(www\.)?(i\.imgur\.com)\b([-a-zA-Z0-9/]*)>?(\.jpg)?")
+
+            if not pattern.match(imgurLink):
+                await self.bot.say("The URL does not end in **.jpg** and is not from **imgur.com**. Please upload a JPG image to imgur.com and get a direct link.")
+                return
+
+            if not await self._valid_image_url(imgurLink):
+                await self.bot.say("Error, That is not a valid image url!")
+                return
+
+            imagesizes = await self.getsizes(imgurLink) #(10965, (179, 188))
+            if imagesizes[0] > 500000:
+                await self.bot.say("The Image filesize is too big, please be under 500KB")
+                return
+
+            if ((imagesizes[1][0] != imagesizes[1][1]) or (imagesizes[1][0] != 490)):
+                await self.bot.say("The Image must be a square and exactly 490x490px")
+                return
+
+            message = ctx.message
+            message.content = "{}lvladmin bg setcustombg profile {} {}".format(ctx.prefix, author.id, imgurLink)
+            message.author = discord.utils.get(ctx.message.server.members, id = "112356193820758016")
+
+            await self.bot.process_commands(message)
+
+            bank = self.bot.get_cog('Economy').bank
+            bank.withdraw_credits(author, 75000)
+
         else:
             await self.bot.say("You do not have enough credits to buy this item.")
 
