@@ -289,8 +289,13 @@ class clashroyale:
 			avatar = member.avatar_url if member.avatar else member.default_avatar_url
 			embed.set_author(name='{} (#{}) has been successfully saved.'.format(profiledata.name, profiletag), icon_url=avatar)
 			await self.bot.say(embed=embed)
-		except:
+		except clashroyaleAPI.NotFoundError:
 			await self.bot.say("We cannot find your ID in our database, please try again.")
+			return
+		except clashroyaleAPI.RequestError:
+			await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
+			return
+
 
 def setup(bot):
 	bot.add_cog(clashroyale(bot))
