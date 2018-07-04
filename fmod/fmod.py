@@ -986,6 +986,7 @@ class fmod:
                             try:
                                 embed2 = await self.bot.get_message(logchannel, messageid)
                                 newembed = discord.Embed(title='Warning Revoked', color=0x00ff40, description='The warning for **{}** has been revoked by **{}** for the reason **{}**.'.format(user, ctx.message.author, reason))
+                                newembed.set_footer(text=credits, icon_url=creditIcon)
                                 await self.bot.edit_message(embed2, embed=newembed)
                                 await self.bot.clear_reactions(embed2)
                             except discord.NotFound:
