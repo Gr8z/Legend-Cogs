@@ -228,7 +228,7 @@ class crtools:
         auth.addToken(key)
         await self.bot.say("RoyaleAPI Token set")
 
-    @commands.group(pass_context=True)
+    @commands.group(pass_context=True, name="clans")
     @checks.mod_or_permissions(administrator=True)
     async def _clans(self, ctx):
         """Base command for managing clash royale clans. [p]help clans for details"""
@@ -240,7 +240,7 @@ class crtools:
     async def clans_delete(self, ctx, clankey):
         """Remove a clan from tracking"""
         clankey = clankey.lower()
-        if await clans.delClan(clankey):
+        if await self.clans.delClan(clankey):
             await self.bot.say("Success")
             return
         else:
@@ -251,9 +251,9 @@ class crtools:
         """Set a Personal Best requirement for a clan"""
         clankey = clankey.lower()
         try:
-            await clans.setPBTrophies(clankey, pb)
+            await self.clans.setPBTrophies(clankey, pb)
         except KeyError:
-            await self.bot.say("Please use a valid clanname: {}".format(await clans.namesClans()))
+            await self.bot.say("Please use a valid clanname: {}".format(await self.clans.namesClans()))
             return 
            
         await self.bot.say("Success")
@@ -263,9 +263,9 @@ class crtools:
         """Add bonus information to title of clan (i.e. Age: 21+)"""
         clankey = clankey.lower()
         try:
-            await clans.setBonus(clankey, " ".join(bonus))
+            await self.clans.setBonus(clankey, " ".join(bonus))
         except KeyError:
-            await self.bot.say("Please use a valid clanname: {}".format(await clans.namesClans()))
+            await self.bot.say("Please use a valid clanname: {}".format(await self.clans.namesClans()))
             return 
         
         await self.bot.say("Success")     
@@ -284,13 +284,13 @@ class crtools:
             if channel is None:
                 await self.bot.say("I can't find the specified channel. It might have been deleted.")
 
-            await clans.setLogChannel(clankey, channel.id)
+            await self.clans.setLogChannel(clankey, channel.id)
 
             await self.bot.send_message(channel, "I will now send log messages to {0.mention}".format(channel))
             await self.bot.say("Clash log channel for {} is now set to {}".format(clankey, channel))
 
         except KeyError:
-            await self.bot.say("Please use a valid clanname: {}".format(await clans.namesClans()))
+            await self.bot.say("Please use a valid clanname: {}".format(await self.clans.namesClans()))
             return 
         except discord.errors.Forbidden:
             await self.bot.say("No permission to send messages to that channel")
