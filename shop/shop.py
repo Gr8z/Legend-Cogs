@@ -325,10 +325,10 @@ class shop:
             return
 
         if self.bank_check(author, 75000):
-            pattern = re.compile(r"<?(https?:\/\/)?(www\.)?(i\.imgur\.com)\b([-a-zA-Z0-9/]*)>?(\.jpg)?")
+            pattern = re.compile(r"<?(https?:\/\/)?(www\.)?([i.]*)?(imgur\.com)\b([-a-zA-Z0-9/]*)>?(\.jpg)?")
 
             if not pattern.match(imgurLink):
-                await self.bot.say("The URL does not end in **.jpg** or is not from **imgur.com**. Please upload a JPG image to imgur.com and get a direct link.")
+                await self.bot.say("The URL does not end in **.jpg** or is not from **i.imgur.com**. Please upload a JPG image to imgur.com and get a direct link.")
                 return
 
             if not await self._valid_image_url(imgurLink):
