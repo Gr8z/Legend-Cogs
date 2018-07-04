@@ -86,8 +86,8 @@ class Clanlog:
         for clankey in old_clans.keys():
             for member in old_clans[clankey]["members"].keys():
                 if member not in new_clans[clankey]["members"]:
-                    memberName = old_clans[clankey]["members"][member]["tag"]
-                    memberTag = old_clans[clankey]["members"][member]["name"]
+                    memberName = old_clans[clankey]["members"][member]["name"]
+                    memberTag = old_clans[clankey]["members"][member]["tag"]
                     await self.clans.delMember(clankey, memberTag)
 
                     title = "{} (#{})".format(memberName, memberTag)
@@ -108,8 +108,8 @@ class Clanlog:
         for clankey in self.clans.keysClans():
             for member in new_clans[clankey]["members"].keys():
                 if member not in old_clans[clankey]["members"]:
-                    memberName = new_clans[clankey]["members"][member]["tag"]
-                    memberTag = new_clans[clankey]["members"][member]["name"]
+                    memberName = new_clans[clankey]["members"][member]["name"]
+                    memberTag = new_clans[clankey]["members"][member]["tag"]
                     await self.clans.addMember(clankey, memberName, memberTag)
 
                     title = "{} (#{})".format(memberName, memberTag)
