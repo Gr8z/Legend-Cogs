@@ -126,7 +126,10 @@ class warlog:
                                 if participant.tag == tag:
                                     WarDayWins += participant.wins
                                     cardsEarned += participant.cardsEarned
+
                     await self.clans.setWarstats(clankey, tag, WarDayWins, cardsEarned)
+                    
+                await self.clans.setWarTrophies(clankey, warTrophies)
 
             await asyncio.sleep(1)
 
