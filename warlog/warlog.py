@@ -89,7 +89,6 @@ class warlog:
             except clashroyale.RequestError:
                 return
 
-            members = await self.clans.getClanData(clankey, 'members')
             standings = clanwars[0].standings
             clanRank = await self.findRank(standings, "tag", await self.clans.getClanData(clankey, 'tag'))
             warTrophies = standings[clanRank].war_trophies
@@ -108,7 +107,7 @@ class warlog:
 
                 sun = int((datetime.date.today() - datetime.timedelta(7 + (datetime.date.today().weekday() + 1) % 7 )).strftime('%s'))
 
-                for memberkey in self.clans.keysClanMembers():
+                for memberkey in self.clans.keysClanMembers(clankey):
                     WarDayWins = 0
                     cardsEarned = 0
                     tag = await self.clans.getClanMemberData(clankey, 'tag')
