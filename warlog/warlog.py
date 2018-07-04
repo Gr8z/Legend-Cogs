@@ -11,7 +11,8 @@ from PIL import ImageFont
 from PIL import Image
 from PIL import ImageDraw
 import clashroyale
-import datetime
+from datetime import datetime,timedelta
+import time
 
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
@@ -41,6 +42,14 @@ class warlog:
             if dic[key] == value:
                 return i
         return -1
+
+    async def last_day(self, d, day_name):
+        days_of_week = ['sunday','monday','tuesday','wednesday',
+                            'thursday','friday','saturday']
+        target_day = days_of_week.index(day_name.lower())
+        delta_day = target_day - d.isoweekday()
+        if delta_day >= 0: delta_day -= 7
+        return int((d + timedelta(days=delta_day)).strftime('%s'))
 
     async def genImage(self, leagueName, trophies, rank, clanName, participants, wins, crowns):
 
@@ -105,8 +114,6 @@ class warlog:
                     f.seek(0)
                     await self.bot.send_file(channel, f, filename=filename)
 
-                sun = int((datetime.date.today() - datetime.timedelta(7 + (datetime.date.today().weekday() + 1) % 7 )).strftime('%s'))
-
                 for memberkey in self.clans.keysClanMembers(clankey):
                     WarDayWins = 0
                     cardsEarned = 0
@@ -114,7 +121,7 @@ class warlog:
                     for index, war in enumerate(clanwars):
                         if index == 5:
                             break
-                        if war.created_date > sun:
+                        if war.created_date > await self.last_day(datetime.today(), 'sunday'):
                             for participant in war.participants:
                                 if participant.tag == tag:
                                     WarDayWins += participant.wins
@@ -126,7 +133,6 @@ class warlog:
     @commands.command(pass_context=True)
     async def warlog(self, ctx):
         """Track Clan wars"""
-
         channel = ctx.message.channel
         await self.getWarData(channel)
 
