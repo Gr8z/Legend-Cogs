@@ -83,9 +83,9 @@ class clans:
         """Return clan array"""
         return self.clans[clankey][data]
 
-    async def getClanMemberData(self, clankey, data):
+    async def getClanMemberData(self, clankey, memberkey, data):
         """Return clan member's dict"""
-        return self.clans[clankey]['members'][data]
+        return self.clans[clankey]['members'][memberkey][data]
 
     async def numClans(self):
         """Return the number of clans"""

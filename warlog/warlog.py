@@ -110,7 +110,7 @@ class warlog:
                 for memberkey in self.clans.keysClanMembers(clankey):
                     WarDayWins = 0
                     cardsEarned = 0
-                    tag = await self.clans.getClanMemberData(clankey, 'tag')
+                    tag = await self.clans.getClanMemberData(clankey, memberkey, 'tag')
                     for index, war in enumerate(clanwars):
                         if index == 5:
                             break
