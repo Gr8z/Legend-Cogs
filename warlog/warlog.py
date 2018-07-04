@@ -89,7 +89,7 @@ class warlog:
             except clashroyale.RequestError:
                 return
 
-            members - await self.clans.getClanData(clankey, 'members')
+            members = await self.clans.getClanData(clankey, 'members')
             standings = clanwars[0].standings
             clanRank = await self.findRank(standings, "tag", await self.clans.getClanData(clankey, 'tag'))
             warTrophies = standings[clanRank].war_trophies

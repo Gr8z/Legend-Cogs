@@ -86,7 +86,7 @@ class Clanlog:
         for clankey in old_clans.keys():
             for member in old_clans[clankey]["members"]:
                 if member not in new_clans[clankey]["members"]:
-                    await self.clans.delMember(member["tag"])
+                    await self.clans.delMember(clankey, member["tag"])
 
                     title = "{} (#{})".format(member["name"], member["tag"])
                     desc = "left **{}**".format(old_clans[clankey]["name"])
