@@ -62,13 +62,23 @@ class auth:
 
     async def addToken(self, key):
         """Add a RoyaleAPI Token"""
-        self.auth['token'] = key
+        self.auth['RoyaleAPI'] = key
+        dataIO.save_json(auth_path, self.auth)
+        return True
+
+    async def addTokenBS(self, key):
+        """Add a brawlstars-api Token"""
+        self.auth['brawlstars-api'] = key
         dataIO.save_json(auth_path, self.auth)
         return True
 
     def getToken(self):
         """Get RoyaleAPI Token"""
-        return self.auth['token']
+        return self.auth['RoyaleAPI']
+
+    def getBSToken(self):
+        """Get brawlstars-api Token"""
+        return self.auth['brawlstars-api']
 
 class clans:
     """Clan Family Management"""
@@ -235,6 +245,13 @@ class crtools:
         """Input your Clash Royale API Token from RoyaleAPI.com"""
         auth.addToken(key)
         await self.bot.say("RoyaleAPI Token set")
+
+    @commands.command()
+    @checks.mod_or_permissions(administrator=True)
+    async def settokenbs(self, key):
+        """Input your BrawlStars API Tokenm"""
+        auth.addTokenBS(key)
+        await self.bot.say("brawlstars-api Token set")
 
     @commands.group(pass_context=True, name="clans")
     @checks.mod_or_permissions(administrator=True)
