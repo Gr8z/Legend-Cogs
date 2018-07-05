@@ -108,10 +108,10 @@ class shop:
             image = Image.open('data/leveler/test.jpg').convert('RGBA')
 
             size = os.path.getsize('data/leveler/test.jpg')
-            if size > 500000:
+            if size > 50000:
                 return "Image file size is too big."
 
-            width, height = img.size
+            width, height = image.size
             if width != height:
                 return "Image is not a square"
 
