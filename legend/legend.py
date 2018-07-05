@@ -761,8 +761,7 @@ class legend:
         server = ctx.message.server
         author = ctx.message.author
 
-        if member is None:
-            member = ctx.message.author
+        member = member or ctx.message.author
 
         try:
             await self.bot.type()

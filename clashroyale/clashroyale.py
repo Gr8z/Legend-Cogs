@@ -50,8 +50,7 @@ class clashroyale:
 	async def clashProfile(self, ctx, member: discord.Member = None):
 		"""View your Clash Royale Profile Data and Statstics."""
 
-		if member is None:
-			member = ctx.message.author
+		member = member or ctx.message.author
 
 		await self.bot.type()
 		try:
@@ -100,8 +99,7 @@ class clashroyale:
 	async def chests(self, ctx, member: discord.Member = None):
 		"""View your upcoming chest cycle for Clash Royale."""
 
-		if member is None:
-			member = ctx.message.author
+		member = member or ctx.message.author
 
 		await self.bot.type()
 		try:
@@ -134,8 +132,7 @@ class clashroyale:
 	async def clashDeck(self, ctx, member: discord.Member = None):
 		"""View yours or other's clash royale Deck"""
 
-		if member is None:
-			member = ctx.message.author
+		member = member or ctx.message.author
 
 		await self.bot.type()
 
@@ -272,8 +269,7 @@ class clashroyale:
 			await self.bot.say("You dont have enough permissions to set tags for others.")
 			return
 
-		if member is None:
-			member = ctx.message.author
+		member = member or ctx.message.author
 
 		try:
 			profiledata = await self.clash.get_player(profiletag)
