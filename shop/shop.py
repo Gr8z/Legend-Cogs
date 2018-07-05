@@ -6,8 +6,7 @@ import asyncio
 import json
 import clashroyale
 import math
-import urllib
-from PIL import ImageFile, Image
+from PIL import Image
 import re
 import os
 import aiohttp
@@ -97,36 +96,30 @@ class shop:
         else:
             return False
 
-    async def getsizes(self, uri):
-        # get file size *and* image size (None if not known)
-        file = urllib.request.urlopen(uri)
-        size = file.headers.get("content-length")
-        if size: 
-            size = int(size)
-        p = ImageFile.Parser()
-        while True:
-            data = file.read(1024)
-            if not data:
-                break
-            p.feed(data)
-            if p.image:
-                return size, p.image.size
-                break
-        file.close()
-        return size, None
-
     async def _valid_image_url(self, url):
 
         try:
             async with self.session.get(url) as r:
                 image = await r.content.read()
+
             with open('data/leveler/test.jpg','wb') as f:
                 f.write(image)
+
             image = Image.open('data/leveler/test.jpg').convert('RGBA')
+
+            size = os.path.getsize('data/leveler/test.jpg')
+            if size > 500000:
+                return "Image file size is too big."
+
+            width, height = img.size
+            if width != height:
+                return "Image is not a square"
+
             os.remove('data/leveler/test.jpg')
-            return True
+
+            return None
         except:
-            return False
+            return "Image is not valid"
 
     @commands.command(pass_context=True, no_pm=True)
     @checks.is_owner()
@@ -140,6 +133,7 @@ class shop:
 
         bank = self.bot.get_cog('Economy').bank
         banks = list(self.banks['374596069989810176'])
+        #banks = list(self.banks['363728974821457921'])
 
         try:
             clans = await self.clash.get_clan(*await self.clans.tagsClans())
@@ -157,7 +151,7 @@ class shop:
 
                 for key in range(0,len(banks)):
                     try:
-                        if (clan_donations > 0) and (clan_tag == await self.tags.getTag(banks[key])):
+                        if (clan_donations+clan_wins+clan_cards > 0) and (clan_tag == await self.tags.getTag(banks[key])):
 
                             try:
                                 user = discord.utils.get(ctx.message.server.members, id = banks[key])
@@ -216,7 +210,7 @@ class shop:
         await self.updateBank()
 
         bank = self.bot.get_cog('Economy').bank
-        #banks = list(self.banks['363728974821457921']) # Test Server
+        #banks = list(self.banks['363728974821457921'])
         banks = list(self.banks['374596069989810176'])
 
         tag = await self.tags.formatTag(tag)
@@ -331,17 +325,9 @@ class shop:
                 await self.bot.say("The URL does not end in **.jpg** or is not from **i.imgur.com**. Please upload a JPG image to imgur.com and get a direct link.")
                 return
 
-            if not await self._valid_image_url(imgurLink):
-                await self.bot.say("Error, That is not a valid image url!")
-                return
-
-            imagesizes = await self.getsizes(imgurLink) #(10965, (179, 188))
-            if imagesizes[0] > 500000:
-                await self.bot.say("The Image filesize is too big, please be under 500KB")
-                return
-
-            if ((imagesizes[1][0] != imagesizes[1][1]) or (imagesizes[1][0] != 490)):
-                await self.bot.say("The Image must be a square and exactly 490x490px")
+            validate = await self._valid_image_url(imgurLink)
+            if validate is not None:
+                await self.bot.say(validate)
                 return
 
             message = ctx.message
