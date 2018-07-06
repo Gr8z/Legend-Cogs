@@ -37,7 +37,7 @@ class warbattles:
                 try:
                     clanBattles = await self.clash.get_clan_battles(await self.clans.getClanData(clankey, 'tag'), type="war")
                 except clashroyale.RequestError:
-                    print("clanBattles error")
+                    print("WARBATTLES: Cannot reach Clash Royale Servers.")
                     return
 
                 for battle in clanBattles:
@@ -51,7 +51,7 @@ class warbattles:
                             try:
                                 playerBattles = await self.clash.get_player_battles(battledata["tag"])
                             except clashroyale.RequestError:
-                                print("playerBattles error")
+                                print("WARBATTLES: Cannot reach Clash Royale Servers.")
                                 return
 
                             for pracBattle in playerBattles:
