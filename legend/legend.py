@@ -1128,11 +1128,11 @@ class legend:
         role = discord.utils.get(server.roles, name="Platoon")
         try:
             if role in member.roles:
+                await self.bot.remove_roles(member, role)
                 await self.bot.say("{} Role Removed from {}".format(role.name, member.display_name))
-                await bot.remove_roles(member, role)
             else:
-                await self.bot.say("{} Role Added to {}".format(role.name, member.display_name))
                 await self.bot.add_roles(member, role)
+                await self.bot.say("{} Role Added to {}".format(role.name, member.display_name))
         except discord.Forbidden:
             raise
         except discord.HTTPException:
