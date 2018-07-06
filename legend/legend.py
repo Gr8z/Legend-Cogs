@@ -1119,6 +1119,11 @@ class legend:
     async def platoon(self, ctx, member: discord.Member):
         """Tpgg;e pPlatoon Role for Brawlers"""
         server = ctx.message.server
+        legendServer = ["374596069989810176"]
+
+        if server.id not in legendServer:
+            await self.bot.say("This command can only be executed in the LeGeND Family Server")
+            return
 
         role = discord.utils.get(server.roles, name="Platoon")
         try:
@@ -1140,6 +1145,11 @@ class legend:
         """Add guest role and change nickname to CR"""
         server = ctx.message.server
         author = ctx.message.author
+        legendServer = ["374596069989810176"]
+
+        if server.id not in legendServer:
+            await self.bot.say("This command can only be executed in the LeGeND Family Server")
+            return
 
         try:
             await self.bot.type()
