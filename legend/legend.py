@@ -1116,8 +1116,28 @@ class legend:
 
     @commands.command(pass_context=True, no_pm=True)
     @commands.has_any_role(*BOTCOMMANDER_ROLES)
+    async def platoon(self, ctx, member: discord.Member):
+        """Tpgg;e pPlatoon Role for Brawlers"""
+        server = ctx.message.server
+
+        role = discord.utils.get(server.roles, name="Platoon")
+        try:
+            if role in member.roles:
+                await self.bot.say("{} Role Removed from {}".format(role.name, member.display_name))
+                await bot.remove_roles(member, role)
+            else:
+                await self.bot.say("{} Role Added to {}".format(role.name, member.display_name))
+                await self.bot.add_roles(member, role)
+        except discord.Forbidden:
+            raise
+        except discord.HTTPException:
+            raise
+
+
+    @commands.command(pass_context=True, no_pm=True)
+    @commands.has_any_role(*BOTCOMMANDER_ROLES)
     async def guest(self, ctx, member: discord.Member):
-        """Toggle waiting Role for members"""
+        """Add guest role and change nickname to CR"""
         server = ctx.message.server
         author = ctx.message.author
 
