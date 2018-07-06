@@ -4,11 +4,11 @@ from .utils.dataIO import dataIO, fileIO
 import os
 from cogs.utils import checks
 
-tags_path = "data/crtools/tags.json"
-auth_path = "data/crtools/auth.json"
-clans_path = "data/crtools/clans.json"
-default_clans = {'defualt':{'tag': '', 'role': '', 'role_id': '', 'name': '', 'nickname': '', 'discord': '', 'waiting': [], 'members': {}, 'bonustitle': '', 
-                'personalbest': 0, 'warTrophies': 0, 'approval': False, 'log_channel': False, 'emoji': ''}}
+tags_path = "data/aacrtools/tags.json"
+auth_path = "data/aacrtools/auth.json"
+clans_path = "data/aacrtools/clans.json"
+default_clans = {'defualt':{'tag': '9PJYVVL2', 'role': 'everyone', 'name': 'defualt', 'nickname': 'defualt', 'discord': None, 'waiting': [], 'members': {}, 'bonustitle': '', 
+                'personalbest': 0, 'warTrophies': 0, 'approval': False, 'log_channel': None, 'warlog_channel': None, 'emoji': ''}}
 
 class tags:
     """Tags Management"""
@@ -64,13 +64,11 @@ class auth:
         """Add a RoyaleAPI Token"""
         self.auth['RoyaleAPI'] = key
         dataIO.save_json(auth_path, self.auth)
-        return True
 
     async def addTokenBS(self, key):
         """Add a brawlstars-api Token"""
         self.auth['brawlstars-api'] = key
         dataIO.save_json(auth_path, self.auth)
-        return True
 
     def getToken(self):
         """Get RoyaleAPI Token"""
@@ -210,6 +208,11 @@ class clans:
         self.clans[clankey]['log_channel'] = channel
         dataIO.save_json(clans_path, self.clans)
 
+    async def setWarLogChannel(self, clankey, channel):
+        """Set a clan's warlog channel"""
+        self.clans[clankey]['warlog_channel'] = channel
+        dataIO.save_json(clans_path, self.clans)
+
     async def addMember(self, clankey, name, tag):
         """Add a member to the clan"""
         self.clans[clankey]['members'][tag] = {}
@@ -231,7 +234,7 @@ class clans:
 
         return self.clans[clankey]['approval']
 
-class crtools:
+class aacrtools:
     """Clash Royale Tools"""
     def __init__(self, bot):
         self.bot = bot
@@ -241,16 +244,16 @@ class crtools:
 
     @commands.command()
     @checks.mod_or_permissions(administrator=True)
-    async def settoken(self, key):
+    async def settoken(self, *, key):
         """Input your Clash Royale API Token from RoyaleAPI.com"""
-        auth.addToken(key)
+        await self.auth.addToken(key)
         await self.bot.say("RoyaleAPI Token set")
 
     @commands.command()
     @checks.mod_or_permissions(administrator=True)
-    async def settokenbs(self, key):
+    async def settokenbs(self, *, key):
         """Input your BrawlStars API Tokenm"""
-        auth.addTokenBS(key)
+        await self.auth.addTokenBS(key)
         await self.bot.say("brawlstars-api Token set")
 
     @commands.group(pass_context=True, name="clans")
@@ -319,6 +322,31 @@ class crtools:
             return 
         except discord.errors.Forbidden:
             await self.bot.say("No permission to send messages to that channel")
+
+    @_clans.command(pass_context=True, name="war")
+    async def clans_warlog(self, ctx, clankey, channel : discord.Channel):
+        """Set Clan's War Log channel to track wins"""
+        clankey = clankey.lower()
+        try:
+            server = ctx.message.server
+
+            if not server.get_member(self.bot.user.id).permissions_in(channel).send_messages:
+                await self.bot.say("I do not have permissions to send messages to {0.mention}".format(channel))
+                return
+
+            if channel is None:
+                await self.bot.say("I can't find the specified channel. It might have been deleted.")
+
+            await self.clans.setWarLogChannel(clankey, channel.id)
+
+            await self.bot.send_message(channel, "I will now send war log messages to {0.mention}".format(channel))
+            await self.bot.say("Clash war log channel for {} is now set to {}".format(clankey, channel))
+
+        except KeyError:
+            await self.bot.say("Please use a valid clanname: {}".format(await self.clans.namesClans()))
+            return 
+        except discord.errors.Forbidden:
+            await self.bot.say("No permission to send messages to that channel")
         
 
     @_clans.command(pass_context=True, name="private")
@@ -332,9 +360,9 @@ class crtools:
             return 
 
 def check_folders():
-    if not os.path.exists("data/crtools"):
-        print("Creating data/crtools folder...")
-        os.makedirs("data/crtools")
+    if not os.path.exists("data/aacrtools"):
+        print("Creating data/aacrtools folder...")
+        os.makedirs("data/aacrtools")
 
 def check_files():
     if not fileIO(tags_path, "check"):
@@ -342,7 +370,7 @@ def check_files():
         fileIO(tags_path, "save", {"0" : {"tag" : "DONOTREMOVE"}})
 
     if not fileIO(auth_path, "check"):
-        print("enter your RoyaleAPI token in data/crtools/auth.json...")
+        print("enter your RoyaleAPI token in data/aacrtools/auth.json...")
         fileIO(auth_path, "save", {"token" : "enter your RoyaleAPI token here!"})
 
     if not fileIO(clans_path, "check"):
@@ -351,12 +379,12 @@ def check_files():
 
 def check_auth():
     c = dataIO.load_json(auth_path)
-    if 'token' not in c:
-        c['token'] = "enter your RoyaleAPI token here!"
+    if 'RoyaleAPI' not in c:
+        c['RoyaleAPI'] = "enter your RoyaleAPI token here!"
     dataIO.save_json(auth_path, c)
 
 def setup(bot):
     check_folders()
     check_files()
     check_auth()
-    bot.add_cog(crtools(bot))
+    bot.add_cog(aacrtools(bot))

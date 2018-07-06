@@ -7,6 +7,7 @@ If you want to see this bot in action, join the LeGeND Family Discord at [discor
 
 ## Cogs
 
+ * **aacrtools** - Clash Royale Tools required for most CR cogs to work.
  * **BrawlStats** - Brawl Stars band info, profile info and event info.
  * **clashroyale** - Clash Royale clan info, profile info, chest cycle and shop offers.
  * **drafting** - Interactive draft royale cog, pick cards using emojis and create brackets.
@@ -25,10 +26,10 @@ If you want to see this bot in action, join the LeGeND Family Discord at [discor
  * **deck** - Clash Royale deck management system with additional features, port from SML-Cogs.
  * **duels** - Clash Royale 1v1 duels with credit bets.
  * **warlog** - Clash Royale Clan War Logs using images.
+ * **warbattles** - Clash Royale Clan War Attack Logs using images. (deck cog required)
  * **fmod** - Advanced Warning system by RSNFreud.
  * **stats** - Count Server Statistics on a Voice Channel.
  * **logging** - log messages and reactions to a database.
- * **crtools** - Clash Royale Tools required for most CR cogs to work.
 
 ## Installation
 

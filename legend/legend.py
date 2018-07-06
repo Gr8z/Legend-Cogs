@@ -152,9 +152,9 @@ class legend:
     def __init__(self, bot):
         self.bot = bot
         self.settings = dataIO.load_json('data/legend/settings.json')
-        self.auth = self.bot.get_cog('crtools').auth
-        self.tags = self.bot.get_cog('crtools').tags
-        self.clans = self.bot.get_cog('crtools').clans
+        self.auth = self.bot.get_cog('aacrtools').auth
+        self.tags = self.bot.get_cog('aacrtools').tags
+        self.clans = self.bot.get_cog('aacrtools').clans
         self.clash = clashroyale.Client(self.auth.getToken(), is_async=True)
         self.welcome = dataIO.load_json('data/legend/welcome.json')
         self.bank = dataIO.load_json('data/economy/bank.json')
@@ -239,11 +239,11 @@ class legend:
                 await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
                 return
             except KeyError:
-                await self.bot.say("You must assosiate a tag with this member first using ``!save #tag @member``")
+                await self.bot.say("You must assosiate a tag with this member first using ``{}save #tag @member``".format(ctx.prefix))
                 return
 
         try:
-            clandata = await self.clash.get_clan(*await self.clans.tagsClans(), exclude=["members"])
+            clandata = await self.clash.get_clan(*await self.clans.tagsClans(), exclude="members")
         except clashroyale.RequestError:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
@@ -357,7 +357,7 @@ class legend:
                 await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
                 return
         except KeyError:
-            await self.bot.say("You must assosiate a tag with this member first using ``!save #tag @member``")
+            await self.bot.say("You must assosiate a tag with this member first using ``{}save #tag @member``".format(ctx.prefix))
             return
 
         membership = not await self.clans.verifyMembership(clantag)
@@ -491,7 +491,7 @@ class legend:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
         except KeyError:
-            await self.bot.say("You must assosiate a tag with this member first using ``!save #tag @member``")
+            await self.bot.say("You must assosiate a tag with this member first using ``{}save #tag @member``".format(ctx.prefix))
             return
 
         allowed = False
@@ -648,7 +648,7 @@ class legend:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
         except KeyError:
-            await self.bot.say("You must assosiate a tag with this member first using ``!save #tag @member``")
+            await self.bot.say("You must assosiate a tag with this member first using ``{}save #tag @member``".format(ctx.prefix))
             return
 
         if not offline:
@@ -776,7 +776,7 @@ class legend:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
         except KeyError:
-            await self.bot.say("You must assosiate a tag with this member first using ``!save #tag @member``")
+            await self.bot.say("You must assosiate a tag with this member first using ``{}save #tag @member``".format(ctx.prefix))
             return
 
         membership = await self.clans.verifyMembership(clantag)
@@ -1130,7 +1130,7 @@ class legend:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
         except KeyError:
-            await self.bot.say("You must assosiate a tag with this member first using ``!save #tag @member``")
+            await self.bot.say("You must assosiate a tag with this member first using ``{}save #tag @member``".format(ctx.prefix))
             return
 
         try:

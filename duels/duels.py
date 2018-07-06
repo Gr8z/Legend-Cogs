@@ -22,8 +22,8 @@ class duels:
     def __init__(self, bot):
         self.bot = bot
         self.settings = dataIO.load_json(settings_path)
-        self.auth = self.bot.get_cog('crtools').auth
-        self.tags = self.bot.get_cog('crtools').tags
+        self.auth = self.bot.get_cog('aacrtools').auth
+        self.tags = self.bot.get_cog('aacrtools').tags
         self.clash = clashroyale.Client(self.auth.getToken(), is_async=True)
         self.active = False
 
@@ -438,7 +438,7 @@ def check_files():
     f = settings_path
     if not fileIO(f, "check"):
         print("Creating duels settings.json...")
-        fileIO(f, {"CONFIG" : {}, "USERS" : {},"DUELS" : {}})
+        fileIO(f, "save", {"CONFIG" : {}, "USERS" : {},"DUELS" : {}})
 
 def setup(bot):
     check_folders()

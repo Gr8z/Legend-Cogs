@@ -5,5 +5,6 @@
     "SHORT" : "A moderation cog with many cool features",
     "DESCRIPTION" : "A moderation cog with many cool features such as reporting, denying from channels, muting and more!",
     "TAGS" : ["mod", "warn", "punish", "moderation", "warnings", "report"],
+    "REQUIREMENTS" : ["tabulate"],
     "HIDDEN" : false
 }

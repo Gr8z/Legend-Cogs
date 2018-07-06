@@ -1,0 +1,10 @@
+{
+    "AUTHOR" : "GR8",
+    "INSTALL_MSG" : "Clash Royale War Attack Log added, if there are any issues, please mention them on https://github.com/Gr8z/LeGeND-Bot",
+    "NAME" : "attacklog",
+    "SHORT" : "Announce war attack wins in a channel for one or more clans.",
+    "DESCRIPTION" : "Clash Royale Clan War Attack log.",
+    "TAGS" : ["royaleapi", "clashroyale", "clanwar", "warlog", "wins","war"],
+    "REQUIREMENTS" : ["clashroyale"],
+    "HIDDEN" : false
+}

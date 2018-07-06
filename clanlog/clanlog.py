@@ -20,8 +20,8 @@ class Clanlog:
 
     def __init__(self, bot):
         self.bot = bot
-        self.auth = self.bot.get_cog('crtools').auth
-        self.clans = self.bot.get_cog('crtools').clans
+        self.auth = self.bot.get_cog('aacrtools').auth
+        self.clans = self.bot.get_cog('aacrtools').clans
         self.clash = clashroyale.Client(self.auth.getToken(), is_async=True)
         self.member_log = dataIO.load_json('data/clanlog/member_log.json')
         self.discord_log = dataIO.load_json('data/clanlog/discord_log.json')
@@ -95,13 +95,14 @@ class Clanlog:
                     embed_left = discord.Embed(title = title, url = "https://royaleapi.com/player/{}".format(memberTag), description=desc, color=0xff0000)
 
                     if server.id == "374596069989810176":
-                        if await self.clans.getClanData(clankey, 'log_channel')  is not None:
+                        channel = await self.clans.getClanData(clankey, 'log_channel')
+                        if channel is not None:
                             try:
-                                await self.bot.send_message(discord.Object(id=await self.clans.getClanData(clankey, 'log_channel')),embed = embed_left)
+                                await self.bot.send_message(discord.Object(id=channel),embed = embed_left)
                             except discord.errors.NotFound:
-                                await self.bot.say("<#{}> NOT FOUND".format(await self.clans.getClanData(clankey, 'log_channel')))
+                                await self.bot.say("<#{}> NOT FOUND".format(channel))
                             except discord.errors.Forbidden:
-                                await self.bot.say("No Permission to send messages in <#{}>".format(await self.clans.getClanData(clankey, 'log_channel')))
+                                await self.bot.say("No Permission to send messages in <#{}>".format(channel))
 
                     await self.bot.say(embed = embed_left)
         
@@ -118,13 +119,14 @@ class Clanlog:
                     embed_join = discord.Embed(title = title, url = "https://royaleapi.com/player/{}".format(memberTag), description=desc, color=0x00ff40)
 
                     if server.id == "374596069989810176":
-                        if await self.clans.getClanData(clankey, 'log_channel') is not None:
+                        channel = await self.clans.getClanData(clankey, 'log_channel')
+                        if channel is not None:
                             try:
-                                await self.bot.send_message(discord.Object(id=await self.clans.getClanData(clankey, 'log_channel')),embed = embed_join)
+                                await self.bot.send_message(discord.Object(id=channel),embed = embed_join)
                             except discord.errors.NotFound:
-                                await self.bot.say("<#{}> NOT FOUND".format(await self.clans.getClanData(clankey, 'log_channel')))
+                                await self.bot.say("<#{}> NOT FOUND".format(channel))
                             except discord.errors.Forbidden:
-                                await self.bot.say("No Permission to send messages in <#{}>".format(await self.clans.getClanData(clankey, 'log_channel')))
+                                await self.bot.say("No Permission to send messages in <#{}>".format(channel))
 
                     await self.bot.say(embed = embed_join)
         
@@ -221,7 +223,11 @@ def check_files():
     f = "data/clanlog/member_log.json"
     if not fileIO(f, "check"):
         print("Creating empty member_log.json...")
-        dataIO.save_json(f, {"1524540132" : 0})
+        fileIO(f, "save", {"1524540132" : 0})
+    f = "data/clanlog/discord_log.json"
+    if not fileIO(f, "check"):
+        print("Creating empty discord_log.json...")
+        fileIO(f, "save", {"1524540132" : 0})
         
 def check_folders():
     if not os.path.exists("data/clanlog"):

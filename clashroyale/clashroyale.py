@@ -15,8 +15,8 @@ class clashroyale:
 
 	def __init__(self, bot):
 		self.bot = bot
-		self.auth = self.bot.get_cog('crtools').auth
-		self.tags = self.bot.get_cog('crtools').tags
+		self.auth = self.bot.get_cog('aacrtools').auth
+		self.tags = self.bot.get_cog('aacrtools').tags
 		self.clash = clashroyaleAPI.Client(self.auth.getToken(), is_async=True)
 
 	# Converts maxPlayers to Cards
@@ -60,7 +60,7 @@ class clashroyale:
 			await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 			return
 		except KeyError:
-			await self.bot.say("You need to first save your profile using ``!save #GAMETAG``")
+			await self.bot.say("You need to first save your profile using ``{}save #GAMETAG``".format(ctx.prefix))
 			return
 
 		if profiledata.clan is None:
@@ -109,7 +109,7 @@ class clashroyale:
 			await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 			return
 		except KeyError:
-			await self.bot.say("You need to first save your profile using ``!save #GAMETAG``")
+			await self.bot.say("You need to first save your profile using ``{}save #GAMETAG``".format(ctx.prefix))
 			return
 
 		valuechestText = ' '.join(profiledata.upcoming).replace('silver', '<:silver:385784583343439882>').replace('gold', '<:gold:385784630227369985>').replace('giant', '<:giant:380832560504373249>').replace('epic', '<:epic:380832620059033610>').replace('super magical', '<:super:380832745305276416>').replace('magical', '<:magic:380832656704798731>').replace('legendary', '<:legend:380832458482122752>')
@@ -143,7 +143,7 @@ class clashroyale:
 			await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 			return
 		except KeyError:
-			await self.bot.say("You need to first save your profile using ``!save #GAMETAG``")
+			await self.bot.say("You need to first save your profile using ``{}save #GAMETAG``".format(ctx.prefix))
 			return
 
 		message = ctx.message
@@ -236,10 +236,8 @@ class clashroyale:
 		""" save your Clash Royale Profile Tag	
 
 		Example:
-			!save #CRRYTPTT @GR8
-			!save #CRRYRPCC
-
-		Type !contact to ask for help.
+			[p]save #CRRYTPTT @GR8
+			[p]save #CRRYRPCC
 		"""
 
 		server = ctx.message.server

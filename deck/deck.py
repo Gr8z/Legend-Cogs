@@ -749,7 +749,7 @@ class Deck:
 
         self.deck_is_valid = deck_is_valid
 
-    async def upload_deck_image(self, ctx, deck, deck_name, author, description=""):
+    async def upload_deck_image(self, ctx, deck, deck_name, author=None, description=""):
         """Upload deck image to the server."""
 
         deck_image = await self.bot.loop.run_in_executor(

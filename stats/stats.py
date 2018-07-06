@@ -132,22 +132,25 @@ def check_folders():
     if not os.path.exists("data/stats"):
         print("Creating data/stats folder...")
         os.makedirs("data/stats")
+    if not os.path.exists("data/clanlog"):
+        print("Creating data/clanlog folder...")
+        os.makedirs("data/clanlog")
 
 def check_files():
     f = settings_path
     if not fileIO(f, "check"):
         print("Creating stats settings.json...")
-        dataIO.save_json(f, {})
+        fileIO(f, "save", {})
 
     f = "data/clanlog/member_log.json"
     if not fileIO(f, "check"):
         print("Creating empty member_log.json...")
-        dataIO.save_json(f, {"1524540132" : 0})
+        fileIO(f, "save", {"1524540132" : 0})
 
     f = "data/clanlog/discord_log.json"
     if not fileIO(f, "check"):
         print("Creating empty discord_log.json...")
-        dataIO.save_json(f, {"1524540132" : 0})
+        fileIO(f, "save", {"1524540132" : 0})
 
 def setup(bot):
     check_folders()
