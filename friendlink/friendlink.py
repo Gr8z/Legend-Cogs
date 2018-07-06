@@ -16,7 +16,7 @@ class friendlink:
     def __init__(self, bot):
         self.bot = bot
         self.regex = re.compile(r"<?(https?:\/\/)?(www\.)?(link\.clashroyale\.com\/invite\/friend)\b([-a-zA-Z0-9/]*)>?")
-        self.auth = self.bot.get_cog('aacrtools').auth
+        self.auth = self.bot.get_cog('crtools').auth
         self.clash = clashroyale.Client(self.auth.getToken(), is_async=True)
 
     async def friend_link(self, message):

@@ -15,8 +15,8 @@ class clashroyale:
 
 	def __init__(self, bot):
 		self.bot = bot
-		self.auth = self.bot.get_cog('aacrtools').auth
-		self.tags = self.bot.get_cog('aacrtools').tags
+		self.auth = self.bot.get_cog('crtools').auth
+		self.tags = self.bot.get_cog('crtools').tags
 		self.clash = clashroyaleAPI.Client(self.auth.getToken(), is_async=True)
 
 	# Converts maxPlayers to Cards

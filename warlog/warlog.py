@@ -22,8 +22,8 @@ class warlog:
 
     def __init__(self, bot):
         self.bot = bot
-        self.auth = self.bot.get_cog('aacrtools').auth
-        self.clans = self.bot.get_cog('aacrtools').clans
+        self.auth = self.bot.get_cog('crtools').auth
+        self.clans = self.bot.get_cog('crtools').clans
         self.clash = clashroyale.Client(self.auth.getToken(), is_async=True)
 
     async def getLeague(self, trophies):

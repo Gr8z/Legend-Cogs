@@ -7,7 +7,7 @@ If you want to see this bot in action, join the LeGeND Family Discord at [discor
 
 ## Cogs
 
- * **aacrtools** - Clash Royale Tools required for most CR cogs to work.
+ * **crtools** - Clash Royale Tools required for most CR cogs to work.
  * **BrawlStats** - Brawl Stars band info, profile info and event info.
  * **clashroyale** - Clash Royale clan info, profile info, chest cycle and shop offers.
  * **drafting** - Interactive draft royale cog, pick cards using emojis and create brackets.

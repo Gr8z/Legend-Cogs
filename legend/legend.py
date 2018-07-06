@@ -152,9 +152,9 @@ class legend:
     def __init__(self, bot):
         self.bot = bot
         self.settings = dataIO.load_json('data/legend/settings.json')
-        self.auth = self.bot.get_cog('aacrtools').auth
-        self.tags = self.bot.get_cog('aacrtools').tags
-        self.clans = self.bot.get_cog('aacrtools').clans
+        self.auth = self.bot.get_cog('crtools').auth
+        self.tags = self.bot.get_cog('crtools').tags
+        self.clans = self.bot.get_cog('crtools').clans
         self.clash = clashroyale.Client(self.auth.getToken(), is_async=True)
         self.welcome = dataIO.load_json('data/legend/welcome.json')
         self.bank = dataIO.load_json('data/economy/bank.json')

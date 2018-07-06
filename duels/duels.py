@@ -22,8 +22,8 @@ class duels:
     def __init__(self, bot):
         self.bot = bot
         self.settings = dataIO.load_json(settings_path)
-        self.auth = self.bot.get_cog('aacrtools').auth
-        self.tags = self.bot.get_cog('aacrtools').tags
+        self.auth = self.bot.get_cog('crtools').auth
+        self.tags = self.bot.get_cog('crtools').tags
         self.clash = clashroyale.Client(self.auth.getToken(), is_async=True)
         self.active = False
 

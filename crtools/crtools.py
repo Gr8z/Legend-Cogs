@@ -4,9 +4,9 @@ from .utils.dataIO import dataIO, fileIO
 import os
 from cogs.utils import checks
 
-tags_path = "data/aacrtools/tags.json"
-auth_path = "data/aacrtools/auth.json"
-clans_path = "data/aacrtools/clans.json"
+tags_path = "data/crtools/tags.json"
+auth_path = "data/crtools/auth.json"
+clans_path = "data/crtools/clans.json"
 default_clans = {'defualt':{'tag': '9PJYVVL2', 'role': 'everyone', 'name': 'defualt', 'nickname': 'defualt', 'discord': None, 'waiting': [], 'members': {}, 'bonustitle': '', 
                 'personalbest': 0, 'warTrophies': 0, 'approval': False, 'log_channel': None, 'warlog_channel': None, 'emoji': ''}}
 
@@ -234,7 +234,7 @@ class clans:
 
         return self.clans[clankey]['approval']
 
-class aacrtools:
+class crtools:
     """Clash Royale Tools"""
     def __init__(self, bot):
         self.bot = bot
@@ -360,9 +360,9 @@ class aacrtools:
             return 
 
 def check_folders():
-    if not os.path.exists("data/aacrtools"):
-        print("Creating data/aacrtools folder...")
-        os.makedirs("data/aacrtools")
+    if not os.path.exists("data/crtools"):
+        print("Creating data/crtools folder...")
+        os.makedirs("data/crtools")
 
 def check_files():
     if not fileIO(tags_path, "check"):
@@ -370,7 +370,7 @@ def check_files():
         fileIO(tags_path, "save", {"0" : {"tag" : "DONOTREMOVE"}})
 
     if not fileIO(auth_path, "check"):
-        print("enter your RoyaleAPI token in data/aacrtools/auth.json...")
+        print("enter your RoyaleAPI token in data/crtools/auth.json...")
         fileIO(auth_path, "save", {"token" : "enter your RoyaleAPI token here!"})
 
     if not fileIO(clans_path, "check"):
@@ -387,4 +387,4 @@ def setup(bot):
     check_folders()
     check_files()
     check_auth()
-    bot.add_cog(aacrtools(bot))
+    bot.add_cog(crtools(bot))
