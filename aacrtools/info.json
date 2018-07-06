@@ -4,7 +4,7 @@
     "NAME" : "aacrtools",
     "SHORT" : "Clash Royale Discord Tools",
     "DESCRIPTION" : "Various tools to integrate Clash Royale into discord.",
-    "TAGS" : ["tags", "management", "clashroyale", "link","aacrtools"],
+    "TAGS" : ["tags", "management", "clashroyale", "link","crtools"],
     "REQUIREMENTS" : [],
     "HIDDEN" : false
 }
