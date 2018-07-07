@@ -72,7 +72,7 @@ class warbattles:
 
                 for battle in clanBattles:
                     battledata = {"train": 0, "time": battle.utc_time}
-                    if battledata["time"] < self.moment:
+                    if battledata["time"] > self.moment:
                         if battle.type == "clanWarWarDay":
                             battledata["tag"] = battle.team[0].tag
                             battledata["name"] = battle.team[0].name
