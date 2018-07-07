@@ -47,6 +47,7 @@ class warbattles:
                             battledata["tag"] = battle.team[0].tag
                             battledata["name"] = battle.team[0].name
                             battledata["deckLink"] = battle.team[0].deck_link
+                            battledata["trophies"] = battle.opponent[0].startTrophies - battle.team[0].startTrophies
 
                             try:
                                 playerBattles = await self.clash.get_player_battles(battledata["tag"])
@@ -71,6 +72,7 @@ class warbattles:
                             embed=discord.Embed(title="", description=battledata["wintext"], color=battledata["wincolor"])
                             embed.set_author(name=battledata["name"] + " (#"+battledata["tag"]+")", icon_url=battle.team[0].clan.badge.image)
                             embed.set_thumbnail(url=battledata["winicon"])
+                            embed.add_field(name="Opponent", value='{0:{1}} Trophies'.format(battledata["trophies"], '+' if battledata["trophies"] else ''), inline=True)
                             embed.add_field(name="Practices", value=battledata["train"], inline=True)
                             embed.add_field(name="Deck Link", value="[Copy to war deck]({}&war=1)".format(battledata["deckLink"]), inline=True)
                             embed.set_footer(text=credits, icon_url=creditIcon)
