@@ -113,6 +113,9 @@ class warlog:
                     image.save(f, "PNG")
                     f.seek(0)
                     await self.bot.send_file(channel, f, filename=filename)
+                    clanChannel = await self.clans.getClanData(clankey, 'warlog_channel')
+                    if clanChannel is not None:
+                        await self.bot.send_file(clanChannel, f, filename=filename)
 
                 for memberkey in self.clans.keysClanMembers(clankey):
                     WarDayWins = 0
