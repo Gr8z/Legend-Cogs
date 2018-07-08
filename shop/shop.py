@@ -193,7 +193,7 @@ class shop:
                                 if BonusMult > 1:
                                     await self.bot.send_message(user,"Hello {} , take these credits*({}% Bonus)* for the **{}** donations, **{}** War Day Wins and **{}** Collection Day Cards you earned for your clan this week. (+{} credits!)".format(user.name, perc, str(clan_donations), str(clan_wins), str(clan_cards), str(amount)))
                                 else:
-                                    await self.bot.send_message(user,"Hello {} , take these credits for the **{}** donations, **{}** War Day Wins and **{}** Collection Day Cards you earned for your clan this week. you contributed to your clan this week. (+{} credits!)".format(user.name, str(clan_donations), str(clan_wins), str(clan_cards), str(amount)))
+                                    await self.bot.send_message(user,"Hello {} , take these credits for the **{}** donations, **{}** War Day Wins and **{}** Collection Day Cards you earned for your clan this week. (+{} credits!)".format(user.name, str(clan_donations), str(clan_wins), str(clan_cards), str(amount)))
                             except Exception as e:
                                 await self.bot.say(e)
                     except:
