@@ -209,7 +209,7 @@ class duels:
                 pay = bank.get_balance(author) + bet
                 bank.set_credits(author, pay)
 
-                await self.bot.say("Duel cancelled, I guess no one is brave enough to go against " + author.mention)
+                await self.bot.say("Duel cancelled, I guess no one is brave enough to go against {}. To get notified for future duels, type in ``!togglerole duels``".format(author.mention))
 
     @duel.command(pass_context=True)
     async def cancel(self, ctx):
