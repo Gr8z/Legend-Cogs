@@ -30,32 +30,23 @@ class warbattles:
 
     async def getLevels(self, deck):
         """Get common, rare, epic, legendary levels"""
-        commons, rares, epics, legendaries = ([] for i in range(4))
+        levels = 0
         for card in deck:
             if card.rarity == "Common":
-                commons.append(card.level)
+                levels += card.level
             if card.rarity == "Rare":
-                rares.append(card.level)
+                levels += card.level + 3
             if card.rarity == "Epic":
-                epics.append(card.level)
+                levels += card.level + 6
             if card.rarity == "Legendary":
-                legendaries.append(card.level)
+                levels += card.level + 9
 
-        if not commons: commons = [0]
-        if not rares: rares = [0]
-        if not epics: epics = [0]
-        if not legendaries: legendaries = [0]
-
-        return [mean(commons), mean(rares), mean(epics), mean(legendaries)]
+        return levels
 
     async def deckStrength(self, team, opp):
         """Check if deck if underleveled or not"""
-        diffLevels = ["","","",""]
-        for i in range(0,4):
-            diff = int(round(team[i] - opp[i]))
-            diffLevels[i] = '{0:{1}}'.format(diff, '+' if diff else '')
-
-        return diffLevels
+        perc = round((1- (team/opp)) * 100, 2)
+        return '{0:{1}}%'.format(perc, '+' if perc else '')
 
     @commands.command(pass_context=True)
     @checks.is_owner()
@@ -104,7 +95,7 @@ class warbattles:
                             embed.set_author(name=battledata["name"] + " (#"+battledata["tag"]+")", icon_url=battle.team[0].clan.badge.image)
                             embed.set_thumbnail(url=battledata["winicon"])
                             embed.add_field(name="Opponent Trophies", value='{0:{1}}'.format(battledata["trophies"], '+' if battledata["trophies"] else ''), inline=True)
-                            embed.add_field(name="Opponent Cards", value="/".join(battledata["deckLevels"]), inline=True)
+                            embed.add_field(name="Opponent Card Levels", value=battledata["deckLevels"], inline=True)
                             embed.add_field(name="Practices", value=battledata["train"], inline=True)
                             embed.add_field(name="Deck Link", value="[Copy to war deck]({}&war=1)".format(battledata["deckLink"]), inline=True)
                             embed.set_footer(text=credits, icon_url=creditIcon)
