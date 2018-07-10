@@ -108,14 +108,13 @@ class warlog:
 
                 image = await self.genImage(clanLeague, str(warTrophies), str(clanRank+1), standings[clanRank].name, str(standings[clanRank].participants), str(standings[clanRank].wins), str(standings[clanRank].crowns))
                 filename = "warlog-{}.png".format(clankey)
-
+                clanChannel = await self.clans.getClanData(clankey, 'warlog_channel')
+                
                 with io.BytesIO() as f:
                     image.save(f, "PNG")
                     f.seek(0)
                     await self.bot.send_file(channel, f, filename=filename)
-                    clanChannel = await self.clans.getClanData(clankey, 'warlog_channel')
                     if clanChannel is not None:
-                        
                         await self.bot.send_file(discord.Object(id=clanChannel), f, filename=filename)
 
                 for memberkey in self.clans.keysClanMembers(clankey):
