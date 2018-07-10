@@ -17,6 +17,7 @@ class clashroyale:
 		self.bot = bot
 		self.auth = self.bot.get_cog('crtools').auth
 		self.tags = self.bot.get_cog('crtools').tags
+		self.clans = self.bot.get_cog('crtools').clans
 		self.clash = clashroyaleAPI.Client(self.auth.getToken(), is_async=True)
 
 	# Converts maxPlayers to Cards
@@ -32,6 +33,21 @@ class clashroyale:
 		if maxPlayers == 100: return 700
 		if maxPlayers == 200: return 2800
 		if maxPlayers == 1000: return 14000
+
+	def emoji(self, name):
+		"""Emoji by name."""
+		for emoji in self.bot.get_all_emojis():
+			if emoji.name == name:
+				return '<:{}:{}>'.format(emoji.name, emoji.id)
+		return ''
+
+	async def getClanEmoji(self, tag):
+		"""Check if emoji exists for the clan"""
+		clankey = await self.clans.getClanKey(tag)
+		if clankey is not None:
+			return await self.clans.getClanData(clankey, 'emoji')
+		else:
+			return self.emoji("clan")
 
 	# Converts seconds to time
 	def sec2tme(self, sec):
@@ -71,27 +87,23 @@ class clashroyale:
 		embed=discord.Embed(title="", url="https://royaleapi.com/player/"+profiledata.tag, color=0xFAA61A)
 		embed.set_author(name=profiledata.name + " (#"+profiledata.tag+")", icon_url=clanurl)
 		embed.set_thumbnail(url="https://royaleapi.github.io/cr-api-assets/arenas/{}.png".format(profiledata.arena.arena.replace(' ', '').lower()))
-		embed.add_field(name="Trophies", value=profiledata.trophies, inline=True)
-		embed.add_field(name="Highest Trophies", value=profiledata.stats.max_trophies, inline=True)
-		embed.add_field(name="Level", value=profiledata.stats.level, inline=True)
-		embed.add_field(name="Arena", value=profiledata.arena.name, inline=True)
+		embed.add_field(name="Trophies", value="{} {:,}".format(self.emoji("crtrophy"), profiledata.trophies), inline=True)
+		embed.add_field(name="Highest Trophies", value="{} {:,}".format(self.emoji("PB"), profiledata.stats.max_trophies), inline=True)
+		embed.add_field(name="Level", value="{} {}".format(self.emoji("level"), profiledata.stats.level), inline=True)
 		if profiledata.clan is not None:
-			embed.add_field(name="Clan", value=profiledata.clan.name, inline=True)
-			embed.add_field(name="Role", value=profiledata.clan.role.capitalize(), inline=True)
-		embed.add_field(name="Cards Found", value=str(profiledata.stats.cards_found)+"/86", inline=True)
-		embed.add_field(name="Favourite Card", value=profiledata.stats.favorite_card.name, inline=True)
-		embed.add_field(name="Games Played", value=profiledata.games.total, inline=True)
-		embed.add_field(name="Tournament Games Played", value=profiledata.games.tournament_games, inline=True)
-		embed.add_field(name="Wins", value=profiledata.games.wins, inline=True)
-		embed.add_field(name="Draws", value=profiledata.games.draws, inline=True)
-		embed.add_field(name="Losses", value=profiledata.games.losses, inline=True)
-		embed.add_field(name="War Day Wins", value=profiledata.games.war_day_wins, inline=True)	
-		embed.add_field(name="Three Crown Wins", value=profiledata.stats.three_crown_wins, inline=True)
-		embed.add_field(name="Total Donations", value=profiledata.stats_total_donations, inline=True)
-		embed.add_field(name="Clan Card Collected", value=profiledata.stats.clan_cards_collected, inline=True)
-		embed.add_field(name="Challenge Max Wins", value=profiledata.stats.challenge_max_wins, inline=True)
-		embed.add_field(name="Challenge Cards Won", value=profiledata.stats.challenge_cards_won, inline=True)
-		embed.add_field(name="Tournament Cards Won", value=profiledata.stats.tournament_cards_won, inline=True)
+			embed.add_field(name="Clan {}".format(profiledata.clan.role.capitalize()), value="{} {}".format(await self.getClanEmoji(profiledata.clan.tag), profiledata.clan.name), inline=True)
+		embed.add_field(name="Cards Found", value="{} {}/86".format(self.emoji("card"), profiledata.stats.cards_found), inline=True)
+		embed.add_field(name="Favourite Card", value="{} {}".format(self.emoji(profiledata.stats.favorite_card.name.replace(" ", "")), profiledata.stats.favorite_card.name), inline=True)
+		embed.add_field(name="Games Played", value="{} {:,}".format(self.emoji("battle"), profiledata.games.total), inline=True)
+		embed.add_field(name="Tournament Games Played", value="{} {:,}".format(self.emoji("tourney"), profiledata.games.tournament_games), inline=True)
+		embed.add_field(name="Wins/Draws/Losses", value="{:,}/{:,}/{:,}".format(profiledata.games.wins, profiledata.games.draws, profiledata.games.losses), inline=True)
+		embed.add_field(name="War Day Wins", value="{} {}".format(self.emoji("warwin"), profiledata.games.war_day_wins), inline=True)	
+		embed.add_field(name="Three Crown Wins", value="{} {:,}".format(self.emoji("3crown"), profiledata.stats.three_crown_wins), inline=True)
+		embed.add_field(name="Total Donations", value="{} {:,}".format(self.emoji("card"), profiledata.stats.total_donations), inline=True)
+		embed.add_field(name="Donations Recieved", value="{} {:,}".format(self.emoji("card"), profiledata.stats.clan_cards_collected), inline=True)
+		embed.add_field(name="Challenge Max Wins", value="{} {}".format(self.emoji("tourney"), profiledata.stats.challenge_max_wins), inline=True)
+		embed.add_field(name="Challenge Cards Won", value="{} {:,}".format(self.emoji("cards"), profiledata.stats.challenge_cards_won), inline=True)
+		embed.add_field(name="Tournament Cards Won", value="{} {:,}".format(self.emoji("cards"), profiledata.stats.tournament_cards_won), inline=True)
 		embed.set_footer(text=credits, icon_url=creditIcon)
 
 		await self.bot.say(embed=embed)
