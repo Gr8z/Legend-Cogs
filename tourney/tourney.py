@@ -46,6 +46,13 @@ class tournament:
 		else:
 			return "{} hour, {} mins".format(h,m)
 
+	def emoji(self, name):
+		"""Emoji by name."""
+		for emoji in self.bot.get_all_emojis():
+			if emoji.name == name:
+				return '<:{}:{}>'.format(emoji.name, emoji.id)
+		return ''
+
 	# Returns a list with tournaments
 	async def getTopTourney(self):
 
@@ -127,9 +134,9 @@ class tournament:
 				embed=discord.Embed(title="Click this link to join the Tournament in Clash Royale!", url="https://legendclans.com/tournaments?id={}".format(tourneydata.tag), color=0xFAA61A)
 				embed.set_thumbnail(url='https://statsroyale.com/images/tournament.png')
 
-				embed.set_author(name=tourneydata.name+" (#"+tourneydata.tag+")")
+				embed.set_author(name="{} (#{})".format(tourneydata.name, tourneydata.tag), url="https://royaleapi.com/tournament/" + tourneydata.tag)
 
-				embed.add_field(name="Players", value=str(tourneydata.current_players) + "/" + str(maxPlayers), inline=True)
+				embed.add_field(name="Players", value="{} {}/{}".format(self.emoji("members"), tourneydata.current_players, maxPlayers), inline=True)
 				embed.add_field(name="Status", value=tourneydata.status.title(), inline=True)
 
 				if tourneydata.status != "inProgress":
@@ -139,7 +146,7 @@ class tournament:
 				endTime = self.sec2tme((tourneydata.create_time + tourneydata.prep_time + tourneydata.duration) - int(time.time()))
 				embed.add_field(name="Ends In", value=endTime, inline=True)
 
-				embed.add_field(name="Top prize", value="<:tournamentcards:380832770454192140> " + str(cards) + "	 <:coin:380832316932489268> " +  str(coins), inline=True)
+				embed.add_field(name="Top prize", value="{} {}	 {} {}".format(self.emoji("tournamentcards"), cards, self.emoji("coin"), coins), inline=True)
 				embed.set_footer(text=credits, icon_url=creditIcon)
 
 				await self.bot.edit_role(server, tour_role, mentionable=True)
@@ -164,9 +171,9 @@ class tournament:
 			embed=discord.Embed(title="Click this link to join the Tournament in Clash Royale!", url="https://legendclans.com/tournaments?id={}".format(tourneydata.tag), color=0xFAA61A)
 			embed.set_thumbnail(url='https://statsroyale.com/images/tournament.png')
 
-			embed.set_author(name=tourneydata.name+" (#"+tourneydata.tag+")")
+			embed.set_author(name="{} (#{})".format(tourneydata.name, tourneydata.tag), url="https://royaleapi.com/tournament/" + tourneydata.tag)
 
-			embed.add_field(name="Players", value=str(tourneydata.current_players) + "/" + str(maxPlayers), inline=True)
+			embed.add_field(name="Players", value="{} {}/{}".format(self.emoji("members"), tourneydata.current_players, maxPlayers), inline=True)
 			embed.add_field(name="Status", value=tourneydata.status.title(), inline=True)
 
 			if tourneydata.status != "inProgress":
@@ -176,7 +183,7 @@ class tournament:
 			endTime = self.sec2tme((tourneydata.create_time + tourneydata.prep_time + tourneydata.duration) - int(time.time()))
 			embed.add_field(name="Ends In", value=endTime, inline=True)
 
-			embed.add_field(name="Top prize", value="<:tournamentcards:380832770454192140> " + str(cards) + "	 <:coin:380832316932489268> " +  str(coins), inline=True)
+			embed.add_field(name="Top prize", value="{} {}	 {} {}".format(self.emoji("tournamentcards"), cards, self.emoji("coin"), coins), inline=True)
 			embed.set_footer(text=credits, icon_url=creditIcon)
 			await self.bot.say(embed=embed)
 		else:

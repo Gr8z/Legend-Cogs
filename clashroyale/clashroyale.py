@@ -46,8 +46,32 @@ class clashroyale:
 		clankey = await self.clans.getClanKey(tag)
 		if clankey is not None:
 			return await self.clans.getClanData(clankey, 'emoji')
+		return self.emoji("clan")
+
+	def getLeagueEmoji(self, trophies):
+		"""Get clan war League Emoji"""
+		if trophies >= 3000:
+			return self.emoji("legendleague")
+		elif trophies >= 1500:
+			return self.emoji("goldleague")
+		elif trophies >= 600:
+			return self.emoji("silverleague")
 		else:
-			return self.emoji("clan")
+			return self.emoji("bronzeleague")
+
+	async def getClanWarTrophies(self, tag):
+		"""Check if war trophies exists for the clan"""
+		clankey = await self.clans.getClanKey(tag)
+		if clankey is not None:
+			return await self.clans.getClanData(clankey, 'warTrophies')
+		return None
+
+	async def getClanLeader(self, members):
+		"""Return clan leader from a list of members"""
+		for member in members:
+			if member.role == "leader":
+				arenaFormat = member.arena.arena.replace(' ', '').lower()
+				return "{} {}".format(self.emoji(arenaFormat), member.name)
 
 	# Converts seconds to time
 	def sec2tme(self, sec):
@@ -84,18 +108,20 @@ class clashroyale:
 		else:
 			clanurl = profiledata.clan.badge.image
 
-		embed=discord.Embed(title="", url="https://royaleapi.com/player/"+profiledata.tag, color=0xFAA61A)
-		embed.set_author(name=profiledata.name + " (#"+profiledata.tag+")", icon_url=clanurl)
-		embed.set_thumbnail(url="https://royaleapi.github.io/cr-api-assets/arenas/{}.png".format(profiledata.arena.arena.replace(' ', '').lower()))
-		embed.add_field(name="Trophies", value="{} {:,}".format(self.emoji("crtrophy"), profiledata.trophies), inline=True)
-		embed.add_field(name="Highest Trophies", value="{} {:,}".format(self.emoji("PB"), profiledata.stats.max_trophies), inline=True)
+		arenaFormat = profiledata.arena.arena.replace(' ', '').lower()
+
+		embed=discord.Embed(color=0xFAA61A)
+		embed.set_author(name=profiledata.name + " (#"+profiledata.tag+")", icon_url=clanurl, url="https://royaleapi.com/player/"+profiledata.tag)
+		embed.set_thumbnail(url="https://royaleapi.github.io/cr-api-assets/arenas/{}.png".format(arenaFormat))
+		embed.add_field(name="Trophies", value="{} {:,}".format(self.emoji(arenaFormat), profiledata.trophies), inline=True)
+		embed.add_field(name="Highest Trophies", value="{} {:,}".format(self.emoji(arenaFormat), profiledata.stats.max_trophies), inline=True)
 		embed.add_field(name="Level", value="{} {}".format(self.emoji("level"), profiledata.stats.level), inline=True)
 		if profiledata.clan is not None:
 			embed.add_field(name="Clan {}".format(profiledata.clan.role.capitalize()), value="{} {}".format(await self.getClanEmoji(profiledata.clan.tag), profiledata.clan.name), inline=True)
 		embed.add_field(name="Cards Found", value="{} {}/86".format(self.emoji("card"), profiledata.stats.cards_found), inline=True)
 		embed.add_field(name="Favourite Card", value="{} {}".format(self.emoji(profiledata.stats.favorite_card.name.replace(" ", "")), profiledata.stats.favorite_card.name), inline=True)
 		embed.add_field(name="Games Played", value="{} {:,}".format(self.emoji("battle"), profiledata.games.total), inline=True)
-		embed.add_field(name="Tournament Games Played", value="{} {:,}".format(self.emoji("tourney"), profiledata.games.tournament_games), inline=True)
+		embed.add_field(name="Tourney Games Played", value="{} {:,}".format(self.emoji("tourney"), profiledata.games.tournament_games), inline=True)
 		embed.add_field(name="Wins/Draws/Losses", value="{:,}/{:,}/{:,}".format(profiledata.games.wins, profiledata.games.draws, profiledata.games.losses), inline=True)
 		embed.add_field(name="War Day Wins", value="{} {}".format(self.emoji("warwin"), profiledata.games.war_day_wins), inline=True)	
 		embed.add_field(name="Three Crown Wins", value="{} {:,}".format(self.emoji("3crown"), profiledata.stats.three_crown_wins), inline=True)
@@ -125,18 +151,21 @@ class clashroyale:
 			await self.bot.say("You need to first save your profile using ``{}save #GAMETAG``".format(ctx.prefix))
 			return
 
-		valuechestText = ' '.join(profiledata.upcoming).replace('silver', '<:silver:385784583343439882>').replace('gold', '<:gold:385784630227369985>').replace('giant', '<:giant:380832560504373249>').replace('epic', '<:epic:380832620059033610>').replace('super magical', '<:super:380832745305276416>').replace('magical', '<:magic:380832656704798731>').replace('legendary', '<:legend:380832458482122752>')
+		valuechestText = ' '.join(profiledata.upcoming).replace('silver', self.emoji("silver")).replace('gold', self.emoji("gold")).replace('giant', self.emoji("giant")).replace('epic', self.emoji("epic")).replace('super magical', self.emoji("super")).replace('magical', self.emoji("magic")).replace('legendary', self.emoji("legendary"))
 
-		chest1 = "<:giant:380832560504373249> +" + str(profiledata.giant+1) + "  "
-		chest2 = "<:epic:380832620059033610> +" + str(profiledata.epic+1) + "  "
-		chest3 = "<:magic:380832656704798731> +" + str(profiledata.magical+1) + "  "
-		chest4 = "<:super:380832745305276416> +" + str(profiledata.super_magical+1) + "  "
-		chest5 = "<:legend:380832458482122752> +" + str(profiledata.legendary+1) + "  "
+		chestList = [
+			"{} +{}".format(self.emoji("giant"), profiledata.giant+1),
+			"{} +{}".format(self.emoji("epic"), profiledata.epic+1),
+			"{} +{}".format(self.emoji("magic"), profiledata.magical+1),
+			"{} +{}".format(self.emoji("super"), profiledata.super_magical+1),
+			"{} +{}".format(self.emoji("legendary"), profiledata.legendary+1),
+		]
 
 		embed=discord.Embed(title="", color=0xFAA61A, description="Your Upcoming chests.")
-		embed.set_author(name="#"+profiletag)
+		embed.set_thumbnail(url="https://cdn.discordapp.com/emojis/385784630227369985.png")
+		embed.set_author(name="{} (#{})".format(member.name ,profiletag))
 		embed.add_field(name="Upcoming Chests", value=valuechestText, inline=False)
-		embed.add_field(name="Special Chests", value=chest1+chest2+chest3+chest4+chest5, inline=False)
+		embed.add_field(name="Special Chests", value=" ".join(chestList), inline=False)
 		embed.set_footer(text=credits, icon_url=creditIcon)
 		
 		await self.bot.say(embed=embed)
@@ -177,14 +206,24 @@ class clashroyale:
 			await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 			return
 
-		embed=discord.Embed(title=clandata.name + " (#" + clandata.tag + ")", url="https://legendclans.com/clanInfo/{}".format(clandata.tag), description=clandata.description, color=0xFAA61A)
+		embed=discord.Embed(description=clandata.description, color=0xFAA61A)
+		embed.set_author(name=clandata.name + " (#"+clandata.tag+")", icon_url=clandata.badge.image, url="https://legendclans.com/clanInfo/"+clandata.tag)
 		embed.set_thumbnail(url=clandata.badge.image)
-		embed.add_field(name="Members", value=str(clandata.member_count)+"/50", inline=True)
-		embed.add_field(name="Donations", value=str(clandata.donations), inline=True)
-		embed.add_field(name="Score", value=str(clandata.score), inline=True)
-		embed.add_field(name="Required Trophies", value=str(clandata.required_score), inline=True)
-		embed.add_field(name="Status", value=str(clandata.type.title()), inline=True)
-		embed.add_field(name="Country", value=str(clandata.location.name), inline=True)
+		embed.add_field(name="Members", value="{} {}/50".format(self.emoji("members"), clandata.member_count), inline=True)
+		embed.add_field(name="Leader", value=await self.getClanLeader(clandata.members), inline=True)
+		embed.add_field(name="Donations", value="{} {:,}".format(self.emoji("cards"), clandata.donations), inline=True)
+		embed.add_field(name="Score", value="{} {:,}".format(self.emoji("PB"), clandata.score), inline=True)
+
+		warTrophies = await self.getClanWarTrophies(clandata.tag)
+		if warTrophies is not None:
+			embed.add_field(name="War Trophies", value="{} {:,}".format(self.getLeagueEmoji(warTrophies), warTrophies), inline=True)
+
+		embed.add_field(name="Required Trophies", value="{} {:,}".format(self.emoji("crtrophy"), clandata.required_score), inline=True)
+		embed.add_field(name="Status", value=":envelope_with_arrow: {}".format(clandata.type.title()), inline=True)
+		if clandata.location.is_country:
+			embed.add_field(name="Country", value=":flag_{}: {}".format(clandata.location.code.lower(), clandata.location.name), inline=True)
+		else:
+			embed.add_field(name="Location", value=":earth_americas: {}".format(clandata.location.name), inline=True)
 		embed.set_footer(text=credits, icon_url=creditIcon)
 
 		await self.bot.say(embed=embed)
@@ -216,9 +255,9 @@ class clashroyale:
 		embed=discord.Embed(title="Click this link to join the Tournament in Clash Royale!", url="https://legendclans.com/tournaments?id={}&pass={}".format(tag, password), color=0xFAA61A)
 		embed.set_thumbnail(url='https://statsroyale.com/images/tournament.png')
 
-		embed.set_author(name=tourneydata.name+" (#"+tourneydata.tag+")")
+		embed.set_author(name="{} (#{})".format(tourneydata.name, tourneydata.tag), url="https://royaleapi.com/tournament/" + tourneydata.tag)
 
-		embed.add_field(name="Players", value=str(tourneydata.current_players) + "/" + str(maxPlayers), inline=True)
+		embed.add_field(name="Players", value="{} {}/{}".format(self.emoji("members"), tourneydata.current_players, maxPlayers), inline=True)
 		embed.add_field(name="Status", value=tourneydata.status.title(), inline=True)
 
 		if not tourneydata.open:
@@ -239,7 +278,7 @@ class clashroyale:
 
 
 		embed.add_field(name="Hosted By", value=tourneydata.creator.name, inline=True)
-		embed.add_field(name="Top prize", value="<:tournamentcards:380832770454192140> " + str(cards) + "	 <:coin:380832316932489268> " +  str(coins), inline=True)
+		embed.add_field(name="Top prize", value="{} {}	 {} {}".format(self.emoji("tournamentcards"), cards, self.emoji("coin"), coins), inline=True)
 		embed.set_footer(text=credits, icon_url=creditIcon)
 		
 		await self.bot.say(embed=embed)
