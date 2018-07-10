@@ -1170,6 +1170,13 @@ class legend:
             await self.bot.say("I don’t have permission to change nick for this user.")
             return
 
+        try:
+            await self.bot.send_message(member,guest_rules)
+            await self.bot.say("{} Role Added to {}".format(role.name, member.display_name))
+        except discord.errors.Forbidden:
+            await self.bot.say("Command failed, {} please fix your privacy settings, we are unable to send you Guest Rules.".format(member.mention))
+            return
+
         role = discord.utils.get(server.roles, name="Guest")
         try:
             await self.bot.add_roles(member, role)
@@ -1177,9 +1184,6 @@ class legend:
             raise
         except discord.HTTPException:
             raise
-
-        await self.bot.send_message(member,guest_rules)
-        await self.bot.say("{} Role Added to {}".format(role.name, member.display_name))
 
     @commands.command(pass_context=True, no_pm=True)
     @commands.has_any_role(*BOTCOMMANDER_ROLES)
