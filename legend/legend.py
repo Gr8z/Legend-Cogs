@@ -86,7 +86,7 @@ credits_info = """**WHAT ARE CREDITS?**
 Credits are a virtual currency in LeGeND Discord, you earn credits by playing in Legend Wars, donating, and playing mini games in discord. To use your credits, you can buy items using !buy.
 
 • Every 30 minutes, you can get free credits by typing !payday in #bot-spam channel.
-• Every Sunday, you receive something called a "Weekly Payout". Which converts all your week's clan donations into credits. So the more active you are in a clan, the more credits you get.
+• Every Sunday, you receive something called a "Weekly Payout". Which converts all your week's clan donations, War Cards collected and War wins into credits. So the more active you are in a clan, the more credits you get.
 • We have Legend Wars every weekend, participating in these wars also give you tons of credits according to your tournament trophies.
 • You can also win credits by playing #heist and #challenges.
 • You can play Clash Royale #duels to bet on your skills in friend battles.
