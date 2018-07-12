@@ -621,7 +621,6 @@ class legend:
             return
 
         clankey = clankey.lower()
-        offline = False
 
         try:
             clan_tag = await self.clans.getClanData(clankey, 'tag')
@@ -643,7 +642,10 @@ class legend:
             else: 
                 clantag = profiledata.clan.tag
                 clanname = profiledata.clan.name
+                
             ign = profiledata.name
+            trophies = profiledata.trophies
+            maxtrophies = profiledata.stats.max_trophies
         except clashroyale.RequestError:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
@@ -651,13 +653,9 @@ class legend:
             await self.bot.say("You must assosiate a tag with this member first using ``{}save #tag @member``".format(ctx.prefix))
             return
 
-        if not offline:
-            trophies = profiledata.trophies
-            maxtrophies = profiledata.stats.max_trophies
-
-            if ((trophies < clandata.required_score) and (maxtrophies < clan_pb)):
-                await self.bot.say("Cannot add you to the waiting list, you don't meet the trophy requirements.")
-                return
+        if ((trophies < clandata.required_score) and (maxtrophies < clan_pb)):
+            await self.bot.say("Cannot add you to the waiting list, you don't meet the trophy requirements.")
+            return
 
         if not await self.clans.addWaitingMember(clankey, member.id):
             await self.bot.say("You are already in a waiting list for this clan.")
