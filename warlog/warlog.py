@@ -114,6 +114,10 @@ class warlog:
                     image.save(f, "PNG")
                     f.seek(0)
                     await self.bot.send_file(channel, f, filename=filename)
+
+                with io.BytesIO() as f:
+                    image.save(f, "PNG")
+                    f.seek(0)
                     if clanChannel is not None:
                         await self.bot.send_file(discord.Object(id=clanChannel), f, filename=filename)
 
