@@ -8,6 +8,7 @@ import io
 import asyncio
 import clashroyale
 import time
+
 try:
     from cogs.deck import Deck
 except:
@@ -15,6 +16,7 @@ except:
 
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
+
 
 class warbattles:
     """Clash Royale Clan War attack log"""
@@ -44,7 +46,7 @@ class warbattles:
 
     async def deckStrength(self, team, opp):
         """Check if deck if underleveled or not"""
-        perc = round((1- (team/opp)) * 100, 2)
+        perc = round((1 - (team / opp)) * 100, 2)
         return '{0:{1}}%'.format(perc, '+' if perc else '')
 
     @commands.command(pass_context=True)
@@ -67,7 +69,8 @@ class warbattles:
                             battledata["tag"] = battle.team[0].tag
                             battledata["name"] = battle.team[0].name
                             battledata["deckLink"] = battle.team[0].deck_link
-                            battledata["deckLevels"] = await self.deckStrength(await self.getLevels(battle.team[0].deck), await self.getLevels(battle.opponent[0].deck))
+                            battledata["deckLevels"] = await self.deckStrength(await self.getLevels(battle.team[0].deck),
+                                                                               await self.getLevels(battle.opponent[0].deck))
                             battledata["trophies"] = battle.opponent[0].startTrophies - battle.team[0].startTrophies
 
                             try:
@@ -85,28 +88,31 @@ class warbattles:
                                 battledata["wintext"] = "War Day Victory"
                                 battledata["winicon"] = "https://royaleapi.com/static/img/ui/cw-war-win.png"
                                 battledata["wincolor"] = discord.Color.green()
-                            else: 
+                            else:
                                 battledata["wintext"] = "War Day Defeat"
                                 battledata["winicon"] = "https://royaleapi.com/static/img/ui/cw-war-loss.png"
                                 battledata["wincolor"] = discord.Color.red()
 
-                            embed=discord.Embed(title="", description=battledata["wintext"], color=battledata["wincolor"])
+                            embed = discord.Embed(title="", description=battledata["wintext"], color=battledata["wincolor"])
                             embed.set_author(name=battledata["name"] + " (#"+battledata["tag"]+")", icon_url=battle.team[0].clan.badge.image)
                             embed.set_thumbnail(url=battledata["winicon"])
-                            embed.add_field(name="Opponent Trophies", value='{0:{1}}'.format(battledata["trophies"], '+' if battledata["trophies"] else ''), inline=True)
+                            embed.add_field(name="Opponent Trophies",
+                                            value='{0:{1}}'.format(battledata["trophies"], '+' if battledata["trophies"] else ''),
+                                            inline=True)
                             embed.add_field(name="Opponent Card Levels", value=battledata["deckLevels"], inline=True)
                             embed.add_field(name="Practices", value=battledata["train"], inline=True)
                             embed.add_field(name="Deck Link", value="[Copy to war deck]({}&war=1)".format(battledata["deckLink"]), inline=True)
                             embed.set_footer(text=credits, icon_url=creditIcon)
 
-                            await self.bot.send_message(discord.Object(id=channel), embed = embed)
+                            await self.bot.send_message(discord.Object(id=channel), embed=embed)
 
                             card_keys = await self.deck.decklink_to_cards(battledata["deckLink"])
                             newctx = ctx
                             newctx.message.channel = discord.Object(id=channel)
                             await self.deck.upload_deck_image(newctx, card_keys, 'War Deck')
-                            #return
+                            # return
         self.moment = time.time()
+
 
 def setup(bot):
     bot.add_cog(warbattles(bot))

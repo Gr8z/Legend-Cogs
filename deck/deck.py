@@ -194,7 +194,7 @@ class Deck:
     async def deck_get_helper(self, ctx,
                               card1=None, card2=None, card3=None, card4=None,
                               card5=None, card6=None, card7=None, card8=None,
-                              deck_name=None, author: discord.Member = None):
+                              deck_name=None, author: discord.Member=None):
         """Abstract command to run deck_get for other modules."""
         await ctx.invoke(self.deck_get, card1, card2, card3, card4, card5,
                          card6, card7, card8, deck_name, author)
@@ -203,7 +203,7 @@ class Deck:
     async def deck_get(self, ctx,
                        card1=None, card2=None, card3=None, card4=None,
                        card5=None, card6=None, card7=None, card8=None,
-                       deck_name=None, author: discord.Member = None):
+                       deck_name=None, author: discord.Member=None):
         """Display a deck with cards.
 
         Enter 8 cards followed by a name.
@@ -235,9 +235,9 @@ class Deck:
 
     @deck.command(name="post", pass_context=True, no_pm=True)
     async def deck_post(self, ctx,
-                       card1=None, card2=None, card3=None, card4=None,
-                       card5=None, card6=None, card7=None, card8=None,
-                       deck_name=None):
+                        card1=None, card2=None, card3=None, card4=None,
+                        card5=None, card6=None, card7=None, card8=None,
+                        deck_name=None):
         """Post your own deck in #decks channel
 
         Enter 8 cards followed by a name.
@@ -260,8 +260,6 @@ class Deck:
         elif deck_name is None:
             await self.bot.say("Please enter a deck name.")
         else:
-            #await self.deck_upload(ctx, member_deck, deck_name, author)
-
             self.check_server_settings(server)
             self.check_member_settings(server, author)
 
@@ -288,7 +286,6 @@ class Deck:
                 deck_is_valid = False
 
             if deck_is_valid:
-                #await self.upload_deck_image(ctx, member_deck, deck_name, member)
                 deck_image = await self.bot.loop.run_in_executor(
                     self.threadex,
                     self.get_deck_image,
@@ -310,7 +307,8 @@ class Deck:
             # generate link
             if self.deck_is_valid:
                 em = await self.decklink_embed(member_deck)
-                await self.bot.send_message(discord.Object(391597618750423041), "Post your favourite deck here using `!deck post`")
+                await self.bot.send_message(discord.Object(391597618750423041), 
+                                            "Post your favourite deck here using `!deck post`")
                 await self.bot.say("Deck successfully posted in #decks")
                 await self.bot.send_message(discord.Object(391597618750423041), embed=em)
 
@@ -350,7 +348,6 @@ class Deck:
             await self.bot.say("Cannot find a URL.")
             return
         await ctx.invoke(self.deck_get, *card_keys)
-        #await self.bot.delete_message(ctx.message)
 
     @deck.command(name="addlink", aliases=['al', 'import', 'i'], pass_context=True, no_pm=True)
     async def deck_addlink(self, ctx, *, url):
@@ -413,7 +410,7 @@ class Deck:
                 self.save_settings()
 
     @deck.command(name="list", pass_context=True, no_pm=True)
-    async def deck_list(self, ctx, member: discord.Member = None):
+    async def deck_list(self, ctx, member: discord.Member=None):
         """List the decks of a user."""
         author = ctx.message.author
         server = ctx.message.server
@@ -446,7 +443,7 @@ class Deck:
                 await self.bot.say("{} hasn’t added any decks yet.".format(member.name))
 
     @deck.command(name="longlist", pass_context=True, no_pm=True)
-    async def deck_longlist(self, ctx, member: discord.Member = None):
+    async def deck_longlist(self, ctx, member: discord.Member=None):
         """List the decks of a user."""
         author = ctx.message.author
         server = ctx.message.server
@@ -494,7 +491,7 @@ class Deck:
                         return
 
     @deck.command(name="show", pass_context=True, no_pm=True)
-    async def deck_show(self, ctx, deck_id=None, member: discord.Member = None):
+    async def deck_show(self, ctx, deck_id=None, member: discord.Member=None):
         """Show the deck of a user by id. With link to copy."""
         author = ctx.message.author
         server = ctx.message.server
@@ -502,7 +499,7 @@ class Deck:
             member = author
         self.check_server_settings(server)
         members = self.settings["Servers"][server.id]["Members"]
-        if not member.id in members:
+        if member.id not in members:
             await self.bot.say("You have not added any decks.")
         elif deck_id is None:
             await self.bot.say("You must enter a deck id.")
@@ -686,7 +683,7 @@ class Deck:
 
         members = self.settings["Servers"][server.id]["Members"]
 
-        if not author.id in members:
+        if author.id not in members:
             await self.bot.say("You have not added any decks.")
         elif not deck_id.isdigit():
             await self.bot.say("The deck_id you have entered is not a number.")

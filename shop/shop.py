@@ -11,6 +11,7 @@ import re
 import os
 import aiohttp
 
+
 class shop:
     """Legend Family Shop for credits"""
 
@@ -45,7 +46,7 @@ class shop:
             await self.bot.remove_roles(member, *roles)
         except:
             pass
-            
+
     async def _is_rare(self, member):
         server = member.server
         botcommander_roles = [discord.utils.get(server.roles, name=r) for r in ["Rare™"]]
@@ -55,7 +56,7 @@ class shop:
             return True
         else:
             return False
-            
+
     async def _is_epic(self, member):
         server = member.server
         botcommander_roles = [discord.utils.get(server.roles, name=r) for r in ["Epic™"]]
@@ -102,7 +103,7 @@ class shop:
             async with self.session.get(url) as r:
                 image = await r.content.read()
 
-            with open('data/leveler/test.jpg','wb') as f:
+            with open('data/leveler/test.jpg', 'wb') as f:
                 f.write(image)
 
             image = Image.open('data/leveler/test.jpg').convert('RGBA')
@@ -133,14 +134,14 @@ class shop:
 
         bank = self.bot.get_cog('Economy').bank
         banks = list(self.banks['374596069989810176'])
-        #banks = list(self.banks['363728974821457921'])
+        # banks = list(self.banks['363728974821457921'])
 
         try:
             clans = await self.clash.get_clan(*await self.clans.tagsClans())
         except clashroyale.RequestError:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
-        
+
         for clan in clans:
             clankey = await self.clans.getClanKey(clan.tag)
             for member in clan.members:
@@ -149,12 +150,12 @@ class shop:
                 clan_wins = await self.clans.getMemberWins(clankey, clan_tag)
                 clan_cards = await self.clans.getMemberCards(clankey, clan_tag)
 
-                for key in range(0,len(banks)):
+                for key in range(0, len(banks)):
                     try:
                         if (clan_donations+clan_wins+clan_cards > 0) and (clan_tag == await self.tags.getTag(banks[key])):
 
                             try:
-                                user = discord.utils.get(ctx.message.server.members, id = banks[key])
+                                user = discord.utils.get(ctx.message.server.members, id=banks[key])
 
                                 rare = await self._is_rare(user)
                                 epic = await self._is_epic(user)
@@ -191,9 +192,26 @@ class shop:
                                 await self.bot.say("{} - ({} donations)".format(user.display_name, clan_donations))
 
                                 if BonusMult > 1:
-                                    await self.bot.send_message(user,"Hello {} , take these credits*({}% Bonus)* for the **{}** donations, **{}** War Day Wins and **{}** Collection Day Cards you earned for your clan this week. (+{} credits!)".format(user.name, perc, str(clan_donations), str(clan_wins), str(clan_cards), str(amount)))
+                                    await self.bot.send_message(user, ("Hello {} , take these credits*({}% Bonus)* "
+                                                                       "for the **{}** donations, **{}** War Day Wins "
+                                                                       "and **{}** Collection Day Cards you "
+                                                                       "earned for your clan this week. "
+                                                                       "(+{} credits!)".format(user.name,
+                                                                                               perc,
+                                                                                               clan_donations,
+                                                                                               clan_wins,
+                                                                                               clan_cards,
+                                                                                               amount)))
                                 else:
-                                    await self.bot.send_message(user,"Hello {} , take these credits for the **{}** donations, **{}** War Day Wins and **{}** Collection Day Cards you earned for your clan this week. (+{} credits!)".format(user.name, str(clan_donations), str(clan_wins), str(clan_cards), str(amount)))
+                                    await self.bot.send_message(user, ("Hello {} , take these credits "
+                                                                       "for the **{}** donations, **{}** War Day Wins "
+                                                                       "and **{}** Collection Day Cards you "
+                                                                       "earned for your clan this week. "
+                                                                       "(+{} credits!)".format(user.name,
+                                                                                               clan_donations,
+                                                                                               clan_wins,
+                                                                                               clan_cards,
+                                                                                               amount)))
                             except Exception as e:
                                 await self.bot.say(e)
                     except:
@@ -210,7 +228,7 @@ class shop:
         await self.updateBank()
 
         bank = self.bot.get_cog('Economy').bank
-        #banks = list(self.banks['363728974821457921'])
+        # banks = list(self.banks['363728974821457921'])
         banks = list(self.banks['374596069989810176'])
 
         tag = await self.tags.formatTag(tag)
@@ -224,18 +242,18 @@ class shop:
         except clashroyale.RequestError:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
-        
+
         for member in tourney.members:
 
             tourney_tag = member.tag
             tourney_score = member.score
 
-            for key in range(0,len(banks)):
+            for key in range(0, len(banks)):
                 try:
                     if (tourney_score > 0) and (tourney_tag == await self.tags.getTag(banks[key])):
 
                         try:
-                            user = discord.utils.get(ctx.message.server.members, id = banks[key])
+                            user = discord.utils.get(ctx.message.server.members, id=banks[key])
 
                             rare = await self._is_rare(user)
                             epic = await self._is_epic(user)
@@ -264,9 +282,22 @@ class shop:
                             await self.bot.say("{} - ({} trophies)".format(user.display_name, tourney_score))
 
                             if BonusMult > 1:
-                                await self.bot.send_message(user,"Hello {}, take these credits*({}% Bonus)* for the **{}** trophies you contributed to your clan in **{}**. (+{} credits!)".format(user.name, perc, str(tourney_score), tourney.name, str(amount) ))
+                                await self.bot.send_message(user, ("Hello {}, take these credits*({}% Bonus)* "
+                                                                   "for the **{}** trophies you contributed to "
+                                                                   "your clan in **{}**. "
+                                                                   "(+{} credits!)".format(user.name,
+                                                                                           perc,
+                                                                                           tourney_score,
+                                                                                           tourney.name,
+                                                                                           amount)))
                             else:
-                                await self.bot.send_message(user,"Hello {}, take these credits for the **{}** trophies you contributed to your clan in **{}**. (+{} credits!)".format(user.name, str(tourney_score), tourney.name, str(amount) ))
+                                await self.bot.send_message(user, ("Hello {}, take these credits* "
+                                                                   "for the **{}** trophies you contributed to "
+                                                                   "your clan in **{}**. "
+                                                                   "(+{} credits!)".format(user.name,
+                                                                                           tourney_score,
+                                                                                           tourney.name,
+                                                                                           amount)))
                         except Exception as e:
                             await self.bot.say(e)
                 except:
@@ -282,7 +313,7 @@ class shop:
             await self.bot.send_file(ctx.message.channel, 'FIF5sug.png')
 
     @buy.command(pass_context=True, name="1")
-    async def buy_1(self , ctx):
+    async def buy_1(self, ctx):
         """ Buy Payday Pro from the shop """
         server = ctx.message.server
         author = ctx.message.author
@@ -301,7 +332,7 @@ class shop:
         if self.bank_check(author, 30000):
             bank = self.bot.get_cog('Economy').bank
             bank.withdraw_credits(author, 30000)
-            await self._add_roles(author,["Pro Payday"])
+            await self._add_roles(author, ["Pro Payday"])
             await self.bot.say("Congratulations, now you can get !payday every 10 minutes.")
         else:
             await self.bot.say("You do not have enough credits to buy this item.")
@@ -322,7 +353,8 @@ class shop:
             pattern = re.compile(r"<?(https?:\/\/)?(www\.)?([i.]*)?(imgur\.com)\b([-a-zA-Z0-9/]*)>?(\.jpg)?")
 
             if not pattern.match(imgurLink):
-                await self.bot.say("The URL does not end in **.jpg** or is not from **i.imgur.com**. Please upload a JPG image to imgur.com and get a direct link.")
+                await self.bot.say("The URL does not end in **.jpg** or is not from **i.imgur.com**. "
+                                   "Please upload a JPG image to imgur.com and get a direct link.")
                 return
 
             validate = await self._valid_image_url(imgurLink)
@@ -332,7 +364,7 @@ class shop:
 
             message = ctx.message
             message.content = "{}lvladmin bg setcustombg profile {} {}".format(ctx.prefix, author.id, imgurLink)
-            message.author = discord.utils.get(ctx.message.server.members, id = "112356193820758016")
+            message.author = discord.utils.get(ctx.message.server.members, id="112356193820758016")
 
             await self.bot.process_commands(message)
 
@@ -357,7 +389,7 @@ class shop:
             await self.bot.say("Error, you can only use default emojis.")
             return
 
-        try: 
+        try:
             await self.bot.add_reaction(ctx.message, emoji)
         except (discord.errors.HTTPException, discord.errors.InvalidArgument):
             await self.bot.say("Error, That's not an emoji I recognize.")
@@ -373,7 +405,7 @@ class shop:
                 if profiledata.clan is None:
                     clantag = ""
                     clanname = ""
-                else: 
+                else:
                     clantag = profiledata.clan.tag
                     clanname = profiledata.clan.name
                 ign = profiledata.name
@@ -424,7 +456,7 @@ class shop:
             await self.bot.say("You do not have enough credits to buy this item.")
 
     @buy.command(pass_context=True, name="5")
-    async def buy_5(self , ctx):
+    async def buy_5(self, ctx):
         """ Buy Rare Role from the shop """
         server = ctx.message.server
         author = ctx.message.author
@@ -445,13 +477,13 @@ class shop:
         if self.bank_check(author, 250000):
             bank = self.bot.get_cog('Economy').bank
             bank.withdraw_credits(author, 250000)
-            await self._add_roles(author,["Rare™"])
+            await self._add_roles(author, ["Rare™"])
             await self.bot.say("Congratulations, you are now a **Rare™**")
         else:
             await self.bot.say("You do not have enough credits to buy this role.")
 
     @buy.command(pass_context=True, name="6")
-    async def buy_6(self , ctx):
+    async def buy_6(self, ctx):
         """ Buy Epic Role from the shop """
         server = ctx.message.server
         author = ctx.message.author
@@ -467,7 +499,7 @@ class shop:
 
         if not rare:
             await self.bot.say("You need to have **Rare™** to buy this role.")
-            return    
+            return
 
         if epic or legendary:
             await self.bot.say("You are already Rare™.")
@@ -476,15 +508,15 @@ class shop:
         if self.bank_check(author, 750000):
             bank = self.bot.get_cog('Economy').bank
             bank.withdraw_credits(author, 750000)
-            await self._remove_roles(author,["Rare™"])
+            await self._remove_roles(author, ["Rare™"])
             await asyncio.sleep(3)
-            await self._add_roles(author,["Epic™"])
+            await self._add_roles(author, ["Epic™"])
             await self.bot.say("Congratulations, you are now a **Epic™**")
         else:
             await self.bot.say("You do not have enough credits to buy this role.")
-        
+
     @buy.command(pass_context=True, name="7")
-    async def buy_7(self , ctx):
+    async def buy_7(self, ctx):
         """ Buy Legendary Role from the shop """
 
         server = ctx.message.server
@@ -500,7 +532,7 @@ class shop:
 
         if not epic:
             await self.bot.say("You need to have **Epic™** to buy this role.")
-            return    
+            return
 
         if legendary:
             await self.bot.say("You are already LeGeNDary™.")
@@ -509,16 +541,15 @@ class shop:
         if self.bank_check(author, 1000000):
             bank = self.bot.get_cog('Economy').bank
             bank.withdraw_credits(author, 1000000)
-            await self._remove_roles(author,["Epic™"])
+            await self._remove_roles(author, ["Epic™"])
             await asyncio.sleep(3)
-            await self._add_roles(author,["LeGeNDary™"])
+            await self._add_roles(author, ["LeGeNDary™"])
             await self.bot.say("Congratulations, you are now a **LeGeNDary™**")
         else:
             await self.bot.say("You do not have enough credits to buy this role.")
 
     @buy.command(pass_context=True, name="8")
     async def buy_8(self, ctx):
-
 
         server = ctx.message.server
         author = ctx.message.author
@@ -532,7 +563,7 @@ class shop:
             await self.bot.say("please contact @GR8#7968 to purchase it for you.")
         else:
             await self.bot.say("You do not have enough credits to buy Nitro.")
-    
+
     @buy.command(pass_context=True, name="9")
     async def buy_9(self, ctx, country):
 
@@ -544,19 +575,24 @@ class shop:
             await self.bot.say("This command can only be executed in the LeGeND Family Server")
             return
         clist = ''
-        world_cup_flare = {'russia':'🇷🇺','brazil':'🇧🇷','japan':'🇯🇵','iran':'🇮🇷','mexico':'🇲🇽','belgium':'🇧🇪','korea':'🇰🇷','saudi-arabia':'🇸🇦'
-                           ,'germany':'🇩🇪','england':'🇬🇧','spain':'🇪🇸','nigeria':'🇳🇬','costa-rica':'🇨🇷','poland':'🇵🇱','egypt':'🇪🇬','iceland':'🇮🇸'
-                           ,'serbia':'🇷🇸','portugal':'🇵🇹','france':'🇫🇷','uruguay':'🇺🇾','argentina':'🇦🇷','panama':'🇵🇦','colombia':'🇨🇴','senegal':'🇸🇳'
-                           ,'morocco':'🇲🇦','tunisia':'🇹🇳','switzerland':'🇨🇭','croatia':'🇭🇷','sweden':'🇸🇪','denmark':'🇩🇰','australia':'🇦🇺','peru':'🇵🇪'
-                          }
-        for key,value in world_cup_flare.items():
-            clist = clist + value + ' ' + key.capitalize()+ '\n'
+        world_cup_flare = {'russia': '🇷🇺', 'brazil': '🇧🇷', 'japan': '🇯🇵', 'iran': '🇮🇷',
+                           'mexico': '🇲🇽', 'belgium': '🇧🇪', 'korea': '🇰🇷', 'saudi-arabia': '🇸🇦',
+                           'germany': '🇩🇪', 'england': '🇬🇧', 'spain': '🇪🇸', 'nigeria': '🇳🇬',
+                           'costa-rica': '🇨🇷', 'poland': '🇵🇱', 'egypt': '🇪🇬', 'iceland': '🇮🇸',
+                           'serbia': '🇷🇸', 'portugal': '🇵🇹', 'france': '🇫🇷', 'uruguay': '🇺🇾',
+                           'argentina': '🇦🇷', 'panama': '🇵🇦', 'colombia': '🇨🇴', 'senegal': '🇸🇳',
+                           'morocco': '🇲🇦', 'tunisia': '🇹🇳', 'switzerland': '🇨🇭',
+                           'croatia': '🇭🇷', 'sweden': '🇸🇪', 'denmark': '🇩🇰',
+                           'australia': '🇦🇺', 'peru': '🇵🇪'}
+        for key, value in world_cup_flare.items():
+            clist = clist + value + ' ' + key.capitalize() + '\n'
         try:
-            country=world_cup_flare[country.lower()]
+            country = world_cup_flare[country.lower()]
         except KeyError:
-            await self.bot.say("**{}** is not participating in FIFA World Cup 2018, select from the following options:\n{}".format(country.upper(),clist))
+            await self.bot.say(("**{}** is not participating in FIFA World Cup 2018, "
+                                "select from the following options:\n{}".format(country.upper(), clist)))
             return
-                          
+
         try:
             await self.bot.type()
             profiletag = await self.tags.getTag(author.id)
@@ -565,7 +601,7 @@ class shop:
             if profiledata.clan is None:
                 clantag = ""
                 clanname = ""
-            else: 
+            else:
                 clantag = profiledata.clan.tag
                 clanname = profiledata.clan.name
             ign = profiledata.name
@@ -593,6 +629,7 @@ class shop:
                 await self.bot.say("I don’t have permission to change nick for this user.")
             else:
                 await self.bot.say("Nickname changed to ** {} **\n".format(newname))
-                    
+
+
 def setup(bot):
     bot.add_cog(shop(bot))

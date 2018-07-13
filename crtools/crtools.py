@@ -7,8 +7,11 @@ from cogs.utils import checks
 tags_path = "data/crtools/tags.json"
 auth_path = "data/crtools/auth.json"
 clans_path = "data/crtools/clans.json"
-default_clans = {'defualt':{'tag': '9PJYVVL2', 'role': 'everyone', 'name': 'defualt', 'nickname': 'defualt', 'discord': None, 'waiting': [], 'members': {}, 'bonustitle': '', 
-                'personalbest': 0, 'warTrophies': 0, 'approval': False, 'log_channel': None, 'warlog_channel': None, 'emoji': ''}}
+default_clans = {'defualt': {'tag': '9PJYVVL2', 'role': 'everyone', 'name': 'defualt',
+                             'nickname': 'defualt', 'discord': None, 'waiting': [], 'members': {},
+                             'bonustitle': '', 'personalbest': 0, 'warTrophies': 0, 'approval': False,
+                             'log_channel': None, 'warlog_channel': None, 'emoji': ''}}
+
 
 class tags:
     """Tags Management"""
@@ -55,6 +58,7 @@ class tags:
                     return user
         return None
 
+
 class auth:
     """RoyaleAPI key management"""
     def __init__(self):
@@ -77,6 +81,7 @@ class auth:
     def getBSToken(self):
         """Get brawlstars-api Token"""
         return self.auth['brawlstars-api']
+
 
 class clans:
     """Clan Family Management"""
@@ -234,6 +239,7 @@ class clans:
 
         return self.clans[clankey]['approval']
 
+
 class crtools:
     """Clash Royale Tools"""
     def __init__(self, bot):
@@ -273,7 +279,7 @@ class crtools:
             return
         else:
             await self.bot.say("Failed")
-    
+
     @_clans.command(pass_context=True, name="pb")
     async def clans_pb(self, ctx, clankey, pb: int):
         """Set a Personal Best requirement for a clan"""
@@ -282,8 +288,8 @@ class crtools:
             await self.clans.setPBTrophies(clankey, pb)
         except KeyError:
             await self.bot.say("Please use a valid clanname: {}".format(await self.clans.namesClans()))
-            return 
-           
+            return
+
         await self.bot.say("Success")
 
     @_clans.command(pass_context=True, name="bonus")
@@ -294,12 +300,12 @@ class crtools:
             await self.clans.setBonus(clankey, " ".join(bonus))
         except KeyError:
             await self.bot.say("Please use a valid clanname: {}".format(await self.clans.namesClans()))
-            return 
-        
-        await self.bot.say("Success")     
+            return
+
+        await self.bot.say("Success")
 
     @_clans.command(pass_context=True, name="log")
-    async def clans_log(self, ctx, clankey, channel : discord.Channel):
+    async def clans_log(self, ctx, clankey, channel: discord.Channel):
         """Set Clan's Log channel to track in's and outs"""
         clankey = clankey.lower()
         try:
@@ -319,12 +325,12 @@ class crtools:
 
         except KeyError:
             await self.bot.say("Please use a valid clanname: {}".format(await self.clans.namesClans()))
-            return 
+            return
         except discord.errors.Forbidden:
             await self.bot.say("No permission to send messages to that channel")
 
     @_clans.command(pass_context=True, name="war")
-    async def clans_warlog(self, ctx, clankey, channel : discord.Channel):
+    async def clans_warlog(self, ctx, clankey, channel: discord.Channel):
         """Set Clan's War Log channel to track wins"""
         clankey = clankey.lower()
         try:
@@ -344,10 +350,9 @@ class crtools:
 
         except KeyError:
             await self.bot.say("Please use a valid clanname: {}".format(await self.clans.namesClans()))
-            return 
+            return
         except discord.errors.Forbidden:
             await self.bot.say("No permission to send messages to that channel")
-        
 
     @_clans.command(pass_context=True, name="private")
     async def clans_private(self, ctx, clankey):
@@ -357,31 +362,35 @@ class crtools:
             await self.bot.say("Private Approval now is set to " + str(await clans.togglePrivate(clankey)))
         except KeyError:
             await self.bot.say("Please use a valid clanname: {}".format(await clans.namesClans()))
-            return 
+            return
+
 
 def check_folders():
     if not os.path.exists("data/crtools"):
         print("Creating data/crtools folder...")
         os.makedirs("data/crtools")
 
+
 def check_files():
     if not fileIO(tags_path, "check"):
         print("Creating empty tags.json...")
-        fileIO(tags_path, "save", {"0" : {"tag" : "DONOTREMOVE"}})
+        fileIO(tags_path, "save", {"0": {"tag": "DONOTREMOVE"}})
 
     if not fileIO(auth_path, "check"):
         print("enter your RoyaleAPI token in data/crtools/auth.json...")
-        fileIO(auth_path, "save", {"token" : "enter your RoyaleAPI token here!"})
+        fileIO(auth_path, "save", {"token": "enter your RoyaleAPI token here!"})
 
     if not fileIO(clans_path, "check"):
         print("Creating empty clans.json...")
         fileIO(clans_path, "save", default_clans)
+
 
 def check_auth():
     c = dataIO.load_json(auth_path)
     if 'RoyaleAPI' not in c:
         c['RoyaleAPI'] = "enter your RoyaleAPI token here!"
     dataIO.save_json(auth_path, c)
+
 
 def setup(bot):
     check_folders()

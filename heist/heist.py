@@ -21,7 +21,8 @@ from tabulate import tabulate
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
 
-BOTCOMMANDER_ROLES =  ["Family Representative", "Clan Manager", "admin", "Heist Manager", "admin"]
+BOTCOMMANDER_ROLES = ["Family Representative", "Clan Manager", "admin", "Heist Manager", "admin"]
+
 
 # Thanks stack overflow http://stackoverflow.com/questions/21872366/plural-string-formatting
 class PluralDict(dict):
@@ -253,8 +254,7 @@ class Heist:
             msg = ("Target Created.\n```Name:       {}\nGroup:      {}\nVault:      {}\nVault Max: "
                    " {}\nSuccess:    {}%```".format(string.capwords(name.content), crew.content,
                                                     vault.content, vault_max.content,
-                                                    success.content)
-                   )
+                                                    success.content))
             target_fmt = {"Crew": int(crew.content), "Vault": int(vault.content),
                           "Vault Max": int(vault_max.content), "Success": int(success.content), "player": None}
             settings["Targets"][string.capwords(name.content)] = target_fmt
@@ -529,7 +529,13 @@ class Heist:
             await self.bot.say("A {5} is being planned by {0}\nThe {4} "
                                "will begin in {1} seconds. Type ``{2}heist play`` to join their "
                                "{3}.\n"
-                               "Type ``!togglerole heist`` to get notified on the next heist.".format(author.display_name, wait_time, ctx.prefix, t_crew, t_heist, heist_role.mention))
+                               "Type ``!togglerole heist`` "
+                               "to get notified on the next heist.".format(author.display_name,
+                                                                           wait_time,
+                                                                           ctx.prefix,
+                                                                           t_crew,
+                                                                           t_heist,
+                                                                           heist_role.mention))
             await self.bot.edit_role(server, heist_role, mentionable=False)
             self.pause = False
             await asyncio.sleep(wait_time)
@@ -560,9 +566,11 @@ class Heist:
         prefix = ctx.prefix
         heist_role = discord.utils.get(server.roles, name="Heist")
         heist_channel = discord.utils.get(ctx.message.server.channels, name="heist")
+        heistPlan_channl = discord.Object(id='391382712499568641')
 
         await self.bot.edit_role(server, heist_role, mentionable=True)
-        await self.bot.send_message(discord.Object(id='391382712499568641'), "**Weekly Grand** {} is going to start in an hour.".format(heist_role.mention))
+        await self.bot.send_message(heistPlan_channl, ("**Weekly Grand** {} "
+                                                       "is going to start in an hour.".format(heist_role.mention)))
         await self.bot.edit_role(server, heist_role, mentionable=False)
 
         self.pause = True
@@ -570,14 +578,18 @@ class Heist:
         await asyncio.sleep(3000)
 
         await self.bot.edit_role(server, heist_role, mentionable=True)
-        await self.bot.send_message(discord.Object(id='391382712499568641'), "**Weekly Grand** {} is going to start in 10 minutes.".format(heist_role.mention))
+        await self.bot.send_message(heistPlan_channl, ("**Weekly Grand** {}"
+                                                       " is going to start in 10 minutes.".format(heist_role.mention)))
         await self.bot.edit_role(server, heist_role, mentionable=False)
-
 
         await asyncio.sleep(540)
 
         await self.bot.edit_role(server, heist_role, mentionable=True)
-        await self.bot.send_message(discord.Object(id='391382712499568641'), "**Weekly Grand** {} is going to start in 60 seconds. We have set the gather time to **10 minutes**, prepare and bring your friends to {}.".format(heist_role.mention, heist_channel.mention))
+        await self.bot.send_message(heistPlan_channl, ("**Weekly Grand** {} "
+                                                       "is going to start in 60 seconds. "
+                                                       "We have set the gather time to **10 minutes**, "
+                                                       "prepare and bring your friends to {}.".format(heist_role.mention,
+                                                                                                     heist_channel.mention)))
         await self.bot.edit_role(server, heist_role, mentionable=False)
 
         await asyncio.sleep(60)
@@ -594,7 +606,13 @@ class Heist:
         await self.bot.say("A Weekly GRAND {5} is being planned.\nThe {4} "
                            "will begin in 10 minutes. Type ``{2}heist play`` to join the "
                            "{3}.\n"
-                           "Type ``!togglerole heist`` to get notified on the next Grand Heist.".format(author.display_name, wait_time, ctx.prefix, t_crew, t_heist, heist_role.mention))
+                           "Type ``!togglerole heist`` "
+                           "to get notified on the next Grand Heist.".format(author.display_name,
+                                                                             wait_time,
+                                                                             ctx.prefix,
+                                                                             t_crew,
+                                                                             t_heist,
+                                                                             heist_role.mention))
         await self.bot.edit_role(server, heist_role, mentionable=False)
 
         self.pause = False
@@ -854,7 +872,7 @@ class Heist:
         channel = server.get_channel("381338682298466315")
 
         if channel is not None:
-            perm = discord.PermissionOverwrite(send_messages = False, read_messages = False)
+            perm = discord.PermissionOverwrite(send_messages=False, read_messages=False)
             await self.bot.edit_channel_permissions(channel, server.default_role, perm)
 
         await self.bot.say("Get ready! The {} is starting with {}\nThe {} has decided to "
@@ -875,7 +893,7 @@ class Heist:
         self.save_system()
 
         if channel is not None:
-            perm = discord.PermissionOverwrite(send_messages = None, read_messages = False)
+            perm = discord.PermissionOverwrite(send_messages=None, read_messages=False)
             await self.bot.edit_channel_permissions(channel, server.default_role, perm)
 
         await self.bot.say(msg)
@@ -913,7 +931,7 @@ class Heist:
             settings["Targets"][target]["Vault"] -= credits_stolen * len(settings["Crew"])
         else:
             bank = self.bot.get_cog('Economy').bank
-            user = discord.utils.get(server.members, id = settings["Targets"][target]["Player"])
+            user = discord.utils.get(server.members, id=settings["Targets"][target]["Player"])
 
             bank.withdraw_credits(user, credits_stolen * len(settings["Crew"]))
 
@@ -1281,13 +1299,13 @@ class Heist:
         bank = self.bot.get_cog('Economy').bank
 
         bank_sorted = sorted(bank.get_server_accounts(server), key=lambda x: x.balance, reverse=True)
-        bank_sorted = [a for a in bank_sorted if a.member] #  exclude users who left
+        bank_sorted = [a for a in bank_sorted if a.member]  # exclude users who left
 
         topBank = bank_sorted[:1]
 
         target_fmt = {
             "Name": "{}’s Bank".format(topBank[0].member.display_name.split('|', 1)[0]),
-            "Crew": 50, 
+            "Crew": 50,
             "Vault": topBank[0].balance,
             "Vault Max": topBank[0].balance,
             "Success": 2,
@@ -1295,7 +1313,6 @@ class Heist:
         }
         settings["Targets"]["Player Bank"] = target_fmt
         self.save_system()
-
 
     # =========== Commission hooks =====================
 
@@ -1322,7 +1339,7 @@ class Heist:
             self.save_system()
             msg = ("{} casted :trident: `resurrection` :trident: on {} and returned them "
                    "to the living.".format(author.display_name, user.display_name))
-            action = "True" 
+            action = "True"
         else:
             msg = "Cast failed. {} is still alive.".format(user.display_name)
             action = None

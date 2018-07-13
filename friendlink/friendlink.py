@@ -10,8 +10,9 @@ import clashroyale
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
 
+
 class friendlink:
-    """friendlink!"""
+    """Automatically convert Clash Royale friend links to beautiful embeds"""
 
     def __init__(self, bot):
         self.bot = bot
@@ -49,14 +50,16 @@ class friendlink:
 
             arenaFormat = profiledata.arena.arena.replace(' ', '').lower()
 
-            embed=discord.Embed(title='Click this link to add as friend in Clash Royale!', url=url[0], color=0x0080ff)
+            embed = discord.Embed(title='Click this link to add as friend in Clash Royale!', url=url[0], color=0x0080ff)
             embed.set_author(name=profiledata.name + " (#"+profiledata.tag+")", icon_url=clanurl)
             embed.set_thumbnail(url="https://imgur.com/C9rLoeh.jpg")
             embed.add_field(name="User", value=message.author.mention, inline=True)
             embed.add_field(name="Trophies", value="{} {:,}".format(self.emoji(arenaFormat), profiledata.trophies), inline=True)
             embed.add_field(name="Level", value="{} {}".format(self.emoji("level"), profiledata.stats.level), inline=True)
             if profiledata.clan is not None:
-                embed.add_field(name="Clan {}".format(profiledata.clan.role.capitalize()), value="{} {}".format(self.emoji("clan"), profiledata.clan.name), inline=True)
+                embed.add_field(name="Clan {}".format(profiledata.clan.role.capitalize()),
+                                value="{} {}".format(self.emoji("clan"), profiledata.clan.name),
+                                inline=True)
             embed.set_footer(text=credits, icon_url=creditIcon)
 
             await self.bot.send_message(message.channel, embed=embed)
@@ -79,6 +82,7 @@ class friendlink:
             return
 
         await self.friend_link(message)
+
 
 def setup(bot):
     bot.add_cog(friendlink(bot))

@@ -15,12 +15,11 @@ try:
 except Exception as e:
     raise RuntimeError("You must run `pip3 install tabulate`.") from e
 
-
 PATH = 'data/fmod/'
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
 
-#stuff for mute time
+# stuff for mute time
 UNIT_TABLE = {'s': 1, 'm': 60, 'h': 60 * 60, 'd': 60 * 60 * 24}
 UNIT_SUF_TABLE = {'sec': (1, ''),
                   'min': (60, ''),
@@ -28,8 +27,10 @@ UNIT_SUF_TABLE = {'sec': (1, ''),
                   'day': (60 * 60 * 24, 's')
                   }
 
+
 class BadTimeExpr(Exception):
     pass
+
 
 def _parse_time(time):
     if any(u in time for u in UNIT_TABLE.keys()):
@@ -39,6 +40,8 @@ def _parse_time(time):
     elif not time.isdigit():
         raise BadTimeExpr("invalid expression '%s'" % time)
     return int(time)
+
+
 def _timespec_sec(t):
     timespec = t[-1]
     if timespec.lower() not in UNIT_TABLE:
@@ -63,6 +66,7 @@ def _generate_timespec(sec):
         sec = sec % secs
     return ', '.join(timespec)
 
+
 class fmod:
     """A feature packed cog for moderation"""
 
@@ -71,9 +75,9 @@ class fmod:
         self.settings = "data/fmod/settings.json"
         self.settingsload = dataIO.load_json(self.settings)
         self.warnings = "data/fmod/warnings.json"
-        self.warningsload = dataIO.load_json(self.warnings)   
-        self.handles = {}        
-        
+        self.warningsload = dataIO.load_json(self.warnings)
+        self.handles = {}
+
     @commands.command(no_pm=True, pass_context=True)
     @checks.admin()
     async def setup(self, ctx):
@@ -82,114 +86,165 @@ class fmod:
         channel = await self.bot.start_private_message(user)
         server = ctx.message.server
         if server.id in self.settingsload:
-            await self.bot.send_message(channel, "You currently have data saved. If you would like to change settings please use the `[p]settings` command.")
+            await self.bot.send_message(channel, "You currently have data saved. "
+                                                 "If you would like to change settings "
+                                                 "please use the `[p]settings` command.")
             return
         else:
             questions = {
                             'Warn Message': None,
-                            'Ban Message': None, 
-                            'Warn Limit' : None,
-                            'Log Channel' : None,
-                            'Mute Time' : None,
-                            'Mute Role' : None,
-                            'Denied Role' : None,
-                            'Denied Channel' : None,
-                            'DM Warn' : None,
-                            'Punishment Roles' : None,
-                            'Revoke Message' : None
+                            'Ban Message': None,
+                            'Warn Limit': None,
+                            'Log Channel': None,
+                            'Mute Time': None,
+                            'Mute Role': None,
+                            'Denied Role': None,
+                            'Denied Channel': None,
+                            'DM Warn': None,
+                            'Punishment Roles': None,
+                            'Revoke Message': None
                         }
-            embed = discord.Embed(description = "Welcome to the setup for the fmod cog! You can stop the setup at any time by typing `stop`. By doing this you will CANCEL any information given.\n\n*When you are ready to begin type `start`.*") 
-            embedmsg = await self.bot.send_message(channel, embed = embed)
-            ready = await self.bot.wait_for_message(channel=channel, author=ctx.message.author, content = 'start')
-         
+            embed = discord.Embed(description="Welcome to the setup for the fmod cog! "
+                                              "You can stop the setup at any time by typing `stop`. "
+                                              "By doing this you will CANCEL any information given.\n\n"
+                                              "*When you are ready to begin type `start`.*")
+            embedmsg = await self.bot.send_message(channel, embed=embed)
+            ready = await self.bot.wait_for_message(channel=channel, author=ctx.message.author, content='start')
+
             for a in questions:
-                embed = discord.Embed(description = "Welcome to the setup for the fmod cog! You can stop the setup at any time by typing `stop`. *By doing this you will CANCEL any information given.*") 
+                embed = discord.Embed(description="Welcome to the setup for the fmod cog! "
+                                                  "You can stop the setup at any time by typing `stop`. "
+                                                  "*By doing this you will CANCEL any information given.*")
                 if a == 'Warn Message':
-                    embed.add_field(name="~~~~", value="**Warn Message** - The message that is sent to the user when they are warned. You can use the following arguments in the message:\n\n```user.mention - mentions the user\nuser.name   - names the user\nuser.id     - gets id of user\nwarn.count  - gets the # of this warn\nwarn.limit  - # of warns allowed```\n\n*Please type your message*", inline = False)
+                    embed.add_field(name="~~~~",
+                                    value="**Warn Message** - "
+                                          "The message that is sent to the user when they are warned. "
+                                          "You can use the following arguments in the message:\n\n"
+                                          "```user.mention - mentions the user\n"
+                                          "user.name   - names the user\n"
+                                          "user.id     - gets id of user\n"
+                                          "warn.count  - gets the # of this warn\n"
+                                          "warn.limit  - # of warns allowed```\n\n"
+                                          "*Please type your message*", inline=False)
                 if a == 'Ban Message':
-                    embed.add_field(name="~~~~", value="**Ban Message** - The message that is sent to the user when they are banned.\n\n*Please type your message*", inline = False)
+                    embed.add_field(name="~~~~",
+                                    value="**Ban Message** - "
+                                         "The message that is sent to the user when they are banned.\n\n"
+                                         "*Please type your message*", inline=False)
                 if a == 'Warn Limit':
-                    embed.add_field(name="~~~~", value="**Warn Limit** - The number of warnings before a user is banned.\n\n*Please type the warning number*", inline = False)
+                    embed.add_field(name="~~~~",
+                                    value="**Warn Limit** - "
+                                          "The number of warnings before a user is banned.\n\n"
+                                          "*Please type the warning number*", inline=False)
                 if a == 'Log Channel':
-                    embed.add_field(name="~~~~", value="**Log Channel** - The channel where warnings are logged into.\n\n*Please type the channel name*", inline = False)
+                    embed.add_field(name="~~~~",
+                                    value="**Log Channel** - "
+                                          "The channel where warnings are logged into.\n\n"
+                                          "*Please type the channel name*", inline=False)
                 if a == 'Mute Time':
-                    embed.add_field(name="~~~~", value="**Mute Time** - How long a user is muted for on reaching their first warning.\n\n*Please type the mute time with the relevant time format. (*For minutes 'm', for hours 'h'*)*", inline = False)
+                    embed.add_field(name="~~~~",
+                                    value="**Mute Time** - "
+                                          "How long a user is muted for on reaching their first warning.\n\n"
+                                          "*Please type the mute time with the relevant time format. "
+                                          "(*For minutes 'm', for hours 'h'*)*", inline=False)
                 if a == 'Mute Role':
-                    embed.add_field(name="~~~~", value="**Mute Role** - The name of the muted role.\n\n*Please type the name of the mute role*", inline = False)
+                    embed.add_field(name="~~~~",
+                                    value="**Mute Role** - "
+                                          "The name of the muted role.\n\n"
+                                          "*Please type the name of the mute role*", inline=False)
                 if a == 'Denied Channel':
-                    embed.add_field(name="~~~~", value="**Denied Channel** - The channel the user will be denied access to on using the [p]deny command.\n\n*Please type the channel name.*", inline = False)
+                    embed.add_field(name="~~~~",
+                                    value="**Denied Channel** - "
+                                          "The channel the user will be denied access to on using the [p]deny command.\n\n"
+                                          "*Please type the channel name.*", inline=False)
                 if a == 'Denied Role':
-                    embed.add_field(name="~~~~", value="**Denied Role** - The name of the denied role used for disabling access to the denied channel.\n\n*Please type the role name*", inline = False)
+                    embed.add_field(name="~~~~",
+                                    value="**Denied Role** - "
+                                          "The name of the denied role used for disabling access to the denied channel.\n\n"
+                                          "*Please type the role name*", inline=False)
                 if a == 'Revoke Message':
-                    embed.add_field(name="~~~~", value="**Revoke Message** - The message sent when a warning is revoked from a user.\n\n*Please type the message*", inline = False)
+                    embed.add_field(name="~~~~",
+                                    value="**Revoke Message** - "
+                                           "The message sent when a warning is revoked from a user.\n\n"
+                                           "*Please type the message*", inline=False)
                 if a == 'DM Warn':
-                    embed.add_field(name="~~~~", value="**DM Warn** - Choose if you want warnings to be sent via PM or posted in the channel the warning was executed in.\n\nReply with `true` or `false`", inline = False)
+                    embed.add_field(name="~~~~",
+                                    value="**DM Warn** - "
+                                          "Choose if you want warnings to be sent via PM or posted "
+                                          "in the channel the warning was executed in.\n\n"
+                                          "Reply with `true` or `false`", inline=False)
                 if a == 'Punishment Roles':
-                    embed.add_field(name="~~~~", value="**Punishment Roles** - Choose if you want punishment roles to be added for each warning. (Eg. For 1 warning would have a role with 1 hammer inside. \n\nReply with `true` or `false`", inline = False)
-                                       
+                    embed.add_field(name="~~~~",
+                                    value="**Punishment Roles** - "
+                                          "Choose if you want punishment roles to be added for each warning. "
+                                          "(Eg. For 1 warning would have a role with 1 hammer inside. \n\n"
+                                          "Reply with `true` or `false`", inline=False)
+
                 await self.bot.edit_message(embedmsg, embed=embed)
                 answer = await self.bot.wait_for_message(channel=channel, author=ctx.message.author)
                 if 'stop' in answer.content:
                     await self.bot.send_message(channel, "Stopping....")
                     break
-                else:                            
-                    while 'Time' in a:                    
+                else:
+                    while 'Time' in a:
                         if "m" in answer.content or "s" in answer.content or "h" in answer.content:
-                                questions.update({a : answer.content})
+                                questions.update({a: answer.content})
                                 break
                         else:
-                            await self.bot.send_message(channel, "You've done something wrong! Please make sure that the format is correct!")
+                            await self.bot.send_message(channel, "You've done something wrong! "
+                                                                 "Please make sure that the format is correct!")
                             answer = await self.bot.wait_for_message(channel=channel, author=ctx.message.author)
 
-                    while 'Limit' in a:                    
-                        if answer.content.isdigit() == True:
-                            questions.update({a : answer.content})
+                    while 'Limit' in a:
+                        if answer.content.isdigit():
+                            questions.update({a: answer.content})
                             break
                         else:
                             await self.bot.send_message(channel, "Please enter a number!")
                             answer = await self.bot.wait_for_message(channel=channel, author=ctx.message.author)
+
                     while 'Channel' in a:
                         channelcheck = answer.content
-                        chancheck = discord.utils.get(server.channels, name = channelcheck)
+                        chancheck = discord.utils.get(server.channels, name=channelcheck)
                         if chancheck is not None:
-                            questions.update({a : answer.content})
+                            questions.update({a: answer.content})
                             break
                         else:
                             await self.bot.send_message(channel, "Please enter a valid channel name!")
-                            answer = await self.bot.wait_for_message(channel=channel, author=ctx.message.author)   
+                            answer = await self.bot.wait_for_message(channel=channel, author=ctx.message.author)
 
                     while 'DM' in a or 'Punishment' in a:
                         answering = answer.content
-                        if 'true' in answering.lower(): 
-                            questions.update({a : True})
-                            break                                
-                        
+                        if 'true' in answering.lower():
+                            questions.update({a: True})
+                            break
                         if 'false' in answering.lower():
-                            questions.update({a : False})
+                            questions.update({a: False})
                             break
                         else:
                             await self.bot.send_message(channel, "Please enter True or False.")
-                            answer = await self.bot.wait_for_message(channel=channel, author=ctx.message.author)   
-                            
-                    while 'Denied Role' in a or 'Mute Role' in a:                               
+                            answer = await self.bot.wait_for_message(channel=channel, author=ctx.message.author)
+
+                    while 'Denied Role' in a or 'Mute Role' in a:
                         rolecheck = answer.content
-                        rolcheck = discord.utils.get(server.roles, name = rolecheck)
+                        rolcheck = discord.utils.get(server.roles, name=rolecheck)
                         if rolcheck is not None:
-                            questions.update({a : answer.content})
+                            questions.update({a: answer.content})
                             break
                         else:
-                            await self.bot.send_message(channel, "Please enter a valid role name!")            
+                            await self.bot.send_message(channel, "Please enter a valid role name!")
                             answer = await self.bot.wait_for_message(channel=channel, author=ctx.message.author)
+
                     while 'Message' in a:
-                        questions.update({a : answer.content})
+                        questions.update({a: answer.content})
                         break
                     else:
-                        questions.update({a : answer.content})
+                        questions.update({a: answer.content})
 
             if not any(x is None for x in questions.values()):
                 self.settingsload[server.id] = questions
                 dataIO.save_json(self.settings, self.settingsload)
-                if 'true' in self.settingsload[server.id]['DM Warn']: 
+                if 'true' in self.settingsload[server.id]['DM Warn']:
                     self.settingsload[server.id]['DM Warn'] = True
                 else:
                     self.settingsload[server.id]['DM Warn'] = False
@@ -202,26 +257,26 @@ class fmod:
                 await self.currentsettings(ctx, channel, server)
             else:
                 pass
-    async def currentsettings(self, ctx, channel, server): 
+    async def currentsettings(self, ctx, channel, server):
         jsonload = self.settingsload[server.id]
         message = "```\n"
         message += "Warn Message: {Warn Message},\n"
-        message += "Ban Message: {Ban Message},\n" 
-        message += "Warn Limit : {Warn Limit}, \n"
-        message += "Log Channel : {Log Channel}, \n"
-        message += "Mute Time : {Mute Time}, \n"
-        message += "Mute Role : {Mute Role},\n"
-        message += "Denied Role : {Denied Role},\n"
-        message += "Denied Channel : {Denied Channel},\n"
-        message += "Revoke Message : {Revoke Message},\n"
-        message += "DM Warn : {DM Warn},\n"  
-        message += "Punishment Roles : {Punishment Roles}"                         
+        message += "Ban Message: {Ban Message},\n"
+        message += "Warn Limit: {Warn Limit}, \n"
+        message += "Log Channel: {Log Channel}, \n"
+        message += "Mute Time: {Mute Time}, \n"
+        message += "Mute Role: {Mute Role},\n"
+        message += "Denied Role: {Denied Role},\n"
+        message += "Denied Channel: {Denied Channel},\n"
+        message += "Revoke Message: {Revoke Message},\n"
+        message += "DM Warn: {DM Warn},\n"
+        message += "Punishment Roles: {Punishment Roles}"
         message += "```"
         await self.bot.send_message(channel, message.format(**jsonload))
-           
+
     @commands.group(no_pm=True, pass_context=True, name='settings')
-    @checks.admin() 
-    async def _settings(self,ctx):
+    @checks.admin()
+    async def _settings(self, ctx):
         """Sets individual settings for the cog"""
         channel = ctx.message.channel
         server = ctx.message.server
@@ -232,12 +287,12 @@ class fmod:
         if ctx.invoked_subcommand is None:
             await send_cmd_help(ctx)
             await self.currentsettings(ctx, channel, server)
-            
+
     @_settings.command(no_pm=True, pass_context=True, manage_server=True)
     async def muterole(self, ctx, rolename: str):
         """Change the mute role name."""
         server = ctx.message.server
-        
+
         self.settingsload[server.id]["Mute Role"] = rolename
         dataIO.save_json(self.settings,
                          self.settingsload)
@@ -248,19 +303,20 @@ class fmod:
         """Resets all the settings"""
         server = ctx.message.server
         await self.bot.say("Are you sure you want to reset the settings? Type `yes` to confirm.")
-        await self.bot.wait_for_message(channel = ctx.message.channel, author = ctx.message.author, content = 'yes')
+        await self.bot.wait_for_message(channel=ctx.message.channel, author=ctx.message.author, content='yes')
         del self.settingsload[server.id]
         dataIO.save_json(self.settings,
                          self.settingsload)
         await self.bot.say("Settings have been cleared!")
-    
+
     @_settings.command(no_pm=True, pass_context=True, manage_server=True)
     async def mutetime(self, ctx):
         """Change the mute time for the first warning"""
         server = ctx.message.server
-        
-        await self.bot.say("Please make sure to set the time with the correct time prefix at the end. (*For minutes 'm', for hours 'h'*)\n\nPlease type your timeframe now.")
-        muteroletime = await self.bot.wait_for_message(channel = ctx.message.channel, author = ctx.message.author)
+
+        await self.bot.say("Please make sure to set the time with the correct time prefix at the end. "
+                           "(*For minutes 'm', for hours 'h'*)\n\nPlease type your timeframe now.")
+        muteroletime = await self.bot.wait_for_message(channel=ctx.message.channel, author=ctx.message.author)
 
         if "m" in muteroletime.content or "s" in muteroletime.content or "h" in muteroletime.content:
             self.settingsload[server.id]["Mute Time"] = muteroletime.content
@@ -270,7 +326,6 @@ class fmod:
         else:
             await self.bot.say("You've done something wrong! Please make sure that the format is correct!")
             return
-           
 
     @_settings.command(no_pm=True, pass_context=True, manage_server=True)
     async def logchannel(self, ctx, channel: str):
@@ -281,7 +336,7 @@ class fmod:
         dataIO.save_json(self.settings,
                          self.settingsload)
         await self.bot.say("Log channel is now: **{}**".format(channel))
-            
+
     @_settings.command(no_pm=True, pass_context=True, manage_server=True)
     async def deniedchannel(self, ctx, channel: str):
         """Change the channel for those that have been denied."""
@@ -290,7 +345,8 @@ class fmod:
         self.settingsload[server.id]["Denied Channel"] = channel
         dataIO.save_json(self.settings,
                          self.settingsload)
-        await self.bot.say("Mute channel is now: **{}**".format(channel))            
+        await self.bot.say("Mute channel is now: **{}**".format(channel))
+
     @_settings.command(no_pm=True, pass_context=True, manage_server=True)
     async def pm(self, ctx):
         """Enable/disable PM warn"""
@@ -306,7 +362,7 @@ class fmod:
             self.settingsload[server.id]['DM Warn'] = True
             await self.bot.say("Warnings are now in DM.")
         dataIO.save_json(self.settings,
-                 self.settingsload)
+                         self.settingsload)
 
     @_settings.command(no_pm=True, pass_context=True, manage_server=True)
     async def punishrole(self, ctx):
@@ -317,10 +373,10 @@ class fmod:
         if 'Punishment Roles' not in self.settingsload[server.id]:
             self.settingsload[server.id]['Punishment Roles'] = True
             msg = true_msg
-        elif self.settingsload[server.id]['Punishment Roles'] == True:
+        elif self.settingsload[server.id]['Punishment Roles']:
             self.settingsload[server.id]['Punishment Roles'] = False
             msg = false_msg
-        elif self.settingsload[server.id]['Punishment Roles'] == False:
+        elif not self.settingsload[server.id]['Punishment Roles']:
             self.settingsload[server.id]['Punishment Roles'] = True
             msg = true_msg
         else:
@@ -355,7 +411,7 @@ class fmod:
         dataIO.save_json(self.settings,
                          self.settingsload)
         await self.bot.say("Revoke message is now: \n{}".format(msg))
-        
+
     @_settings.command(no_pm=True, pass_context=True)
     @checks.admin_or_permissions(ban_members=True, manage_server=True)
     async def ban(self, ctx, *, msg=None):
@@ -371,7 +427,7 @@ class fmod:
         dataIO.save_json(self.settings,
                          self.settingsload)
         await self.bot.say("Ban message is now: \n{}".format(msg))
-        
+
     @_settings.command(no_pm=True, pass_context=True)
     @checks.admin_or_permissions(ban_members=True, manage_server=True)
     async def message(self, ctx, *, msg=None):
@@ -427,14 +483,15 @@ class fmod:
         msg = msg.replace("warn.limit",
                           str(_max))
         return msg
+
     async def embedlog(self, mod, user, reason, countnum, channel, ID, warntype):
         avatar = user.avatar_url if user.avatar else user.default_avatar_url
         if warntype == 'denied':
-            embed=discord.Embed(title="User Denied", color=0xfd9e11)
+            embed = discord.Embed(title="User Denied", color=0xfd9e11)
         elif warntype == 'Ban':
-            embed=discord.Embed(title="User Banned", color=0xf01e1e)
+            embed = discord.Embed(title="User Banned", color=0xf01e1e)
         else:
-            embed=discord.Embed(title="User Warned", color=0xfd9e11)
+            embed = discord.Embed(title="User Warned", color=0xfd9e11)
         embed.set_thumbnail(url=avatar)
         embed.add_field(name="Case ID:", value=ID, inline=False)
         embed.add_field(name="User:", value=user, inline=False)
@@ -448,7 +505,7 @@ class fmod:
         await self.bot.add_reaction(react, "\U0001f937")
         global msgid
         msgid = react.id
-    
+
     @commands.command(no_pm=True, pass_context=True)
     @checks.mod()
     async def warn(self, ctx, user: discord.Member, *, reason: str=None):
@@ -480,88 +537,81 @@ class fmod:
         mutetime = self.settingsload[server.id]['Mute Time']
         msg = self.settingsload[server.id]["Warn Message"]
         ban = self.settingsload[server.id]["Ban Message"]
-        
+
         if server.id not in self.warningsload:
             self.warningsload[server.id] = {}
-            dataIO.save_json(self.warnings,
-                             self.warningsload)
+            dataIO.save_json(self.warnings, self.warningsload)
             if user.id not in self.warningsload[server.id]:
                 self.warningsload[server.id][user.id] = {}
-                dataIO.save_json(self.warnings,
-                                 self.warningsload)
+                dataIO.save_json(self.warnings, self.warningsload)
             else:
                 pass
         else:
             if user.id not in self.warningsload[server.id]:
                 self.warningsload[server.id][user.id] = {}
-                dataIO.save_json(self.warnings,
-                                 self.warningsload)
+                dataIO.save_json(self.warnings, self.warningsload)
             else:
                 pass
-                
+
         if "Count" in self.warningsload[server.id][user.id]:
             count = self.warningsload[server.id][user.id]["Count"]
         else:
-            count = 0   
+            count = 0
         if "ID" in self.warningsload[server.id]:
             ID = self.warningsload[server.id]["ID"]
         else:
-            ID = 10000  
+            ID = 10000
         logchannel = self.settingsload[server.id]["Log Channel"]
-        channel = discord.utils.get(server.channels, name = logchannel)
+        channel = discord.utils.get(server.channels, name=logchannel)
         if channel is None:
-            msg = await self.bot.say ("I was unable to write to your log channel. Please make sure there is a channel called {} on the server!".format(logchannel))
+            msg = await self.bot.say("I was unable to write to your log channel. "
+                                     "Please make sure there is a channel called {} on the server!".format(logchannel))
             return
         else:
             pass
-        max = int(_max)    
-        #checks for warn number    
+        max = int(_max)
+        # checks for warn number
         if count == 0:
             count += 1
             self.warningsload[server.id][user.id].update({"Count": count})
-            dataIO.save_json(self.warnings,
-                             self.warningsload)
+            dataIO.save_json(self.warnings, self.warningsload)
             msg = await self.filter_message(msg=msg,
                                             user=user,
                                             count=count,
                                             _max=_max)
             data = discord.Embed(title=server.name, color=0xfd9e11)
-            data.add_field(name="Warning",
-                           value=msg)
-            data.add_field(name="Reason:",
-                               value=reason,
-                               inline=False)
-            data.add_field(name="​​Additional Actions:", value="*In addition to this you have been muted for {} as a result of your actions.*".format(mutetime), inline=False)
+            data.add_field(name="Warning", value=msg)
+            data.add_field(name="Reason:", value=reason, inline=False)
+            data.add_field(name="​​Additional Actions:",
+                           value="*In addition to this you have been muted for {} as a result of your actions.*".format(mutetime),
+                           inline=False)
             data.set_footer(text=credits, icon_url=creditIcon)
             if p:
-                #if dm is on
+                # if dm is on
                 await self.bot.send_message(user, embed=data)
-                await self.bot.say("Done...")   
+                await self.bot.say("Done...")
             elif not p:
-                #if dm is not on
+                # if dm is not on
                 await self.bot.say(embed=data)
-            #run and log
+            # run and log
             _max = int(_max)
-            countnum = "{}/{}".format(count,_max)
+            countnum = "{}/{}".format(count, _max)
             mod = ctx.message.author
             if 'ID' not in self.warningsload[server.id]:
                 self.warningsload[server.id].update({'ID': ID})
-                dataIO.save_json(self.warnings,
-                             self.warningsload)
+                dataIO.save_json(self.warnings, self.warningsload)
             else:
                 ID = int(ID)+12
                 ID = str(ID)
                 self.warningsload[server.id].update({'ID': ID})
-                dataIO.save_json(self.warnings,
-                             self.warningsload)
+                dataIO.save_json(self.warnings, self.warningsload)
             await self._punish_cmd_common(ctx, user, reason=reason)
             await self.embedlog(mod, user, reason, countnum, channel, ID, warntype=True)
-            #msgid = ctx.message.id
             if 'Warnings' in self.warningsload[server.id][user.id]:
                 pass
             else:
                 self.warningsload[server.id][user.id]['Warnings'] = {}
-                dataIO.save_json(self.warnings, self.warningsload) 
+                dataIO.save_json(self.warnings, self.warningsload)
             self.warningsload[server.id][user.id]["Warnings"][ID] = {
                                         'User': user.id,
                                         'Mod': mod.id,
@@ -569,15 +619,11 @@ class fmod:
                                         'Warning Number': countnum,
                                         'Message ID': msgid
                                     }
-            dataIO.save_json(self.warnings,
-                 self.warningsload) 
-            
-       
+            dataIO.save_json(self.warnings, self.warningsload)
         elif count > 0 and count < max -1:
             count += 1
             self.warningsload[server.id][user.id].update({"Count": count})
-            dataIO.save_json(self.warnings,
-                             self.warningsload)
+            dataIO.save_json(self.warnings, self.warningsload)
             msg = await self.filter_message(msg=msg,
                                             user=user,
                                             count=count,
@@ -585,37 +631,33 @@ class fmod:
             data = discord.Embed(title=server.name, color=0xfd9e11)
             data.add_field(name="Warning",
                            value=msg)
-            data.add_field(name="Reason:",
-                               value=reason,
-                               inline=False)
+            data.add_field(name="Reason:", value=reason, inline=False)
             data.set_footer(text=credits, icon_url=creditIcon)
             if p:
-                #if dm is on
-                await self.bot.send_message(user, embed=data) 
-                await self.bot.say("Done...")    
+                # if dm is on
+                await self.bot.send_message(user, embed=data)
+                await self.bot.say("Done...")
             elif not p:
-                #if dm is not on
+                # if dm is not on
                 await self.bot.say(embed=data)
-        #run and log
-            max = int(_max)  
-            countnum = "{}/{}".format(count,_max)
+            # run and log
+            max = int(_max)
+            countnum = "{}/{}".format(count, _max)
             mod = ctx.message.author
             if 'ID' not in self.warningsload[server.id]:
                 self.warningsload[server.id].update({'ID': ID})
-                dataIO.save_json(self.warnings,
-                             self.warningsload)
+                dataIO.save_json(self.warnings, self.warningsload)
             else:
                 ID = int(ID)+12
                 ID = str(ID)
                 self.warningsload[server.id].update({'ID': ID})
-                dataIO.save_json(self.warnings,
-                             self.warningsload)
+                dataIO.save_json(self.warnings, self.warningsload)
             await self.embedlog(mod, user, reason, countnum, channel, ID, warntype=True)
             if 'Warnings' in self.warningsload[server.id][user.id]:
                 pass
             else:
                 self.warningsload[server.id][user.id]['Warnings'] = {}
-                dataIO.save_json(self.warnings, self.warningsload) 
+                dataIO.save_json(self.warnings, self.warningsload)
             self.warningsload[server.id][user.id]["Warnings"][ID] = {
                                         'User': user.id,
                                         'Mod': mod.id,
@@ -623,9 +665,7 @@ class fmod:
                                         'Warning Number': countnum,
                                         'Message ID': msgid
                                     }
-            dataIO.save_json(self.warnings,
-                 self.warningsload) 
-                 
+            dataIO.save_json(self.warnings, self.warningsload)
         else:
             msg = ban
             msg = await self.filter_message(msg=msg,
@@ -633,39 +673,34 @@ class fmod:
                                             count=count,
                                             _max=_max)
             data = discord.Embed(title=server.name, color=0xf01e1e)
-            data.add_field(name="Banned",
-                           value=msg)
-            data.add_field(name="Reason:",
-                               value=reason,
-                               inline=False)
+            data.add_field(name="Banned", value=msg)
+            data.add_field(name="Reason:", value=reason, inline=False)
             data.set_footer(text=credits, icon_url=creditIcon)
             if p:
-                #if dm is on
+                # if dm is on
                 await self.bot.send_message(user, embed=data)
-                await self.bot.say("Max warning reached, user banned.")    
+                await self.bot.say("Max warning reached, user banned.")
             elif not p:
-                #if dm is not on
+                # if dm is not on
                 await self.bot.say(embed=data)
-        #run and log
+        # run and log
             countnum = "Banned"
             mod = ctx.message.author
             if 'ID' not in self.warningsload[server.id]:
                 self.warningsload[server.id].update({'ID': ID})
-                dataIO.save_json(self.warnings,
-                             self.warningsload)
+                dataIO.save_json(self.warnings, self.warningsload)
             else:
                 ID = int(ID)+12
                 ID = str(ID)
                 self.warningsload[server.id].update({'ID': ID})
-                dataIO.save_json(self.warnings,
-                             self.warningsload)
+                dataIO.save_json(self.warnings, self.warningsload)
             await self.embedlog(mod, user, reason, countnum, channel, ID, warntype='Ban')
-            #msgid = ctx.message.id
+
             if 'Warnings' in self.warningsload[server.id][user.id]:
                 pass
             else:
                 self.warningsload[server.id][user.id]['Warnings'] = {}
-                dataIO.save_json(self.warnings, self.warningsload) 
+                dataIO.save_json(self.warnings, self.warningsload)
             self.warningsload[server.id][user.id]['Warnings'][ID] = {
                                         'User': user.id,
                                         'Mod': mod.id,
@@ -673,14 +708,13 @@ class fmod:
                                         'Warning Number': countnum,
                                         'Message ID': msgid
                                     }
-            dataIO.save_json(self.warnings,
-                 self.warningsload) 
+            dataIO.save_json(self.warnings, self.warningsload)
             try:
                 await self.bot.ban(user, delete_message_days=0)
             except discord.errors.Forbidden:
                 await self.bot.say("I don't have permissions to ban that user.")
         if 'Punishment Roles' in self.settingsload[server.id] and can_role:
-            if self.settingsload[server.id]['Punishment Roles'] == True:
+            if self.settingsload[server.id]['Punishment Roles']:
                 poops = count * "\U0001f528"
                 role_name = "Warning {}".format(poops)
                 is_there = False
@@ -699,16 +733,16 @@ class fmod:
                                              poop_role)
                 except discord.errors.Forbidden:
                     await self.bot.say("No permission to add roles")
-    
+
     async def setup_channel(self, channel, role):
         perms = discord.PermissionOverwrite()
-        
+
         if channel.type == discord.ChannelType.text:
             perms.send_messages = False
         elif channel.type == discord.ChannelType.voice:
             perms.speak = False
 
-        await self.bot.edit_channel_permissions(channel, role, overwrite=perms)            
+        await self.bot.edit_channel_permissions(channel, role, overwrite=perms)
     async def _punish_cmd_common(self, ctx, member, reason):
         server = ctx.message.server
         mutetime = self.settingsload[server.id]["Mute Time"]
@@ -718,7 +752,7 @@ class fmod:
             return False
         rolename = self.settingsload[server.id]['Mute Role']
         role = discord.utils.get(server.roles, name=rolename)
-        
+
         if role is None:
             await self.bot.say("Please make sure the role {} exists!".format(role))
             return
@@ -727,7 +761,7 @@ class fmod:
             await self.bot.say('The %s role is too high for me to manage.' % role)
             return
         self.warningsload[server.id][member.id]['User Muted'] = {}
-        dataIO.save_json(self.warnings, self.warningsload) 
+        dataIO.save_json(self.warnings, self.warningsload)
         self.warningsload[server.id][member.id]['User Muted'] = {
             'Action': 'Muted',
             'until': (time.time() + duration),
@@ -736,7 +770,7 @@ class fmod:
         }
         dataIO.save_json(self.warnings, self.warningsload)
         perms = discord.Permissions.none()
-        
+
         if role is None:
             role = await self.bot.edit_role(server, role, permissions=perms)
             await self.bot.move_role(server, role, server.me.top_role.position - 1)
@@ -746,10 +780,10 @@ class fmod:
 
         # schedule callback for role removal
         if duration:
-           self.schedule_unpunish(duration, member, reason)
+            self.schedule_unpunish(duration, member, reason)
 
         return True
-        
+
     async def on_channel_create(self, channel):
         """Run when new channels are created and set up role permissions"""
         if channel.is_private:
@@ -758,14 +792,15 @@ class fmod:
         server = channel.server
         if server.id != "374596069989810176":
             return
-            
+
         rolename = self.settingsload[server.id]['Mute Role']
         role = discord.utils.get(server.roles, name=rolename)
         if not role:
             return
 
         await self.setup_channel(channel, role)
-    def schedule_unpunish(self, delay, member, reason=None):   
+
+    def schedule_unpunish(self, delay, member, reason=None):
         """Schedules role removal, canceling and removing existing tasks if present"""
         sid = member.server.id
 
@@ -793,14 +828,14 @@ class fmod:
             msg = 'Your punishment in %s has ended.' % member.server.name
             if reason:
                 msg += "\nReason was: %s" % reason
-                
+
     def _unpunish_data(self, member):
         """Removes punish data entry and cancels any present callback"""
         sid = member.server.id
         if sid in self.warningsload and member.id in self.warningsload[sid]:
             del(self.warningsload[member.server.id][member.id]['User Muted'])
             dataIO.save_json(self.warnings, self.warningsload)
-        
+
     async def on_member_join(self, member):
         """Restore punishment if punished user leaves/rejoins"""
         server = member.server
@@ -808,13 +843,12 @@ class fmod:
 
         if server.id != "374596069989810176":
             return
-        
-        #role = discord.utils.get(server.roles, name=rolename)
+
         deniedrole = self.settingsload[server.id]['Denied Role']
-        
-        #re-adds warning roles
+
+        # re-adds warning roles
         if 'Punishment Roles' in self.settingsload[sid]:
-            if self.settingsload[sid]['Punishment Roles'] == True:
+            if self.settingsload[sid]['Punishment Roles']:
                 if member.id in self.warningsload[sid]:
                     count = self.warningsload[sid][member.id]["Count"]
                     if count >= 1:
@@ -839,17 +873,17 @@ class fmod:
                                 await self.bot.say("No permission to add roles")
                 else:
                     pass
-        #checks if denied from a channel and re-adds role
+        # checks if denied from a channel and re-adds role
         for mid in self.warningsload[sid]:
             try:
                 for warning_key, data in self.warningsload[server.id][mid]["Warnings"].items():
-                    if data['Warning Number'] == 'Channel Denied':          
+                    if data['Warning Number'] == 'Channel Denied':
                         role = discord.utils.get(server.roles, name=deniedrole)
                         await self.bot.add_roles(member, role)
                         break
             except:
                 continue
-                
+
         if member.id in self.warningsload[sid]:
             if 'User Muted' in self.warningsload[sid][member.id]:
                 duration = self.warningsload[sid][member.id]['User Muted']['until'] - time.time()
@@ -857,13 +891,10 @@ class fmod:
                     rolename = self.settingsload[server.id]['Mute Role']
                     role = discord.utils.get(member.server.roles, name=rolename)
                     await self.bot.add_roles(member, role)
-      
                     if member.id not in self.handles[sid]:
                         self.schedule_unpunish(duration, member, reason)
 
-    #other commands
-    
-
+    # other commands
     @commands.command(no_pm=True, pass_context=True)
     @checks.admin()
     async def warns(self, ctx):
@@ -887,7 +918,7 @@ class fmod:
                         deniedcheck = False
             except:
                 continue
-                
+
         def getmname(mid):
             member = discord.utils.get(server.members, id=mid)
             if member:
@@ -896,12 +927,12 @@ class fmod:
                 mid = str(mid)
                 msg = '{}'.format(mid)
                 return msg
-        if newcount == 0 and deniedcheck == False:
+        if newcount == 0 and not deniedcheck:
             await self.bot.say("No users are currently punished.")
             return
         headers = ['Case ID', 'Member', 'Warning Number', 'Moderator', 'Reason']
         table = []
-        disp_table = []   
+        disp_table = []
         for mid in self.warningsload[server.id]:
             try:
                 for warning_key, data in self.warningsload[server.id][mid]["Warnings"].items():
@@ -930,21 +961,21 @@ class fmod:
             try:
                 for warning_key, data in self.warningsload[server.id][mid]["Warnings"].items():
                     if warning_key == warnid:
-                        await self.bot.say("Are you sure you want to delete warn number **{}**?\n\nType `yes` to continue.".format(warnid)) 
+                        await self.bot.say("Are you sure you want to delete warn number **{}**?\n\nType `yes` to continue.".format(warnid))
                         continuemsg = await self.bot.wait_for_message(channel=channel, author=ctx.message.author)
                         if 'yes' in continuemsg.content:
-                            user = discord.utils.get(server.members, id = mid)
+                            user = discord.utils.get(server.members, id=mid)
                             if data['Warning Number'] == 'Channel Denied':
                                 role = self.settingsload[server.id]['Denied Role']
-                                role = discord.utils.get(server.roles, name = role)
-                                await self.bot.remove_roles(user,role)
+                                role = discord.utils.get(server.roles, name=role)
+                                await self.bot.remove_roles(user, role)
                                 await self.bot.say("The denied role has been removed from this user!")
                             else:
                                 count = self.warningsload[server.id][mid]["Count"]
                                 count = int(count)-1
                                 self.warningsload[server.id][mid].update({"Count": count})
                                 if 'Punishment Roles' in self.settingsload[server.id]:
-                                    if self.settingsload[server.id]['Punishment Roles'] == True:
+                                    if self.settingsload[server.id]['Punishment Roles']:
                                         try:
                                             role = role = list(filter(lambda r: r.name.startswith('Warning \U0001f528'), server.roles))
                                             await self.bot.remove_roles(user, *role)
@@ -968,9 +999,11 @@ class fmod:
                                             await self.bot.add_roles(user,
                                                                      poop_role)
                                         except discord.errors.Forbidden:
-                                            await self.bot.say("No permission to add roles") 
-                            embed = discord.Embed(title='Warning Revoked by {}'.format(ctx.message.author), description = revokemessage, color=0x00ff40)
-                            embed.add_field(name = 'Reason:', value = reason)
+                                            await self.bot.say("No permission to add roles")
+                            embed = discord.Embed(title='Warning Revoked by {}'.format(ctx.message.author),
+                                                  description=revokemessage,
+                                                  color=0x00ff40)
+                            embed.add_field(name='Reason:', value=reason)
                             embed.set_footer(text=credits, icon_url=creditIcon)
                             channel = await self.bot.start_private_message(user)
                             await self.bot.send_message(channel, embed=embed)
@@ -978,25 +1011,31 @@ class fmod:
                             del(self.warningsload[server.id][mid]['Warnings'][warnid])
                             dataIO.save_json(self.warnings, self.warningsload)
                             logchannel = self.settingsload[server.id]["Log Channel"]
-                            logchannel = discord.utils.get(server.channels, name = logchannel)
+                            logchannel = discord.utils.get(server.channels, name=logchannel)
                             messageid = data['Message ID']
 
                             await self.bot.say("Warning deleted!")
 
                             try:
                                 embed2 = await self.bot.get_message(logchannel, messageid)
-                                newembed = discord.Embed(title='Warning Revoked', color=0x00ff40, description='The warning for **{}** has been revoked by **{}** for the reason **{}**.'.format(user, ctx.message.author, reason))
+                                newembed = discord.Embed(title='Warning Revoked',
+                                                         color=0x00ff40,
+                                                         description=('The warning for **{}** '
+                                                                      'has been revoked by **{}**'
+                                                                      ' for the reason **{}**.'.format(user,
+                                                                                                       ctx.message.author,
+                                                                                                       reason)))
                                 newembed.set_footer(text=credits, icon_url=creditIcon)
                                 await self.bot.edit_message(embed2, embed=newembed)
                                 await self.bot.clear_reactions(embed2)
                             except discord.NotFound:
-                                await self.bot.say("Log Message is not found. If you changed the log channel you will need to react to the message there")
-                            
+                                await self.bot.say("Log Message is not found. "
+                                                   "If you changed the log channel you will need to react to the message there")
                             return
             except:
                 continue
         await self.bot.say("This warning was not found. Please make sure you typed it correctly!")
-                     
+
     @commands.command(no_pm=True, pass_context=True)
     @checks.admin()
     async def delwarn(self, ctx, id, *, reason):
@@ -1005,7 +1044,7 @@ class fmod:
         if server.id not in self.settingsload:
             await self.bot.say("Please run the `[p]setup` command before running this command.")
             return
-        await self.delwarning(ctx, server = server, warnid=id, reason=reason)
+        await self.delwarning(ctx, server=server, warnid=id, reason=reason)
 
     @commands.command(no_pm=True, pass_context=True)
     @checks.admin()
@@ -1022,8 +1061,7 @@ class fmod:
             return
         if server.id not in self.warningsload:
             await self.bot.say("This user has no warnings!")
-            return        
-        
+            return
         if user.id not in self.warningsload[server.id]:
             await self.bot.say("This user has no warnings!")
             return
@@ -1049,16 +1087,17 @@ class fmod:
             return
         revokechannel = self.settingsload[server.id]['Denied Channel']
         deniedrole = self.settingsload[server.id]['Denied Role']
-        channel = discord.utils.get(server.channels, name = revokechannel)
+        channel = discord.utils.get(server.channels, name=revokechannel)
         if channel is None:
-            msg = await self.bot.say ("I was unable to write to your log channel. Please make sure there is a channel called {} on the server!".format(revokechannel))
+            msg = await self.bot.say(("I was unable to write to your log channel. "
+                                      "Please make sure there is a channel called {} on the server!".format(revokechannel)))
             return
         else:
             pass
         if "ID" in self.warningsload[server.id]:
             ID = self.warningsload[server.id]["ID"]
         else:
-            ID = 10000  
+            ID = 10000
         if reason is None:
             msg = await self.bot.say("Please enter a reason!")
             await asyncio.sleep(5)
@@ -1066,47 +1105,46 @@ class fmod:
             return
         if server.id not in self.warningsload:
             self.warningsload[server.id] = {}
-            dataIO.save_json(self.warnings,
-                             self.warningsload)        
+            dataIO.save_json(self.warnings, self.warningsload)
         if user.id in self.warningsload[server.id]:
             for warning_key, data in self.warningsload[server.id][user.id]["Warnings"].items():
                 try:
                     if data['Warning Number'] == 'Channel Denied':
                         msg = await self.bot.say("This user has already been denied access to the channel.")
                         await asyncio.sleep(8)
-                        await self.bot.delete_message(msg)          
+                        await self.bot.delete_message(msg)
                         await self.bot.delete_message(ctx.message)
                         return
                 except:
                     continue
 
             else:
-                role = discord.utils.get(server.roles, name = deniedrole)
+                role = discord.utils.get(server.roles, name=deniedrole)
                 mod = ctx.message.author
                 await self.bot.delete_message(ctx.message)
                 await self.bot.add_roles(user, role)
                 dmuser = await self.bot.start_private_message(user)
-                embed = discord.Embed(title='You have been denied from {}'.format(channel), description = 'This is to let you know that you have been denied read permissions for the {} channel.'.format(channel))
+                embed = discord.Embed(title='You have been denied from {}'.format(channel),
+                                      description=('This is to let you know that you have been '
+                                                   'denied read permissions for the {} channel.'.format(channel)))
                 await self.bot.send_message(dmuser, embed=embed)
-                reason=reason
+
                 if 'ID' not in self.warningsload[server.id]:
                     self.warningsload[server.id].update({'ID': ID})
-                    dataIO.save_json(self.warnings,
-                                 self.warningsload)
+                    dataIO.save_json(self.warnings, self.warningsload)
                 else:
                     ID = int(ID)+12
                     ID = str(ID)
                     self.warningsload[server.id].update({'ID': ID})
-                    dataIO.save_json(self.warnings,
-                                 self.warningsload)
+                    dataIO.save_json(self.warnings, self.warningsload)
                 if 'Warnings' in self.warningsload[server.id][user.id]:
                     pass
                 else:
                     self.warningsload[server.id][user.id]['Warnings'] = {}
-                    dataIO.save_json(self.warnings, self.warningsload) 
+                    dataIO.save_json(self.warnings, self.warningsload)
                 countnum = 'User Denied'
                 logchannel = self.settingsload[server.id]['Log Channel']
-                logchannel = discord.utils.get(server.channels, name = logchannel)
+                logchannel = discord.utils.get(server.channels, name=logchannel)
                 mod = ctx.message.author
                 await self.embedlog(mod, user, reason, countnum, logchannel, ID, warntype='denied')
                 self.warningsload[server.id][user.id]["Warnings"][ID] = {
@@ -1118,20 +1156,21 @@ class fmod:
                 }
                 dataIO.save_json(self.warnings, self.warningsload)
                 for channel in server.channels:
-                    perms = discord.PermissionOverwrite()           
+                    perms = discord.PermissionOverwrite()
                     if channel.type == discord.ChannelType.text:
                         perms.send_messages = False
                         perms.read_messages = False
-                    await self.bot.edit_channel_permissions(channel, role, overwrite=perms)            
+                    await self.bot.edit_channel_permissions(channel, role, overwrite=perms)
 
     @commands.command(no_pm=True, pass_context=True)
     @checks.mod()
     async def attach(self, ctx, warnid):
-        """Attaches evidence to a warning"""  
+        """Attaches evidence to a warning"""
         server = ctx.message.server
         if server.id not in self.settingsload:
             await self.bot.say("Please run the `[p]setup` command before running this command.")
             return
+
         def getmname(mid):
             member = discord.utils.get(server.members, id=mid)
             if member:
@@ -1148,16 +1187,18 @@ class fmod:
                 for warning_key, data in self.warningsload[server.id][mid]["Warnings"].items():
                     if warning_key == warnid:
                         logchannel = self.settingsload[server.id]["Log Channel"]
-                        logchannel = discord.utils.get(server.channels, name = logchannel)
+                        logchannel = discord.utils.get(server.channels, name=logchannel)
                         messageid = data['Message ID']
                         await self.bot.say("Warning attachment manager sent through DM!")
                         try:
                             embed2 = await self.bot.get_message(logchannel, messageid)
                         except discord.NotFound:
-                            await self.bot.say("Message is not found. If you changed the log channel you will need to react to the message there")
+                            await self.bot.say("Message is not found. If you changed the log "
+                                               "channel you will need to react to the message there")
                             return
                         dmchannel = await self.bot.start_private_message(ctx.message.author)
-                        await self.bot.send_message(dmchannel, "Please send your attachments for the warning {}. When you have finished please type `stop`.".format(warnid))
+                        await self.bot.send_message(dmchannel, ("Please send your attachments for the warning {}. "
+                                                                "When you have finished please type `stop`.".format(warnid)))
                         if 'Attachments' in self.warningsload[server.id][mid]["Warnings"][warnid]:
                             if 'None' not in self.warningsload[server.id][mid]["Warnings"][warnid]['Attachments']:
                                 attachlist = self.warningsload[server.id][mid]["Warnings"][warnid]['Attachments']
@@ -1174,13 +1215,12 @@ class fmod:
                                         attachmentlist = stuff.attachments[0]
                                         attachment = attachmentlist['url']
                                         attachlist.append(attachment)
-                                        await self.bot.add_reaction(stuff, emoji = '\U0001f4ce')
+                                        await self.bot.add_reaction(stuff, emoji='\U0001f4ce')
                                         stuff = await self.bot.wait_for_message(channel=dmchannel, author=ctx.message.author)
                                     else:
                                         attachlist.append(stuff.content)
-                                        await self.bot.add_reaction(stuff, emoji = '\U0001f4ce')
+                                        await self.bot.add_reaction(stuff, emoji='\U0001f4ce')
                                         stuff = await self.bot.wait_for_message(channel=dmchannel, author=ctx.message.author)
-                                   
                                 else:
                                     await self.bot.send_message(dmchannel, "Please send a picture or a link")
                                     stuff = await self.bot.wait_for_message(channel=dmchannel, author=ctx.message.author)
@@ -1193,20 +1233,19 @@ class fmod:
 
                         newembed = discord.Embed(title=title, color=embed['color'])
                         newembed.set_thumbnail(url=avatar)
-                        newembed.add_field(name = 'Case ID:', value = warnid, inline = False)
-                        newembed.add_field(name = 'User:', value = getmname(data['User']), inline = False)
-                        newembed.add_field(name = 'Reason:', value = data['Reason'], inline = False)
-                        newembed.add_field(name = 'Warning Number:', value = data['Warning Number'], inline = False)
-                        newembed.add_field(name = 'Attachments:', value = attachlist2, inline = False)
+                        newembed.add_field(name='Case ID:', value=warnid, inline=False)
+                        newembed.add_field(name='User:', value=getmname(data['User']), inline=False)
+                        newembed.add_field(name='Reason:', value=data['Reason'], inline=False)
+                        newembed.add_field(name='Warning Number:', value=data['Warning Number'], inline=False)
+                        newembed.add_field(name='Attachments:', value=attachlist2, inline=False)
                         newembed.set_footer(text=credits, icon_url=creditIcon)
                         await self.bot.edit_message(embed2, embed=newembed)
-                        self.warningsload[server.id][mid]["Warnings"][warnid].update({"Attachments": attachlist})                   
+                        self.warningsload[server.id][mid]["Warnings"][warnid].update({"Attachments": attachlist})
                         dataIO.save_json(self.warnings, self.warningsload)
                         return
-                    # else:
             except:
                 continue
-          
+
     @commands.command(no_pm=True, pass_context=True)
     async def report(self, ctx, user: discord.Member):
         """Reports a user to the staff"""
@@ -1216,8 +1255,10 @@ class fmod:
             return
         channel = await self.bot.start_private_message(ctx.message.author)
         await self.bot.delete_message(ctx.message)
-        await self.bot.send_message(channel, "You are reporting {}. This will inform the staff members of this users actions. Are you sure you want to continue? \n\n Type `yes` to continue...".format(user))
-        await self.bot.wait_for_message(channel = channel, author=ctx.message.author, content = 'yes')
+        await self.bot.send_message(channel, ("You are reporting {}. "
+                                              "This will inform the staff members of this users actions. "
+                                              "Are you sure you want to continue? \n\n Type `yes` to continue...".format(user)))
+        await self.bot.wait_for_message(channel=channel, author=ctx.message.author, content='yes')
         await self.bot.send_message(channel, "Please enter a reason")
         reason = await self.bot.wait_for_message(channel=channel, author=ctx.message.author)
         await self.bot.send_message(channel, "Your reason is {}. Are you sure? \n\nType `yes` to continue or `no` to return.".format(reason.content))
@@ -1225,7 +1266,9 @@ class fmod:
         attachlist = []
         while confirm.content is not None:
             if confirm.content == 'yes':
-                await self.bot.send_message(channel, "Please enter your image attachments as proof. Formats accepted are: Discord, Gyazo and Lightshot. File uploads via discord are also allowed. Once you are done type `send`.")
+                await self.bot.send_message(channel, "Please enter your image attachments as proof. "
+                                                     "Formats accepted are: Discord, Gyazo and Lightshot. "
+                                                     "File uploads via discord are also allowed. Once you are done type `send`.")
                 proof = await self.bot.wait_for_message(channel=channel, author=ctx.message.author)
                 while proof.content is not None:
                     if proof.content == 'send':
@@ -1237,32 +1280,32 @@ class fmod:
                                 attachmentlist = proof.attachments[0]
                                 attachment = attachmentlist['url']
                                 attachlist.append(attachment)
-                                await self.bot.add_reaction(proof, emoji = '\U0001f4ce')
+                                await self.bot.add_reaction(proof, emoji='\U0001f4ce')
                                 proof = await self.bot.wait_for_message(channel=channel, author=ctx.message.author)
                             else:
                                 attachlist.append(proof.content)
-                                await self.bot.add_reaction(proof, emoji = '\U0001f4ce')
+                                await self.bot.add_reaction(proof, emoji='\U0001f4ce')
                                 proof = await self.bot.wait_for_message(channel=channel, author=ctx.message.author)
-                           
                         else:
                             await self.bot.send_message(channel, "Please send a picture or a link")
-                            proof = await self.bot.wait_for_message(channel=channel, author=ctx.message.author) 
+                            proof = await self.bot.wait_for_message(channel=channel, author=ctx.message.author)
                 break
             if confirm.content == 'no':
                 confirm = await self.bot.wait_for_message(channel=channel, author=ctx.message.author)
         logchannel = self.settingsload[server.id]['Log Channel']
-        logchannel = discord.utils.get(server.channels, name = logchannel)
+        logchannel = discord.utils.get(server.channels, name=logchannel)
         attachlist2 = ('\n'.join(attachlist))
-        embed = discord.Embed(title = 'Report', color=0x0080ff)
-        embed.add_field(name = 'User:', value = user, inline = False)
-        embed.add_field(name = 'Reason:', value = reason.content, inline = False)
-        embed.add_field(name = 'Attachments:', value = attachlist2, inline = False)
+        embed = discord.Embed(title='Report', color=0x0080ff)
+        embed.add_field(name='User:', value=user, inline=False)
+        embed.add_field(name='Reason:', value=reason.content, inline=False)
+        embed.add_field(name='Attachments:', value=attachlist2, inline=False)
         embed.set_footer(text=credits, icon_url=creditIcon)
-        react = await self.bot.send_message(logchannel, embed = embed)
+        react = await self.bot.send_message(logchannel, embed=embed)
         await self.bot.add_reaction(react, "\U0001f44d")
         await self.bot.add_reaction(react, "\U0001f44e")
         await self.bot.add_reaction(react, "\U0001f937")
-      
+
+
 def check_folder():
     if not os.path.exists("data/fmod"):
         print("Creating data/fmod/server.id folder")
@@ -1283,7 +1326,9 @@ def check_file():
     if not dataIO.is_valid_json(b):
         print("Creating data/fmod/warnings.json")
         dataIO.save_json(b,
-                         data) 
+                         data)
+
+
 def setup(bot):
     check_folder()
     check_file()

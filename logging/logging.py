@@ -7,6 +7,7 @@ from cogs.utils import checks
 
 import sqlite3
 
+
 class dbHandler:
 
     def __init__(self, dbPath):
@@ -66,11 +67,9 @@ class dbHandler:
         c.execute("DELETE FROM {0} WHERE ({1} <= datetime('now', '-1 month'))".format(self.DB_TABLE_LOG, self.DB_LOG_TIMESTAMP))
         c.execute("DELETE FROM {0} WHERE ({1} <= datetime('now', '-1 month'))".format(self.DB_TABLE_REACTION, self.DB_REACTION_TIMESTAMP))
 
-        # Test
-        #c.execute("DELETE FROM {0} WHERE ({1} <= datetime('now', '-5 minutes'))".format(self.DB_TABLE_LOG, self.DB_LOG_TIMESTAMP))
-        #c.execute("DELETE FROM {0} WHERE ({1} <= datetime('now', '-5 minutes'))".format(self.DB_TABLE_REACTION, self.DB_REACTION_TIMESTAMP))
         self.conn.commit()
         return True
+
 
 class logging:
     """Message Logging!"""
@@ -88,7 +87,7 @@ class logging:
         if message.author.bot:
             return
 
-        content = str(message.content) if len(message.content)>0 else ""
+        content = str(message.content) if len(message.content) > 0 else ""
         content += "" if not message.attachments else str(message.attachments[0]['url'])
         self.db.addLog(message.server, message.id, self.OPERATION_MESSAGE, content, message.author, message.channel, message.timestamp)
 
@@ -101,7 +100,7 @@ class logging:
             return
 
         if before != after:
-            content = str(after.content) if len(after.content)>0 else ""
+            content = str(after.content) if len(after.content) > 0 else ""
             content += "" if not after.attachments else str(after.attachments[0]['url'])
             self.db.addLog(after.server, after.id, self.OPERATION_EDIT, content, after.author, after.channel, after.timestamp)
 
@@ -110,18 +109,22 @@ class logging:
         if user.bot:
             return
 
-        content = str(reaction.message.content) if len(reaction.message.content)>0 else ""
+        content = str(reaction.message.content) if len(reaction.message.content) > 0 else ""
         content += "" if not reaction.message.attachments else str(reaction.message.attachments[0]['url'])
-        self.db.addReaction(reaction.message.server, reaction.message.id, self.OPERATION_REACT_ADD, content, reaction.emoji, user, reaction.message.channel, reaction.message.timestamp)
+        self.db.addReaction(reaction.message.server, reaction.message.id,
+                            self.OPERATION_REACT_ADD, content, reaction.emoji, user,
+                            reaction.message.channel, reaction.message.timestamp)
 
     async def on_reaction_remove(self, reaction, user):
 
         if user.bot:
             return
 
-        content = str(reaction.message.content) if len(reaction.message.content)>0 else ""
+        content = str(reaction.message.content) if len(reaction.message.content) > 0 else ""
         content += "" if not reaction.message.attachments else str(reaction.message.attachments[0]['url'])
-        self.db.addReaction(reaction.message.server, reaction.message.id, self.OPERATION_REACT_DELETE, content, reaction.emoji, user, reaction.message.channel, reaction.message.timestamp)
+        self.db.addReaction(reaction.message.server, reaction.message.id, self.OPERATION_REACT_DELETE,
+                            content, reaction.emoji, user,
+                            reaction.message.channel, reaction.message.timestamp)
 
     @commands.command(no_pm=True, pass_context=True)
     @checks.admin()
@@ -129,10 +132,12 @@ class logging:
         self.db.deleteOldLogReaction()
         print("Logs older than 30 days deleted.")
 
+
 def check_folders():
     if not os.path.exists("data/sqlite"):
         print("Creating data/Logging folder...")
         os.makedirs("data/sqlite")
+
 
 def setup(bot):
     check_folders()

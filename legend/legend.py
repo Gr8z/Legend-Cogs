@@ -15,11 +15,12 @@ import requests
 
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
-BOTCOMMANDER_ROLES =  ["Family Representative", "Clan Manager", "Clan Deputy", "Co-Leader", "Hub Officer", "admin"]
+BOTCOMMANDER_ROLES = ["Family Representative", "Clan Manager",
+                      "Clan Deputy", "Co-Leader", "Hub Officer", "admin"]
 
 rules_text = """**Here are some Legend Family Discord server rules.**\n
 • No Hateful, obscene, offensive, racist, sexual or violent words allowed in chat or images.
-• Respect others' opinions. If you disagree, please do so in a constructive manner. 
+• Respect others' opinions. If you disagree, please do so in a constructive manner.
 • This is an English only server, please use any other languages in a private message.
 • Do not spam, and avoid ever using @myclanname without permission from clan managers or deputies.
 • No advertisement of any kind, e.g. clans, websites, discord invites.
@@ -33,7 +34,7 @@ rules_text = """**Here are some Legend Family Discord server rules.**\n
 • If you are leaving the clan for another reason, please talk with your leader first when possible. As a clan leader it helps to know if you're leaving for good, if you're leaving to do 2v2 with a few friends for a while, or if you're leaving for an eSport event.\n
 **Violation of these roles will lead to punishment including temporary guest role reduced access, temporary kick from server, or permanent kick from server, depending on the severity and/or frequency of the offense**"""
 
-commands_text =  """Here are some of the Legend Family Bot commands, you can use them in the #bot-spam channel.\n
+commands_text = """Here are some of the Legend Family Bot commands, you can use them in the #bot-spam channel.\n
 **!clashProfile** - to view your Clash Royale stats.
 **!chests** - to view your upcoming chests you will receive.
 **!tourney** - to instantly recieve an open tournament that is available to join.
@@ -57,7 +58,7 @@ commands_text =  """Here are some of the Legend Family Bot commands, you can use
 
 info_text = """You will find several channels on our Discord Server\n
 **#global-chat**: to discuss about the game.
-**#tourneys**: Dozens of tournaments posted everyday. 
+**#tourneys**: Dozens of tournaments posted everyday.
 **#news**: important info about family.
 **#giveaways**: Win Discord credits and game keys every day.
 **#deck-recommendation**: decks discussion.
@@ -68,12 +69,12 @@ info_text = """You will find several channels on our Discord Server\n
 **#challenges**: Word and number challenge games with other members. Answer all the questions before any one else to win.
 **#friends-forever**: Post your Clash friend invite link or add others.
 """
-cw_info = """We organize **Legend Wars** every weekend, which aims to determine **which clan is the strongest**. 
+cw_info = """We organize **Legend Wars** every weekend, which aims to determine **which clan is the strongest**.
 
 The **idea** is simple: A private tournament that anyone may join **within Legend Family and the alliance.**
-Score is calculated in a way that allows every participant to contribute to help their clan win.  We sum the earned tournament trophies of the members of each clan to calculate a clan score, clan with highest clan score is declared the **winner**! 
+Score is calculated in a way that allows every participant to contribute to help their clan win.  We sum the earned tournament trophies of the members of each clan to calculate a clan score, clan with highest clan score is declared the **winner**!
 
-There are 2 factors to win: convince more players to participate within your clan and earn more tournament trophies. Both are **equally important**. We publish tourneys and passwords at same time, so we give equal chances to each clan and player. 
+There are 2 factors to win: convince more players to participate within your clan and earn more tournament trophies. Both are **equally important**. We publish tourneys and passwords at same time, so we give equal chances to each clan and player.
 
 The Top player in each war will recieve $10. However, each and every participant will recieve discord credits for getting trophies for their clan. The more trophies you can collect, the more credits you will get. Credits can used in LeGeND shop to buy various items.
 
@@ -101,7 +102,7 @@ With the goal of encouraging competitive play in the family, there is a monthly 
 
 While we have a clan called LeGeND Esports!, the team operates separately from the clan, and sends members from any family clan to events.
 
-But please remember that this is a more professional setting than the rest of the family and poor behaviour will not be tolerated. 
+But please remember that this is a more professional setting than the rest of the family and poor behaviour will not be tolerated.
 
 Please note that if you just lurk in the server and not participate for a long period of time you will be kicked off the server.
 
@@ -128,7 +129,7 @@ https://legendclans.com
 
 guest_rules = """Welcome to the **Legend Family** Discord server. As a guest, you agree to follow the following rules:
 
-• Respect others' opinions. If you disagree, please do so in a constructive manner. 
+• Respect others' opinions. If you disagree, please do so in a constructive manner.
 • This is an English only server, please use any other languages in a private message.
 • Do not spam, and avoid ever using @clanname without permission from clan managers or deputies.
 • No advertisement of any kind, e.g. clans, websites, discord invites.
@@ -147,6 +148,7 @@ Additional help and information: https://legendclans.com
 Thanks + enjoy!
 """
 
+
 class legend:
 
     def __init__(self, bot):
@@ -162,14 +164,14 @@ class legend:
 
     async def updateSeen(self):
         self.seen = dataIO.load_json('data/seen/seen.json')
-        
+
     def save_settings(self):
         """Saves the json"""
         dataIO.save_json('data/legend/settings.json', self.settings)
-        
+
     async def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
-       return ''.join(random.choice(chars) for _ in range(size))
-    
+        return ''.join(random.choice(chars) for _ in range(size))
+
     async def _add_roles(self, member, role_names):
         """Add roles"""
         server = member.server
@@ -187,7 +189,6 @@ class legend:
         roles = [discord.utils.get(server.roles, name=role_name) for role_name in role_names]
         try:
             await self.bot.remove_roles(member, *roles)
-            #await asyncio.sleep(3)
         except:
             pass
 
@@ -203,7 +204,11 @@ class legend:
 
     async def _is_member(self, member):
         server = member.server
-        botcommander_roles = [discord.utils.get(server.roles, name=r) for r in ["Member", "Co-Leader", "Hub Officer", "Clan Deputy", "Clan Manager"]]
+        botcommander_roles = [discord.utils.get(server.roles, name=r) for r in ["Member",
+                                                                                "Co-Leader",
+                                                                                "Hub Officer",
+                                                                                "Clan Deputy",
+                                                                                "Clan Manager"]]
         botcommander_roles = set(botcommander_roles)
         author_roles = set(member.roles)
         if len(author_roles.intersection(botcommander_roles)):
@@ -212,7 +217,7 @@ class legend:
             return False
 
     @commands.command(pass_context=True)
-    async def legend(self, ctx, member: discord.Member = None):
+    async def legend(self, ctx, member: discord.Member=None):
         """ Show Legend clans, can also show clans based on a member's trophies"""
 
         await self.bot.type()
@@ -230,7 +235,7 @@ class legend:
 
                 if profiledata.clan is None:
                     clanname = "*None*"
-                else: 
+                else:
                     clanname = profiledata.clan.name
 
                 ign = profiledata.name
@@ -247,14 +252,17 @@ class legend:
         except clashroyale.RequestError:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
-                
+
         clandata = sorted(clandata, key=lambda x: (x.required_score, x.score), reverse=True)
-       
-        embed=discord.Embed(color=0xFAA61A)
+
+        embed = discord.Embed(color=0xFAA61A)
         if "url" in self.settings and "family" in self.settings:
-            embed.set_author(name=self.settings['family'], url=self.settings['url'], icon_url="https://i.imgur.com/dtSMITE.jpg")
+            embed.set_author(name=self.settings['family'], url=self.settings['url'],
+                             icon_url="https://i.imgur.com/dtSMITE.jpg")
         else:
-            embed.set_author(name="LeGeND Family Clans", url="http://royaleapi.com/clan/family/legend", icon_url="https://i.imgur.com/dtSMITE.jpg")
+            embed.set_author(name="LeGeND Family Clans",
+                             url="http://royaleapi.com/clan/family/legend",
+                             icon_url="https://i.imgur.com/dtSMITE.jpg")
 
         embed.set_footer(text=credits, icon_url=creditIcon)
 
@@ -265,14 +273,14 @@ class legend:
             numWaiting = 0
             personalbest = 0
             bonustitle = None
-            
+
             for clankey in self.clans.keysClans():
                 if await self.clans.getClanData(clankey, 'tag') == clan.tag:
                     numWaiting = await self.clans.numWaiting(clankey)
                     personalbest = await self.clans.getClanData(clankey, 'personalbest')
                     bonustitle = await self.clans.getClanData(clankey, 'bonustitle')
                     emoji = await self.clans.getClanData(clankey, 'emoji')
-                    warTrophies = await self.clans.getClanData(clankey, 'warTrophies') 
+                    warTrophies = await self.clans.getClanData(clankey, 'warTrophies')
                     totalWaiting += numWaiting
                     break
 
@@ -291,28 +299,56 @@ class legend:
                 title += "["+str(clan.type).title()+"] "
 
             title += clan.name + " (#" + clan.tag + ") "
-            
+
             if personalbest > 0:
                 title += "PB: "+str(personalbest)+"+  "
                 clan.max_trophies = personalbest
-            
-            if bonustitle is not None:
-                title += bonustitle  
 
-            desc = "{} {}      <:crtrophy:448609948008579073> {}+     <:wartrophy:448609141796241408> {}   <:openlink:448611387040595979> [Open](https://legendclans.com/clanInfo/{})".format(emoji, showMembers, str(clan.required_score), str(warTrophies), clan.tag)
+            if bonustitle is not None:
+                title += bonustitle
+
+            desc = ("{} {}      <:crtrophy:448609948008579073> "
+                    "{}+     <:wartrophy:448609141796241408> "
+                    "{}   <:openlink:448611387040595979> "
+                    "[Open](https://legendclans.com/clanInfo/{})".format(emoji,
+                                                                         showMembers,
+                                                                         str(clan.required_score),
+                                                                         str(warTrophies),
+                                                                         clan.tag))
 
             if (member is None) or ((clan.required_score <= trophies) and (maxtrophies > personalbest) and (trophies - clan.required_score < 1200) and (clan.type != 'closed')):
                 foundClan = True
                 embed.add_field(name=title, value=desc, inline=False)
 
-        if foundClan is False:
-            embed.add_field(name="uh oh!", value="There are no clans available for you at the moment, please type !legend to see all self.clans.", inline=False)
+        if not foundClan:
+            embed.add_field(name="uh oh!",
+                            value="There are no clans available for you at the moment, "
+                            "please type !legend to see all self.clans.",
+                            inline=False)
 
-        embed.description = "Our Family is made up of " + str(await self.clans.numClans()) + " clans with a total of " + str(totalMembers) + " members. We have " + str((await self.clans.numClans()*50)-totalMembers) + " spots left and " + str(totalWaiting) + " members in waiting lists."
+        embed.description = ("Our Family is made up of {} "
+                             "clans with a total of {} "
+                             "members. We have {} spots left "
+                             "and {} members in waiting lists.".format(await self.clans.numClans(),
+                                                                       totalMembers,
+                                                                       (await self.clans.numClans()*50)-totalMembers,
+                                                                       totalWaiting))
         await self.bot.say(embed=embed)
 
         if member is not None:
-            await self.bot.say("Hello **{}**, above are all the clans you are allowed to join, based on your statistics. Which clan would you like to join? \n\n**Name:** {} (#{})\n**Trophies:** {}/{}\n**Clan:** {}\n```WARNING: PLEASE DO NOT REQUEST TO JOIN ANY CLANS IF YOU HAVE NOT YET RECIEVED YOUR RECRUIT CODE!```".format(ign, ign, profiletag, str(trophies), str(maxtrophies), clanname))
+            await self.bot.say(("Hello **{}**, above are all the clans "
+                                "you are allowed to join, based on your statistics. "
+                                "Which clan would you like to join? \n\n"
+                                "**Name:** {} (#{})\n**Trophies:** {}/{}\n"
+                                "**Clan:** {}\n"
+                                "```WARNING: PLEASE DO NOT REQUEST TO "
+                                "JOIN ANY CLANS IF YOU HAVE NOT YET "
+                                "RECIEVED YOUR RECRUIT CODE!```".format(ign,
+                                                                        ign,
+                                                                        profiletag,
+                                                                        trophies,
+                                                                        maxtrophies,
+                                                                        clanname)))
 
     @commands.command(pass_context=True, no_pm=True)
     @commands.has_any_role(*BOTCOMMANDER_ROLES)
@@ -329,11 +365,11 @@ class legend:
         clankey = clankey.lower()
 
         try:
-            clan_tag = await self.clans.getClanData(clankey, 'tag') 
-            clan_name = await self.clans.getClanData(clankey, 'name') 
-            clan_role = await self.clans.getClanData(clankey, 'role') 
+            clan_tag = await self.clans.getClanData(clankey, 'tag')
+            clan_name = await self.clans.getClanData(clankey, 'name')
+            clan_role = await self.clans.getClanData(clankey, 'role')
             clan_pb = await self.clans.getClanData(clankey, 'personalbest')
-            clan_approval = await self.clans.getClanData(clankey, 'approval') 
+            clan_approval = await self.clans.getClanData(clankey, 'approval')
         except KeyError:
             await self.bot.say("Please use a valid clanname: {}".format(await self.clans.namesClans()))
             return
@@ -342,7 +378,7 @@ class legend:
         try:
             await self.bot.type()
             profiletag = await self.tags.getTag(member.id)
-            profiledata = await self.clash.get_player(profiletag, exclude=["games","currentDeck","cards","achievements"])
+            profiledata = await self.clash.get_player(profiletag, exclude=["games", "currentDeck", "cards", "achievements"])
             clandata = await self.clash.get_clan(clan_tag)
 
             ign = profiledata.name
@@ -350,7 +386,7 @@ class legend:
                 leftClan = True
                 clantag = ""
                 clanname = ""
-            else: 
+            else:
                 clantag = profiledata.clan.tag
                 clanname = profiledata.clan.name
         except clashroyale.RequestError:
@@ -385,7 +421,8 @@ class legend:
                 return
 
             if not leftClan:
-                await self.bot.say("Approval failed, You have not yet left your current clan. Would you like me to check again in 2 minutes? (Yes/No)")
+                await self.bot.say("Approval failed, You have not yet left your current clan. "
+                                   "Would you like me to check again in 2 minutes? (Yes/No)")
 
                 answer = await self.bot.wait_for_message(timeout=15, author=ctx.message.author)
 
@@ -402,16 +439,16 @@ class legend:
                 await self.bot.process_commands(message)
                 return
 
-            if await self.clans.numWaiting(clankey)  > 0:
+            if await self.clans.numWaiting(clankey) > 0:
                 if await self.clans.checkWaitingMember(clankey, member.id):
-                    canWait = (50 - clandata.member_count) -1
+                    canWait = (50 - clandata.member_count) - 1
 
                     if await self.clans.getWaitingIndex(clankey, member.id) > canWait:
                         await self.bot.say("Approval failed, you are not first in queue for the waiting list on this server.")
                         return
-                    
+
                     await self.clans.delWaitingMember(clankey, member.id)
-                    
+
                     role = discord.utils.get(server.roles, name="Waiting")
                     try:
                         await self.bot.remove_roles(member, role)
@@ -426,15 +463,18 @@ class legend:
             try:
                 recruitCode = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6))
 
-                await self.bot.send_message(member, 
-                    "Congratulations, You have been approved to join **"+ clan_name + " (#" + clan_tag + ")**.\n\n\n" +
-                    "Your **RECRUIT CODE** is: ``" + recruitCode + "`` \n"+
-                    "Send this code in the join request message.\n\n"+
-                    "Click this link to join the clan: https://legendclans.com/clanInfo/"+ clan_tag +"\n\n" +
-                    "That's it! Now wait for your clan leadership to accept you. \n" +
-                    "If you do not see a 'request to join' button, make sure you leave your current clan and check the trophy requirements. \n\n" + 
-                    "**IMPORTANT**: Once your clan leadership has accepted your request, let a staff member in discord know that you have been accepted. They will then unlock all the member channels for you."
-                    )
+                await self.bot.send_message(member, "Congratulations, You have been approved to join **" + clan_name +
+                                                    " (#" + clan_tag + ")**.\n\n\n" +
+                                                    "Your **RECRUIT CODE** is: ``" + recruitCode + "`` \n" +
+                                                    "Send this code in the join request message.\n\n" +
+                                                    "Click this link to join the clan: https://legendclans.com/clanInfo/" +
+                                                    clan_tag + "\n\n" +
+                                                    "That's it! Now wait for your clan leadership to accept you. \n" +
+                                                    "If you do not see a 'request to join' button, make sure you leave " +
+                                                    "your current clan and check the trophy requirements. \n\n" +
+                                                    "**IMPORTANT**: Once your clan leadership has accepted your request, " +
+                                                    "let a staff member in discord know that you have been accepted. " +
+                                                    "They will then unlock all the member channels for you.")
                 await self.bot.say(member.mention + " has been approved for **" + clan_name + "**. Please check your DM for instructions on how to join.")
 
                 try:
@@ -461,7 +501,7 @@ class legend:
     @commands.command(pass_context=True, no_pm=True)
     async def newmember(self, ctx, member: discord.Member):
         """Setup nickname, roles and invite links for a new member"""
-        
+
         server = ctx.message.server
         author = ctx.message.author
         legendServer = ["374596069989810176"]
@@ -478,11 +518,11 @@ class legend:
         try:
             await self.bot.type()
             profiletag = await self.tags.getTag(member.id)
-            profiledata = await self.clash.get_player(profiletag, exclude=["games","currentDeck","cards","achievements"])
+            profiledata = await self.clash.get_player(profiletag, exclude=["games", "currentDeck", "cards", "achievements"])
             if profiledata.clan is None:
                 clantag = ""
                 clanname = ""
-            else: 
+            else:
                 clantag = profiledata.clan.tag
                 clanname = profiledata.clan.name
 
@@ -505,7 +545,7 @@ class legend:
         if not allowed:
             await self.bot.say("You dont have enough permissions to use this command on others.")
             return
-            
+
         membership = await self.clans.verifyMembership(clantag)
 
         if membership:
@@ -515,21 +555,21 @@ class legend:
                 invite = await self.clans.getClanData(savekey, 'discord')
                 if invite is not None:
                     joinLink = "https://discord.gg/" + str(invite)
-                    await self.bot.send_message(member, 
-                        "Hi There! Congratulations on getting accepted into our family. We have unlocked all the member channels for you in LeGeND Discord Server. Now you have to carefuly read this message and follow the steps mentioned below: \n\n"+
-                        "Please click on the link below to join your clan Discord server. \n\n"+
-                        clanname + ": " + joinLink + "\n\n" +
-                        "Please do not leave our main or clan servers while you are in the clan. Thank you."
-                        )
+                    await self.bot.send_message(member, "Hi There! Congratulations on getting accepted into our family. " +
+                                                        "We have unlocked all the member channels for you in LeGeND Discord Server. " +
+                                                        "Now you have to carefuly read this message and follow the steps mentioned below: \n\n" +
+                                                        "Please click on the link below to join your clan Discord server. \n\n" +
+                                                        clanname + ": " + joinLink + "\n\n" +
+                                                        "Please do not leave our main or clan servers while you are in the clan. Thank you.")
                 else:
-                    
-                   await self.bot.send_message(member, 
-                       "Hi There! Congratulations on getting accepted into our family. We have unlocked all the member channels for you in LeGeND Discord Server. \n\n"+
-                       "Please do not leave our Discord server while you are in the clan. Thank you."
-                       )
+
+                    await self.bot.send_message(member, "Hi There! Congratulations on getting accepted into our family. "
+                                                        "We have unlocked all the member channels for you in LeGeND Discord Server. \n\n" +
+                                                        "Please do not leave our Discord server while you are in the clan. Thank you.")
             except discord.errors.Forbidden:
-                    await self.bot.say("Membership failed, {} please fix your privacy settings, we are unable to send you Direct Messages.".format(member.mention))
-                    return
+                await self.bot.say(("Membership failed, {} please fix your privacy settings, "
+                                    "we are unable to send you Direct Messages.".format(member.mention)))
+                return
 
             await self.clans.delWaitingMember(savekey, member.id)
 
@@ -542,11 +582,9 @@ class legend:
                     newname = ign + " | " + newclanname
                     await self.bot.change_nickname(member, newname)
                 except discord.HTTPException:
-                    await self.bot.say(
-                        "I don’t have permission to change nick for this user.")
+                    await self.bot.say("I don’t have permission to change nick for this user.")
                 else:
                     mymessage += "Nickname changed to **{}**\n".format(newname)
-
 
             role_names = [await self.clans.getClanData(savekey, 'role'), 'Member']
             try:
@@ -557,7 +595,7 @@ class legend:
                     "{} does not have permission to edit {}’s roles.".format(
                         author.display_name, member.display_name))
             except discord.HTTPException:
-                await self.bot.say("failed to add {}.").format(', '.join(role_names))
+                await self.bot.say("failed to add {}.".format(', '.join(role_names)))
 
             await self.bot.say(mymessage)
 
@@ -567,33 +605,36 @@ class legend:
             await self._remove_roles(member, ['Guest'])
 
             roleName = discord.utils.get(server.roles, name=role_names[0])
-            await self.bot.send_message(discord.Object(id='375839851955748874'), '**' + ctx.message.author.display_name + '** recruited ' + '**' + ign + ' (#'+ profiletag + ')** to ' + roleName.mention)
+            await self.bot.send_message(discord.Object(id='375839851955748874'), "**{}** {} recruited **{} (#{}) to {}".format(ctx.message.author.display_name,
+                                                                                                                               ign,
+                                                                                                                               profiletag,
+                                                                                                                               roleName.mention))
+            await asyncio.sleep(300)
+            await self.bot.send_message(member, rules_text)
 
             await asyncio.sleep(300)
-            await self.bot.send_message(member,rules_text)
+            await self.bot.send_message(member, commands_text)
 
             await asyncio.sleep(300)
-            await self.bot.send_message(member,commands_text)
+            await self.bot.send_message(member, info_text)
 
             await asyncio.sleep(300)
-            await self.bot.send_message(member,info_text)
+            await self.bot.send_message(member, cw_info)
 
             await asyncio.sleep(300)
-            await self.bot.send_message(member,cw_info)
-            
-            await asyncio.sleep(300)
-            await self.bot.send_message(member,credits_info)
+            await self.bot.send_message(member, credits_info)
 
             await asyncio.sleep(300)
-            await self.bot.send_message(member,coc_bs)
+            await self.bot.send_message(member, coc_bs)
 
-            #await asyncio.sleep(300)
-            #await self.bot.send_message(member,esports_info)
+            # await asyncio.sleep(300)
+            # await self.bot.send_message(member, esports_info)
 
             await asyncio.sleep(300)
-            await self.bot.send_message(member,social_info)
+            await self.bot.send_message(member, social_info)
         else:
-            await self.bot.say("You must be accepted into a clan before I can give you clan roles. Would you like me to check again in 2 minutes? (Yes/No)")
+            await self.bot.say("You must be accepted into a clan before I can give you clan roles. "
+                               "Would you like me to check again in 2 minutes? (Yes/No)")
 
             answer = await self.bot.wait_for_message(timeout=15, author=ctx.message.author)
 
@@ -634,15 +675,15 @@ class legend:
         try:
             await self.bot.type()
             profiletag = await self.tags.getTag(member.id)
-            profiledata = await self.clash.get_player(profiletag, exclude=["games","currentDeck","cards","achievements"])
+            profiledata = await self.clash.get_player(profiletag, exclude=["games", "currentDeck", "cards", "achievements"])
             clandata = await self.clash.get_clan(clan_tag)
             if profiledata.clan is None:
                 clantag = ""
                 clanname = ""
-            else: 
+            else:
                 clantag = profiledata.clan.tag
                 clanname = profiledata.clan.name
-                
+
             ign = profiledata.name
             trophies = profiledata.trophies
             maxtrophies = profiledata.stats.max_trophies
@@ -668,7 +709,9 @@ class legend:
             raise
         except discord.HTTPException:
             raise
-        await self.bot.say(member.mention + " You have been added to the waiting list for **"+ clan_name + "**. We will mention you when a spot is available.")
+        await self.bot.say(member.mention + " You have been added to the waiting list for **" +
+                           clan_name +
+                           "**. We will mention you when a spot is available.")
 
         roleName = discord.utils.get(server.roles, name=await self.clans.getClanData(clankey, 'role'))
         await self.bot.send_message(discord.Object(id='375839851955748874'), "**{} (#{})** added to the waiting list for {}".format(ign, profiletag, roleName.mention))
@@ -689,8 +732,8 @@ class legend:
 
         try:
             clan_tag = await self.clans.getClanData(clankey, 'tag')
-            clan_name = await self.clans.getClanData(clankey, 'name') 
-            clan_role = await self.clans.getClanData(clankey, 'role') 
+            clan_name = await self.clans.getClanData(clankey, 'name')
+            clan_role = await self.clans.getClanData(clankey, 'role')
         except KeyError:
             await self.bot.say("Please use a valid clanname: {}".format(await self.clans.namesClans()))
             return
@@ -705,11 +748,11 @@ class legend:
                 raise
             except discord.HTTPException:
                 raise
-            await self.bot.say(member.mention + " has been removed from the waiting list for **"+ clan_name + "**.")
+            await self.bot.say(member.mention + " has been removed from the waiting list for **" + clan_name + "**.")
         except ValueError:
             await self.bot.say("Recruit not found in the waiting list.")
 
-    @commands.command(pass_context=True, no_pm=True, aliases=["waitlist","wait"])
+    @commands.command(pass_context=True, no_pm=True, aliases=["waitlist", "wait"])
     async def waitinglist(self, ctx):
         """Show status of the waiting list."""
 
@@ -727,14 +770,14 @@ class legend:
 
         await self.bot.type()
 
-        embed=discord.Embed(color=0xFAA61A)
+        embed = discord.Embed(color=0xFAA61A)
 
         for clan in self.clans.keysClans():
             if await self.clans.numWaiting(clan) > 0:
                 counterClans += 1
                 message = ""
                 for index, userID in enumerate(await self.clans.getClanData(clan, 'waiting')):
-                    user = discord.utils.get(ctx.message.server.members, id = userID)
+                    user = discord.utils.get(ctx.message.server.members, id=userID)
                     try:
                         message += str(index+1) + ". " + user.display_name + "\n"
                         counterPlayers += 1
@@ -742,7 +785,7 @@ class legend:
                         await self.clans.delWaitingMember(clan, userID)
                         message += str(index+1) + ". " + "*user not found*" + "\n"
                 embed.add_field(name=await self.clans.getClanData(clan, 'name'), value=message, inline=False)
-        
+
         if not message:
             await self.bot.say("The waiting list is empty")
         else:
@@ -753,7 +796,7 @@ class legend:
 
     @commands.command(pass_context=True, no_pm=True)
     @commands.has_any_role(*BOTCOMMANDER_ROLES)
-    async def changenick(self, ctx, member: discord.Member = None):   
+    async def changenick(self, ctx, member: discord.Member=None):
         """ Change nickname of a user of their IGN + Clan"""
 
         server = ctx.message.server
@@ -764,10 +807,10 @@ class legend:
         try:
             await self.bot.type()
             profiletag = await self.tags.getTag(member.id)
-            profiledata = await self.clash.get_player(profiletag, exclude=["games","currentDeck","cards","achievements"])
+            profiledata = await self.clash.get_player(profiletag, exclude=["games", "currentDeck", "cards", "achievements"])
             if profiledata.clan is None:
                 clantag = "none"
-            else: 
+            else:
                 clantag = profiledata.clan.tag
             ign = profiledata.name
         except clashroyale.RequestError:
@@ -780,7 +823,7 @@ class legend:
         membership = await self.clans.verifyMembership(clantag)
 
         if membership:
-    
+
             mymessage = ""
             if ign is None:
                 await self.bot.say("Cannot find IGN.")
@@ -793,7 +836,7 @@ class legend:
                 except discord.HTTPException:
                     await self.bot.say("I don’t have permission to change nick for this user.")
                 else:
-                     await self.bot.say("Nickname changed to ** {} **\n".format(newname))
+                    await self.bot.say("Nickname changed to ** {} **\n".format(newname))
         else:
             await self.bot.say("This command is only available for family members.")
 
@@ -815,7 +858,7 @@ class legend:
             clan_tag = await self.clans.getClanData(clankey, 'tag')
             clan_role = await self.clans.getClanData(clankey, 'role')
             clan_name = await self.clans.getClanData(clankey, 'name')
-            clan_nickname = await self.clans.getClanData(clankey, 'nickname') 
+            clan_nickname = await self.clans.getClanData(clankey, 'nickname')
             clan_role = await self.clans.getClanData(clankey, 'role')
         except KeyError:
             await self.bot.say("Please use a valid clanname: {}".format(await self.clans.namesClans()))
@@ -828,7 +871,7 @@ class legend:
         except clashroyale.RequestError:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
- 
+
         await self.updateSeen()
 
         cr_members_name = []
@@ -871,7 +914,7 @@ class legend:
         for index, player_tag in enumerate(cr_members_tag):
             try:
                 dc_member = await self.tags.getUser(server.members, player_tag)
-                
+
                 if role not in dc_member.roles:
                     d_members_without_role.append(dc_member.display_name)
 
@@ -896,10 +939,10 @@ class legend:
         if False in cr_clanSettings:
             message += "\n\n:warning: Problems in clan settings for **" + clan_name + "**:```"
 
-            if cr_clanSettings[0] is False: message += "\n• Clan Badge is incorrect."
-            if cr_clanSettings[1] is False: message += "\n• Clan Location is incorrect."
-            if cr_clanSettings[2] is False: message += "\n• Clan description is incorrect."
-            if cr_clanSettings[3] is False: message += "\n• Clan is closed."
+            if not cr_clanSettings[0]: message += "\n• Clan Badge is incorrect."
+            if not cr_clanSettings[1]: message += "\n• Clan Location is incorrect."
+            if not cr_clanSettings[2]: message += "\n• Clan description is incorrect."
+            if not cr_clanSettings[3]: message += "\n• Clan is closed."
 
             message += "```"
 
@@ -948,25 +991,24 @@ class legend:
         """Base command for showing top members"""
         if ctx.invoked_subcommand is None:
             await self.bot.send_cmd_help(ctx)
-    
+
     @topmembers.command(name="trophies")
-    async def topmembers_trophies(self, role : str = None):
+    async def topmembers_trophies(self, role: str=None):
         """Show Family Ladder LeaderBoard"""
         number = 10
         if number > 100:
             await self.bot.say("Sorry! the number must be below 100.")
             return
-        
 
         if "family" in self.settings:
             familyname = self.settings['family']
         else:
             familyname = "LeGeND Family"
 
-        if role not in ["leader","coleader","elder", "member", None]:
+        if role not in ["leader", "coleader", "elder", "member", None]:
             await self.bot.say("Invalid role!")
             return
-        if role != None:
+        if role is not None:
             filterroles = True
             await self.bot.say("**{0} Ladder LeaderBoard** ({1}s)".format(familyname, role))
         else:
@@ -984,8 +1026,8 @@ class legend:
 
         players = dict(allplayers)
         players['data'] = sorted(allplayers['data'], key=lambda x: x['family_rank_score'])
-        
-        if role == None:
+
+        if role is None:
             message = "```\n"
             for x in range(0, number):
                 clantag = players['data'][x]['clan_tag']
@@ -998,7 +1040,7 @@ class legend:
                     await self.bot.say(message)
                     message = "```\n"
             message += "```"
-            
+
         else:
             message = "```\n"
             amount = 0
@@ -1008,9 +1050,9 @@ class legend:
                 for i in self.clans.keysClans():
                     if clantag == await self.clans.getClanData(i, 'tag'):
                         clanname = await self.clans.getClanData(i, 'nickname')
-                            
+
                 if role == clanrole:
-                    message += (str(amount + 1) + ".").ljust(4) + " [" + str(players['data'][x]['trophies']) + "]  " + players['data'][x]['name'] + " (" + clanname + ") " +  "\n"
+                    message += (str(amount + 1) + ".").ljust(4) + " [" + str(players['data'][x]['trophies']) + "]  " + players['data'][x]['name'] + " (" + clanname + ") " + "\n"
                     amount += 1
                     if amount == number:
                         break
@@ -1020,24 +1062,24 @@ class legend:
                         message = "```\n"
             message += "```"
         await self.bot.say(message)
-        
+
     @topmembers.command(name="donations")
-    async def topmembers_donations(self, role : str = None):
+    async def topmembers_donations(self, role: str=None):
         """Show Family Donations LeaderBoard"""
         number = 10
         if number > 100:
             await self.bot.say("Sorry! the number must be below 100.")
             return
-        
+
         if "family" in self.settings:
             familyname = self.settings['family']
         else:
             familyname = "LeGeND Family"
 
-        if role not in ["leader","coleader","elder", "member", None]:
+        if role not in ["leader", "coleader", "elder", "member", None]:
             await self.bot.say("Invalid role!")
             return
-        if role != None:
+        if role is not None:
             filterroles = True
             await self.bot.say("**{0} Donations LeaderBoard** ({1}s)".format(familyname, role))
         else:
@@ -1054,8 +1096,8 @@ class legend:
             return
         players = dict(allplayers)
         players['data'] = sorted(allplayers['data'], key=lambda x: x['family_rank_donations'])
-        
-        if role == None:
+
+        if role is None:
             message = "```\n"
             for x in range(0, number):
                 clantag = players['data'][x]['clan_tag']
@@ -1077,9 +1119,9 @@ class legend:
                 for i in self.clans.keysClans():
                     if clantag == await self.clans.getClanData(i, 'tag'):
                         clanname = await self.clans.getClanData(i, 'nickname')
-                            
+
                 if role == clanrole:
-                    message += (str(amount + 1) + ".").ljust(4) + (" [" + str(players['data'][x]['donations']) + "]  ").ljust(9) + players['data'][x]['name'] + " (" + clanname + ") " +  "\n"
+                    message += (str(amount + 1) + ".").ljust(4) + (" [" + str(players['data'][x]['donations']) + "]  ").ljust(9) + players['data'][x]['name'] + " (" + clanname + ") " + "\n"
                     amount += 1
                     if amount == number:
                         break
@@ -1087,26 +1129,26 @@ class legend:
                         message += "```"
                         await self.bot.say(message)
                         message = "```\n"
-            message += "```"  
+            message += "```"
         await self.bot.say(message)
-        
+
     @commands.command()
     async def topclans(self):
         """Show top 10 international clans"""
-        
+
         await self.bot.type()
         try:
             topclans = await self.clash.get_top_clans(country_key='_int')
             msg = "```python\n"
-        
+
             for x in range(10):
                 msg += ((str(topclans[x].rank) + ".").ljust(4) + topclans[x].name + "\n")
             for i in range(10, len(topclans)):
                 for j in self.clans.keysClans():
                     if topclans[i].tag == await self.clans.getClanData(j, 'tag'):
-                        msg += ((str(topclans[i].rank) + ".").ljust(4) + topclans[i].name + "\n")    
+                        msg += ((str(topclans[i].rank) + ".").ljust(4) + topclans[i].name + "\n")
             msg += "```"
-        
+
             await self.bot.say("**Top clans in Local International Leaderboard**" + msg)
         except clashroyale.RequestError:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
@@ -1136,7 +1178,6 @@ class legend:
         except discord.HTTPException:
             raise
 
-
     @commands.command(pass_context=True, no_pm=True)
     @commands.has_any_role(*BOTCOMMANDER_ROLES)
     async def guest(self, ctx, member: discord.Member):
@@ -1152,7 +1193,7 @@ class legend:
         try:
             await self.bot.type()
             profiletag = await self.tags.getTag(member.id)
-            profiledata = await self.clash.get_player(profiletag, exclude=["games","currentDeck","cards","achievements"])
+            profiledata = await self.clash.get_player(profiletag, exclude=["games", "currentDeck", "cards", "achievements"])
             ign = profiledata.name
         except clashroyale.RequestError:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
@@ -1170,7 +1211,7 @@ class legend:
 
         role = discord.utils.get(server.roles, name="Guest")
         try:
-            await self.bot.send_message(member,guest_rules)
+            await self.bot.send_message(member, guest_rules)
             await self.bot.say("{} Role Added to {}".format(role.name, member.display_name))
         except discord.errors.Forbidden:
             await self.bot.say("Command failed, {} please fix your privacy settings, we are unable to send you Guest Rules.".format(member.mention))
@@ -1197,7 +1238,10 @@ class legend:
             return
 
         rolesToRemove = await self.clans.rolesClans()
-        rolesToRemove += ["Bait","Siege","Cycle","Control","Beatdown","Tournaments","Giveaways","Gizer","Pro Payday","Rare™","Epic™","LeGeNDary™"]
+        rolesToRemove += ["Bait", "Siege", "Cycle", "Control",
+                          "Beatdown", "Tournaments", "Giveaways",
+                          "Gizer", "Pro Payday", "Rare™", "Epic™",
+                          "LeGeNDary™"]
 
         await self._remove_roles(member, rolesToRemove)
         await self.bot.change_nickname(member, None)
@@ -1215,11 +1259,11 @@ class legend:
 
         server = ctx.message.server
         author = ctx.message.author
-        
+
         await self.bot.type()
 
         tag = await self.tags.formatTag(tag)
-        
+
         if not await self.tags.verifyTag(tag):
             await self.bot.say("The ID you provided has invalid characters. Please try again.")
             return
@@ -1248,14 +1292,14 @@ class legend:
             clanwar_dict[tourney_clan]['score'] += tourney_score
             clanwar_dict[tourney_clan]['participants'] += 1
 
-        message =  "\n**{}**```{}\t{}\t{}\n".format(tourney.name, "CLAN".ljust(17), "SCORE".ljust(9), "PARTICIPANTS")
+        message = "\n**{}**```{}\t{}\t{}\n".format(tourney.name, "CLAN".ljust(17), "SCORE".ljust(9), "PARTICIPANTS")
         clanwar_dict = OrderedDict(sorted(clanwar_dict.items(), key=lambda x: x[1]['score'], reverse=True))
         for x in clanwar_dict:
             message += "{}\t{}\t{}\n".format(x.ljust(17), str(clanwar_dict[x]['score']).ljust(9), clanwar_dict[x]['participants'])
-        message += "```"   
+        message += "```"
         await self.bot.say(message)
 
-            
+
 def check_folders():
     if not os.path.exists("data/legend"):
         print("Creating data/legend folder...")
@@ -1265,17 +1309,19 @@ def check_folders():
         print("Creating data/seen folder...")
         os.makedirs("data/seen")
 
+
 def check_files():
     f = "data/legend/settings.json"
     if not fileIO(f, "check"):
         print("Creating empty settings.json...")
-        fileIO(f, "save", {})      
+        fileIO(f, "save", {})
 
     f = "data/seen/seen.json"
     if not fileIO(f, "check"):
         print("Creating empty seen.json...")
         fileIO(f, "save", {})
-        
+
+
 def setup(bot):
     check_folders()
     check_files()

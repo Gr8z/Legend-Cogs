@@ -16,12 +16,14 @@ import chardet
 import time
 import math
 
-default_settings = {"CHANNEL": "381338442543398912", "CREDITS": 50, "ROLE": None, "LOCK": False, "QUESTIONS" : 60, "DELAY": 60}
+default_settings = {"CHANNEL": "381338442543398912", "CREDITS": 50,
+                    "ROLE": None, "LOCK": False, "QUESTIONS": 60, "DELAY": 60}
 settings_path = "data/challenges/settings.json"
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
 
 TriviaLine = namedtuple("TriviaLine", "question answers")
+
 
 class challenges:
     """My custom cog that does stuff!"""
@@ -58,7 +60,7 @@ class challenges:
             await send_cmd_help(ctx)
 
     @chalset.command(pass_context=True)
-    async def channel(self, ctx, channel : discord.Channel):
+    async def channel(self, ctx, channel: discord.Channel):
         """Sets the channel to play challenges.
 
         If channel isn't specified, the server's default channel will be used"""
@@ -146,7 +148,7 @@ class challenges:
 
         channel = self.get_game_channel(server)
         role_name = self.settings[server.id]["ROLE"]
-        lock_state = self.settings[server.id]["LOCK"] 
+        lock_state = self.settings[server.id]["LOCK"]
         q_num = self.settings[server.id]["QUESTIONS"]
         delay = self.settings[server.id]["DELAY"]
 
@@ -165,13 +167,16 @@ class challenges:
                 challenges_role = discord.utils.get(server.roles, name=role_name)
 
             await self.bot.edit_role(server, challenges_role, mentionable=True)
-            await self.bot.send_message(channel, ":rotating_light: New challenge starting in {} seconds :rotating_light: {}".format(str(delay), challenges_role.mention))
+            await self.bot.send_message(channel, (":rotating_light: New challenge starting in "
+                                                  "{} seconds :rotating_light: {}".format(str(delay),
+                                                                                           challenges_role.mention)))
             await self.bot.edit_role(server, challenges_role, mentionable=False)
         else:
-            await self.bot.send_message(channel, ":rotating_light: New challenge starting in {} seconds :rotating_light:".format(str(delay)))
+            await self.bot.send_message(channel, (":rotating_light: New challenge starting in "
+                                                  "{} seconds :rotating_light:".format(str(delay))))
 
         if lock_state:
-            perm = discord.PermissionOverwrite(send_messages = False, read_messages = False)
+            perm = discord.PermissionOverwrite(send_messages=False, read_messages=False)
             await self.bot.edit_channel_permissions(channel, server.default_role, perm)
 
         self.active = True
@@ -179,7 +184,7 @@ class challenges:
         await asyncio.sleep(delay)
 
         if lock_state:
-            perm = discord.PermissionOverwrite(send_messages = None, read_messages = False)
+            perm = discord.PermissionOverwrite(send_messages=None, read_messages=False)
             await self.bot.edit_channel_permissions(channel, server.default_role, perm)
 
         c = challengeSession(self.bot)
@@ -195,6 +200,7 @@ class challenges:
         await self.bot.say("Challenge stopped.")
         self.active = False
 
+
 class challengeSession():
     def __init__(self, bot):
         self.bot = bot
@@ -206,9 +212,12 @@ class challengeSession():
         self.bank = self.bot.get_cog('Economy').bank
         self.scores = Counter()
         self.statusNum = ""
-        self.gameList = [self.emoji_reacter, self.word_scramble, self.trivia, self.maths, self.guess, self.stop]
-        self.trivia_list = ['artandliterature', 'clashroyale', 'computers', 'elements', 'games', 'general', 'worldcapitals', 'entertainment','riddles']
-        
+        self.gameList = [self.emoji_reacter, self.word_scramble, self.trivia,
+                         self.maths, self.guess, self.stop]
+        self.trivia_list = ['artandliterature', 'clashroyale', 'computers',
+                            'elements', 'games', 'general', 'worldcapitals',
+                            'entertainment', 'riddles']
+
     def get_game_channel(self, server):
         try:
             return server.get_channel(self.settings[server.id]["CHANNEL"])
@@ -216,7 +225,7 @@ class challengeSession():
             return None
 
     def RepresentsInt(self, s):
-        try: 
+        try:
             int(s)
             return True
         except ValueError:
@@ -262,7 +271,8 @@ class challengeSession():
     async def correct_answer(self, server, answer):
         try:
             self.bank.deposit_credits(answer.author, self.settings[server.id]["CREDITS"])
-            await self.bot.say("You got it {} (+{} credits)".format(answer.author.mention, self.settings[server.id]["CREDITS"]))
+            await self.bot.say("You got it {} (+{} credits)".format(answer.author.mention,
+                                                                    self.settings[server.id]["CREDITS"]))
         except:
             await self.bot.say("You got it {} (please do ``!bank register``)".format(answer.author.mention))
 
@@ -280,21 +290,22 @@ class challengeSession():
             self.timeout = 0
             if self.scores:
                 await self.send_table()
-            await self.bot.say("No one is playing, challenge ended. Type ``!togglerole challenges`` to get notified on the next challenge.")
+            await self.bot.say("No one is playing, challenge ended. "
+                               "Type ``!togglerole challenges`` to get notified on the next challenge.")
         elif self.games < q_num:
             await asyncio.sleep(3)
             await random.choice(self.gameList)(server)
         else:
             if self.scores:
                 await self.send_table()
-            await self.bot.say("Thats it, challenge ended. Type ``!togglerole challenges`` to get notified on the next challenge.")
+            await self.bot.say("Thats it, challenge ended. "
+                               "Type ``!togglerole challenges`` to get notified on the next challenge.")
 
     async def emoji_reacter(self, server):
         channel = self.get_game_channel(server)
-        
         emoji = random.choice(self.emoji)
 
-        embed=discord.Embed(title=emoji['emoji'], description=emoji['description'], color=0x008000)
+        embed = discord.Embed(title=emoji['emoji'], description=emoji['description'], color=0x008000)
         embed.set_author(name="React with Emoji")
         embed.set_footer(text=credits, icon_url=creditIcon)
 
@@ -311,9 +322,10 @@ class challengeSession():
                 if react.reaction.emoji == emoji['emoji']:
                     try:
                         self.bank.deposit_credits(react.user, self.settings[server.id]["CREDITS"])
-                        await self.bot.say("You got it {} (+{} credits)".format(react.user.mention, self.settings[server.id]["CREDITS"]))
+                        await self.bot.say("You got it {} (+{} credits)".format(react.user.mention,
+                                                                                self.settings[server.id]["CREDITS"]))
                     except:
-                        await self.bot.say("You got it {} (please do ``!bank register``)".format(react.user.mention)) 
+                        await self.bot.say("You got it {} (please do ``!bank register``)".format(react.user.mention))
                     self.scores[react.user] += 1
                     self.timeout = 0
                     break
@@ -331,11 +343,11 @@ class challengeSession():
                 random.shuffle(foo)
                 scambled = ''.join(foo)
             return scambled
-                
+
         word = random.choice(self.words)
         self.words.remove(word)
 
-        embed=discord.Embed(title="", description=scramble(word).upper(), color=0x8000ff)
+        embed = discord.Embed(title="", description=scramble(word).upper(), color=0x8000ff)
         embed.set_author(name="Unscramble the word")
         embed.set_footer(text=credits, icon_url=creditIcon)
 
@@ -351,7 +363,7 @@ class challengeSession():
             if answer is None:
                 await self.bot.say("Time's up, it was **{}**".format(word))
                 self.timeout += 1
-                break 
+                break
 
             if answer.author != self.bot.user:
                 await self.correct_answer(server, answer)
@@ -363,12 +375,12 @@ class challengeSession():
     async def trivia(self, server):
         channel = self.get_game_channel(server)
 
-        trivia_list = random.choice(self.trivia_list)     
-        question_list = self.parse_trivia_list(trivia_list)        
+        trivia_list = random.choice(self.trivia_list)
+        question_list = self.parse_trivia_list(trivia_list)
         current_line = random.choice(question_list)
         question_list.remove(current_line)
 
-        embed=discord.Embed(title="", description=current_line.question, color=0xff8000)
+        embed = discord.Embed(title="", description=current_line.question, color=0xff8000)
         embed.set_author(name="Answer the question")
         embed.set_footer(text=credits, icon_url=creditIcon)
 
@@ -407,15 +419,15 @@ class challengeSession():
     async def maths(self, server):
         channel = self.get_game_channel(server)
 
-        ops = {'+':operator.add,
-               '-':operator.sub,
-               '*':operator.mul}
-        num1 = random.randint(0,120)
-        num2 = random.randint(1,100)
+        ops = {'+': operator.add,
+               '-': operator.sub,
+               '*': operator.mul}
+        num1 = random.randint(0, 120)
+        num2 = random.randint(1, 100)
         op = random.choice(list(ops.keys()))
-        number = ops.get(op)(num1,num2)
+        number = ops.get(op)(num1, num2)
 
-        embed=discord.Embed(title="", description='What is {} {} {}?\n'.format(num1, op, num2), color=0xff8080)
+        embed = discord.Embed(title="", description='What is {} {} {}?\n'.format(num1, op, num2), color=0xff8080)
         embed.set_author(name="Calculate")
         embed.set_footer(text=credits, icon_url=creditIcon)
 
@@ -428,7 +440,7 @@ class challengeSession():
             if answer is None:
                 await self.bot.say("Time's up, the correct answer is **{}**".format(str(number)))
                 self.timeout += 1
-                break 
+                break
 
             if answer.author != self.bot.user:
                 await self.correct_answer(server, answer)
@@ -440,11 +452,11 @@ class challengeSession():
     async def guess(self, server):
         channel = self.get_game_channel(server)
 
-        startNum = random.randint(10,100)
-        endNum = random.randint(startNum + 25,startNum + 100)
-        number = random.randint(startNum,endNum)
+        startNum = random.randint(10, 100)
+        endNum = random.randint(startNum + 25, startNum + 100)
+        number = random.randint(startNum, endNum)
 
-        embed=discord.Embed(title="", description='A number between {} - {}'.format(startNum, endNum), color=0x0080ff)
+        embed = discord.Embed(title="", description='A number between {} - {}'.format(startNum, endNum), color=0x0080ff)
         embed.set_author(name="Guess the number")
         embed.set_footer(text=credits, icon_url=creditIcon)
 
@@ -458,8 +470,8 @@ class challengeSession():
             if (time.time() - start > 20):
                 await self.bot.say("Time's up, the correct answer is **{}**".format(str(number)))
                 self.timeout += 1
-                break 
-            
+                break
+
             answer = await self.bot.wait_for_message(timeout=5)
 
             if answer is not None:
@@ -480,16 +492,17 @@ class challengeSession():
     async def stop(self, server):
         channel = self.get_game_channel(server)
 
-        timer = random.randint(3,15)
+        timer = random.randint(3, 15)
         niceTry = []
 
-        embed=discord.Embed(title="", description='Type \'stop\' only once in {} seconds.'.format(timer), color=0x804000)
+        embed = discord.Embed(title="", description='Type \'stop\' only once in {} seconds.'.format(timer), color=0x804000)
         embed.set_author(name="Stop Watch")
         embed.set_footer(text=credits, icon_url=creditIcon)
 
         msg = await self.bot.send_message(channel, embed=embed)
 
         start = time.time()
+
         def check(msg):
             if (math.ceil(time.time() - start) == timer) and (msg.content.lower() == "stop"):
                 return True
@@ -498,27 +511,28 @@ class challengeSession():
                 return False
 
         while True:
-
             if (time.time() - start > timer+3):
                 await self.bot.say("Time's up, you missed it.")
                 self.timeout += 1
-                break 
-            
+                break
+
             answer = await self.bot.wait_for_message(check=check, timeout=5)
 
             if answer is not None:
-               if answer.author.id not in niceTry:
-                   if answer.author != self.bot.user:
-                       await self.correct_answer(server, answer)
-                       break
+                if answer.author.id not in niceTry:
+                    if answer.author != self.bot.user:
+                        await self.correct_answer(server, answer)
+                        break
 
         self.games += 1
         await self.start_game(server)
+
 
 def check_folders():
     if not os.path.exists("data/challenges"):
         print("Creating data/challenges folder...")
         os.makedirs("data/challenges")
+
 
 def check_files():
     f = settings_path
@@ -534,6 +548,7 @@ def check_files():
                         current[k][key] = deepcopy(default_settings)[key]
                         print("Adding " + str(key) +
                               " field to challenges settings.json")
+
 
 def setup(bot):
     check_folders()
