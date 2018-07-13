@@ -101,7 +101,7 @@ class warbattles:
                                             inline=True)
                             embed.add_field(name="Opponent Card Levels", value=battledata["deckLevels"], inline=True)
                             embed.add_field(name="Practices", value=battledata["train"], inline=True)
-                            embed.add_field(name="Deck Link", value="[Copy to war deck]({}&war=1)".format(battledata["deckLink"]), inline=True)
+                            embed.add_field(name="Deck Link", value="[Copy to war deck]({}&ID={}&war=1)".format(battledata["deckLink"], battledata["tag"]), inline=True)
                             embed.set_footer(text=credits, icon_url=creditIcon)
 
                             await self.bot.send_message(discord.Object(id=channel), embed=embed)
