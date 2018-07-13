@@ -260,7 +260,7 @@ class legend:
             embed.set_author(name=self.settings['family'], url=self.settings['url'],
                              icon_url="https://i.imgur.com/dtSMITE.jpg")
         else:
-            embed.set_author(name="LeGeND Family Clans",
+            embed.set_author(name="Legend Family Clans",
                              url="http://royaleapi.com/clan/family/legend",
                              icon_url="https://i.imgur.com/dtSMITE.jpg")
 
@@ -359,7 +359,7 @@ class legend:
         legendServer = ["374596069989810176"]
 
         if server.id not in legendServer:
-            await self.bot.say("This command can only be executed in the LeGeND Family Server")
+            await self.bot.say("This command can only be executed in the Legend Family Server")
             return
 
         clankey = clankey.lower()
@@ -507,7 +507,7 @@ class legend:
         legendServer = ["374596069989810176"]
 
         if server.id not in legendServer:
-            await self.bot.say("This command can only be executed in the LeGeND Family Server")
+            await self.bot.say("This command can only be executed in the Legend Family Server")
             return
 
         isMember = await self._is_member(member)
@@ -658,7 +658,7 @@ class legend:
         legendServer = ["374596069989810176"]
 
         if server.id not in legendServer:
-            await self.bot.say("This command can only be executed in the LeGeND Family Server")
+            await self.bot.say("This command can only be executed in the Legend Family Server")
             return
 
         clankey = clankey.lower()
@@ -725,7 +725,7 @@ class legend:
         legendServer = ["374596069989810176"]
 
         if server.id not in legendServer:
-            await self.bot.say("This command can only be executed in the LeGeND Family Server")
+            await self.bot.say("This command can only be executed in the Legend Family Server")
             return
 
         clankey = clankey.lower()
@@ -765,7 +765,7 @@ class legend:
         legendServer = ["374596069989810176"]
 
         if server.id not in legendServer:
-            await self.bot.say("This command can only be executed in the LeGeND Family Server")
+            await self.bot.say("This command can only be executed in the Legend Family Server")
             return
 
         await self.bot.type()
@@ -790,7 +790,7 @@ class legend:
             await self.bot.say("The waiting list is empty")
         else:
             embed.description = "We have " + str(counterPlayers) + " people waiting for " + str(counterClans) + " self.clans."
-            embed.set_author(name="LeGeND Family Waiting List", icon_url="https://i.imgur.com/dtSMITE.jpg")
+            embed.set_author(name="Legend Family Waiting List", icon_url="https://i.imgur.com/dtSMITE.jpg")
             embed.set_footer(text=credits, icon_url=creditIcon)
             await self.bot.say(embed=embed)
 
@@ -849,7 +849,7 @@ class legend:
         legendServer = ["374596069989810176"]
 
         if server.id not in legendServer:
-            await self.bot.say("This command can only be executed in the LeGeND Family Server")
+            await self.bot.say("This command can only be executed in the Legend Family Server")
             return
 
         clankey = clankey.lower()
@@ -1003,17 +1003,24 @@ class legend:
         if "family" in self.settings:
             familyname = self.settings['family']
         else:
-            familyname = "LeGeND Family"
+            familyname = "Legend Family"
+
+        if role is None:
+            title = "{} leaderboard - Trophies".format(familyname)
+        else:
+            role = role.replace("-", "").strip('s').lower()
+            title = "{} {} leaderboard - Trophies".format(familyname, role.capitalize())
 
         if role not in ["leader", "coleader", "elder", "member", None]:
-            await self.bot.say("Invalid role!")
+            await self.bot.say("Invalid role! Please chose between: leader, coleader, and elder.")
             return
-        if role is not None:
-            filterroles = True
-            await self.bot.say("**{0} Ladder LeaderBoard** ({1}s)".format(familyname, role))
-        else:
-            await self.bot.say("**{} Ladder LeaderBoard**".format(familyname))
+
+        embed = discord.Embed(color=0xFAA61A)
+        embed.set_author(name=title,
+                         icon_url="https://i.imgur.com/dtSMITE.jpg")
+
         await self.bot.type()
+
         try:
             if "url" in self.settings:
                 familyurl = '{}/members/datatable'.format(self.settings['url'])
@@ -1027,41 +1034,29 @@ class legend:
         players = dict(allplayers)
         players['data'] = sorted(allplayers['data'], key=lambda x: x['family_rank_score'])
 
-        if role is None:
-            message = "```\n"
-            for x in range(0, number):
-                clantag = players['data'][x]['clan_tag']
-                for i in self.clans.keysClans():
-                    if clantag == await self.clans.getClanData(i, 'tag'):
-                        clanname = await self.clans.getClanData(i, 'nickname')
-                message += (str(x + 1) + ".").ljust(4) + " [" + str(players['data'][x]['trophies']) + "]  " + players['data'][x]['name'] + " (" + clanname + ") " + "\n"
-                if (x+1) % 40 == 0:
-                    message += "```"
-                    await self.bot.say(message)
-                    message = "```\n"
-            message += "```"
+        message = ""
+        amount = 0
+        for x in range(0, len(players['data'])):
+            clanrole = players['data'][x]['role'].replace("-", "").lower()
+            clantag = players['data'][x]['clan_tag']
+            for i in self.clans.keysClans():
+                if clantag == await self.clans.getClanData(i, 'tag'):
+                    clanname = await self.clans.getClanData(i, 'nickname')
 
-        else:
-            message = "```\n"
-            amount = 0
-            for x in range(0, len(players['data'])):
-                clanrole = players['data'][x]['role'].replace("-", "").lower()
-                clantag = players['data'][x]['clan_tag']
-                for i in self.clans.keysClans():
-                    if clantag == await self.clans.getClanData(i, 'tag'):
-                        clanname = await self.clans.getClanData(i, 'nickname')
+            if role:
+                if role != clanrole:
+                    continue
 
-                if role == clanrole:
-                    message += (str(amount + 1) + ".").ljust(4) + " [" + str(players['data'][x]['trophies']) + "]  " + players['data'][x]['name'] + " (" + clanname + ") " + "\n"
-                    amount += 1
-                    if amount == number:
-                        break
-                    if (amount+1) % 40 == 0:
-                        message += "```"
-                        await self.bot.say(message)
-                        message = "```\n"
-            message += "```"
-        await self.bot.say(message)
+            message += "``{} [{}]`` {} ({})\n".format((str(amount + 1) + ".").ljust(3),
+                                                     players['data'][x]['trophies'],
+                                                     players['data'][x]['name'],
+                                                     clanname)
+            amount += 1
+            if amount == number:
+                break
+
+        embed.description = message
+        await self.bot.say(embed=embed)
 
     @topmembers.command(name="donations")
     async def topmembers_donations(self, role: str=None):
@@ -1074,17 +1069,24 @@ class legend:
         if "family" in self.settings:
             familyname = self.settings['family']
         else:
-            familyname = "LeGeND Family"
+            familyname = "Legend Family"
+
+        if role is None:
+            title = "{} leaderboard - Donations".format(familyname)
+        else:
+            role = role.replace("-", "").strip('s').lower()
+            title = "{} {} leaderboard - Donations".format(familyname, role.capitalize())
 
         if role not in ["leader", "coleader", "elder", "member", None]:
-            await self.bot.say("Invalid role!")
+            await self.bot.say("Invalid role! Please chose between: leader, coleader, and elder.")
             return
-        if role is not None:
-            filterroles = True
-            await self.bot.say("**{0} Donations LeaderBoard** ({1}s)".format(familyname, role))
-        else:
-            await self.bot.say("**{0} Donations LeaderBoard**".format(familyname))
+
+        embed = discord.Embed(color=0xFAA61A)
+        embed.set_author(name=title,
+                         icon_url="https://i.imgur.com/dtSMITE.jpg")
+
         await self.bot.type()
+
         try:
             if "url" in self.settings:
                 familyurl = '{}/members/datatable'.format(self.settings['url'])
@@ -1094,43 +1096,33 @@ class legend:
         except:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
+
         players = dict(allplayers)
         players['data'] = sorted(allplayers['data'], key=lambda x: x['family_rank_donations'])
 
-        if role is None:
-            message = "```\n"
-            for x in range(0, number):
-                clantag = players['data'][x]['clan_tag']
-                for i in self.clans.keysClans():
-                    if clantag == await self.clans.getClanData(i, 'tag'):
-                        clanname = await self.clans.getClanData(i, 'nickname')
-                message += (str(x + 1) + ".").ljust(4) + (" [" + str(players['data'][x]['donations']) + "]  ").ljust(9) + players['data'][x]['name'] + " (" + clanname + ") " + "\n"
-                if (x+1) % 40 == 0:
-                    message += "```"
-                    await self.bot.say(message)
-                    message = "```\n"
-            message += "```"
-        else:
-            message = "```\n"
-            amount = 0
-            for x in range(0, len(players['data'])):
-                clanrole = players['data'][x]['role'].replace("-", "").lower()
-                clantag = players['data'][x]['clan_tag']
-                for i in self.clans.keysClans():
-                    if clantag == await self.clans.getClanData(i, 'tag'):
-                        clanname = await self.clans.getClanData(i, 'nickname')
+        message = ""
+        amount = 0
+        for x in range(0, len(players['data'])):
+            clanrole = players['data'][x]['role'].replace("-", "").lower()
+            clantag = players['data'][x]['clan_tag']
+            for i in self.clans.keysClans():
+                if clantag == await self.clans.getClanData(i, 'tag'):
+                    clanname = await self.clans.getClanData(i, 'nickname')
 
-                if role == clanrole:
-                    message += (str(amount + 1) + ".").ljust(4) + (" [" + str(players['data'][x]['donations']) + "]  ").ljust(9) + players['data'][x]['name'] + " (" + clanname + ") " + "\n"
-                    amount += 1
-                    if amount == number:
-                        break
-                    if (amount+1) % 40 == 0:
-                        message += "```"
-                        await self.bot.say(message)
-                        message = "```\n"
-            message += "```"
-        await self.bot.say(message)
+            if role:
+                if role != clanrole:
+                    continue
+
+            message += "``{} [{}]`` {} ({})\n".format((str(amount + 1) + ".").ljust(3),
+                                                     players['data'][x]['donations'],
+                                                     players['data'][x]['name'],
+                                                     clanname)
+            amount += 1
+            if amount == number:
+                break
+
+        embed.description = message
+        await self.bot.say(embed=embed)
 
     @commands.command()
     async def topclans(self):
@@ -1138,21 +1130,25 @@ class legend:
 
         await self.bot.type()
         try:
-            topclans = await self.clash.get_top_clans(country_key='_int')
-            msg = "```python\n"
-
-            for x in range(10):
-                msg += ((str(topclans[x].rank) + ".").ljust(4) + topclans[x].name + "\n")
-            for i in range(10, len(topclans)):
-                for j in self.clans.keysClans():
-                    if topclans[i].tag == await self.clans.getClanData(j, 'tag'):
-                        msg += ((str(topclans[i].rank) + ".").ljust(4) + topclans[i].name + "\n")
-            msg += "```"
-
-            await self.bot.say("**Top clans in Local International Leaderboard**" + msg)
+            topclans = await self.clash.get_top_clans('_int')
         except clashroyale.RequestError:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
+
+        msg = ""
+        for x in range(10):
+            msg += "``" + str(topclans[x].rank).zfill(3) + "." + "`` " + topclans[x].name + "\n"
+        for i in range(10, len(topclans)):
+            for j in self.clans.keysClans():
+                if topclans[i].tag == await self.clans.getClanData(j, 'tag'):
+                    msg += "``" + str(topclans[i].rank).zfill(3) + "." + "`` " + topclans[i].name + "\n"
+
+        embed = discord.Embed(description=msg, color=0xFAA61A)
+        embed.set_author(name="Local International Leaderboard",
+                         url="http://royaleapi.com/top/clans/_int",
+                         icon_url="https://i.imgur.com/dtSMITE.jpg")
+        embed.set_footer(text=credits, icon_url=creditIcon)
+        await self.bot.say(embed=embed)
 
     @commands.command(pass_context=True, no_pm=True)
     @commands.has_any_role(*BOTCOMMANDER_ROLES)
@@ -1162,7 +1158,7 @@ class legend:
         legendServer = ["374596069989810176"]
 
         if server.id not in legendServer:
-            await self.bot.say("This command can only be executed in the LeGeND Family Server")
+            await self.bot.say("This command can only be executed in the Legend Family Server")
             return
 
         role = discord.utils.get(server.roles, name="Platoon")
@@ -1187,7 +1183,7 @@ class legend:
         legendServer = ["374596069989810176"]
 
         if server.id not in legendServer:
-            await self.bot.say("This command can only be executed in the LeGeND Family Server")
+            await self.bot.say("This command can only be executed in the Legend Family Server")
             return
 
         try:
@@ -1234,7 +1230,7 @@ class legend:
         legendServer = ["374596069989810176"]
 
         if server.id not in legendServer:
-            await self.bot.say("This command can only be executed in the LeGeND Family Server")
+            await self.bot.say("This command can only be executed in the Legend Family Server")
             return
 
         rolesToRemove = await self.clans.rolesClans()
