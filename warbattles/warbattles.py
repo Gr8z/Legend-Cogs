@@ -8,7 +8,6 @@ import io
 import asyncio
 import clashroyale
 import time
-from statistics import mean
 try:
     from cogs.deck import Deck
 except:
