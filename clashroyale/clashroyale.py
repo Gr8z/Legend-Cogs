@@ -164,12 +164,12 @@ class clashroyale:
             return
 
         mapEmoji = {
-            'silver': 'silver'
-            'gold': 'gold'
-            'giant': 'giant'
-            'epic': 'epic'
-            'super magical': 'super'
-            'magical': 'magic'
+            'silver': 'silver',
+            'gold': 'gold',
+            'giant': 'giant',
+            'epic': 'epic',
+            'super magical': 'super',
+            'magical': 'magic',
             'legendary': 'legendary'
         }
 
