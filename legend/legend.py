@@ -605,7 +605,7 @@ class legend:
             await self._remove_roles(member, ['Guest'])
 
             roleName = discord.utils.get(server.roles, name=role_names[0])
-            await self.bot.send_message(discord.Object(id='375839851955748874'), "**{}** {} recruited **{} (#{}) to {}".format(ctx.message.author.display_name,
+            await self.bot.send_message(discord.Object(id='375839851955748874'), "**{}** recruited **{} (#{}) to {}".format(ctx.message.author.display_name,
                                                                                                                                ign,
                                                                                                                                profiletag,
                                                                                                                                roleName.mention))

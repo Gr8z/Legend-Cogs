@@ -134,7 +134,7 @@ class duels:
             await self.bot.say("You do not have {} credits to bet on this duel.".format(str(bet)))
             return
 
-        if notself.account_check(author.id):
+        if not self.account_check(author.id):
             await self.bot.say("You need to register before starting a duel, type ``{}duel register``.".format(ctx.prefix))
             return
 
