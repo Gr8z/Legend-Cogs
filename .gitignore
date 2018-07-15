@@ -102,3 +102,7 @@ ENV/
 
 # Test Bot script
 enable-cog.bat
+
+#Sublime Text
+*.sublime-workspace
+*.sublime-project
