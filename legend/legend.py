@@ -442,9 +442,9 @@ class legend:
                     return
             
             if not leftClan:
-                warning = "\n```WARNING: PLEASE DO NOT REQUEST TO "
-                          "JOIN ANY CLANS IF YOU HAVE NOT YET "
-                          "RECIEVED YOUR RECRUIT CODE!```"
+                warning = ("\n```WARNING: PLEASE DO NOT REQUEST TO "
+                           "JOIN ANY CLANS IF YOU HAVE NOT YET "
+                           "RECIEVED YOUR RECRUIT CODE!```")
                 await self.bot.say(("{} Please leave your current clan now. "
                                     "Your recruit code will arrive in 3 minutes.{}".format(member.mention, warning)))
                 await asyncio.sleep(180)
