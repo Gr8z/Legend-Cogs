@@ -96,17 +96,17 @@ Credits are a virtual currency in LeGeND Discord, you earn credits by playing in
 You can type !buy here to look at different ways you can spend these credits.
 """
 
-esports_info = """The LeGeND Esports Team is recruiting all active and aspiring players!
+esports_info = """**The LeGeND eSports Team** is recruiting all active and aspiring players!
 
-With the goal of encouraging competitive play in the family, there is a monthly ranked season system on the Esports Team Server where players compete to play on LeGeND Esports A Team and B team to represent the family in various North American events. Our strongest players will compete side by side with the very best in leagues such as CCTS, CPL, and even RPL!
+With the goal of encouraging competitive play in the family, there is a LeGeND eSports **Americas** and **Eurasia** team to represent the family in various events. Our strongest players will compete side by side with the very best in leagues such as **CCTS, CPL, and even RPL**!
 
-While we have a clan called LeGeND Esports!, the team operates separately from the clan, and sends members from any family clan to events.
+While we have a clan called LeGeND eSports!, the team operates separately from the clan, and sends members from our family to events.
 
-But please remember that this is a more professional setting than the rest of the family and poor behaviour will not be tolerated.
+But please remember that this is a more professional setting than the rest of the family and **poor behaviour will not be tolerated**. 
+
+Join now: https://discord.gg/ck8nGEN
 
 Please note that if you just lurk in the server and not participate for a long period of time you will be kicked off the server.
-
-https://discord.gg/CN47Tkx
 """
 
 coc_bs = """We also play **Clash of Clans** and **Brawl Stars**, we would like to invite to you join them if you play either of these supercell games.
@@ -627,8 +627,8 @@ class legend:
             await asyncio.sleep(300)
             await self.bot.send_message(member, coc_bs)
 
-            # await asyncio.sleep(300)
-            # await self.bot.send_message(member, esports_info)
+            await asyncio.sleep(300)
+            await self.bot.send_message(member, esports_info)
 
             await asyncio.sleep(300)
             await self.bot.send_message(member, social_info)
