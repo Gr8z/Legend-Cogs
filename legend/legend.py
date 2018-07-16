@@ -417,26 +417,7 @@ class legend:
 
             if clan_approval:
                 if clan_role in [y.name.lower() for y in member.roles]:
-                    await self.bot.say("Approval failed, only an {} staff can approve new recruits for this clan.".format(clan_name))
-                return
-
-            if not leftClan:
-                await self.bot.say("Approval failed, You have not yet left your current clan. "
-                                   "Would you like me to check again in 2 minutes? (Yes/No)")
-
-                answer = await self.bot.wait_for_message(timeout=15, author=ctx.message.author)
-
-                if answer is None:
-                    return
-                elif "yes" not in answer.content.lower():
-                    return
-
-                await self.bot.say("Okay, I will retry this command in 2 minutes.")
-                await asyncio.sleep(120)
-
-                message = ctx.message
-                message.content = ctx.prefix + "approve {} {}".format(member.mention, clankey)
-                await self.bot.process_commands(message)
+                    await self.bot.say("Approval failed, only {} staff can approve new recruits for this clan.".format(clan_name))
                 return
 
             if await self.clans.numWaiting(clankey) > 0:
@@ -459,6 +440,14 @@ class legend:
                 else:
                     await self.bot.say("Approval failed, there is a waiting queue for this clan. Please first join the waiting list.")
                     return
+            
+            if not leftClan:
+                warning = "\n```WARNING: PLEASE DO NOT REQUEST TO "
+                          "JOIN ANY CLANS IF YOU HAVE NOT YET "
+                          "RECIEVED YOUR RECRUIT CODE!```"
+                await self.bot.say(("{} Please leave your current clan now. "
+                                    "Your recruit code will arrive in 3 minutes.{}".format(member.mention, warning)))
+                await asyncio.sleep(180)
 
             try:
                 recruitCode = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6))
@@ -605,7 +594,7 @@ class legend:
             await self._remove_roles(member, ['Guest'])
 
             roleName = discord.utils.get(server.roles, name=role_names[0])
-            await self.bot.send_message(discord.Object(id='375839851955748874'), "**{}** recruited **{} (#{}) to {}".format(ctx.message.author.display_name,
+            await self.bot.send_message(discord.Object(id='375839851955748874'), "**{}** recruited **{} (#{})** to {}".format(ctx.message.author.display_name,
                                                                                                                                ign,
                                                                                                                                profiletag,
                                                                                                                                roleName.mention))
