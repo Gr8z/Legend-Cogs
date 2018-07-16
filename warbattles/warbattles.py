@@ -28,6 +28,7 @@ class warbattles:
         self.deck = Deck(self.bot)
         self.clash = clashroyale.Client(self.auth.getToken(), is_async=True, timeout=20)
         self.moment = time.time()
+        self.completed = [[],[]]
 
     async def getLevels(self, deck):
         """Get common, rare, epic, legendary levels"""
@@ -55,7 +56,7 @@ class warbattles:
         """War battle catcher with practice count, run in scedule"""
         for clankey in self.clans.keysClans():
             channel = await self.clans.getClanData(clankey, 'warlog_channel')
-            if channel is not None:
+            if ((channel is not None) and (clankey not in self.completed[0])):
                 try:
                     clanBattles = await self.clash.get_clan_battles(await self.clans.getClanData(clankey, 'tag'), type="war")
                 except clashroyale.RequestError:
@@ -65,7 +66,7 @@ class warbattles:
                 for battle in clanBattles:
                     battledata = {"train": 0, "time": battle.utc_time}
                     if battledata["time"] > self.moment:
-                        if battle.type == "clanWarWarDay":
+                        if battle.type == "clanWarWarDay" and (battle.team[0].tag not in self.completed[1]):
                             battledata["tag"] = battle.team[0].tag
                             battledata["name"] = battle.team[0].name
                             battledata["deckLink"] = battle.team[0].deck_link
@@ -110,7 +111,12 @@ class warbattles:
                             newctx = ctx
                             newctx.message.channel = discord.Object(id=channel)
                             await self.deck.upload_deck_image(newctx, card_keys, 'War Deck')
-                            # return
+                            
+                            self.completed[1].append(battledata["tag"])
+                            await asyncio.sleep(1)
+                self.completed[0].append(clankey)
+                await asyncio.sleep(1)
+        self.completed = [[],[]]
         self.moment = time.time()
 
 
