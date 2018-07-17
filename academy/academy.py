@@ -98,7 +98,7 @@ class academy:
 
         await self.bot.send_message(channel_req,
                                     msg_req.format(
-                                        user.display_name,
+                                        user.mention,
                                         ingame_name,
                                         trophies,
                                         info,
