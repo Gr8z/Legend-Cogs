@@ -323,7 +323,7 @@ class legend:
         if not foundClan:
             embed.add_field(name="uh oh!",
                             value="There are no clans available for you at the moment, "
-                            "please type !legend to see all self.clans.",
+                            "please type !legend to see all clans.",
                             inline=False)
 
         embed.description = ("Our Family is made up of {} "
