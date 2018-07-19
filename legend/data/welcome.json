@@ -4,6 +4,7 @@
     "I just saw  {0.mention} come out of the goblin hut. Please find them some pants.",
     "Hey {0.mention}, I would use mirror spell to have a second you, even if it costs one more elixir! Welcome!",
     "We've played PEKKA and {0.mention} has countered with e-barbs! Its okay tho, he's new here.",
+    "We've played Fire spirits and {0.mention} has countered with Minion horde! Its okay tho, he's new here.",
     "If the bowler could stop playing with his ball long enough, we could all get together and welcome {0.mention} to the arena!",
     "It is a goblin barrel with just one troop! And that troop is {0.mention}",
     "Please welcome {0.mention}, who can counter a minion horde with a log.",
@@ -27,6 +28,7 @@
     "Watch out {0.mention} just stunned us with a zap.",
     "Hi {0.mention}, welcome to The LeGeNDary arena! Get it? LeGeND...ary ! No? Okay sorry :(",
     "Even Ice Wizard's mustache isn't as hot as {0.mention}",
-    "Watch out, It's a {0.mention} barrel!"
+    "Watch out, It's a {0.mention} barrel!",
+    "Welcome {0.mention}, who never misses a rocket!"
 ]
 }
