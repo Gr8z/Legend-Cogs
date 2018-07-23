@@ -186,7 +186,7 @@ class clashroyale:
         ]
 
         embed = discord.Embed(title="", color=0xFAA61A, description="Your Upcoming chests.")
-        embed.set_thumbnail(url="https://cdn.discordapp.com/emojis/385784630227369985.png")
+        embed.set_thumbnail(url="https://cdn.discordapp.com/emojis/380832387195469826.png")
         embed.set_author(name="{} (#{})".format(member.name, profiletag))
         embed.add_field(name="Upcoming Chests", value=valuechestText, inline=False)
         embed.add_field(name="Special Chests", value=" ".join(chestList), inline=False)
