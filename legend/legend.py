@@ -340,10 +340,10 @@ class legend:
                                 "you are allowed to join, based on your statistics. "
                                 "Which clan would you like to join? \n\n"
                                 "**Name:** {} (#{})\n**Trophies:** {}/{}\n"
-                                "**Clan:** {}\n"
-                                "```WARNING: PLEASE DO NOT REQUEST TO "
+                                "**Clan:** {}\n\n"
+                                ":warning: **PLEASE DO NOT REQUEST TO "
                                 "JOIN ANY CLANS IF YOU HAVE NOT YET "
-                                "RECIEVED YOUR RECRUIT CODE!```".format(ign,
+                                "RECIEVED YOUR RECRUIT CODE!**".format(ign,
                                                                         ign,
                                                                         profiletag,
                                                                         trophies,
@@ -442,9 +442,9 @@ class legend:
                     return
             
             if not leftClan:
-                warning = ("\n```WARNING: PLEASE DO NOT REQUEST TO "
+                warning = ("\n\n:warning: **PLEASE DO NOT REQUEST TO "
                            "JOIN ANY CLANS IF YOU HAVE NOT YET "
-                           "RECIEVED YOUR RECRUIT CODE!```")
+                           "RECIEVED YOUR RECRUIT CODE!**")
                 await self.bot.say(("{} Please leave your current clan now. "
                                     "Your recruit code will arrive in 3 minutes.{}".format(member.mention, warning)))
                 await asyncio.sleep(180)
