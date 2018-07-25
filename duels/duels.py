@@ -72,7 +72,7 @@ class duels:
                 break
         return {"topScore": topScore, "userIdRank": userIdRank}
 
-   def emoji(self, name):
+    def emoji(self, name):
         """Emoji by name."""
         for emoji in self.bot.get_all_emojis():
             if emoji.name == name:
@@ -130,11 +130,11 @@ class duels:
         server = ctx.message.server
 
         if self.active:
-            await self.bot.say("Another duel is already in progress, type ``!duel accept``.")
+            await self.bot.say("Another duel is already in progress, type ``{}duel accept``.".format(ctx.prefix))
             return
 
         if bet < 5000:
-            await self.bot.say("Your bet is too low, bet a bigger number.")
+            await self.bot.say("Your bet is too low, minimum credits for a duel are 5000.")
             return
 
         if not self.bank_check(author, bet):
@@ -149,6 +149,14 @@ class duels:
             privateDuel = None
         else:
             privateDuel = member.id
+
+        if author.id == privateDuel:
+            await self.bot.say("I can't let your duel yourself, go and pick someone else.")
+            return
+
+        if privateDuel == self.bot.user.id:
+            await self.bot.say("I don't play Clash Royale, If i did you wouldn't stand a chance.")
+            return
 
         duelPlayer = self.settings['USERS'][author.id]
 
