@@ -29,6 +29,10 @@
     "Hi {0.mention}, welcome to The LeGeNDary arena! Get it? LeGeND...ary ! No? Okay sorry :(",
     "Even Ice Wizard's mustache isn't as hot as {0.mention}",
     "Watch out, It's a {0.mention} barrel!",
+    "Welcome {0.mention}. Leave your weapons by the door.",
+    "Swoooosh. {0.mention} just landed in the Arena.",
+    "{0.mention} just arrived. Seems OP - please nerf.",
+    "Ha! {0.mention} has joined! You activated my King Tower!.",
     "Welcome {0.mention}, who never misses a rocket!"
 ]
 }
