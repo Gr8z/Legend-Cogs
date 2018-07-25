@@ -72,6 +72,13 @@ class duels:
                 break
         return {"topScore": topScore, "userIdRank": userIdRank}
 
+   def emoji(self, name):
+        """Emoji by name."""
+        for emoji in self.bot.get_all_emojis():
+            if emoji.name == name:
+                return '<:{}:{}>'.format(emoji.name, emoji.id)
+        return ''
+
     @commands.group(pass_context=True, no_pm=True)
     async def duel(self, ctx):
         """Play a duel in clashroyale"""
@@ -160,14 +167,17 @@ class duels:
         else:
             clanurl = profiledata.clan.badge.image
 
+        arenaFormat = profiledata.arena.arena.replace(' ', '').lower()
+        
         embed = discord.Embed(color=0x0080ff)
         embed.set_author(name=profiledata.name + " (#"+profiledata.tag+")", icon_url=clanurl)
         embed.set_thumbnail(url="https://imgur.com/9DoEq22.jpg")
-        embed.add_field(name="Duel Wins", value=str(duelPlayer['WON']), inline=True)
-        embed.add_field(name="Trophies", value=profiledata.trophies, inline=True)
+        embed.add_field(name="Duel Wins", value="{} {}".format(self.emoji("battle"), duelPlayer['WON']), inline=True)
+        embed.add_field(name="Trophies", value="{} {:,}".format(self.emoji(arenaFormat), profiledata.trophies), inline=True)
         if profiledata.clan is not None:
-            embed.add_field(name="Clan", value=profiledata.clan.name, inline=True)
-        embed.add_field(name="Arena", value=profiledata.arena.name, inline=True)
+            embed.add_field(name="Clan {}".format(profiledata.clan.role.capitalize()),
+                            value="{} {}".format(self.emoji("clan"), profiledata.clan.name), inline=True)
+        embed.add_field(name="Challenge Max Wins", value="{} {}".format(self.emoji("tourney"), profiledata.stats.challenge_max_wins), inline=True)
         embed.set_footer(text=credits, icon_url=creditIcon)
 
         if privateDuel is None:
@@ -186,8 +196,9 @@ class duels:
                                                                                                     ctx.prefix)), embed=embed)
             await self.bot.edit_role(server, duels_role, mentionable=False)
         else:
-            await self.bot.say(content=("{} wants to duel one of you in Clash Royale "
+            await self.bot.say(content=("{} wants to duel {} in Clash Royale "
                                         "for {} credits, type ``{}duel accept`` the offer.".format(author.mention,
+                                                                                                    member.mention,
                                                                                                     bet,
                                                                                                     ctx.prefix)), embed=embed)
         duelID = str(int(time.time()))
