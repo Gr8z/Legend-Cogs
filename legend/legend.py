@@ -300,6 +300,7 @@ class legend:
                 trophies = profiledata.trophies
                 cards = profiledata.cards
                 maxtrophies = profiledata.stats.max_trophies
+                plyrLeagueCWR = 0
 
                 if profiledata.clan is None:
                     clanname = "*None*"
