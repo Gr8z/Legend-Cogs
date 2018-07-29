@@ -376,9 +376,9 @@ class crtools:
         """Toggle Private approval of new recruits"""
         clankey = clankey.lower()
         try:
-            await self.bot.say("Private Approval now is set to " + str(await clans.togglePrivate(clankey)))
+            await self.bot.say("Private Approval now is set to " + str(await self.clans.togglePrivate(clankey)))
         except KeyError:
-            await self.bot.say("Please use a valid clanname: {}".format(await clans.namesClans()))
+            await self.bot.say("Please use a valid clanname: {}".format(await self.clans.namesClans()))
             return
 
 
