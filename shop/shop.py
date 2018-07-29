@@ -21,7 +21,7 @@ class shop:
         self.auth = self.bot.get_cog('crtools').auth
         self.tags = self.bot.get_cog('crtools').tags
         self.clans = self.bot.get_cog('crtools').clans
-        self.clash = clashroyale.Client(self.auth.getToken(), is_async=True)
+        self.clash = clashroyale.RoyaleAPI(self.auth.getToken(), is_async=True)
         self.session = aiohttp.ClientSession()
 
     async def updateBank(self):

@@ -157,7 +157,7 @@ class legend:
         self.auth = self.bot.get_cog('crtools').auth
         self.tags = self.bot.get_cog('crtools').tags
         self.clans = self.bot.get_cog('crtools').clans
-        self.clash = clashroyale.Client(self.auth.getToken(), is_async=True)
+        self.clash = clashroyale.RoyaleAPI(self.auth.getToken(), is_async=True)
         self.welcome = dataIO.load_json('data/legend/welcome.json')
         self.bank = dataIO.load_json('data/economy/bank.json')
         self.seen = dataIO.load_json('data/seen/seen.json')
@@ -216,6 +216,61 @@ class legend:
         else:
             return False
 
+    async def getLeague(self, trophies):
+        if trophies >= 3000:
+            return "legend"
+        elif trophies >= 1500:
+            return "gold"
+        elif trophies >= 600:
+            return "silver"
+        else:
+            return "bronze"
+
+    async def getBestLeague(self, cards):
+        """Get best leagues using readiness"""
+        readiness = await self.clanwarReadiness(cards)
+        max_key = max(readiness, key=lambda k: readiness[k])
+
+        return "{} League ({}%)".format(max_key.capitalize(), readiness[max_key])
+
+    async def clanwarReadiness(self, cards):
+        """Calculate clanwar readiness"""
+        count = 0
+        readiness = {
+            "legend": 0,
+            "gold": 0,
+            "silver": 0,
+            "bronze": 0
+        }
+        leagueLevels = {
+            "legend": [12,10,7,4],
+            "gold": [11,9,6,3],
+            "silver": [10,8,5,2],
+            "bronze": [9,7,4,1]
+        }
+
+        for card in cards:
+            for league in leagueLevels.keys():
+                if card.rarity == "Common":
+                    overlevel = card.level >= leagueLevels[league][0]
+                elif card.rarity == "Rare":
+                    overlevel = card.level >= leagueLevels[league][1]
+                elif card.rarity == "Epic":
+                    overlevel = card.level >= leagueLevels[league][2]
+                elif card.rarity == "Legendary":
+                    overlevel = card.level >= leagueLevels[league][3]
+
+                if overlevel:
+                    readiness[league] += 1
+            count += 1
+        
+        for levels in readiness.keys():
+            readiness[levels] = int((readiness[levels] / count) * 100)
+
+        print(readiness)
+        return readiness
+
+
     @commands.command(pass_context=True)
     async def legend(self, ctx, member: discord.Member=None):
         """ Show Legend clans, can also show clans based on a member's trophies"""
@@ -231,6 +286,7 @@ class legend:
                 profiletag = await self.tags.getTag(member.id)
                 profiledata = await self.clash.get_player(profiletag)
                 trophies = profiledata.trophies
+                cards = profiledata.cards
                 maxtrophies = profiledata.stats.max_trophies
 
                 if profiledata.clan is None:
@@ -337,6 +393,7 @@ class legend:
                                 "you are allowed to join, based on your statistics. "
                                 "Which clan would you like to join? \n\n"
                                 "**Name:** {} (#{})\n**Trophies:** {}/{}\n"
+                                "**CW Readiness:** {}\n"
                                 "**Clan:** {}\n\n"
                                 ":warning: **PLEASE DO NOT REQUEST TO "
                                 "JOIN ANY CLANS IF YOU HAVE NOT YET "
@@ -345,6 +402,7 @@ class legend:
                                                                         profiletag,
                                                                         trophies,
                                                                         maxtrophies,
+                                                                        await self.getBestLeague(cards),
                                                                         clanname)))
 
     @commands.command(pass_context=True, no_pm=True)

@@ -25,7 +25,7 @@ class Clanlog:
         self.bot = bot
         self.auth = self.bot.get_cog('crtools').auth
         self.clans = self.bot.get_cog('crtools').clans
-        self.clash = clashroyale.Client(self.auth.getToken(), is_async=True)
+        self.clash = clashroyale.RoyaleAPI(self.auth.getToken(), is_async=True)
         self.member_log = dataIO.load_json('data/clanlog/member_log.json')
         self.discord_log = dataIO.load_json('data/clanlog/discord_log.json')
         self.last_count = 0

@@ -21,7 +21,7 @@ class clashroyale:
         self.auth = self.bot.get_cog('crtools').auth
         self.tags = self.bot.get_cog('crtools').tags
         self.clans = self.bot.get_cog('crtools').clans
-        self.clash = clashroyaleAPI.Client(self.auth.getToken(), is_async=True)
+        self.clash = clashroyaleAPI.OfficialAPI(self.auth.getToken(), is_async=True)
 
     def getCards(self, maxPlayers):
         """Converts maxPlayers to Cards"""
@@ -105,7 +105,7 @@ class clashroyale:
         try:
             profiletag = await self.tags.getTag(member.id)
             profiledata = await self.clash.get_player(profiletag)
-        except clashroyaleAPI.RequestError:
+        except clashroyaleAPI.errors.NotResponding:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
         except KeyError:

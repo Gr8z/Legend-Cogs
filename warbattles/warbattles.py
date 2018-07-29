@@ -26,7 +26,7 @@ class warbattles:
         self.auth = self.bot.get_cog('crtools').auth
         self.clans = self.bot.get_cog('crtools').clans
         self.deck = Deck(self.bot)
-        self.clash = clashroyale.Client(self.auth.getToken(), is_async=True, timeout=20)
+        self.clash = clashroyale.RoyaleAPI(self.auth.getToken(), is_async=True, timeout=20)
         self.moment = time.time()
         self.completed = [[],[]]
 

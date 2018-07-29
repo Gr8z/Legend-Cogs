@@ -18,7 +18,7 @@ class tournament:
     def __init__(self, bot):
         self.bot = bot
         self.auth = self.bot.get_cog('crtools').auth
-        self.clash = clashroyale.Client(self.auth.getToken(), is_async=True)
+        self.clash = clashroyale.RoyaleAPI(self.auth.getToken(), is_async=True)
 
     def getCards(self, maxPlayers):
         """Converts maxPlayers to Cards"""

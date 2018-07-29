@@ -18,7 +18,7 @@ class friendlink:
         self.bot = bot
         self.regex = re.compile(r"<?(https?:\/\/)?(www\.)?(link\.clashroyale\.com\/invite\/friend)\b([-a-zA-Z0-9/]*)>?")
         self.auth = self.bot.get_cog('crtools').auth
-        self.clash = clashroyale.Client(self.auth.getToken(), is_async=True)
+        self.clash = clashroyale.RoyaleAPI(self.auth.getToken(), is_async=True)
 
     def emoji(self, name):
         """Emoji by name."""
