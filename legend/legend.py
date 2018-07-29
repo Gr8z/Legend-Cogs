@@ -293,7 +293,7 @@ class legend:
             if clan.member_count < 50:
                 showMembers = str(clan.member_count) + "/50"
             else:
-                showMembers = "**FULL**   "
+                showMembers = "**FULL**  "
 
             if str(clan.type) != 'invite only':
                 title += "["+str(clan.type).title()+"] "
@@ -307,14 +307,11 @@ class legend:
             if bonustitle is not None:
                 title += bonustitle
 
-            desc = ("{} {}      <:crtrophy:448609948008579073> "
-                    "{}+     <:wartrophy:448609141796241408> "
-                    "{}   <:openlink:448611387040595979> "
-                    "[Open](https://legendclans.com/clanInfo/{})".format(emoji,
-                                                                         showMembers,
-                                                                         str(clan.required_score),
-                                                                         str(warTrophies),
-                                                                         clan.tag))
+            desc = ("{} {}  <:crtrophy:448609948008579073> "
+                    "{}+  <:wartrophy:448609141796241408> {}".format(emoji,
+                                                                        showMembers,
+                                                                        clan.required_score,
+                                                                        warTrophies))
 
             if (member is None) or ((clan.required_score <= trophies) and (maxtrophies > personalbest) and (trophies - clan.required_score < 1200) and (clan.type != 'closed')):
                 foundClan = True
