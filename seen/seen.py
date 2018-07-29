@@ -4,7 +4,6 @@ import discord
 import os
 import asyncio
 from datetime import datetime
-import time
 
 DB_VERSION = 2
 
@@ -84,7 +83,7 @@ class Seen:
         if not reaction.message.channel.is_private and self.bot.user.id != user.id:
             server = reaction.message.server
             author = user
-            ts = time.time()
+            ts = datetime.now().timestamp() - 18000
             data = {}
             data['TIMESTAMP'] = ts
             if server.id not in self.seen:
