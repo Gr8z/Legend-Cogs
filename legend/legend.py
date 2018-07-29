@@ -229,7 +229,14 @@ class legend:
     async def getBestLeague(self, cards):
         """Get best leagues using readiness"""
         readiness = await self.clanwarReadiness(cards)
-        max_key = max(readiness, key=lambda k: readiness[k])
+
+        legend = readiness["legend"]
+        gold = readiness["gold"] - legend
+        silver = readiness["silver"] - gold - legend
+        bronze = readiness["bronze"] - silver - gold - legend
+
+        readinessCount = {"legend": legend, "gold": gold, "silver": silver, "bronze": bronze}
+        max_key = max(readinessCount, key=lambda k: readinessCount[k])
 
         return "{} League ({}%)".format(max_key.capitalize(), readiness[max_key])
 
@@ -267,7 +274,6 @@ class legend:
         for levels in readiness.keys():
             readiness[levels] = int((readiness[levels] / count) * 100)
 
-        print(readiness)
         return readiness
 
 
