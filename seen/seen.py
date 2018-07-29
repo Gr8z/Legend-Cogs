@@ -29,7 +29,7 @@ class Seen:
         '''seen <@username>'''
         server = context.message.server
         author = username
-        timestamp_now = context.message.timestamp
+        timestamp_now = datetime.now()
         if server.id in self.seen:
             if author.id in self.seen[server.id]:
                 data = self.seen[server.id][author.id]
@@ -71,7 +71,7 @@ class Seen:
         if not message.channel.is_private and self.bot.user.id != message.author.id:
             server = message.server
             author = message.author
-            ts = message.timestamp.timestamp()
+            ts = datetime.now().timestamp()
             data = {}
             data['TIMESTAMP'] = ts
             if server.id not in self.seen:
@@ -83,7 +83,7 @@ class Seen:
         if not reaction.message.channel.is_private and self.bot.user.id != user.id:
             server = reaction.message.server
             author = user
-            ts = datetime.now().timestamp() - 18000
+            ts = datetime.now().timestamp()
             data = {}
             data['TIMESTAMP'] = ts
             if server.id not in self.seen:
