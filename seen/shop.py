@@ -4,7 +4,7 @@ import discord
 import os
 import asyncio
 from datetime import datetime
-
+import time
 
 DB_VERSION = 2
 
@@ -70,17 +70,27 @@ class Seen:
 
     async def on_message(self, message):
         if not message.channel.is_private and self.bot.user.id != message.author.id:
-            if not any(message.content.startswith(n) for n in self.bot.settings.prefixes):
-                server = message.server
-                author = message.author
-                ts = message.timestamp.timestamp()
-                data = {}
-                data['TIMESTAMP'] = ts
-                if server.id not in self.seen:
-                    self.seen[server.id] = {}
-                self.seen[server.id][author.id] = data
-                self.new_data = True
+            server = message.server
+            author = message.author
+            ts = message.timestamp.timestamp()
+            data = {}
+            data['TIMESTAMP'] = ts
+            if server.id not in self.seen:
+                self.seen[server.id] = {}
+            self.seen[server.id][author.id] = data
+            self.new_data = True
 
+    async def on_reaction_add(self, reaction, user):
+        if not reaction.message.channel.is_private and self.bot.user.id != user.id:
+            server = reaction.message.server
+            author = user
+            ts = time.time()
+            data = {}
+            data['TIMESTAMP'] = ts
+            if server.id not in self.seen:
+                self.seen[server.id] = {}
+            self.seen[server.id][author.id] = data
+            self.new_data = True
 
 def check_folder():
     if not os.path.exists('data/seen'):
