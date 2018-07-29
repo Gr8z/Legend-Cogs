@@ -291,7 +291,7 @@ class shop:
                                                                                            tourney.name,
                                                                                            amount)))
                             else:
-                                await self.bot.send_message(user, ("Hello {}, take these credits* "
+                                await self.bot.send_message(user, ("Hello {}, take these credits "
                                                                    "for the **{}** trophies you contributed to "
                                                                    "your clan in **{}**. "
                                                                    "(+{} credits!)".format(user.name,
