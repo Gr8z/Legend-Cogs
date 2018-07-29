@@ -240,6 +240,11 @@ class legend:
 
         return "{} League ({}%)".format(max_key.capitalize(), readiness[max_key])
 
+    async def getBestPerc(self, cards, league):
+        """Get best leagues level perc using readiness"""
+        readiness = await self.clanwarReadiness(cards)
+        return readiness[league]
+
     async def clanwarReadiness(self, cards):
         """Calculate clanwar readiness"""
         count = 0
@@ -294,6 +299,7 @@ class legend:
                 trophies = profiledata.trophies
                 cards = profiledata.cards
                 maxtrophies = profiledata.stats.max_trophies
+                plyrLeagueCWR = 0
 
                 if profiledata.clan is None:
                     clanname = "*None*"
@@ -340,6 +346,7 @@ class legend:
                 if await self.clans.getClanData(clankey, 'tag') == clan.tag:
                     numWaiting = await self.clans.numWaiting(clankey)
                     personalbest = await self.clans.getClanData(clankey, 'personalbest')
+                    cwr = await self.clans.getClanData(clankey, 'cwr')
                     bonustitle = await self.clans.getClanData(clankey, 'bonustitle')
                     emoji = await self.clans.getClanData(clankey, 'emoji')
                     warTrophies = await self.clans.getClanData(clankey, 'warTrophies')
@@ -364,18 +371,25 @@ class legend:
 
             if personalbest > 0:
                 title += "PB: "+str(personalbest)+"+  "
-                clan.max_trophies = personalbest
+
+            if cwr > 0:
+                plyrLeagueCWR = await self.getBestPerc(cards, await self.getLeague(warTrophies))
+                title += "CWR: "+str(cwr)+"%  "
 
             if bonustitle is not None:
                 title += bonustitle
 
             desc = ("{} {}  <:crtrophy:448609948008579073> "
                     "{}+  <:wartrophy:448609141796241408> {}".format(emoji,
-                                                                        showMembers,
-                                                                        clan.required_score,
-                                                                        warTrophies))
+                                                                     showMembers,
+                                                                     clan.required_score,
+                                                                     warTrophies))
 
-            if (member is None) or ((clan.required_score <= trophies) and (maxtrophies > personalbest) and (trophies - clan.required_score < 1200) and (clan.type != 'closed')):
+            if (member is None) or ((clan.required_score <= trophies) and
+                                    (maxtrophies > personalbest) and 
+                                    (plyrLeagueCWR > cwr) and 
+                                    (trophies - clan.required_score < 1200) and 
+                                    (clan.type != 'closed')):
                 foundClan = True
                 embed.add_field(name=title, value=desc, inline=False)
 
@@ -430,7 +444,9 @@ class legend:
             clan_name = await self.clans.getClanData(clankey, 'name')
             clan_role = await self.clans.getClanData(clankey, 'role')
             clan_pb = await self.clans.getClanData(clankey, 'personalbest')
+            clan_cwr = await self.clans.getClanData(clankey, 'cwr')
             clan_approval = await self.clans.getClanData(clankey, 'approval')
+            clan_war = await self.clans.getClanData(clankey, 'warTrophies')
         except KeyError:
             await self.bot.say("Please use a valid clanname: {}".format(await self.clans.namesClans()))
             return
@@ -462,7 +478,9 @@ class legend:
         if membership:
 
             trophies = profiledata.trophies
+            cards = profiledata.cards
             maxtrophies = profiledata.stats.max_trophies
+            plyrLeagueCWR = await self.getBestPerc(cards, await self.getLeague(clan_war))
 
             if (clandata.member_count == 50):
                 await self.bot.say("Approval failed, the clan is Full.")
@@ -470,6 +488,10 @@ class legend:
 
             if ((trophies < clandata.required_score) and (maxtrophies < clan_pb)):
                 await self.bot.say("Approval failed, you don't meet the trophy requirements.")
+                return
+
+            if (plyrLeagueCWR < clan_cwr):
+                await self.bot.say("Approval failed, you don't meet the CW Readiness requirements.")
                 return
 
             if (clandata.type == "closed"):
@@ -718,6 +740,8 @@ class legend:
             clan_name = await self.clans.getClanData(clankey, 'name')
             clan_role = await self.clans.getClanData(clankey, 'role')
             clan_pb = await self.clans.getClanData(clankey, 'personalbest')
+            clan_cwr = await self.clans.getClanData(clankey, 'cwr')
+            clan_war = await self.clans.getClanData(clankey, 'warTrophies')
         except KeyError:
             await self.bot.say("Please use a valid clanname: {}".format(await self.clans.namesClans()))
             return
@@ -736,7 +760,9 @@ class legend:
 
             ign = profiledata.name
             trophies = profiledata.trophies
+            cards = profiledata.cards
             maxtrophies = profiledata.stats.max_trophies
+            plyrLeagueCWR = await self.getBestPerc(cards, await self.getLeague(clan_war))
         except clashroyale.RequestError:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
@@ -747,6 +773,10 @@ class legend:
         if ((trophies < clandata.required_score) and (maxtrophies < clan_pb)):
             await self.bot.say("Cannot add you to the waiting list, you don't meet the trophy requirements.")
             return
+
+        if (plyrLeagueCWR < clan_cwr):
+                await self.bot.say("Cannot add you to the waiting list, you don't meet the CW Readiness requirements.")
+                return
 
         if not await self.clans.addWaitingMember(clankey, member.id):
             await self.bot.say("You are already in a waiting list for this clan.")

@@ -10,7 +10,7 @@ clans_path = "data/crtools/clans.json"
 default_clans = {'defualt': {'tag': '9PJYVVL2', 'role': 'everyone', 'name': 'defualt',
                              'nickname': 'defualt', 'discord': None, 'waiting': [], 'members': {},
                              'bonustitle': '', 'personalbest': 0, 'warTrophies': 0, 'approval': False,
-                             'log_channel': None, 'warlog_channel': None, 'emoji': ''}}
+                             'log_channel': None, 'warlog_channel': None, 'emoji': '', 'cwr': 0}}
 
 
 class tags:
@@ -203,6 +203,11 @@ class clans:
         self.clans[clankey]['personalbest'] = trophies
         dataIO.save_json(clans_path, self.clans)
 
+    async def setCWR(self, clankey, cwr):
+        """Set a clan's CWR"""
+        self.clans[clankey]['cwr'] = cwr
+        dataIO.save_json(clans_path, self.clans)
+
     async def setBonus(self, clankey, bonus):
         """Set a clan's Bonus Statement"""
         self.clans[clankey]['bonustitle'] = bonus
@@ -286,6 +291,18 @@ class crtools:
         clankey = clankey.lower()
         try:
             await self.clans.setPBTrophies(clankey, pb)
+        except KeyError:
+            await self.bot.say("Please use a valid clanname: {}".format(await self.clans.namesClans()))
+            return
+
+        await self.bot.say("Success")
+
+    @_clans.command(pass_context=True, name="cwr")
+    async def clans_cwr(self, ctx, clankey, percent: int):
+        """Set a CWR requirement for a clan"""
+        clankey = clankey.lower()
+        try:
+            await self.clans.setCWR(clankey, percent)
         except KeyError:
             await self.bot.say("Please use a valid clanname: {}".format(await self.clans.namesClans()))
             return
