@@ -291,6 +291,7 @@ class legend:
             trophies = 9999
             maxtrophies = 9999
             maxmembers = 51
+            plyrLeagueCWR = 0
         else:
             try:
                 await self.bot.type()
@@ -299,7 +300,6 @@ class legend:
                 trophies = profiledata.trophies
                 cards = profiledata.cards
                 maxtrophies = profiledata.stats.max_trophies
-                plyrLeagueCWR = 0
 
                 if profiledata.clan is None:
                     clanname = "*None*"
@@ -373,8 +373,9 @@ class legend:
                 title += "PB: "+str(personalbest)+"+  "
 
             if cwr > 0:
-                plyrLeagueCWR = await self.getBestPerc(cards, await self.getLeague(warTrophies))
                 title += "CWR: "+str(cwr)+"%  "
+                if member is not None:
+                    plyrLeagueCWR = await self.getBestPerc(cards, await self.getLeague(warTrophies))
 
             if bonustitle is not None:
                 title += bonustitle
@@ -775,7 +776,7 @@ class legend:
             return
 
         if (plyrLeagueCWR < clan_cwr):
-                await self.bot.say("Cannot add you to the waiting list, you don't meet the CW Readiness requirements.")
+                await self.bot.say("Cannot add you to the waiting lists, you don't meet the CW Readiness requirements.")
                 return
 
         if not await self.clans.addWaitingMember(clankey, member.id):
