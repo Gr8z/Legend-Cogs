@@ -389,7 +389,7 @@ class legend:
 
             if (member is None) or ((clan.required_score <= trophies) and
                                     (maxtrophies > personalbest) and 
-                                    (plyrLeagueCWR > cwr) and 
+                                    (plyrLeagueCWR >= cwr) and 
                                     (trophies - clan.required_score < 1200) and 
                                     (clan.type != 'closed')):
                 foundClan = True
