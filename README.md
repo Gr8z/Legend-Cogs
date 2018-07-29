@@ -30,6 +30,7 @@ If you want to see this bot in action, join the LeGeND Family Discord at [discor
  * **fmod** - Advanced Warning system by RSNFreud.
  * **stats** - Count Server Statistics on a Voice Channel.
  * **logging** - log messages and reactions to a database.
+ * **seen** - Check when a user was last seen, port from aikaterna-cogs.
 
 ## Installation
 
