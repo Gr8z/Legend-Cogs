@@ -338,7 +338,7 @@ class clashroyale:
 
         for league in leagues.keys():
             f_title = "{} League ({}%) - {}".format(leagues[league]["name"], leagues[league]["percent"], leagues[league]["levels"])
-            groups = self.grouper(leagues[league]["cards"], 35)
+            groups = self.grouper(leagues[league]["cards"], 30)
             for index, cards in enumerate(groups):
                 value = ""
                 for card in cards:
