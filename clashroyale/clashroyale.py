@@ -5,6 +5,7 @@ import os
 from __main__ import send_cmd_help
 import time
 import clashroyale as clashroyaleAPI
+import itertools
 
 BOTCOMMANDER_ROLES = ["Family Representative", "Clan Manager",
                       "Clan Deputy", "Co-Leader", "Hub Officer", "admin"]
@@ -22,6 +23,10 @@ class clashroyale:
         self.tags = self.bot.get_cog('crtools').tags
         self.clans = self.bot.get_cog('crtools').clans
         self.clash = clashroyaleAPI.RoyaleAPI(self.auth.getToken(), is_async=True)
+
+    def grouper(self, iterable, n):
+        args = [iter(iterable)] * n
+        return itertools.zip_longest(*args)
 
     def getCards(self, maxPlayers):
         """Converts maxPlayers to Cards"""
@@ -111,7 +116,7 @@ class clashroyale:
                 arenaFormat = member.arena.arena.replace(' ', '').lower()
                 return "{} {}".format(self.emoji(arenaFormat), member.name)
 
-    def sec2tme(self, sec):
+    async def sec2tme(self, sec):
         """Converts seconds to readable time"""
         m, s = divmod(sec, 60)
         h, m = divmod(m, 60)
@@ -123,6 +128,54 @@ class clashroyale:
                 return "{} minutes, {} secs".format(m, s)
         else:
             return "{} hour, {} mins".format(h, m)
+
+    async def clanwarReadiness(self, cards):
+        """Calculate clanwar readiness"""
+        readiness = {}
+        leagueLevels = {
+            "legendary": [12,10,7,4],
+            "gold": [11,9,6,3],
+            "silver": [10,8,5,2],
+            "bronze": [9,7,4,1]
+        }
+
+        
+        for league in leagueLevels.keys():
+            readiness[league] = {"name": league.capitalize(),
+                                 "total": 0,
+                                 "percent": 0,
+                                 "cards": [],
+                                 "levels": "/".join(str(x) for x in leagueLevels[league])}
+            count = 0
+            for card in cards:
+                if card.rarity == "Common":
+                    overlevel = card.level >= leagueLevels[league][0]
+                elif card.rarity == "Rare":
+                    overlevel = card.level >= leagueLevels[league][1]
+                elif card.rarity == "Epic":
+                    overlevel = card.level >= leagueLevels[league][2]
+                elif card.rarity == "Legendary":
+                    overlevel = card.level >= leagueLevels[league][3]
+
+                if overlevel:
+                    readiness[league]["total"] += 1
+                    readiness[league]["cards"].append(card.name.replace(" ", ""))
+                count += 1
+        
+        for levels in readiness.keys():
+            readiness[levels]["percent"] = int((readiness[levels]["total"] / count) * 100)
+
+        readiness["gold"]["cards"] = list(set(readiness["gold"]["cards"]) -
+                                          set(readiness["legendary"]["cards"]))
+        readiness["silver"]["cards"] = list(set(readiness["silver"]["cards"]) -
+                                            set(readiness["gold"]["cards"]) -
+                                            set(readiness["legendary"]["cards"]))
+        readiness["bronze"]["cards"] = list(set(readiness["bronze"]["cards"]) -
+                                            set(readiness["silver"]["cards"]) -
+                                            set(readiness["gold"]["cards"]) -
+                                            set(readiness["legendary"]["cards"]))
+
+        return readiness
 
     @commands.command(pass_context=True, aliases=['clashprofile'])
     async def clashProfile(self, ctx, member: discord.Member=None):
@@ -253,6 +306,48 @@ class clashroyale:
 
         await self.bot.process_commands(message)
 
+    @commands.command(pass_context=True, aliases=['cwr'])
+    async def clanwarreadiness(self, ctx, member: discord.Member=None):
+        """View yours or other's clash royale CWR"""
+
+        member = member or ctx.message.author
+
+        await self.bot.type()
+
+        try:
+            profiletag = await self.tags.getTag(member.id)
+            profiledata = await self.clash.get_player(profiletag)
+            leagues = await self.clanwarReadiness(profiledata.cards)
+        except clashroyaleAPI.RequestError:
+            await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
+            return
+        except KeyError:
+            await self.bot.say("You need to first save your profile using ``{}save #GAMETAG``".format(ctx.prefix))
+            return
+
+        if profiledata.clan is None:
+            clanurl = "https://i.imgur.com/4EH5hUn.png"
+        else:
+            clanurl = profiledata.clan.badge.image
+
+        embed = discord.Embed(color=0xFAA61A, description="Clan War Readiness")
+        embed.set_author(name=profiledata.name + " (#"+profiledata.tag+")", icon_url=clanurl, url="https://royaleapi.com/player/"+profiledata.tag)
+        embed.add_field(name="War Day Wins", value="{} {}".format(self.emoji("warwin"), profiledata.games.war_day_wins), inline=True)
+        embed.add_field(name="War Cards Collected", value="{} {}".format(self.emoji("card"), profiledata.stats.clan_cards_collected), inline=True)
+        embed.set_footer(text=credits, icon_url=creditIcon)
+
+        for league in leagues.keys():
+            f_title = "{} League ({}%) - {}".format(leagues[league]["name"], leagues[league]["percent"], leagues[league]["levels"])
+            groups = self.grouper(leagues[league]["cards"], 35)
+            for index, cards in enumerate(groups):
+                value = ""
+                for card in cards:
+                    if card is not None:
+                        value += self.emoji(card)
+                embed.add_field(name=f_title if index == 0 else '\u200b', value=value, inline=False)
+
+        await self.bot.say(embed=embed)
+
     @commands.command(pass_context=True)
     async def clan(self, ctx, clantag):
         """View Clash Royale Clan statistics and information """
@@ -338,10 +433,10 @@ class clashroyale:
         if tourneydata.status != "ended":
 
             if tourneydata.status != "inProgress":
-                startTime = self.sec2tme((tourneydata.create_time + tourneydata.prep_time) - int(time.time()))
+                startTime = await self.sec2tme((tourneydata.create_time + tourneydata.prep_time) - int(time.time()))
                 embed.add_field(name="Starts In", value=startTime, inline=True)
 
-            endTime = self.sec2tme((tourneydata.create_time + tourneydata.prep_time + tourneydata.duration) - int(time.time()))
+            endTime = await self.sec2tme((tourneydata.create_time + tourneydata.prep_time + tourneydata.duration) - int(time.time()))
             embed.add_field(name="Ends In", value=endTime, inline=True)
 
         embed.add_field(name="Hosted By", value=tourneydata.creator.name, inline=True)
