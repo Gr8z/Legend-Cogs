@@ -66,7 +66,7 @@ class warbattles:
                 for battle in clanBattles:
                     battledata = {"train": 0, "time": battle.utc_time}
                     if battledata["time"] > self.moment:
-                        if battle.type == "clanWarWarDay" and (battle.team[0].tag not in self.completed[1]):
+                        if battle.type == "clanWarWarDay" and (battledata["time"] not in self.completed[1]):
                             battledata["tag"] = battle.team[0].tag
                             battledata["name"] = battle.team[0].name
                             battledata["deckLink"] = battle.team[0].deck_link
@@ -112,7 +112,7 @@ class warbattles:
                             newctx.message.channel = discord.Object(id=channel)
                             await self.deck.upload_deck_image(newctx, card_keys, 'War Deck')
                             
-                            self.completed[1].append(battledata["tag"])
+                            self.completed[1].append(battledata["time"])
                             await asyncio.sleep(1)
                 self.completed[0].append(clankey)
                 await asyncio.sleep(1)
