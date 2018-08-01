@@ -207,19 +207,24 @@ class clashroyale:
         for chest in mapEmoji.keys():
             valuechestText = valuechestText.replace(chest, self.emoji(mapEmoji[chest]))
 
+        specialChestText = []
         chestList = [
-            "{} +{}".format(self.emoji("giant"), profiledata.giant+1),
-            "{} +{}".format(self.emoji("epic"), profiledata.epic+1),
-            "{} +{}".format(self.emoji("magic"), profiledata.magical+1),
-            "{} +{}".format(self.emoji("super"), profiledata.super_magical+1),
-            "{} +{}".format(self.emoji("legendary"), profiledata.legendary+1),
+            [self.emoji("giant"), profiledata.giant],
+            [self.emoji("epic"), profiledata.epic],
+            [self.emoji("magic"), profiledata.magical],
+            [self.emoji("super"), profiledata.super_magical],
+            [self.emoji("legendary"), profiledata.legendary]
         ]
+
+        for chest in chestList:
+            if chest[1] != 0:
+                specialChestText.append("{} +{}".format(chest[0], chest[1]+1))
 
         embed = discord.Embed(title="", color=0xFAA61A, description="Your Upcoming chests.")
         embed.set_thumbnail(url="https://cdn.discordapp.com/emojis/380832387195469826.png")
         embed.set_author(name="{} (#{})".format(member.name, profiletag))
         embed.add_field(name="Upcoming Chests", value=valuechestText, inline=False)
-        embed.add_field(name="Special Chests", value=" ".join(chestList), inline=False)
+        embed.add_field(name="Special Chests", value=" ".join(specialChestText), inline=False)
         embed.set_footer(text=credits, icon_url=creditIcon)
 
         await self.bot.say(embed=embed)
