@@ -2,7 +2,6 @@ import discord
 from discord.ext import commands
 import os
 from .utils.dataIO import dataIO, fileIO
-from cogs.utils import checks
 import asyncio
 import random
 from random import choice as rand_choice
@@ -30,7 +29,8 @@ rules_text = """**Here are some Legend Family Discord server rules.**\n
 • A good rule is to talk to people as if you were talking to them face to face.
 • There are more rules that vary from clan to clan. Ask your clan leader for the rules of your clan.\n
 **Clan Transfer**\n
-• If you are transferring from one Legend Family clan to another, please contact your destination clan's clan leader first, and wait for the all clear from that clan leader. We are all for members being wherever they want to be, but it helps us keep track of what is going on, and helps us make sure you get accepted.
+• If you are transferring from one Legend Family clan to another, please contact your destination clan's clan leader first, 
+and wait for the all clear from that clan leader. We are all for members being wherever they want to be, but it helps us keep track of what is going on, and helps us make sure you get accepted.
 • If you are leaving the clan for another reason, please talk with your leader first when possible. As a clan leader it helps to know if you're leaving for good, if you're leaving to do 2v2 with a few friends for a while, or if you're leaving for an eSport event.\n
 **Violation of these roles will lead to punishment including temporary guest role reduced access, temporary kick from server, or permanent kick from server, depending on the severity and/or frequency of the offense**"""
 
@@ -257,10 +257,10 @@ class legend:
             "bronze": 0
         }
         leagueLevels = {
-            "legend": [12,10,7,4],
-            "gold": [11,9,6,3],
-            "silver": [10,8,5,2],
-            "bronze": [9,7,4,1]
+            "legend": [12, 10, 7, 4],
+            "gold": [11, 9, 6, 3],
+            "silver": [10, 8, 5, 2],
+            "bronze": [9, 7, 4, 1]
         }
 
         for card in cards:
@@ -277,12 +277,11 @@ class legend:
                 if overlevel:
                     readiness[league] += 1
             count += 1
-        
+
         for levels in readiness.keys():
             readiness[levels] = int((readiness[levels] / count) * 100)
 
         return readiness
-
 
     @commands.command(pass_context=True)
     async def legend(self, ctx, member: discord.Member=None):
@@ -292,7 +291,6 @@ class legend:
         if member is None:
             trophies = 9999
             maxtrophies = 9999
-            maxmembers = 51
             plyrLeagueCWR = 0
         else:
             try:
@@ -310,7 +308,6 @@ class legend:
                     clanname = profiledata.clan.name
 
                 ign = profiledata.name
-                maxmembers = 50
             except clashroyale.RequestError:
                 await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
                 return
@@ -390,9 +387,9 @@ class legend:
                                                                      warTrophies))
 
             if (member is None) or ((clan.required_score <= trophies) and
-                                    (maxtrophies > personalbest) and 
-                                    (plyrLeagueCWR >= cwr) and 
-                                    (trophies - clan.required_score < 1200) and 
+                                    (maxtrophies > personalbest) and
+                                    (plyrLeagueCWR >= cwr) and
+                                    (trophies - clan.required_score < 1200) and
                                     (clan.type != 'closed')):
                 foundClan = True
                 embed.add_field(name=title, value=desc, inline=False)
@@ -422,19 +419,18 @@ class legend:
                                 ":warning: **PLEASE DO NOT REQUEST TO "
                                 "JOIN ANY CLANS IF YOU HAVE NOT YET "
                                 "RECIEVED YOUR RECRUIT CODE!**".format(ign,
-                                                                        ign,
-                                                                        profiletag,
-                                                                        trophies,
-                                                                        maxtrophies,
-                                                                        await self.getBestLeague(cards),
-                                                                        clanname)))
+                                                                       ign,
+                                                                       profiletag,
+                                                                       trophies,
+                                                                       maxtrophies,
+                                                                       await self.getBestLeague(cards),
+                                                                       clanname)))
 
     @commands.command(pass_context=True, no_pm=True)
     @commands.has_any_role(*BOTCOMMANDER_ROLES)
     async def approve(self, ctx, member: discord.Member, clankey):
         """Send instructions to people joining a clan"""
         server = ctx.message.server
-        author = ctx.message.author
         legendServer = ["374596069989810176"]
 
         if server.id not in legendServer:
@@ -468,8 +464,7 @@ class legend:
                 clantag = ""
                 clanname = ""
             else:
-                clantag = profiledata.clan.tag
-                clanname = profiledata.clan.name
+                clantag = profiledata.clan.tag\
         except clashroyale.RequestError:
                 await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
                 return
@@ -527,7 +522,7 @@ class legend:
                 else:
                     await self.bot.say("Approval failed, there is a waiting queue for this clan. Please first join the waiting list.")
                     return
-            
+
             if not leftClan:
                 warning = ("\n\n:warning: **PLEASE DO NOT REQUEST TO "
                            "JOIN ANY CLANS IF YOU HAVE NOT YET "
@@ -681,10 +676,11 @@ class legend:
             await self._remove_roles(member, ['Guest'])
 
             roleName = discord.utils.get(server.roles, name=role_names[0])
-            await self.bot.send_message(discord.Object(id='375839851955748874'), "**{}** recruited **{} (#{})** to {}".format(ctx.message.author.display_name,
-                                                                                                                               ign,
-                                                                                                                               profiletag,
-                                                                                                                               roleName.mention))
+            await self.bot.send_message(discord.Object(id='375839851955748874'),
+                                        "**{}** recruited **{} (#{})** to {}".format(ctx.message.author.display_name,
+                                                                                     ign,
+                                                                                     profiletag,
+                                                                                     roleName.mention))
             await asyncio.sleep(300)
             await self.bot.send_message(member, rules_text)
 
@@ -1132,9 +1128,9 @@ class legend:
                     continue
 
             message += "``{} [{}]`` {} ({})\n".format((str(amount + 1) + ".").ljust(3),
-                                                     players['data'][x]['trophies'],
-                                                     players['data'][x]['name'],
-                                                     clanname)
+                                                      players['data'][x]['trophies'],
+                                                      players['data'][x]['name'],
+                                                      clanname)
             amount += 1
             if amount == number:
                 break
@@ -1198,9 +1194,9 @@ class legend:
                     continue
 
             message += "``{} [{}]`` {} ({})\n".format((str(amount + 1) + ".").ljust(3),
-                                                     players['data'][x]['donations'],
-                                                     players['data'][x]['name'],
-                                                     clanname)
+                                                      players['data'][x]['donations'],
+                                                      players['data'][x]['name'],
+                                                      clanname)
             amount += 1
             if amount == number:
                 break
