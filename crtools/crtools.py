@@ -7,10 +7,59 @@ from cogs.utils import checks
 tags_path = "data/crtools/tags.json"
 auth_path = "data/crtools/auth.json"
 clans_path = "data/crtools/clans.json"
+constants_path = "data/crtools/constants.json"
 default_clans = {'defualt': {'tag': '9PJYVVL2', 'role': 'everyone', 'name': 'defualt',
                              'nickname': 'defualt', 'discord': None, 'waiting': [], 'members': {},
                              'bonustitle': '', 'personalbest': 0, 'warTrophies': 0, 'approval': False,
                              'log_channel': None, 'warlog_channel': None, 'emoji': '', 'cwr': 0}}
+
+
+class constants:
+    """constants Management"""
+    def __init__(self):
+        self.constants = dataIO.load_json(constants_path)
+        self.images = 'https://royaleapi.github.io/cr-api-assets/'
+
+    async def card_to_key(self, name):
+        """Card key to decklink id."""
+        for card in self.constants["cards"]:
+            if name == card["name"]:
+                return str(card["id"])
+        return None
+
+    async def get_region_key(self, num):
+        """Get a region's key name."""
+        for region in self.constants["region"]:
+            if num == region["id"]:
+                return card["key"]
+        return None
+
+    async def decklink_url(self, deck, war=False):
+        """Decklink URL."""
+        ids = []
+        for card in deck:
+            ids.append(await self.card_to_key(card["name"]))
+        url = 'https://link.clashroyale.com/deck/en?deck=' + ';'.join(ids)
+        if war:
+            url += '&ID=CRRYRPCC&war=1'
+        return url
+
+    async def get_clan_image(self, p):
+        """Get clan badge URL from badge ID"""
+        try:
+            badge_id = p.clan.badge_id
+        except AttributeError:
+            try:
+                badge_id = p.badge_id
+            except AttributeError:
+                return 'https://i.imgur.com/Y3uXsgj.png'
+
+        if badge_id is None:
+            return 'https://i.imgur.com/Y3uXsgj.png'
+
+        for i in self.constants["alliance_badges"]:
+            if i["id"] == badge_id:
+                return self.images + 'badges/' + i["name"] + '.png'
 
 
 class tags:
@@ -74,9 +123,18 @@ class auth:
         self.auth['brawlstars-api'] = key
         dataIO.save_json(auth_path, self.auth)
 
+    async def addTokenOfficial(self, key):
+        """Add a api.clashroyal.com Token"""
+        self.auth['OfficialAPI'] = key
+        dataIO.save_json(auth_path, self.auth)
+
     def getToken(self):
         """Get RoyaleAPI Token"""
         return self.auth['RoyaleAPI']
+
+    def getOfficialToken(self):
+        """Get OfficialAPI Token"""
+        return self.auth['OfficialAPI']
 
     def getBSToken(self):
         """Get brawlstars-api Token"""
@@ -252,6 +310,7 @@ class crtools:
         self.tags = tags()
         self.clans = clans()
         self.auth = auth()
+        self.constants = constants()
 
     @commands.command()
     @checks.mod_or_permissions(administrator=True)
@@ -263,9 +322,16 @@ class crtools:
     @commands.command()
     @checks.mod_or_permissions(administrator=True)
     async def settokenbs(self, *, key):
-        """Input your BrawlStars API Tokenm"""
+        """Input your BrawlStars API Token"""
         await self.auth.addTokenBS(key)
         await self.bot.say("brawlstars-api Token set")
+
+    @commands.command()
+    @checks.mod_or_permissions(administrator=True)
+    async def settokencr(self, *, key):
+        """Input your Official CR API Token"""
+        await self.auth.addTokenOfficial(key)
+        await self.bot.say("OfficialAPI Token set")
 
     @commands.group(pass_context=True, name="clans")
     @checks.mod_or_permissions(administrator=True)
