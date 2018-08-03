@@ -8,6 +8,7 @@ tags_path = "data/crtools/tags.json"
 auth_path = "data/crtools/auth.json"
 clans_path = "data/crtools/clans.json"
 constants_path = "data/crtools/constants.json"
+
 default_clans = {'defualt': {'tag': '9PJYVVL2', 'role': 'everyone', 'name': 'defualt',
                              'nickname': 'defualt', 'discord': None, 'waiting': [], 'members': {},
                              'bonustitle': '', 'personalbest': 0, 'warTrophies': 0, 'approval': False,
