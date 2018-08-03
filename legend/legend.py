@@ -464,7 +464,7 @@ class legend:
                 clantag = ""
                 clanname = ""
             else:
-                clantag = profiledata.clan.tag\
+                clantag = profiledata.clan.tag
         except clashroyale.RequestError:
                 await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
                 return
