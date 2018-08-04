@@ -1,18 +1,12 @@
 import discord
 from discord.ext import commands
-from cogs.utils import checks
-from .utils.dataIO import dataIO, fileIO
-from __main__ import send_cmd_help
-import os
 import io
 import asyncio
-import PIL
 from PIL import ImageFont
 from PIL import Image
 from PIL import ImageDraw
 import clashroyale
 from datetime import datetime, timedelta
-import time
 
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
@@ -25,7 +19,10 @@ class warlog:
         self.bot = bot
         self.auth = self.bot.get_cog('crtools').auth
         self.clans = self.bot.get_cog('crtools').clans
-        self.clash = clashroyale.RoyaleAPI(self.auth.getToken(), is_async=True)
+        self.clash = clashroyale.OfficialAPI(self.auth.getOfficialToken(), is_async=True)
+
+    async def cleanTime(self, time: str):
+        return int(datetime.strptime(time, '%Y%m%dT%H%M%S.%fZ').timestamp()) + 18000
 
     async def getLeague(self, trophies):
 
@@ -40,7 +37,7 @@ class warlog:
 
     async def findRank(self, lst, key, value):
         for i, dic in enumerate(lst):
-            if dic[key] == value:
+            if dic["clan"][key].strip("#") == value:
                 return i
         return -1
 
@@ -51,7 +48,7 @@ class warlog:
         delta_day = target_day - d.isoweekday()
         if delta_day >= 0:
             delta_day -= 7
-        return int((d + timedelta(days=delta_day)).strftime('%s'))
+        return int((d + timedelta(days=delta_day)).timestamp())
 
     async def genImage(self, leagueName, trophies, rank, clanName, participants, wins, crowns):
 
@@ -100,9 +97,9 @@ class warlog:
             except clashroyale.RequestError:
                 return
 
-            standings = clanwars[0].standings
+            standings = clanwars.get("items")[0].standings
             clanRank = await self.findRank(standings, "tag", await self.clans.getClanData(clankey, 'tag'))
-            warTrophies = standings[clanRank].war_trophies
+            warTrophies = standings[clanRank].clan.clan_score
 
             if await self.clans.getClanData(clankey, 'warTrophies') != warTrophies:
 
@@ -111,10 +108,10 @@ class warlog:
                 image = await self.genImage(clanLeague,
                                             str(warTrophies),
                                             str(clanRank + 1),
-                                            standings[clanRank].name,
-                                            str(standings[clanRank].participants),
-                                            str(standings[clanRank].wins),
-                                            str(standings[clanRank].crowns))
+                                            standings[clanRank].clan.name,
+                                            str(standings[clanRank].clan.participants),
+                                            str(standings[clanRank].clan.wins),
+                                            str(standings[clanRank].clan.crowns))
                 filename = "warlog-{}.png".format(clankey)
                 clanChannel = await self.clans.getClanData(clankey, 'warlog_channel')
 
@@ -133,14 +130,15 @@ class warlog:
                     WarDayWins = 0
                     cardsEarned = 0
                     tag = await self.clans.getClanMemberData(clankey, memberkey, 'tag')
-                    for index, war in enumerate(clanwars):
+                    for index, war in enumerate(clanwars.get("items")):
                         if index == 5:
                             break
-                        if war.created_date > await self.last_day(datetime.today(), 'sunday'):
+                        created_date = await self.cleanTime(war.created_date)
+                        if created_date > await self.last_day(datetime.today(), 'sunday'):
                             for participant in war.participants:
-                                if participant.tag == tag:
+                                if participant.tag.strip("#") == tag:
                                     WarDayWins += participant.wins
-                                    cardsEarned += participant.cardsEarned
+                                    cardsEarned += participant.cards_earned
 
                     await self.clans.setWarstats(clankey, tag, WarDayWins, cardsEarned)
 

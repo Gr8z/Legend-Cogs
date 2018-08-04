@@ -9,6 +9,7 @@ import asyncio
 import time
 from operator import itemgetter
 import clashroyale
+import datetime
 
 settings_path = "data/duels/settings.json"
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
