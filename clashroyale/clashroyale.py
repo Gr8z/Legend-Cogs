@@ -264,15 +264,13 @@ class clashroyale:
             'Legendary Chest': 'legendary'
         }
 
-        valuechestText = ""
-        for x in range(0, 8):
-            valuechestText += self.emoji(mapEmoji[chestdata.get("items")[x].name]) + " "
-
-        specialChestText = ""
-        for z in range(9, 14):
-            emojiChest = self.emoji(mapEmoji[chestdata.get("items")[z].name])
-            numChest = chestdata.get("items")[z].index + 1
-            specialChestText += "{} +{} ".format(emojiChest, numChest)
+        valuechestText, specialChestText = "", ""
+        for chest in chestdata.get("items"):
+            if chest.index < 9:
+                valuechestText += self.emoji(mapEmoji[chest.name]) + " "
+            else:
+                emojiChest = self.emoji(mapEmoji[chest.name])
+                specialChestText += "{} +{} ".format(emojiChest, chest.index + 1)
 
         embed = discord.Embed(title="", color=0xFAA61A, description="Your Upcoming chests.")
         embed.set_thumbnail(url="https://cdn.discordapp.com/emojis/380832387195469826.png")
