@@ -18,7 +18,8 @@ class friendlink:
         self.bot = bot
         self.regex = re.compile(r"<?(https?:\/\/)?(www\.)?(link\.clashroyale\.com\/invite\/friend)\b([-a-zA-Z0-9/]*)>?")
         self.auth = self.bot.get_cog('crtools').auth
-        self.clash = clashroyale.RoyaleAPI(self.auth.getToken(), is_async=True)
+        self.constants = self.bot.get_cog('crtools').constants
+        self.clash = clashroyale.OfficialAPI(self.auth.getOfficialToken(), is_async=True)
 
     def emoji(self, name):
         """Emoji by name."""
@@ -43,21 +44,16 @@ class friendlink:
             except clashroyale.RequestError:
                 return
 
-            if profiledata.clan is None:
-                clanurl = "https://i.imgur.com/4EH5hUn.png"
-            else:
-                clanurl = profiledata.clan.badge.image
-
-            arenaFormat = profiledata.arena.arena.replace(' ', '').lower()
+            arenaFormat = profiledata.arena.name.replace(' ', '').lower()
 
             embed = discord.Embed(title='Click this link to add as friend in Clash Royale!', url=url[0], color=0x0080ff)
-            embed.set_author(name=profiledata.name + " (#"+profiledata.tag+")", icon_url=clanurl)
+            embed.set_author(name=profiledata.name + " ("+profiledata.tag+")", icon_url=await self.constants.get_clan_image(profiledata))
             embed.set_thumbnail(url="https://imgur.com/C9rLoeh.jpg")
             embed.add_field(name="User", value=message.author.mention, inline=True)
             embed.add_field(name="Trophies", value="{} {:,}".format(self.emoji(arenaFormat), profiledata.trophies), inline=True)
-            embed.add_field(name="Level", value="{} {}".format(self.emoji("level"), profiledata.stats.level), inline=True)
+            embed.add_field(name="Level", value=self.emoji("level{}".format(profiledata.expLevel)), inline=True)
             if profiledata.clan is not None:
-                embed.add_field(name="Clan {}".format(profiledata.clan.role.capitalize()),
+                embed.add_field(name="Clan {}".format(profiledata.role.capitalize()),
                                 value="{} {}".format(self.emoji("clan"), profiledata.clan.name),
                                 inline=True)
             embed.set_footer(text=credits, icon_url=creditIcon)
