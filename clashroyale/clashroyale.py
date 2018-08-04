@@ -48,6 +48,10 @@ class clashroyale:
         }
         return coins[str(maxPlayers)]
 
+    async def cleanTime(self, time):
+        """Converts time to timestamp"""
+        return int(datetime.strptime(time, '%Y%m%dT%H%M%S.%fZ').timestamp()) + 18000
+
     def camelToString(self, label):
         """Convert from camel case to normal"""
         return re.sub(r'((?<=[a-z])[A-Z]|(?<!\A)[A-Z](?=[a-z]))', r' \1', label)
@@ -430,7 +434,7 @@ class clashroyale:
         await self.bot.delete_message(ctx.message)
 
         if tourneydata.status != "ended":
-            tourneydata.created_time = int(datetime.strptime(tourneydata.created_time, '%Y%m%dT%H%M%S.%fZ').timestamp()) + 18000
+            tourneydata.created_time = await self.cleanTime(tourneydata.created_time)
             if tourneydata.status != "inProgress":
                 startTime = await self.sec2tme((tourneydata.created_time + tourneydata.preparation_duration) - int(time.time()))
                 embed.add_field(name="Starts In", value=startTime, inline=True)

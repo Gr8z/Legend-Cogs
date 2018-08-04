@@ -2,14 +2,12 @@
 
 import discord
 from discord.ext import commands
-from cogs.utils import checks
 from .utils.dataIO import dataIO, fileIO
 from __main__ import send_cmd_help
 import os
-from copy import deepcopy
 import asyncio
 import time
-from operator import itemgetter, attrgetter
+from operator import itemgetter
 import clashroyale
 
 settings_path = "data/duels/settings.json"
@@ -25,7 +23,8 @@ class duels:
         self.settings = dataIO.load_json(settings_path)
         self.auth = self.bot.get_cog('crtools').auth
         self.tags = self.bot.get_cog('crtools').tags
-        self.clash = clashroyale.RoyaleAPI(self.auth.getToken(), is_async=True)
+        self.constants = self.bot.get_cog('crtools').constants
+        self.clash = clashroyale.OfficialAPI(self.auth.getOfficialToken(), is_async=True)
         self.active = False
 
     def account_check(self, id):
@@ -78,6 +77,14 @@ class duels:
             if emoji.name == name:
                 return '<:{}:{}>'.format(emoji.name, emoji.id)
         return ''
+
+    async def cleanTime(self, time):
+        """Converts time to timestamp"""
+        return int(datetime.strptime(time, '%Y%m%dT%H%M%S.%fZ').timestamp()) + 18000
+
+    async def battleWinner(self, battle):
+        """Gets the winner of the battle, with the difference in crowns"""
+        return battle.team.crowns - battle.opponent.crowns
 
     @commands.group(pass_context=True, no_pm=True)
     async def duel(self, ctx):
@@ -170,22 +177,17 @@ class duels:
 
         self.active = True
 
-        if profiledata.clan is None:
-            clanurl = "https://i.imgur.com/4EH5hUn.png"
-        else:
-            clanurl = profiledata.clan.badge.image
+        arenaFormat = profiledata.arena.name.replace(' ', '').lower()
 
-        arenaFormat = profiledata.arena.arena.replace(' ', '').lower()
-        
         embed = discord.Embed(color=0x0080ff)
-        embed.set_author(name=profiledata.name + " (#"+profiledata.tag+")", icon_url=clanurl)
+        embed.set_author(name=profiledata.name + " ("+profiledata.tag+")", icon_url=await self.constants.get_clan_image(profiledata))
         embed.set_thumbnail(url="https://imgur.com/9DoEq22.jpg")
         embed.add_field(name="Duel Wins", value="{} {}".format(self.emoji("battle"), duelPlayer['WON']), inline=True)
         embed.add_field(name="Trophies", value="{} {:,}".format(self.emoji(arenaFormat), profiledata.trophies), inline=True)
         if profiledata.clan is not None:
-            embed.add_field(name="Clan {}".format(profiledata.clan.role.capitalize()),
+            embed.add_field(name="Clan {}".format(profiledata.role.capitalize()),
                             value="{} {}".format(self.emoji("clan"), profiledata.clan.name), inline=True)
-        embed.add_field(name="Challenge Max Wins", value="{} {}".format(self.emoji("tourney"), profiledata.stats.challenge_max_wins), inline=True)
+        embed.add_field(name="Challenge Max Wins", value="{} {}".format(self.emoji("tourney"), profiledata.challenge_max_wins), inline=True)
         embed.set_footer(text=credits, icon_url=creditIcon)
 
         if privateDuel is None:
@@ -199,16 +201,16 @@ class duels:
             await self.bot.edit_role(server, duels_role, mentionable=True)
             await self.bot.say(content=("[{}] {} wants to duel one of you in Clash Royale "
                                         "for {} credits, type ``{}duel accept`` the offer.".format(duels_role.mention,
-                                                                                                    author.mention,
-                                                                                                    bet,
-                                                                                                    ctx.prefix)), embed=embed)
+                                                                                                   author.mention,
+                                                                                                   bet,
+                                                                                                   ctx.prefix)), embed=embed)
             await self.bot.edit_role(server, duels_role, mentionable=False)
         else:
             await self.bot.say(content=("{} wants to duel {} in Clash Royale "
                                         "for {} credits, type ``{}duel accept`` the offer.".format(author.mention,
-                                                                                                    member.mention,
-                                                                                                    bet,
-                                                                                                    ctx.prefix)), embed=embed)
+                                                                                                   member.mention,
+                                                                                                   bet,
+                                                                                                   ctx.prefix)), embed=embed)
         duelID = str(int(time.time()))
         self.settings["DUELS"][duelID] = {
             "TIME": duelID,
@@ -276,6 +278,7 @@ class duels:
         duelPlayers = self.settings["DUELS"][duelID]["PLAYERS"]
         duelBet = self.settings["DUELS"][duelID]["BET"]
         privateDuel = self.settings["DUELS"][duelID]["PRIVATE"]
+        max_trophies = 0
 
         if duelPlayers[0] == author.id:
             await self.bot.say("Sorry, You cannot duel yourself.")
@@ -294,27 +297,28 @@ class duels:
             await self.bot.say("You need to register before accepting a duel, type ``{}duel register``.".format(ctx.prefix))
             return
 
-        try:
-            profiledata = await self.clash.get_player(*[self.settings['USERS'][duelPlayers[0]]["TAG"],
-                                                      self.settings['USERS'][author.id]["TAG"]],
-                                                      keys="stats")
-        except clashroyale.RequestError:
-            await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
-            return
-
-        if (profiledata[0].stats.max_trophies + 600) < profiledata[1].stats.max_trophies:
-            await self.bot.say("Sorry, your trophies are too high for this duel.")
-            return
+        duelPlayers.append(author.id)
+        for player in duelPlayers:
+            try:
+                profiledata = await self.clash.get_player(self.settings['USERS'][player]["TAG"])
+                if max_trophies == 0:
+                    max_trophies = profiledata.best_trophies
+                else:
+                    if (max_trophies + 600) < profiledata.best_trophies:
+                        await self.bot.say("Sorry, your trophies are too high for this duel.")
+                        duelPlayers.remove(author.id)
+                        return
+            except clashroyale.RequestError:
+                duelPlayers.remove(author.id)
+                await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
+                return
 
         await self.bot.say("{} Are you sure you want to accept the bet of {} credits? (Yes/No)".format(author.mention, str(duelBet)))
         answer = await self.bot.wait_for_message(timeout=15, author=author)
 
-        if answer is None:
+        if answer is None or "yes" not in answer.content.lower():
+            duelPlayers.remove(author.id)
             return
-        elif "yes" not in answer.content.lower():
-            return
-
-        duelPlayers.append(author.id)
 
         bank = self.bot.get_cog('Economy').bank
         bank.withdraw_credits(author, duelBet)
@@ -333,8 +337,8 @@ class duels:
                             "1. Send your friend links below for your opponent and spectators.\n"
                             "2. Duel each other once using friendly battle.\n"
                             "3. Type !duel claim after the game to recieve your credits.```".format(userOne.mention,
-                                                                                                     userTwo.mention,
-                                                                                                     str(duelBet*2))))
+                                                                                                    userTwo.mention,
+                                                                                                    str(duelBet*2))))
 
     @duel.command(pass_context=True)
     async def claim(self, ctx):
@@ -369,7 +373,8 @@ class duels:
 
         msg = ""
         for battle in profiledata:
-            if (battle.utc_time > int(duelID)) and (battle.opponent[0].tag in playerTags):
+            battle.winner = await self.battleWinner(battle)
+            if (await self.cleanTime(battle.battle_time) > int(duelID)) and (battle.opponent[0].tag.strip("#") in playerTags):
                 if battle.winner > 0:
 
                     duelPlayer["WON"] += 1
@@ -414,7 +419,6 @@ class duels:
         try:
             resultRankings = await self.get_rankings(ctx, user.id)
             topScore = resultRankings["topScore"]
-            userIdRank = resultRankings["userIdRank"]
             playerAmount = len(self.settings["USERS"])
             data = True
         except Exception as e:
@@ -426,7 +430,6 @@ class duels:
             pages = []
             totalPages = 0
             usr = 0
-            userFound = False
             userFoundPage = False
             msg = ""
             while (usr < playerAmount):
@@ -444,7 +447,6 @@ class duels:
                         sn = ' '
                     if user.id == topScore[usr][0]:
                         msg = msg+"(#{}){}| » {} |  ({})\n".format(usr+1, sn, topScore[usr][2]+sp, topScore[usr][1])
-                        userFound = True
                         userFoundPage = totalPages
                     else:
                         msg = msg+"(#{}){}|   {} |  ({})\n".format(usr+1, sn, topScore[usr][2]+sp, topScore[usr][1])
