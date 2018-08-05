@@ -1,9 +1,9 @@
 # Legend-Cogs
-[<img src="https://discordapp.com/api/guilds/374596069989810176/widget.png?style=shield">](http://discord.me/LegendFamily) [<img src="https://img.shields.io/badge/discord-py-blue.svg">](https://github.com/Rapptz/discord.py)
+[<img src="https://discordapp.com/api/guilds/374596069989810176/widget.png?style=shield">](http://discord.gg/T7XdjFS) [<img src="https://img.shields.io/badge/discord-py-blue.svg">](https://github.com/Rapptz/discord.py)
 
 Made with Python and [RED](https://github.com/Cog-Creators/Red-DiscordBot).
 
-If you want to see this bot in action, join the LeGeND Family Discord at [discord.me/LegendFamily](http://discord.me/LegendFamily)
+If you want to see this bot in action, join the LeGeND Family Discord at [legendclans.com/discord](http://discord.gg/T7XdjFS)
 
 ## Cogs
 
@@ -40,18 +40,18 @@ To install a cog on your bot instance:
 
 `[p]cog repo add Legend-Cogs https://github.com/Gr8z/Legend-Cogs`
 
-### 2. Add the cog you want to installed
+### 2. Add the cog you want to install
 
 `[p]cog install Legend-Cogs clashroyale`
 
+[p] = Replace this with your bot's command prefix. (usually '!')
 
 ## Credits
 
-* [AtomToast](https://github.com/AtomToast)
-* [SML](https://github.com/smlbiobot)
 * [RED](https://github.com/Cog-Creators/Red-DiscordBot)
 * [RoyaleAPI](https://github.com/royaleapi)
+* [AtomToast](https://github.com/AtomToast)
+* [SML](https://github.com/smlbiobot)
 * [Bobloy](https://github.com/bobloy)
-* [Karthik Suresh](https://github.com/karthiks2601)
 * [Joshua](https://github.com/yeongjoshua)
 * [SauravAnchlia](https://github.com/SauravAnchlia)
