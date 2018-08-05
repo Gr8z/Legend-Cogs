@@ -24,7 +24,7 @@ class Clanlog:
         self.bot = bot
         self.auth = self.bot.get_cog('crtools').auth
         self.clans = self.bot.get_cog('crtools').clans
-        self.clash = clashroyale.RoyaleAPI(self.auth.getToken(), is_async=True)
+        self.clash = clashroyale.OfficialAPI(self.auth.getOfficialToken(), is_async=True)
         self.member_log = dataIO.load_json('data/clanlog/member_log.json')
         self.discord_log = dataIO.load_json('data/clanlog/discord_log.json')
         self.last_count = 0
@@ -47,18 +47,17 @@ class Clanlog:
         old_clans = deepcopy(await self.clans.getClans())
         new_clans = deepcopy(old_clans)
 
-        try:
-            clan_requests = await self.clash.get_clan(*await self.clans.tagsClans())
-        except clashroyale.RequestError:
-            print("CLANLOG: Cannot reach Clash Royale Servers.")
-            return
-
         count = 0
-        for clan in clan_requests:
-            count = count + len(clan.members)
-            clankey = await self.clans.getClanKey(clan.tag)
+        for clankey in self.clans.keysClans():
+            try:
+                clan = await self.clash.get_clan(await self.clans.getClanData(clankey, 'tag'))
+            except clashroyale.RequestError:
+                print("CLANLOG: Cannot reach Clash Royale Servers.")
+                return
+
+            count += clan.get("members")
             one_clan = {}
-            for member in clan.members:
+            for member in clan.member_list:
                 one_clan[member.tag] = {}
                 one_clan[member.tag]["tag"] = member.tag
                 one_clan[member.tag]["name"] = member.name

@@ -139,7 +139,7 @@ class shop:
                 await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
                 return
 
-            for member in clan.members:
+            for member in clan.member_list:
                 clan_tag = member.tag
                 clan_donations = member.donations
                 clan_wins = await self.clans.getMemberWins(clankey, clan_tag)
