@@ -50,7 +50,7 @@ class clashroyale:
 
     async def cleanTime(self, time):
         """Converts time to timestamp"""
-        return int(datetime.strptime(time, '%Y%m%dT%H%M%S.%fZ').timestamp()) + 18000
+        return int(datetime.strptime(time, '%Y%m%dT%H%M%S.%fZ').timestamp()) + 7200
 
     def camelToString(self, label):
         """Convert from camel case to normal"""

@@ -81,7 +81,7 @@ class duels:
 
     async def cleanTime(self, time):
         """Converts time to timestamp"""
-        return int(datetime.strptime(time, '%Y%m%dT%H%M%S.%fZ').timestamp()) + 18000
+        return int(datetime.strptime(time, '%Y%m%dT%H%M%S.%fZ').timestamp()) + 7200
 
     async def battleWinner(self, battle):
         """Gets the winner of the battle, with the difference in crowns"""

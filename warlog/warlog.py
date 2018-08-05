@@ -22,7 +22,7 @@ class warlog:
         self.clash = clashroyale.OfficialAPI(self.auth.getOfficialToken(), is_async=True)
 
     async def cleanTime(self, time: str):
-        return int(datetime.strptime(time, '%Y%m%dT%H%M%S.%fZ').timestamp()) + 18000
+        return int(datetime.strptime(time, '%Y%m%dT%H%M%S.%fZ').timestamp()) + 7200
 
     async def getLeague(self, trophies):
 
