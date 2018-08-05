@@ -465,7 +465,7 @@ class legend:
                 leftClan = True
                 clantag = ""
             else:
-                clantag = profiledata.clan.tag
+                clantag = profiledata.clan.tag.strip("#")
         except clashroyale.RequestError:
                 await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
                 return
@@ -595,7 +595,7 @@ class legend:
                 clantag = ""
                 clanname = ""
             else:
-                clantag = profiledata.clan.tag
+                clantag = profiledata.clan.tag.strip("#")
                 clanname = profiledata.clan.name
 
             ign = profiledata.name
@@ -878,7 +878,7 @@ class legend:
             if profiledata.clan is None:
                 clantag = "none"
             else:
-                clantag = profiledata.clan.tag
+                clantag = profiledata.clan.tag.strip("#")
             ign = profiledata.name
         except clashroyale.RequestError:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
@@ -943,7 +943,7 @@ class legend:
         cr_members_trophy = []
         for member in clandata.member_list:
             cr_members_name.append(member.name)
-            cr_members_tag.append(member.tag)
+            cr_members_tag.append(member.tag.strip("#"))
             cr_members_trophy.append(member.trophies)
 
         role = discord.utils.get(server.roles, name=clan_role)
