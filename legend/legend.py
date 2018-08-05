@@ -359,9 +359,10 @@ class legend:
             else:
                 title = ""
 
-            totalMembers += clan.get("members")
-            if clan.get("members") < 50:
-                showMembers = str(clan.member_count) + "/50"
+            member_count = clan.get("members")
+            totalMembers += member_count
+            if member_count < 50:
+                showMembers = str(member_count) + "/50"
             else:
                 showMembers = "**FULL**  "
 
