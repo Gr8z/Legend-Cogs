@@ -1,10 +1,6 @@
 import discord
 from discord.ext import commands
-import requests
-from .utils.dataIO import dataIO, fileIO
-from cogs.utils import checks
 import asyncio
-import json
 
 BOTCOMMANDER_ROLES = ["Family Representative", "Clan Manager", "Clan Deputy",
                       "Co-Leader", "Hub Officer", "admin", "Member"]

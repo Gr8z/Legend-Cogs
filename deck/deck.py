@@ -307,7 +307,7 @@ class Deck:
             # generate link
             if self.deck_is_valid:
                 em = await self.decklink_embed(member_deck)
-                await self.bot.send_message(discord.Object(391597618750423041), 
+                await self.bot.send_message(discord.Object(391597618750423041),
                                             "Post your favourite deck here using `!deck post`")
                 await self.bot.say("Deck successfully posted in #decks")
                 await self.bot.send_message(discord.Object(391597618750423041), embed=em)

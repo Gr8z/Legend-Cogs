@@ -71,7 +71,6 @@ class Heist:
     async def _reset_heist(self, ctx):
         """Resets heist in case it hangs"""
         server = ctx.message.server
-        author = ctx.message.author
 
         settings = self.check_server_settings(server)
         self.reset_heist(settings)
@@ -366,7 +365,6 @@ class Heist:
                        settings["Config"]["Sentence Base"], settings["Config"]["Death Timer"]]
         timers = list(map(self.time_format, time_values))
         description = ["Heist Version {}".format(self.version), "Theme: {}".format(theme)]
-        footer = "Heist was developed by Redjumpman for Red Bot."
 
         embed = discord.Embed(colour=0x0066FF, description="\n".join(description))
         embed.title = "{} Heist Settings".format(server.name)
@@ -561,9 +559,7 @@ class Heist:
         author = ctx.message.author
         server = ctx.message.server
         settings = self.check_server_settings(server)
-        cost = settings["Config"]["Heist Cost"]
         wait_time = settings["Config"]["Wait Time"]
-        prefix = ctx.prefix
         heist_role = discord.utils.get(server.roles, name="Heist")
         heist_channel = discord.utils.get(ctx.message.server.channels, name="heist")
         heistPlan_channl = discord.Object(id='391382712499568641')
@@ -589,7 +585,7 @@ class Heist:
                                                        "is going to start in 60 seconds. "
                                                        "We have set the gather time to **10 minutes**, "
                                                        "prepare and bring your friends to {}.".format(heist_role.mention,
-                                                                                                     heist_channel.mention)))
+                                                                                                      heist_channel.mention)))
         await self.bot.edit_role(server, heist_role, mentionable=False)
 
         await asyncio.sleep(60)
@@ -630,9 +626,6 @@ class Heist:
     @commands.has_any_role(*BOTCOMMANDER_ROLES)
     async def _pause_heist(self, ctx, *, text=None):
         """This pauses !heist play"""
-        server = ctx.message.server
-        author = ctx.message.author
-
         self.pause = not self.pause
         if self.pause:
             await self.bot.say("Heist has been paused!")
@@ -644,7 +637,6 @@ class Heist:
     async def _mention_heist(self, ctx, *, text=None):
         """This mentions the @Heist role"""
         server = ctx.message.server
-        author = ctx.message.author
         role_name = "Heist"
 
         if role_name is not None:

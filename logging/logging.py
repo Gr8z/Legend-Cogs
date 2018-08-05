@@ -1,8 +1,5 @@
 import discord
-from discord.ext import commands
-from .utils.dataIO import dataIO, fileIO
 import os
-import asyncio
 from cogs.utils import checks
 
 import sqlite3

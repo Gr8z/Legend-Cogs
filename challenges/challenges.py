@@ -3,8 +3,8 @@
 import discord
 from discord.ext import commands
 from cogs.utils import checks
-from .utils.dataIO import dataIO, fileIO
-from collections import Counter, defaultdict, namedtuple
+from .utils.dataIO import dataIO
+from collections import Counter, namedtuple
 from .utils.chat_formatting import box
 from __main__ import send_cmd_help
 import os
@@ -96,7 +96,7 @@ class challenges:
         self.add_defualt_settings(server)
 
         if not self.verify_role(server, role):
-            await self.bot.say("{} is not a valid role on this server.".format(actor_role))
+            await self.bot.say("{} is not a valid role on this server.".format(role))
             return
 
         self.settings[server.id]["ROLE"] = role
@@ -149,7 +149,6 @@ class challenges:
         channel = self.get_game_channel(server)
         role_name = self.settings[server.id]["ROLE"]
         lock_state = self.settings[server.id]["LOCK"]
-        q_num = self.settings[server.id]["QUESTIONS"]
         delay = self.settings[server.id]["DELAY"]
 
         if self.active:
@@ -169,7 +168,7 @@ class challenges:
             await self.bot.edit_role(server, challenges_role, mentionable=True)
             await self.bot.send_message(channel, (":rotating_light: New challenge starting in "
                                                   "{} seconds :rotating_light: {}".format(str(delay),
-                                                                                           challenges_role.mention)))
+                                                                                          challenges_role.mention)))
             await self.bot.edit_role(server, challenges_role, mentionable=False)
         else:
             await self.bot.send_message(channel, (":rotating_light: New challenge starting in "
@@ -195,8 +194,6 @@ class challenges:
     @chal.command(pass_context=True)
     async def stop(self, ctx):
         """Stop the challenge on the specified channel"""
-        server = ctx.message.server
-
         await self.bot.say("Challenge stopped.")
         self.active = False
 
@@ -309,7 +306,7 @@ class challengeSession():
         embed.set_author(name="React with Emoji")
         embed.set_footer(text=credits, icon_url=creditIcon)
 
-        msg = await self.bot.send_message(channel, embed=embed)
+        await self.bot.send_message(channel, embed=embed)
 
         while True:
             react = await self.bot.wait_for_reaction(emoji=emoji['emoji'], timeout=15)
@@ -351,7 +348,7 @@ class challengeSession():
         embed.set_author(name="Unscramble the word")
         embed.set_footer(text=credits, icon_url=creditIcon)
 
-        msg = await self.bot.send_message(channel, embed=embed)
+        await self.bot.send_message(channel, embed=embed)
         print("Answer: {}".format(word))
 
         def check(msg):
@@ -384,7 +381,7 @@ class challengeSession():
         embed.set_author(name="Answer the question")
         embed.set_footer(text=credits, icon_url=creditIcon)
 
-        msg = await self.bot.send_message(channel, embed=embed)
+        await self.bot.send_message(channel, embed=embed)
         print("Answer: {}".format(str(current_line.answers[0])))
 
         def check(msg):
@@ -431,7 +428,7 @@ class challengeSession():
         embed.set_author(name="Calculate")
         embed.set_footer(text=credits, icon_url=creditIcon)
 
-        msg = await self.bot.send_message(channel, embed=embed)
+        await self.bot.send_message(channel, embed=embed)
         print("Answer: {}".format(str(number)))
 
         while True:
@@ -460,7 +457,7 @@ class challengeSession():
         embed.set_author(name="Guess the number")
         embed.set_footer(text=credits, icon_url=creditIcon)
 
-        msg = await self.bot.send_message(channel, embed=embed)
+        await self.bot.send_message(channel, embed=embed)
         print("Answer: {}".format(str(number)))
 
         start = time.time()
@@ -499,8 +496,7 @@ class challengeSession():
         embed.set_author(name="Stop Watch")
         embed.set_footer(text=credits, icon_url=creditIcon)
 
-        msg = await self.bot.send_message(channel, embed=embed)
-
+        await self.bot.send_message(channel, embed=embed)
         start = time.time()
 
         def check(msg):

@@ -11,7 +11,6 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdate
 import matplotlib.ticker as ticker
 
-import operator
 import numpy as np
 import clashroyale
 

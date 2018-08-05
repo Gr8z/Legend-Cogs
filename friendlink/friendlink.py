@@ -1,8 +1,4 @@
 import discord
-from discord.ext import commands
-from .utils.dataIO import dataIO, fileIO
-import os
-import asyncio
 import re
 import urllib.parse as urlparse
 import clashroyale
@@ -36,8 +32,6 @@ class friendlink:
 
             parsed = urlparse.urlparse(url[0])
             profiletag = urlparse.parse_qs(parsed.query)['tag'][0]
-            token = urlparse.parse_qs(parsed.query)['token'][0]
-            platform = urlparse.parse_qs(parsed.query)['platform'][0]
 
             try:
                 profiledata = await self.clash.get_player(profiletag)
@@ -68,10 +62,9 @@ class friendlink:
 
     async def on_message(self, message):
 
-        server = message.server
         author = message.author
 
-        if message.author.id == self.bot.user.id:
+        if author.id == self.bot.user.id:
             return
 
         if self.regex.search(message.content) is None:

@@ -1,10 +1,7 @@
 import discord
 from discord.ext import commands
-from random import randint
 import asyncio
-from .utils.dataIO import dataIO, fileIO
 import time
-import random
 import clashroyale
 
 lastTag = '0'

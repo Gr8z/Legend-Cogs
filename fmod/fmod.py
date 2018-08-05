@@ -1,14 +1,12 @@
 import discord
 from discord.ext import commands
 import os
-from .utils.dataIO import fileIO, dataIO
+from .utils.dataIO import dataIO
 from cogs.utils import checks
 from __main__ import send_cmd_help
 import asyncio
 import time
 import re
-from datetime import datetime
-import uuid
 from .utils.chat_formatting import pagify, box
 try:
     from tabulate import tabulate
@@ -109,7 +107,7 @@ class fmod:
                                               "By doing this you will CANCEL any information given.\n\n"
                                               "*When you are ready to begin type `start`.*")
             embedmsg = await self.bot.send_message(channel, embed=embed)
-            ready = await self.bot.wait_for_message(channel=channel, author=ctx.message.author, content='start')
+            await self.bot.wait_for_message(channel=channel, author=ctx.message.author, content='start')
 
             for a in questions:
                 embed = discord.Embed(description="Welcome to the setup for the fmod cog! "
@@ -165,8 +163,8 @@ class fmod:
                 if a == 'Revoke Message':
                     embed.add_field(name="~~~~",
                                     value="**Revoke Message** - "
-                                           "The message sent when a warning is revoked from a user.\n\n"
-                                           "*Please type the message*", inline=False)
+                                          "The message sent when a warning is revoked from a user.\n\n"
+                                          "*Please type the message*", inline=False)
                 if a == 'DM Warn':
                     embed.add_field(name="~~~~",
                                     value="**DM Warn** - "
@@ -257,6 +255,7 @@ class fmod:
                 await self.currentsettings(ctx, channel, server)
             else:
                 pass
+
     async def currentsettings(self, ctx, channel, server):
         jsonload = self.settingsload[server.id]
         message = "```\n"
@@ -510,7 +509,6 @@ class fmod:
     @checks.mod()
     async def warn(self, ctx, user: discord.Member, *, reason: str=None):
         server = ctx.message.server
-        author = ctx.message.author
         channel = ctx.message.channel
         can_ban = channel.permissions_for(server.me).ban_members
         can_role = channel.permissions_for(server.me).manage_roles
@@ -620,7 +618,7 @@ class fmod:
                                         'Message ID': msgid
                                     }
             dataIO.save_json(self.warnings, self.warningsload)
-        elif count > 0 and count < max -1:
+        elif count > 0 and count < max - 1:
             count += 1
             self.warningsload[server.id][user.id].update({"Count": count})
             dataIO.save_json(self.warnings, self.warningsload)
@@ -718,7 +716,6 @@ class fmod:
                 poops = count * "\U0001f528"
                 role_name = "Warning {}".format(poops)
                 is_there = False
-                colour = 0xbc7642
                 for role in server.roles:
                     if role.name == role_name:
                         poop_role = role
@@ -743,6 +740,7 @@ class fmod:
             perms.speak = False
 
         await self.bot.edit_channel_permissions(channel, role, overwrite=perms)
+
     async def _punish_cmd_common(self, ctx, member, reason):
         server = ctx.message.server
         mutetime = self.settingsload[server.id]["Mute Time"]
@@ -855,7 +853,6 @@ class fmod:
                         poops = "\U0001f528" * count
                         role_name = "Warning {}".format(poops)
                         is_there = False
-                        colour = 0xbc7642
                         for role in member.server.roles:
                             if role.name == role_name:
                                 poop_role = role
@@ -985,7 +982,6 @@ class fmod:
                                         poops = count * "\U0001f528"
                                         role_name = "Warning {}".format(poops)
                                         is_there = False
-                                        colour = 0xbc7642
                                         for role in server.roles:
                                             if role.name == role_name:
                                                 poop_role = role
@@ -1040,7 +1036,6 @@ class fmod:
     @checks.admin()
     async def delwarn(self, ctx, id, *, reason):
         server = ctx.message.server
-        channel = ctx.message.channel
         if server.id not in self.settingsload:
             await self.bot.say("Please run the `[p]setup` command before running this command.")
             return
@@ -1050,7 +1045,6 @@ class fmod:
     @checks.admin()
     async def setcount(self, ctx, user: discord.Member, count):
         server = ctx.message.server
-        channel = ctx.message.channel
         counter = self.warningsload[server.id][user.id]["Count"]
         max = self.warningsload[server.id][user.id]["Warn Limit"]
         max = int(max)
@@ -1210,7 +1204,7 @@ class fmod:
                                 await self.bot.send_message(dmchannel, "Done!")
                                 break
                             else:
-                                if stuff.attachments or 'discord' in proof.content or 'gyazo' in proof.content or 'prntscr' in proof.content:
+                                if stuff.attachments or 'discord' in stuff.content or 'gyazo' in stuff.content or 'prntscr' in stuff.content:
                                     if stuff.attachments:
                                         attachmentlist = stuff.attachments[0]
                                         attachment = attachmentlist['url']
@@ -1311,7 +1305,7 @@ def check_folder():
         print("Creating data/fmod/server.id folder")
         os.makedirs("data/fmod")
     if not os.path.exists(PATH):
-        log.debug('Creating folder: data/fmod')
+        print('Creating folder: data/fmod')
         os.makedirs(PATH)
 
 

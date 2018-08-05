@@ -462,7 +462,6 @@ class legend:
             if profiledata.clan is None:
                 leftClan = True
                 clantag = ""
-                clanname = ""
             else:
                 clantag = profiledata.clan.tag
         except clashroyale.RequestError:
@@ -726,7 +725,6 @@ class legend:
     async def waiting(self, ctx, member: discord.Member, clankey):
         """Add people to the waiting list for a clan"""
         server = ctx.message.server
-        author = ctx.message.author
         legendServer = ["374596069989810176"]
 
         if server.id not in legendServer:
@@ -738,7 +736,6 @@ class legend:
         try:
             clan_tag = await self.clans.getClanData(clankey, 'tag')
             clan_name = await self.clans.getClanData(clankey, 'name')
-            clan_role = await self.clans.getClanData(clankey, 'role')
             clan_pb = await self.clans.getClanData(clankey, 'personalbest')
             clan_cwr = await self.clans.getClanData(clankey, 'cwr')
             clan_war = await self.clans.getClanData(clankey, 'warTrophies')
@@ -751,17 +748,12 @@ class legend:
             profiletag = await self.tags.getTag(member.id)
             profiledata = await self.clash.get_player(profiletag, exclude=["games", "currentDeck", "cards", "achievements"])
             clandata = await self.clash.get_clan(clan_tag)
-            if profiledata.clan is None:
-                clantag = ""
-                clanname = ""
-            else:
-                clantag = profiledata.clan.tag
-                clanname = profiledata.clan.name
 
             ign = profiledata.name
             trophies = profiledata.trophies
             cards = profiledata.cards
             maxtrophies = profiledata.stats.max_trophies
+
             plyrLeagueCWR = await self.getBestPerc(cards, await self.getLeague(clan_war))
         except clashroyale.RequestError:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
@@ -801,7 +793,6 @@ class legend:
     async def remove(self, ctx, member: discord.Member, clankey):
         """Delete people from the waiting list for a clan"""
         server = ctx.message.server
-        author = ctx.message.author
         legendServer = ["374596069989810176"]
 
         if server.id not in legendServer:
@@ -811,9 +802,7 @@ class legend:
         clankey = clankey.lower()
 
         try:
-            clan_tag = await self.clans.getClanData(clankey, 'tag')
             clan_name = await self.clans.getClanData(clankey, 'name')
-            clan_role = await self.clans.getClanData(clankey, 'role')
         except KeyError:
             await self.bot.say("Please use a valid clanname: {}".format(await self.clans.namesClans()))
             return
@@ -841,7 +830,6 @@ class legend:
         counterPlayers = 0
 
         server = ctx.message.server
-        author = ctx.message.author
         legendServer = ["374596069989810176"]
 
         if server.id not in legendServer:
@@ -879,9 +867,6 @@ class legend:
     async def changenick(self, ctx, member: discord.Member=None):
         """ Change nickname of a user of their IGN + Clan"""
 
-        server = ctx.message.server
-        author = ctx.message.author
-
         member = member or ctx.message.author
 
         try:
@@ -903,8 +888,6 @@ class legend:
         membership = await self.clans.verifyMembership(clantag)
 
         if membership:
-
-            mymessage = ""
             if ign is None:
                 await self.bot.say("Cannot find IGN.")
             else:
@@ -925,7 +908,6 @@ class legend:
     async def audit(self, ctx, clankey):
         """ Check to see if your clan members are setup properly in discord."""
         server = ctx.message.server
-        author = ctx.message.author
         legendServer = ["374596069989810176"]
 
         if server.id not in legendServer:
@@ -1259,7 +1241,6 @@ class legend:
     async def guest(self, ctx, member: discord.Member):
         """Add guest role and change nickname to CR"""
         server = ctx.message.server
-        author = ctx.message.author
         legendServer = ["374596069989810176"]
 
         if server.id not in legendServer:
@@ -1306,7 +1287,6 @@ class legend:
         """Use this command after kicking people from clan"""
 
         server = ctx.message.server
-        author = ctx.message.author
         legendServer = ["374596069989810176"]
 
         if server.id not in legendServer:
@@ -1332,10 +1312,6 @@ class legend:
     @commands.command(pass_context=True, no_pm=True)
     async def cwstats(self, ctx, tag):
         """Tournament/Clanwar Statistics generator"""
-
-        server = ctx.message.server
-        author = ctx.message.author
-
         await self.bot.type()
 
         tag = await self.tags.formatTag(tag)

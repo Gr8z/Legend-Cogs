@@ -1,10 +1,6 @@
 import discord
 from discord.ext import commands
 from cogs.utils import checks
-from .utils.dataIO import dataIO, fileIO
-from __main__ import send_cmd_help
-import os
-import io
 import asyncio
 import clashroyale
 import time
@@ -28,7 +24,7 @@ class warbattles:
         self.deck = Deck(self.bot)
         self.clash = clashroyale.RoyaleAPI(self.auth.getToken(), is_async=True, timeout=20)
         self.moment = time.time()
-        self.completed = [[],[]]
+        self.completed = [[], []]
 
     async def getLevels(self, deck):
         """Get common, rare, epic, legendary levels"""
@@ -111,12 +107,12 @@ class warbattles:
                             newctx = ctx
                             newctx.message.channel = discord.Object(id=channel)
                             await self.deck.upload_deck_image(newctx, card_keys, 'War Deck')
-                            
+
                             self.completed[1].append(battledata["time"])
                             await asyncio.sleep(1)
                 self.completed[0].append(clankey)
                 await asyncio.sleep(1)
-        self.completed = [[],[]]
+        self.completed = [[], []]
         self.moment = time.time()
 
 
