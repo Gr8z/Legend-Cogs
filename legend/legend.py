@@ -159,7 +159,7 @@ class legend:
         self.auth = self.bot.get_cog('crtools').auth
         self.tags = self.bot.get_cog('crtools').tags
         self.clans = self.bot.get_cog('crtools').clans
-        self.clash = clashroyale.RoyaleAPI(self.auth.getToken(), is_async=True)
+        self.clash = clashroyale.OfficialAPI(self.auth.getOfficialToken(), is_async=True)
         self.welcome = dataIO.load_json('data/legend/welcome.json')
         self.bank = dataIO.load_json('data/economy/bank.json')
         self.seen = dataIO.load_json('data/seen/seen.json')
@@ -299,7 +299,7 @@ class legend:
                 profiledata = await self.clash.get_player(profiletag)
                 trophies = profiledata.trophies
                 cards = profiledata.cards
-                maxtrophies = profiledata.stats.max_trophies
+                maxtrophies = profiledata.best_trophies
                 plyrLeagueCWR = 0
 
                 if profiledata.clan is None:
@@ -315,13 +315,16 @@ class legend:
                 await self.bot.say("You must assosiate a tag with this member first using ``{}save #tag @member``".format(ctx.prefix))
                 return
 
-        try:
-            clandata = await self.clash.get_clan(*await self.clans.tagsClans(), exclude="members")
-        except clashroyale.RequestError:
-            await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
-            return
+        clandata = []
+        for clankey in self.clans.keysClans():
+            try:
+                clan = await self.clash.get_clan(await self.clans.getClanData(clankey, 'tag'))
+                clandata.append(clan)
+            except clashroyale.RequestError:
+                await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
+                return
 
-        clandata = sorted(clandata, key=lambda x: (x.required_score, x.score), reverse=True)
+        clandata = sorted(clandata, key=lambda x: (x.required_trophies, x.clan_score), reverse=True)
 
         embed = discord.Embed(color=0xFAA61A)
         if "url" in self.settings and "family" in self.settings:
@@ -342,32 +345,30 @@ class legend:
             personalbest = 0
             bonustitle = None
 
-            for clankey in self.clans.keysClans():
-                if await self.clans.getClanData(clankey, 'tag') == clan.tag:
-                    numWaiting = await self.clans.numWaiting(clankey)
-                    personalbest = await self.clans.getClanData(clankey, 'personalbest')
-                    cwr = await self.clans.getClanData(clankey, 'cwr')
-                    bonustitle = await self.clans.getClanData(clankey, 'bonustitle')
-                    emoji = await self.clans.getClanData(clankey, 'emoji')
-                    warTrophies = await self.clans.getClanData(clankey, 'warTrophies')
-                    totalWaiting += numWaiting
-                    break
+            clankey = await self.clans.getClanKey(clan.tag.strip("#"))
+            numWaiting = await self.clans.numWaiting(clankey)
+            personalbest = await self.clans.getClanData(clankey, 'personalbest')
+            cwr = await self.clans.getClanData(clankey, 'cwr')
+            bonustitle = await self.clans.getClanData(clankey, 'bonustitle')
+            emoji = await self.clans.getClanData(clankey, 'emoji')
+            warTrophies = await self.clans.getClanData(clankey, 'warTrophies')
+            totalWaiting += numWaiting
 
             if numWaiting > 0:
                 title = "["+str(numWaiting)+" Waiting] "
             else:
                 title = ""
 
-            totalMembers += clan.member_count
-            if clan.member_count < 50:
+            totalMembers += clan.get("members")
+            if clan.get("members") < 50:
                 showMembers = str(clan.member_count) + "/50"
             else:
                 showMembers = "**FULL**  "
 
-            if str(clan.type) != 'invite only':
+            if str(clan.type) != 'inviteOnly':
                 title += "["+str(clan.type).title()+"] "
 
-            title += clan.name + " (#" + clan.tag + ") "
+            title += clan.name + " (" + clan.tag + ") "
 
             if personalbest > 0:
                 title += "PB: "+str(personalbest)+"+  "
@@ -383,13 +384,13 @@ class legend:
             desc = ("{} {}  <:crtrophy:448609948008579073> "
                     "{}+  <:wartrophy:448609141796241408> {}".format(emoji,
                                                                      showMembers,
-                                                                     clan.required_score,
+                                                                     clan.required_trophies,
                                                                      warTrophies))
 
-            if (member is None) or ((clan.required_score <= trophies) and
+            if (member is None) or ((clan.required_trophies <= trophies) and
                                     (maxtrophies > personalbest) and
                                     (plyrLeagueCWR >= cwr) and
-                                    (trophies - clan.required_score < 1200) and
+                                    (trophies - clan.required_trophies < 1200) and
                                     (clan.type != 'closed')):
                 foundClan = True
                 embed.add_field(name=title, value=desc, inline=False)
@@ -455,7 +456,7 @@ class legend:
         try:
             await self.bot.type()
             profiletag = await self.tags.getTag(member.id)
-            profiledata = await self.clash.get_player(profiletag, exclude=["games", "currentDeck", "cards", "achievements"])
+            profiledata = await self.clash.get_player(profiletag)
             clandata = await self.clash.get_clan(clan_tag)
 
             ign = profiledata.name
@@ -477,14 +478,14 @@ class legend:
 
             trophies = profiledata.trophies
             cards = profiledata.cards
-            maxtrophies = profiledata.stats.max_trophies
+            maxtrophies = profiledata.best_trophies
             plyrLeagueCWR = await self.getBestPerc(cards, await self.getLeague(clan_war))
 
-            if (clandata.member_count == 50):
+            if (clandata.get("members") == 50):
                 await self.bot.say("Approval failed, the clan is Full.")
                 return
 
-            if ((trophies < clandata.required_score) and (maxtrophies < clan_pb)):
+            if ((trophies < clandata.required_trophies) and (maxtrophies < clan_pb)):
                 await self.bot.say("Approval failed, you don't meet the trophy requirements.")
                 return
 
@@ -503,7 +504,7 @@ class legend:
 
             if await self.clans.numWaiting(clankey) > 0:
                 if await self.clans.checkWaitingMember(clankey, member.id):
-                    canWait = (50 - clandata.member_count) - 1
+                    canWait = (50 - clandata.get("members")) - 1
 
                     if await self.clans.getWaitingIndex(clankey, member.id) > canWait:
                         await self.bot.say("Approval failed, you are not first in queue for the waiting list on this server.")
@@ -588,7 +589,7 @@ class legend:
         try:
             await self.bot.type()
             profiletag = await self.tags.getTag(member.id)
-            profiledata = await self.clash.get_player(profiletag, exclude=["games", "currentDeck", "cards", "achievements"])
+            profiledata = await self.clash.get_player(profiletag)
             if profiledata.clan is None:
                 clantag = ""
                 clanname = ""
@@ -746,13 +747,13 @@ class legend:
         try:
             await self.bot.type()
             profiletag = await self.tags.getTag(member.id)
-            profiledata = await self.clash.get_player(profiletag, exclude=["games", "currentDeck", "cards", "achievements"])
+            profiledata = await self.clash.get_player(profiletag)
             clandata = await self.clash.get_clan(clan_tag)
 
             ign = profiledata.name
             trophies = profiledata.trophies
             cards = profiledata.cards
-            maxtrophies = profiledata.stats.max_trophies
+            maxtrophies = profiledata.best_trophies
 
             plyrLeagueCWR = await self.getBestPerc(cards, await self.getLeague(clan_war))
         except clashroyale.RequestError:
@@ -762,7 +763,7 @@ class legend:
             await self.bot.say("You must assosiate a tag with this member first using ``{}save #tag @member``".format(ctx.prefix))
             return
 
-        if ((trophies < clandata.required_score) and (maxtrophies < clan_pb)):
+        if ((trophies < clandata.required_trophies) and (maxtrophies < clan_pb)):
             await self.bot.say("Cannot add you to the waiting list, you don't meet the trophy requirements.")
             return
 
@@ -872,7 +873,7 @@ class legend:
         try:
             await self.bot.type()
             profiletag = await self.tags.getTag(member.id)
-            profiledata = await self.clash.get_player(profiletag, exclude=["games", "currentDeck", "cards", "achievements"])
+            profiledata = await self.clash.get_player(profiletag)
             if profiledata.clan is None:
                 clantag = "none"
             else:
@@ -939,10 +940,10 @@ class legend:
         cr_members_name = []
         cr_members_tag = []
         cr_members_trophy = []
-        for member in clandata.members:
-            cr_members_name.append(member['name'])
-            cr_members_tag.append(member['tag'])
-            cr_members_trophy.append(member['trophies'])
+        for member in clandata.member_list:
+            cr_members_name.append(member.name)
+            cr_members_tag.append(member.tag)
+            cr_members_trophy.append(member.trophies)
 
         role = discord.utils.get(server.roles, name=clan_role)
         d_members = [m for m in server.members if role in m.roles]
@@ -986,12 +987,12 @@ class legend:
                 cr_members_with_no_player_tag.append(cr_members_name[index])
                 continue
 
-        clanReq = clandata.required_score
+        clanReq = clandata.required_trophies
         for index, player_trophy in enumerate(cr_members_trophy):
             if player_trophy < clanReq:
                 cr_members_with_less_trophies.append(cr_members_name[index])
 
-        cr_clanSettings.append(clandata.badge.id == 16000002)
+        cr_clanSettings.append(clandata.badge_id == 16000002)
         cr_clanSettings.append(clandata.location.name == "International")
         cr_clanSettings.append("Legend Family🔥14 Clans🔥LegendClans.com🔥Events & Prizes🔥Apply at legendclans.com/discord🔥" in clandata.description)
         cr_clanSettings.append(clandata.type != "closed")
@@ -1192,7 +1193,7 @@ class legend:
 
         await self.bot.type()
         try:
-            topclans = await self.clash.get_top_clans('_int')
+            topclans = await self.clash.get_top_clans('_int') # TODO
         except clashroyale.RequestError:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
@@ -1250,7 +1251,7 @@ class legend:
         try:
             await self.bot.type()
             profiletag = await self.tags.getTag(member.id)
-            profiledata = await self.clash.get_player(profiletag, exclude=["games", "currentDeck", "cards", "achievements"])
+            profiledata = await self.clash.get_player(profiletag)
             ign = profiledata.name
         except clashroyale.RequestError:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
@@ -1327,14 +1328,14 @@ class legend:
             return
 
         clanwar_dict = {}
-        for member in tourney.members:
+        for member in tourney.members_list:
 
             tourney_score = member.score
 
             if member.clan is None:
                 tourney_clan = "OTHERS"
             else:
-                tourney_clan = member.clan.name
+                tourney_clan = member.clan.name  # TODO
 
             if tourney_clan not in clanwar_dict:
                 clanwar_dict[tourney_clan] = {}
