@@ -1194,18 +1194,18 @@ class legend:
 
         await self.bot.type()
         try:
-            topclans = await self.clash.get_top_clans('_int') # TODO
+            topclans = await self.clash.get_top_clans('57000006')
         except clashroyale.RequestError:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
 
         msg = ""
         for x in range(10):
-            msg += "``" + str(topclans[x].rank).zfill(3) + "." + "`` " + topclans[x].name + "\n"
-        for i in range(10, len(topclans)):
+            msg += "``" + str(topclans.get("items")[x].rank).zfill(3) + "." + "`` " + topclans.get("items")[x].name + "\n"
+        for i in range(10, len(topclans.get("items"))):
             for j in self.clans.keysClans():
-                if topclans[i].tag == await self.clans.getClanData(j, 'tag'):
-                    msg += "``" + str(topclans[i].rank).zfill(3) + "." + "`` " + topclans[i].name + "\n"
+                if topclans.get("items")[i].tag.strip("#") == await self.clans.getClanData(j, 'tag'):
+                    msg += "``" + str(topclans.get("items")[i].rank).zfill(3) + "." + "`` " + topclans.get("items")[i].name + "\n"
 
         embed = discord.Embed(description=msg, color=0xFAA61A)
         embed.set_author(name="Local International Leaderboard",
@@ -1333,10 +1333,10 @@ class legend:
 
             tourney_score = member.score
 
-            if member.clan is None:
+            if not hasattr(member, 'clan'):
                 tourney_clan = "OTHERS"
             else:
-                tourney_clan = member.clan.name  # TODO
+                tourney_clan = member.clan.name
 
             if tourney_clan not in clanwar_dict:
                 clanwar_dict[tourney_clan] = {}
