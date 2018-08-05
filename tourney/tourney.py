@@ -8,6 +8,9 @@ lastTag = '0'
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
 
+BOTCOMMANDER_ROLES = ["Family Representative", "Clan Manager", "Clan Deputy",
+                      "Co-Leader", "Hub Officer", "admin", "Member", "guest"]
+
 
 class tournament:
     """tournament!"""
@@ -168,6 +171,7 @@ class tournament:
             await asyncio.sleep(120)
 
     @commands.command()
+    @commands.has_any_role(*BOTCOMMANDER_ROLES)
     async def tourney(self):
         """ Get a open tournament"""
 
