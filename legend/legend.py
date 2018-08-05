@@ -265,13 +265,13 @@ class legend:
 
         for card in cards:
             for league in leagueLevels.keys():
-                if card.rarity == "Common":
+                if card.max_level == 13:
                     overlevel = card.level >= leagueLevels[league][0]
-                elif card.rarity == "Rare":
+                elif card.max_level == 11:
                     overlevel = card.level >= leagueLevels[league][1]
-                elif card.rarity == "Epic":
+                elif card.max_level == 8:
                     overlevel = card.level >= leagueLevels[league][2]
-                elif card.rarity == "Legendary":
+                elif card.max_level == 5:
                     overlevel = card.level >= leagueLevels[league][3]
 
                 if overlevel:
