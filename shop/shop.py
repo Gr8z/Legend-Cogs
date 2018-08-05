@@ -140,7 +140,7 @@ class shop:
                 return
 
             for member in clan.member_list:
-                clan_tag = member.tag
+                clan_tag = member.tags.strip('#')
                 clan_donations = member.donations
                 clan_wins = await self.clans.getMemberWins(clankey, clan_tag)
                 clan_cards = await self.clans.getMemberCards(clankey, clan_tag)
@@ -237,7 +237,7 @@ class shop:
 
         for member in tourney.members_list:
 
-            tourney_tag = member.tag
+            tourney_tag = member.tag.strip('#')
             tourney_score = member.score
 
             for key in range(0, len(banks)):
@@ -397,7 +397,7 @@ class shop:
                 if profiledata.clan is None:
                     clantag = ""
                 else:
-                    clantag = profiledata.clan.tag
+                    clantag = profiledata.clan.tag.strip("#")
                 ign = profiledata.name
             except clashroyale.RequestError:
                 await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")

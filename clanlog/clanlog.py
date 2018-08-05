@@ -58,13 +58,14 @@ class Clanlog:
             count += clan.get("members")
             one_clan = {}
             for member in clan.member_list:
-                one_clan[member.tag] = {}
-                one_clan[member.tag]["tag"] = member.tag
-                one_clan[member.tag]["name"] = member.name
-                one_clan[member.tag]["WarDayWins"] = 0
-                one_clan[member.tag]["cardsEarned"] = 0
+                tag = member.tag.strip("#")
+                one_clan[tag] = {}
+                one_clan[tag]["tag"] = tag
+                one_clan[tag]["name"] = member.name
+                one_clan[tag]["WarDayWins"] = 0
+                one_clan[tag]["cardsEarned"] = 0
                 if download is not None:
-                    await self.clans.addMember(clankey, member.name, member.tag)
+                    await self.clans.addMember(clankey, member.name, tag)
             new_clans[clankey]['members'] = one_clan
 
         if download is not None:
