@@ -1,9 +1,8 @@
 import discord
 from discord.ext import commands
-from .utils.dataIO import dataIO, fileIO
+from .utils.dataIO import dataIO
 from cogs.utils import checks
 import asyncio
-import json
 import clashroyale
 import math
 from PIL import Image
@@ -21,7 +20,7 @@ class shop:
         self.auth = self.bot.get_cog('crtools').auth
         self.tags = self.bot.get_cog('crtools').tags
         self.clans = self.bot.get_cog('crtools').clans
-        self.clash = clashroyale.RoyaleAPI(self.auth.getToken(), is_async=True)
+        self.clash = clashroyale.OfficialAPI(self.auth.getOfficialToken(), is_async=True)
         self.session = aiohttp.ClientSession()
 
     async def updateBank(self):
@@ -127,23 +126,19 @@ class shop:
     async def sendpayouts(self, ctx):
         """Payout money for clanchest and donations."""
 
-        server = ctx.message.server
-        author = ctx.message.author
-
         await self.updateBank()
 
         bank = self.bot.get_cog('Economy').bank
         banks = list(self.banks['374596069989810176'])
         # banks = list(self.banks['363728974821457921'])
 
-        try:
-            clans = await self.clash.get_clan(*await self.clans.tagsClans())
-        except clashroyale.RequestError:
-            await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
-            return
+        for clankey in self.clans.keysClans():
+            try:
+                clan = await self.clash.get_clan(await self.clans.getClanData(clankey, 'tag'))
+            except clashroyale.RequestError:
+                await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
+                return
 
-        for clan in clans:
-            clankey = await self.clans.getClanKey(clan.tag)
             for member in clan.members:
                 clan_tag = member.tag
                 clan_donations = member.donations
@@ -222,9 +217,6 @@ class shop:
     async def sendcwpayouts(self, ctx, tag):
         """Payout money for clanwar trophies."""
 
-        server = ctx.message.server
-        author = ctx.message.author
-
         await self.updateBank()
 
         bank = self.bot.get_cog('Economy').bank
@@ -243,7 +235,7 @@ class shop:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
 
-        for member in tourney.members:
+        for member in tourney.members_list:
 
             tourney_tag = member.tag
             tourney_score = member.score
@@ -404,10 +396,8 @@ class shop:
 
                 if profiledata.clan is None:
                     clantag = ""
-                    clanname = ""
                 else:
                     clantag = profiledata.clan.tag
-                    clanname = profiledata.clan.name
                 ign = profiledata.name
             except clashroyale.RequestError:
                 await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
@@ -563,6 +553,7 @@ class shop:
             await self.bot.say("please contact @GR8#7968 to purchase it for you.")
         else:
             await self.bot.say("You do not have enough credits to buy Nitro.")
+
 
 def setup(bot):
     bot.add_cog(shop(bot))
