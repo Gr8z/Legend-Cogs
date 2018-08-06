@@ -140,7 +140,7 @@ class shop:
                 return
 
             for member in clan.member_list:
-                clan_tag = member.tags.strip('#')
+                clan_tag = member.tag.strip('#')
                 clan_donations = member.donations
                 clan_wins = await self.clans.getMemberWins(clankey, clan_tag)
                 clan_cards = await self.clans.getMemberCards(clankey, clan_tag)

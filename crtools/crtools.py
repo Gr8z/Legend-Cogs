@@ -217,11 +217,17 @@ class clans:
 
     async def getMemberWins(self, clankey, tag):
         """Get a member's war day wins from the week"""
-        return self.clans[clankey]['members'][tag]['WarDayWins']
+        try:
+            return self.clans[clankey]['members'][tag]['WarDayWins']
+        except KeyError:
+            return 0
 
     async def getMemberCards(self, clankey, tag):
         """Get a member's cardsEarned from the week"""
-        return self.clans[clankey]['members'][tag]['cardsEarned']
+        try:
+            return self.clans[clankey]['members'][tag]['cardsEarned']
+        except KeyError:
+            return 0
 
     async def addWaitingMember(self, clankey, memberID):
         """Add a user to a clan's waiting list"""
