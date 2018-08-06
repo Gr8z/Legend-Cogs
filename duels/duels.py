@@ -85,7 +85,7 @@ class duels:
 
     async def battleWinner(self, battle):
         """Gets the winner of the battle, with the difference in crowns"""
-        return battle.team.crowns - battle.opponent.crowns
+        return battle.team[0].crowns - battle.opponent[0].crowns
 
     @commands.group(pass_context=True, no_pm=True)
     async def duel(self, ctx):
