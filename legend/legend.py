@@ -300,6 +300,7 @@ class legend:
                 trophies = profiledata.trophies
                 cards = profiledata.cards
                 maxtrophies = profiledata.best_trophies
+                maxwins = profiledata.challenge_max_wins
                 plyrLeagueCWR = 0
 
                 if profiledata.clan is None:
@@ -417,6 +418,7 @@ class legend:
                                 "Which clan would you like to join? \n\n"
                                 "**Name:** {} (#{})\n**Trophies:** {}/{}\n"
                                 "**CW Readiness:** {}\n"
+                                "**Max Challenge Wins:** {}\n"
                                 "**Clan:** {}\n\n"
                                 ":warning: **PLEASE DO NOT REQUEST TO "
                                 "JOIN ANY CLANS IF YOU HAVE NOT YET "
@@ -426,6 +428,7 @@ class legend:
                                                                        trophies,
                                                                        maxtrophies,
                                                                        await self.getBestLeague(cards),
+                                                                       maxwins,
                                                                        clanname)))
 
     @commands.command(pass_context=True, no_pm=True)
