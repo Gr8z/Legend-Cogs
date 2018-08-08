@@ -4,6 +4,7 @@ from cogs.utils import checks
 import asyncio
 import clashroyale
 import time
+from datetime import datetime
 
 try:
     from cogs.deck import Deck
@@ -21,8 +22,9 @@ class warbattles:
         self.bot = bot
         self.auth = self.bot.get_cog('crtools').auth
         self.clans = self.bot.get_cog('crtools').clans
+        self.constants = self.bot.get_cog('crtools').constants
         self.deck = Deck(self.bot)
-        self.clash = clashroyale.RoyaleAPI(self.auth.getToken(), is_async=True, timeout=20)
+        self.clash = clashroyale.OfficialAPI(self.auth.getOfficialToken(), is_async=True, timeout=20)
         self.moment = time.time()
         self.completed = [[], []]
 
@@ -30,13 +32,13 @@ class warbattles:
         """Get common, rare, epic, legendary levels"""
         levels = 0
         for card in deck:
-            if card.rarity == "Common":
+            if card.max_level == 13:
                 levels += card.level
-            if card.rarity == "Rare":
+            elif card.max_level == 11:
                 levels += card.level + 3
-            if card.rarity == "Epic":
+            elif card.max_level == 8:
                 levels += card.level + 6
-            if card.rarity == "Legendary":
+            elif card.max_level == 5:
                 levels += card.level + 9
 
         return levels
@@ -46,6 +48,18 @@ class warbattles:
         perc = round((1 - (team / opp)) * 100, 2)
         return '{0:{1}}%'.format(perc, '+' if perc else '')
 
+    async def cleanTime(self, time):
+        """Converts time to timestamp"""
+        return int(datetime.strptime(time, '%Y%m%dT%H%M%S.%fZ').timestamp()) + 7200
+
+    async def get_clan_battles(self, clankey):
+        """ Get war battles from each clan member"""
+        battles = []
+        for member in self.clans.keysClanMembers(clankey):
+            battles += await self.clash.get_player_battles(member)
+            await asyncio.sleep(0.08)
+        return battles
+
     @commands.command(pass_context=True)
     @checks.is_owner()
     async def warbattles(self, ctx):
@@ -54,33 +68,29 @@ class warbattles:
             channel = await self.clans.getClanData(clankey, 'warlog_channel')
             if ((channel is not None) and (clankey not in self.completed[0])):
                 try:
-                    clanBattles = await self.clash.get_clan_battles(await self.clans.getClanData(clankey, 'tag'), type="war")
+                    clanBattles = await self.get_clan_battles(clankey)
                 except clashroyale.RequestError:
                     print("WARBATTLES: Cannot reach Clash Royale Servers.")
                     return
 
                 for battle in clanBattles:
-                    battledata = {"train": 0, "time": battle.utc_time}
+                    battledata = {"train": 0, "time": await self.cleanTime(battle.battle_time)}
                     if battledata["time"] > self.moment:
                         if battle.type == "clanWarWarDay" and (battledata["time"] not in self.completed[1]):
-                            battledata["tag"] = battle.team[0].tag
+                            battledata["tag"] = battle.team[0].tag.strip("#")
                             battledata["name"] = battle.team[0].name
-                            battledata["deckLink"] = battle.team[0].deck_link
-                            battledata["deckLevels"] = await self.deckStrength(await self.getLevels(battle.team[0].deck),
-                                                                               await self.getLevels(battle.opponent[0].deck))
-                            battledata["trophies"] = battle.opponent[0].startTrophies - battle.team[0].startTrophies
+                            battledata["deckLink"] = await self.constants.decklink_url(battle.team[0].cards)
+                            battledata["deckLevels"] = await self.deckStrength(await self.getLevels(battle.team[0].cards),
+                                                                               await self.getLevels(battle.opponent[0].cards))
+                            battledata["trophies"] = battle.opponent[0].starting_trophies - battle.team[0].starting_trophies
 
-                            try:
-                                playerBattles = await self.clash.get_player_battles(battledata["tag"])
-                            except clashroyale.RequestError:
-                                print("WARBATTLES: Cannot reach Clash Royale Servers.")
-                                return
+                            for pracBattle in clanBattles:
+                                if pracBattle.team[0].tag.strip('#') == battledata["tag"]:
+                                    if ((pracBattle.type != "clanWarWarDay") and (await self.cleanTime(pracBattle.battle_time) < battledata["time"])):
+                                        if (await self.constants.decklink_url(pracBattle.team[0].cards) == battledata["deckLink"]):
+                                            battledata["train"] += 1
 
-                            for pracBattle in playerBattles:
-                                if ((pracBattle.type != "clanWarWarDay") and (pracBattle.utc_time < battledata["time"])):
-                                    if (pracBattle.team[0].deck_link == battledata["deckLink"]) and (pracBattle.team[0].tag == battledata["tag"]):
-                                        battledata["train"] += 1
-
+                            battle.winner = battle.team[0].crowns - battle.opponent[0].crowns
                             if battle.winner >= 1:
                                 battledata["wintext"] = "War Day Victory"
                                 battledata["winicon"] = "https://royaleapi.com/static/img/ui/cw-war-win.png"
@@ -91,7 +101,8 @@ class warbattles:
                                 battledata["wincolor"] = discord.Color.red()
 
                             embed = discord.Embed(title="", description=battledata["wintext"], color=battledata["wincolor"])
-                            embed.set_author(name=battledata["name"] + " (#"+battledata["tag"]+")", icon_url=battle.team[0].clan.badge.image)
+                            embed.set_author(name=battledata["name"] + " (#"+battledata["tag"]+")",
+                                             icon_url=await self.constants.get_clan_image(battle.team))
                             embed.set_thumbnail(url=battledata["winicon"])
                             embed.add_field(name="Opponent Trophies",
                                             value='{0:{1}}'.format(battledata["trophies"], '+' if battledata["trophies"] else ''),
@@ -109,7 +120,6 @@ class warbattles:
                             await self.deck.upload_deck_image(newctx, card_keys, 'War Deck')
 
                             self.completed[1].append(battledata["time"])
-                            await asyncio.sleep(1)
                 self.completed[0].append(clankey)
                 await asyncio.sleep(1)
         self.completed = [[], []]

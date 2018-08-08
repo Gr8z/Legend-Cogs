@@ -93,11 +93,11 @@ class warlog:
         for clankey in self.clans.keysClans():
 
             try:
-                clanwars = await self.clash.get_clan_war_log(await self.clans.getClanData(clankey, 'tag'))
+                clanwars = (await self.clash.get_clan_war_log(await self.clans.getClanData(clankey, 'tag'))).get("items")
             except clashroyale.RequestError:
                 return
 
-            standings = clanwars.get("items")[0].standings
+            standings = clanwars[0].standings
             clanRank = await self.findRank(standings, "tag", await self.clans.getClanData(clankey, 'tag'))
             warTrophies = standings[clanRank].clan.clan_score
 
@@ -126,21 +126,20 @@ class warlog:
                     if clanChannel is not None:
                         await self.bot.send_file(discord.Object(id=clanChannel), f, filename=filename)
 
-                for memberkey in self.clans.keysClanMembers(clankey):
+                for member in self.clans.keysClanMembers(clankey):
                     WarDayWins = 0
                     cardsEarned = 0
-                    tag = await self.clans.getClanMemberData(clankey, memberkey, 'tag')
-                    for index, war in enumerate(clanwars.get("items")):
+                    for index, war in enumerate(clanwars):
                         if index == 5:
                             break
                         created_date = await self.cleanTime(war.created_date)
                         if created_date > await self.last_day(datetime.today(), 'sunday'):
                             for participant in war.participants:
-                                if participant.tag.strip("#") == tag:
+                                if participant.tag.strip("#") == member:
                                     WarDayWins += participant.wins
                                     cardsEarned += participant.cards_earned
 
-                    await self.clans.setWarstats(clankey, tag, WarDayWins, cardsEarned)
+                    await self.clans.setWarstats(clankey, member, WarDayWins, cardsEarned)
 
                 await self.clans.setWarTrophies(clankey, warTrophies)
 

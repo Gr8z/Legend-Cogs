@@ -250,7 +250,7 @@ class clashroyale:
         await self.bot.type()
         try:
             profiletag = await self.tags.getTag(member.id)
-            chestdata = await self.clash.get_player_chests(profiletag)
+            chestdata = (await self.clash.get_player_chests(profiletag)).get("items")
         except clashroyaleAPI.RequestError:
             await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             return
@@ -269,7 +269,7 @@ class clashroyale:
         }
 
         valuechestText, specialChestText = "", ""
-        for chest in chestdata.get("items"):
+        for chest in chestdata:
             if chest.index < 9:
                 valuechestText += self.emoji(mapEmoji[chest.name]) + " "
             else:
