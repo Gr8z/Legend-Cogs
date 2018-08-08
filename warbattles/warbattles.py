@@ -28,6 +28,19 @@ class warbattles:
         self.moment = time.time()
         self.completed = [[], []]
 
+    async def compareDeck(self, team, opp):
+        """Check if both decks are similar"""
+        deck1, deck2 = [], []
+
+        for x in range(0, 8):
+            deck1 = team[0].name
+            deck2 = opp[0].name
+
+        diff = len(set(deck1) - set(deck2))
+        if diff > 3:
+            return False
+        return True
+
     async def getLevels(self, deck):
         """Get common, rare, epic, legendary levels"""
         levels = 0
@@ -87,7 +100,7 @@ class warbattles:
                             for pracBattle in clanBattles:
                                 if pracBattle.team[0].tag.strip('#') == battledata["tag"]:
                                     if ((pracBattle.type != "clanWarWarDay") and (await self.cleanTime(pracBattle.battle_time) < battledata["time"])):
-                                        if (await self.constants.decklink_url(pracBattle.team[0].cards) == battledata["deckLink"]):
+                                        if await self.compareDeck(pracBattle.team[0].cards, battle.team[0].cards):
                                             battledata["train"] += 1
 
                             battle.winner = battle.team[0].crowns - battle.opponent[0].crowns
@@ -102,7 +115,7 @@ class warbattles:
 
                             embed = discord.Embed(title="", description=battledata["wintext"], color=battledata["wincolor"])
                             embed.set_author(name=battledata["name"] + " (#"+battledata["tag"]+")",
-                                             icon_url=await self.constants.get_clan_image(battle.team))
+                                             icon_url=await self.constants.get_clan_image(battle.team[0]))
                             embed.set_thumbnail(url=battledata["winicon"])
                             embed.add_field(name="Opponent Trophies",
                                             value='{0:{1}}'.format(battledata["trophies"], '+' if battledata["trophies"] else ''),
