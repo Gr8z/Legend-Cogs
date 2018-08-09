@@ -99,9 +99,11 @@ class warbattles:
 
                             for pracBattle in clanBattles:
                                 if pracBattle.team[0].tag.strip('#') == battledata["tag"]:
-                                    if ((pracBattle.type != "clanWarWarDay") and (await self.cleanTime(pracBattle.battle_time) < battledata["time"])):
-                                        if await self.compareDeck(pracBattle.team[0].cards, battle.team[0].cards):
-                                            battledata["train"] += 1
+                                    if pracBattle.type not in ["clanWarWarDay", "PvP"]:
+                                        pracTime = await self.cleanTime(pracBattle.battle_time)
+                                        if (pracTime < battledata["time"]) and (self.moment - pracTime < 86400):
+                                            if await self.compareDeck(pracBattle.team[0].cards, battle.team[0].cards):
+                                                battledata["train"] += 1
 
                             battle.winner = battle.team[0].crowns - battle.opponent[0].crowns
                             if battle.winner >= 1:
@@ -122,7 +124,9 @@ class warbattles:
                                             inline=True)
                             embed.add_field(name="Opponent Card Levels", value=battledata["deckLevels"], inline=True)
                             embed.add_field(name="Practices", value=battledata["train"], inline=True)
-                            embed.add_field(name="Deck Link", value="[Copy to war deck]({}&ID={}&war=1)".format(battledata["deckLink"], battledata["tag"]), inline=True)
+                            embed.add_field(name="Deck Link",
+                                            value="[Copy to war deck]({}&ID={}&war=1)".format(battledata["deckLink"],
+                                                                                              battledata["tag"]), inline=True)
                             embed.set_footer(text=credits, icon_url=creditIcon)
 
                             await self.bot.send_message(discord.Object(id=channel), embed=embed)
