@@ -830,7 +830,7 @@ class Heist:
         for result in results:
             await self.bot.say(result)
             await asyncio.sleep(5)
-        await self.bot.say("The {} is now over. Distributing player spoils...".format(t_heist))
+        await self.bot.say("The {} is now over. To get notified on the next heist, type in ``!togglerole heist``".format(t_heist))
         await asyncio.sleep(5)
 
     async def vault_updater(self):
