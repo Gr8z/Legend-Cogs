@@ -417,7 +417,7 @@ class shop:
                         newclanname = await self.clans.getClanData(savekey, 'nickname')
                         newname = "{} {} | {}".format(ign, emoji, newclanname)
                     else:
-                        newname = "{} | Guest {}".format(ign, emoji)
+                        newname = "{} {} | Guest".format(ign, emoji)
                     await self.bot.change_nickname(author, newname)
                 except discord.HTTPException:
                     await self.bot.say("I don’t have permission to change nick for this user.")
