@@ -1300,9 +1300,7 @@ class legend:
 
         rolesToRemove = await self.clans.rolesClans()
         rolesToRemove += ["Bait", "Siege", "Cycle", "Control",
-                          "Beatdown", "Tournaments", "Giveaways",
-                          "Gizer", "Pro Payday", "Rare™", "Epic™",
-                          "LeGeNDary™"]
+                          "Beatdown", "Tournaments", "Giveaways"]
 
         await self._remove_roles(member, rolesToRemove)
         await self.bot.change_nickname(member, None)
