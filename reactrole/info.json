@@ -1,0 +1,10 @@
+{
+    "AUTHOR" : "GR8",
+    "INSTALL_MSG" : "Role Reaction cog added, if there are any issues, please mention them on https://github.com/Gr8z/LeGeND-Bot",
+    "NAME" : "reactrole",
+    "SHORT" : "Use message reactions to assign roles.",
+    "DESCRIPTION" : "Assing any role to an emoji. Reacting with that emoji on a specified channel will add/remove roles.",
+    "TAGS" : ["role", "emoji", "reactions", "rolereact"],
+    "REQUIREMENTS" : [],
+    "HIDDEN" : false
+}
