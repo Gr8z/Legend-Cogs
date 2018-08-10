@@ -143,8 +143,7 @@ class Deck:
         - none
         """
         if use is None:
-            await self.bot.send_cmd_help(ctx)
-            return
+            return await self.bot.send_cmd_help(ctx)
         server = ctx.message.server
         self.settings["Servers"][server.id]["decklink"] = use
         self.save_settings()
@@ -345,8 +344,7 @@ class Deck:
         """Get a deck using the decklink."""
         card_keys = await self.decklink_to_cards(url)
         if card_keys is None:
-            await self.bot.say("Cannot find a URL.")
-            return
+            return await self.bot.say("Cannot find a URL.")
         await ctx.invoke(self.deck_get, *card_keys)
 
     @deck.command(name="addlink", aliases=['al', 'import', 'i'], pass_context=True, no_pm=True)
@@ -354,8 +352,7 @@ class Deck:
         """Add a deck using the decklink."""
         card_keys = await self.decklink_to_cards(url)
         if card_keys is None:
-            await self.bot.say("Cannot find a URL.")
-            return
+            return await self.bot.say("Cannot find a URL.")
         await ctx.invoke(self.deck_add, *card_keys)
         await self.bot.delete_message(ctx.message)
 
@@ -464,8 +461,7 @@ class Deck:
                 await self.bot.say("You don’t have any decks stored.\n"
                                    "Type `!deck add` to add some.")
             else:
-                await self.bot.say("{} hasn’t added any decks yet.".format(member.name))
-            return
+                return await self.bot.say("{} hasn’t added any decks yet.".format(member.name))
 
         deck_id = 1
         results_max = 3
@@ -487,8 +483,7 @@ class Deck:
                         author=ctx.message.author,
                         check=pagination_check)
                     if answer is None:
-                        await self.bot.say("Results aborted.")
-                        return
+                        return await self.bot.say("Results aborted.")
 
     @deck.command(name="show", pass_context=True, no_pm=True)
     async def deck_show(self, ctx, deck_id=None, member: discord.Member=None):

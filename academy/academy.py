@@ -40,33 +40,27 @@ class academy:
         await self.bot.send_message(channel, "What's your in-game name?")
         reply = (await self.bot.wait_for_message(channel=channel, author=user, timeout=90))
         if reply is None:
-            await self.bot.send_message(channel, msg_timeout)
-            return
+            return await self.bot.send_message(channel, msg_timeout)
         elif reply.content.lower() == "stop":
-            await self.bot.send_message(channel, msg_stop)
-            return
+            return await self.bot.send_message(channel, msg_stop)
         else:
             ingame_name = reply.content
 
         await self.bot.send_message(channel, "How many trophies do you have?")
         reply = await self.bot.wait_for_message(channel=channel, author=user, timeout=90)
         if reply is None:
-            await self.bot.send_message(channel, msg_timeout)
-            return
+            return await self.bot.send_message(channel, msg_timeout)
         elif reply.content.lower() == "stop":
-            await self.bot.send_message(channel, msg_stop)
-            return
+            return await self.bot.send_message(channel, msg_stop)
         else:
             trophies = reply.content
 
         await self.bot.send_message(channel, "What archetype/deck do you want to learn?")
         reply = await self.bot.wait_for_message(channel=channel, author=user, timeout=120)
         if reply is None:
-            await self.bot.send_message(channel, msg_timeout)
-            return
+            return await self.bot.send_message(channel, msg_timeout)
         elif reply.content.lower() == "stop":
-            await self.bot.send_message(channel, msg_stop)
-            return
+            return await self.bot.send_message(channel, msg_stop)
         else:
             info = reply.content
 
@@ -74,21 +68,17 @@ class academy:
         reply = await self.bot.wait_for_message(channel=channel, author=user, timeout=120)
         if reply is None:
             await self.bot.send_message(channel, msg_timeout)
-            return
         elif reply.content.lower() == "stop":
-            await self.bot.send_message(channel, msg_stop)
-            return
+            return await self.bot.send_message(channel, msg_stop)
         else:
             time = reply.content
 
         await self.bot.send_message(channel, "Do you have anything else you want to add? (Type \"No\" if not)")
         reply = await self.bot.wait_for_message(channel=channel, author=user, timeout=120)
         if reply is None:
-            await self.bot.send_message(channel, msg_timeout)
-            return
+            return await self.bot.send_message(channel, msg_timeout)
         elif reply.content.lower() == "stop":
-            await self.bot.send_message(channel, msg_stop)
-            return
+            return await self.bot.send_message(channel, msg_stop)
         else:
             more_info = reply.content
 

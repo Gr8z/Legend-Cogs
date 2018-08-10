@@ -281,8 +281,7 @@ class fmod:
         server = ctx.message.server
 
         if server.id not in self.settingsload:
-            await self.bot.say("Please run the `[p]setup` command before running this command.")
-            return
+            return await self.bot.say("Please run the `[p]setup` command before running this command.")
         if ctx.invoked_subcommand is None:
             await send_cmd_help(ctx)
             await self.currentsettings(ctx, channel, server)
@@ -323,8 +322,7 @@ class fmod:
                              self.settingsload)
             await self.bot.say("Default mute time is now: **{}**".format(muteroletime.content))
         else:
-            await self.bot.say("You've done something wrong! Please make sure that the format is correct!")
-            return
+            return await self.bot.say("You've done something wrong! Please make sure that the format is correct!")
 
     @_settings.command(no_pm=True, pass_context=True, manage_server=True)
     async def logchannel(self, ctx, channel: str):
@@ -400,10 +398,9 @@ class fmod:
     async def revokemsg(self, ctx, *, msg=None):
         """Set the message on warning being revoked."""
         if not msg:
-            await self.bot.say("```Set the message on warning being removed.\n\n"
-                               "To get a full list of information, use "
-                               "**settings message** without any parameters.```")
-            return
+            return await self.bot.say("```Set the message on warning being removed.\n\n"
+                                      "To get a full list of information, use "
+                                      "**settings message** without any parameters.```")
         server = ctx.message.server
 
         self.settingsload[server.id]["Revoke Message"] = msg
@@ -416,10 +413,9 @@ class fmod:
     async def ban(self, ctx, *, msg=None):
         """Set the ban message."""
         if not msg:
-            await self.bot.say("```Set the ban message.\n\n"
-                               "To get a full list of information, use "
-                               "**settings message** without any parameters.```")
-            return
+            return await self.bot.say("```Set the ban message.\n\n"
+                                      "To get a full list of information, use "
+                                      "**settings message** without any parameters.```")
         server = ctx.message.server
 
         self.settingsload[server.id]["Ban Message"] = msg

@@ -71,9 +71,8 @@ class challenges:
             channel = ctx.message.server.default_channel
         if not server.get_member(self.bot.user.id
                                  ).permissions_in(channel).send_messages:
-            await self.bot.say("I do not have permissions to send "
-                               "messages to {0.mention}".format(channel))
-            return
+            return await self.bot.say("I do not have permissions to send "
+                                      "messages to {0.mention}".format(channel))
         self.settings[server.id]["CHANNEL"] = channel.id
         dataIO.save_json(settings_path, self.settings)
         channel = self.get_game_channel(server)
@@ -96,8 +95,7 @@ class challenges:
         self.add_defualt_settings(server)
 
         if not self.verify_role(server, role):
-            await self.bot.say("{} is not a valid role on this server.".format(role))
-            return
+            return await self.bot.say("{} is not a valid role on this server.".format(role))
 
         self.settings[server.id]["ROLE"] = role
         await self.bot.say("Mentionable role has been set to {}.".format(role))
@@ -152,12 +150,10 @@ class challenges:
         delay = self.settings[server.id]["DELAY"]
 
         if self.active:
-            await self.bot.say("A challenge is already running, wait for it to end first.")
-            return
+            return await self.bot.say("A challenge is already running, wait for it to end first.")
 
         if channel is None:
-            await self.bot.say("Challenge channel not set, use ``[p]chalset channel`` to set your channel.")
-            return
+            return await self.bot.say("Challenge channel not set, use ``[p]chalset channel`` to set your channel.")
 
         if role_name is not None:
             challenges_role = discord.utils.get(server.roles, name=role_name)

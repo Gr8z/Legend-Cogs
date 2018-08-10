@@ -202,11 +202,9 @@ class clashroyale:
             profiletag = await self.tags.getTag(member.id)
             profiledata = await self.clash.get_player(profiletag)
         except clashroyaleAPI.RequestError:
-            await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
-            return
+            return await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
         except KeyError:
-            await self.bot.say("You need to first save your profile using ``{}save #GAMETAG``".format(ctx.prefix))
-            return
+            return await self.bot.say("You need to first save your profile using ``{}save #GAMETAG``".format(ctx.prefix))
 
         arenaFormat = profiledata.arena.name.replace(' ', '').lower()
 
@@ -252,11 +250,9 @@ class clashroyale:
             profiletag = await self.tags.getTag(member.id)
             chestdata = (await self.clash.get_player_chests(profiletag)).get("items")
         except clashroyaleAPI.RequestError:
-            await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
-            return
+            return await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
         except KeyError:
-            await self.bot.say("You need to first save your profile using ``{}save #GAMETAG``".format(ctx.prefix))
-            return
+            return await self.bot.say("You need to first save your profile using ``{}save #GAMETAG``".format(ctx.prefix))
 
         mapEmoji = {
             'Silver Chest': 'silver',
@@ -297,11 +293,9 @@ class clashroyale:
             profiletag = await self.tags.getTag(member.id)
             profiledata = await self.clash.get_player(profiletag)
         except clashroyaleAPI.RequestError:
-            await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
-            return
+            return await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
         except KeyError:
-            await self.bot.say("You need to first save your profile using ``{}save #GAMETAG``".format(ctx.prefix))
-            return
+            return await self.bot.say("You need to first save your profile using ``{}save #GAMETAG``".format(ctx.prefix))
 
         message = ctx.message
         message.content = ctx.prefix + "deck gl " + await self.constants.decklink_url(profiledata.current_deck)
@@ -322,12 +316,9 @@ class clashroyale:
             profiledata = await self.clash.get_player(profiletag)
             leagues = await self.clanwarReadiness(profiledata.cards)
         except clashroyaleAPI.RequestError:
-            await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
-            return
+            return await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
         except KeyError:
-            raise
-            await self.bot.say("You need to first save your profile using ``{}save #GAMETAG``".format(ctx.prefix))
-            return
+            return await self.bot.say("You need to first save your profile using ``{}save #GAMETAG``".format(ctx.prefix))
 
         embed = discord.Embed(color=0xFAA61A, description="Clan War Readiness")
         embed.set_author(name=profiledata.name + " ("+profiledata.tag+")",
@@ -358,8 +349,7 @@ class clashroyale:
         try:
             clandata = await self.clash.get_clan(clantag)
         except clashroyaleAPI.RequestError:
-            await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
-            return
+            return await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 
         embed = discord.Embed(description=clandata.description, color=0xFAA61A)
         embed.set_author(name=clandata.name + " ("+clandata.tag+")",
@@ -398,14 +388,12 @@ class clashroyale:
         tag = await self.tags.formatTag(tag)
 
         if not await self.tags.verifyTag(tag):
-            await self.bot.say("The ID you provided has invalid characters. Please try again.")
-            return
+            return await self.bot.say("The ID you provided has invalid characters. Please try again.")
 
         try:
             tourneydata = await self.clash.get_tournament(tag)
         except clashroyaleAPI.RequestError:
-            await self.bot.say("Error: Tournament not found. Please double check your #TAG")
-            return
+            return await self.bot.say("Error: Tournament not found. Please double check your #TAG")
 
         maxPlayers = tourneydata.max_capacity
         cards = self.getCards(maxPlayers)
@@ -428,8 +416,7 @@ class clashroyale:
             if password is not None:
                 embed.add_field(name="Password", value="```{}```".format(password), inline=True)
             else:
-                await self.bot.say("Error: Please enter a tournament password.")
-                return
+                return await self.bot.say("Error: Please enter a tournament password.")
 
         await self.bot.delete_message(ctx.message)
 
@@ -466,8 +453,7 @@ class clashroyale:
         profiletag = await self.tags.formatTag(profiletag)
 
         if not await self.tags.verifyTag(profiletag):
-            await self.bot.say("The ID you provided has invalid characters. Please try again.")
-            return
+            return await self.bot.say("The ID you provided has invalid characters. Please try again.")
 
         await self.bot.type()
 
@@ -484,8 +470,7 @@ class clashroyale:
                 allowed = True
 
         if not allowed:
-            await self.bot.say("You dont have enough permissions to set tags for others.")
-            return
+            return await self.bot.say("You dont have enough permissions to set tags for others.")
 
         member = member or ctx.message.author
 
@@ -494,8 +479,7 @@ class clashroyale:
 
             checkUser = await self.tags.getUser(server.members, profiletag)
             if checkUser is not None:
-                await self.bot.say("Error, This Player ID is already linked with **" + checkUser.display_name + "**")
-                return
+                return await self.bot.say("Error, This Player ID is already linked with **" + checkUser.display_name + "**")
 
             await self.tags.linkTag(profiletag, member.id)
 
@@ -505,11 +489,9 @@ class clashroyale:
                              icon_url=avatar)
             await self.bot.say(embed=embed)
         except clashroyaleAPI.NotFoundError:
-            await self.bot.say("We cannot find your ID in our database, please try again.")
-            return
+            return await self.bot.say("We cannot find your ID in our database, please try again.")
         except clashroyaleAPI.RequestError:
-            await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
-            return
+            return await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 
 
 def setup(bot):

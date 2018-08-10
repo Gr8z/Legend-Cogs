@@ -203,8 +203,7 @@ class tournament:
             embed.set_footer(text=credits, icon_url=creditIcon)
             await self.bot.say(embed=embed)
         else:
-            await self.bot.say("Found nothing, please try again after a few minutes!")
-            return
+            return await self.bot.say("Found nothing, please try again after a few minutes!")
 
 
 def setup(bot):

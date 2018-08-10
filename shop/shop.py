@@ -136,8 +136,7 @@ class shop:
             try:
                 clan = await self.clash.get_clan(await self.clans.getClanData(clankey, 'tag'))
             except clashroyale.RequestError:
-                await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
-                return
+                return await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 
             for member in clan.member_list:
                 clan_tag = member.tag.strip('#')
@@ -226,14 +225,12 @@ class shop:
         tag = await self.tags.formatTag(tag)
 
         if not await self.tags.verifyTag(tag):
-            await self.bot.say("The ID you provided has invalid characters. Please try again.")
-            return
+            return await self.bot.say("The ID you provided has invalid characters. Please try again.")
 
         try:
             tourney = await self.clash.get_tournament(tag)
         except clashroyale.RequestError:
-            await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
-            return
+            return await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 
         for member in tourney.members_list:
 
@@ -312,14 +309,12 @@ class shop:
         legendServer = ["374596069989810176"]
 
         if server.id not in legendServer:
-            await self.bot.say("This command can only be executed in the LeGeND Family Server")
-            return
+            return await self.bot.say("This command can only be executed in the LeGeND Family Server")
 
         payday = await self._is_payday(author)
 
         if payday:
-            await self.bot.say("You already have Pro Payday.")
-            return
+            return await self.bot.say("You already have Pro Payday.")
 
         if self.bank_check(author, 30000):
             bank = self.bot.get_cog('Economy').bank
@@ -338,21 +333,18 @@ class shop:
         legendServer = ["374596069989810176"]
 
         if server.id not in legendServer:
-            await self.bot.say("This command can only be executed in the LeGeND Family Server")
-            return
+            return await self.bot.say("This command can only be executed in the LeGeND Family Server")
 
         if self.bank_check(author, 75000):
             pattern = re.compile(r"<?(https?:\/\/)?(www\.)?([i.]*)?(imgur\.com)\b([-a-zA-Z0-9/]*)>?(\.jpg)?")
 
             if not pattern.match(imgurLink):
-                await self.bot.say("The URL does not end in **.jpg** or is not from **i.imgur.com**. "
-                                   "Please upload a JPG image to imgur.com and get a direct link.")
-                return
+                return await self.bot.say("The URL does not end in **.jpg** or is not from **i.imgur.com**. "
+                                          "Please upload a JPG image to imgur.com and get a direct link.")
 
             validate = await self._valid_image_url(imgurLink)
             if validate is not None:
-                await self.bot.say(validate)
-                return
+                return await self.bot.say(validate)
 
             message = ctx.message
             message.content = "{}lvladmin bg setcustombg profile {} {}".format(ctx.prefix, author.id, imgurLink)
@@ -374,18 +366,15 @@ class shop:
         legendServer = ["374596069989810176"]
 
         if server.id not in legendServer:
-            await self.bot.say("This command can only be executed in the LeGeND Family Server")
-            return
+            return await self.bot.say("This command can only be executed in the LeGeND Family Server")
 
         if (emoji.startswith("<:") and emoji.endswith(">")) or (emoji.startswith("<a:") and emoji.endswith(">")):
-            await self.bot.say("Error, you can only use default emojis.")
-            return
+            return await self.bot.say("Error, you can only use default emojis.")
 
         try:
             await self.bot.add_reaction(ctx.message, emoji)
         except (discord.errors.HTTPException, discord.errors.InvalidArgument):
-            await self.bot.say("Error, That's not an emoji I recognize.")
-            return
+            return await self.bot.say("Error, That's not an emoji I recognize.")
 
         if self.bank_check(author, 80000):
 
@@ -400,11 +389,9 @@ class shop:
                     clantag = profiledata.clan.tag.strip("#")
                 ign = profiledata.name
             except clashroyale.RequestError:
-                await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
-                return
+                return await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             except KeyError:
-                await self.bot.say("You must assosiate a tag with this member first using ``{}save #tag @member``".format(ctx.prefix))
-                return
+                return await self.bot.say("You must assosiate a tag with this member first using ``{}save #tag @member``".format(ctx.prefix))
 
             membership = await self.clans.verifyMembership(clantag)
 
@@ -437,8 +424,7 @@ class shop:
         legendServer = ["374596069989810176"]
 
         if server.id not in legendServer:
-            await self.bot.say("This command can only be executed in the LeGeND Family Server")
-            return
+            return await self.bot.say("This command can only be executed in the LeGeND Family Server")
 
         if self.bank_check(author, 90000):
             await self.bot.say("please contact @GR8#7968 to purchase it for you.")
@@ -453,16 +439,14 @@ class shop:
         legendServer = ["374596069989810176"]
 
         if server.id not in legendServer:
-            await self.bot.say("This command can only be executed in the LeGeND Family Server")
-            return
+            return await self.bot.say("This command can only be executed in the LeGeND Family Server")
 
         rare = await self._is_rare(author)
         epic = await self._is_epic(author)
         legendary = await self._is_legendary(author)
 
         if rare or epic or legendary:
-            await self.bot.say("You are already Rare™.")
-            return
+            return await self.bot.say("You are already Rare™.")
 
         if self.bank_check(author, 250000):
             bank = self.bot.get_cog('Economy').bank
@@ -480,20 +464,17 @@ class shop:
         legendServer = ["374596069989810176"]
 
         if server.id not in legendServer:
-            await self.bot.say("This command can only be executed in the LeGeND Family Server")
-            return
+            return await self.bot.say("This command can only be executed in the LeGeND Family Server")
 
         rare = await self._is_rare(author)
         epic = await self._is_epic(author)
         legendary = await self._is_legendary(author)
 
         if not rare:
-            await self.bot.say("You need to have **Rare™** to buy this role.")
-            return
+            return await self.bot.say("You need to have **Rare™** to buy this role.")
 
         if epic or legendary:
-            await self.bot.say("You are already Rare™.")
-            return
+            return await self.bot.say("You are already Rare™.")
 
         if self.bank_check(author, 750000):
             bank = self.bot.get_cog('Economy').bank
@@ -514,19 +495,16 @@ class shop:
         legendServer = ["374596069989810176"]
 
         if server.id not in legendServer:
-            await self.bot.say("This command can only be executed in the LeGeND Family Server")
-            return
+            return await self.bot.say("This command can only be executed in the LeGeND Family Server")
 
         epic = await self._is_epic(author)
         legendary = await self._is_legendary(author)
 
         if not epic:
-            await self.bot.say("You need to have **Epic™** to buy this role.")
-            return
+            return await self.bot.say("You need to have **Epic™** to buy this role.")
 
         if legendary:
-            await self.bot.say("You are already LeGeNDary™.")
-            return
+            return await self.bot.say("You are already LeGeNDary™.")
 
         if self.bank_check(author, 1000000):
             bank = self.bot.get_cog('Economy').bank
@@ -546,8 +524,7 @@ class shop:
         legendServer = ["374596069989810176"]
 
         if server.id not in legendServer:
-            await self.bot.say("This command can only be executed in the LeGeND Family Server")
-            return
+            return await self.bot.say("This command can only be executed in the LeGeND Family Server")
 
         if self.bank_check(author, 4000000):
             await self.bot.say("please contact @GR8#7968 to purchase it for you.")

@@ -103,15 +103,13 @@ class duels:
 
         bank = self.bot.get_cog('Economy').bank
         if not bank.account_exists(author):
-            await self.bot.say("You need to first open a bank account using ``{}bank register``".format(ctx.prefix))
-            return
+            return await self.bot.say("You need to first open a bank account using ``{}bank register``".format(ctx.prefix))
 
         if not self.account_check(author.id):
             try:
                 player_tag = await self.tags.getTag(author.id)
             except KeyError:
-                await self.bot.say("You need to first save your profile using ``{}save clash #GAMETAG``".format(ctx.prefix))
-                return
+                return await self.bot.say("You need to first save your profile using ``{}save clash #GAMETAG``".format(ctx.prefix))
 
             self.settings["USERS"][author.id] = {
                 "WON": 0,
@@ -138,20 +136,16 @@ class duels:
         server = ctx.message.server
 
         if self.active:
-            await self.bot.say("Another duel is already in progress, type ``{}duel accept``.".format(ctx.prefix))
-            return
+            return await self.bot.say("Another duel is already in progress, type ``{}duel accept``.".format(ctx.prefix))
 
         if bet < 5000:
-            await self.bot.say("Your bet is too low, minimum credits for a duel are 5000.")
-            return
+            return await self.bot.say("Your bet is too low, minimum credits for a duel are 5000.")
 
         if not self.bank_check(author, bet):
-            await self.bot.say("You do not have {} credits to bet on this duel.".format(str(bet)))
-            return
+            return await self.bot.say("You do not have {} credits to bet on this duel.".format(str(bet)))
 
         if not self.account_check(author.id):
-            await self.bot.say("You need to register before starting a duel, type ``{}duel register``.".format(ctx.prefix))
-            return
+            return await self.bot.say("You need to register before starting a duel, type ``{}duel register``.".format(ctx.prefix))
 
         if member is None:
             privateDuel = None
@@ -159,12 +153,10 @@ class duels:
             privateDuel = member.id
 
         if author.id == privateDuel:
-            await self.bot.say("I can't let your duel yourself, go and pick someone else.")
-            return
+            return await self.bot.say("I can't let your duel yourself, go and pick someone else.")
 
         if privateDuel == self.bot.user.id:
-            await self.bot.say("I don't play Clash Royale, If i did you wouldn't stand a chance.")
-            return
+            return await self.bot.say("I don't play Clash Royale, If i did you wouldn't stand a chance.")
 
         duelPlayer = self.settings['USERS'][author.id]
 
@@ -173,8 +165,7 @@ class duels:
         try:
             profiledata = await self.clash.get_player(duelPlayer['TAG'])
         except clashroyale.RequestError:
-            await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
-            return
+            return await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 
         self.active = True
 
@@ -250,8 +241,7 @@ class duels:
         duelBet = self.settings["DUELS"][duelID]["BET"]
 
         if duelPlayers[0] != author.id:
-            await self.bot.say("Sorry, Only the dueler can cancel his own battle.")
-            return
+            return await self.bot.say("Sorry, Only the dueler can cancel his own battle.")
 
         self.settings["DUELS"].pop(duelID)
         fileIO(settings_path, "save", self.settings)
@@ -272,8 +262,7 @@ class duels:
         author = ctx.message.author
 
         if not self.active:
-            await self.bot.say("There is no duel active to accept, type ``{}duel start`` to start a new duel.".format(ctx.prefix))
-            return
+            return await self.bot.say("There is no duel active to accept, type ``{}duel start`` to start a new duel.".format(ctx.prefix))
 
         duelID = self.settings["CONFIG"]["ACTIVE"]
         duelPlayers = self.settings["DUELS"][duelID]["PLAYERS"]
@@ -282,21 +271,17 @@ class duels:
         max_trophies = 0
 
         if duelPlayers[0] == author.id:
-            await self.bot.say("Sorry, You cannot duel yourself.")
-            return
+            return await self.bot.say("Sorry, You cannot duel yourself.")
 
         if privateDuel is not None:
             if privateDuel is not author.id:
-                await self.bot.say("Cannot join the duel, it is set to private.")
-                return
+                return await self.bot.say("Cannot join the duel, it is set to private.")
 
         if not self.bank_check(author, duelBet):
-            await self.bot.say("You do not have {} credits to accept the bet on this duel.".format(str(duelBet)))
-            return
+            return await self.bot.say("You do not have {} credits to accept the bet on this duel.".format(str(duelBet)))
 
         if not self.account_check(author.id):
-            await self.bot.say("You need to register before accepting a duel, type ``{}duel register``.".format(ctx.prefix))
-            return
+            return await self.bot.say("You need to register before accepting a duel, type ``{}duel register``.".format(ctx.prefix))
 
         duelPlayers.append(author.id)
         for player in duelPlayers:
@@ -306,13 +291,11 @@ class duels:
                     max_trophies = profiledata.best_trophies
                 else:
                     if (max_trophies + 600) < profiledata.best_trophies:
-                        await self.bot.say("Sorry, your trophies are too high for this duel.")
+                        return await self.bot.say("Sorry, your trophies are too high for this duel.")
                         duelPlayers.remove(author.id)
-                        return
             except clashroyale.RequestError:
                 duelPlayers.remove(author.id)
-                await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
-                return
+                return await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 
         await self.bot.say("{} Are you sure you want to accept the bet of {} credits? (Yes/No)".format(author.mention, str(duelBet)))
         answer = await self.bot.wait_for_message(timeout=15, author=author)
@@ -347,15 +330,13 @@ class duels:
         author = ctx.message.author
 
         if not self.account_check(author.id):
-            await self.bot.say("You need to register before claiming your bet, type ``{}duel register``.".format(ctx.prefix))
-            return
+            return await self.bot.say("You need to register before claiming your bet, type ``{}duel register``.".format(ctx.prefix))
 
         duelPlayer = self.settings['USERS'][author.id]
         duelID = duelPlayer["DUELID"]
 
         if int(duelID) == 0:
-            await self.bot.say("You have no bets to collect, type ``{}duel start`` to start a new duel.".format(ctx.prefix))
-            return
+            return await self.bot.say("You have no bets to collect, type ``{}duel start`` to start a new duel.".format(ctx.prefix))
 
         duelPlayers = self.settings["DUELS"][duelID]["PLAYERS"]
         duelBet = self.settings["DUELS"][duelID]["BET"]
@@ -369,8 +350,7 @@ class duels:
         try:
             profiledata = await self.clash.get_player_battles(duelPlayer['TAG'])
         except clashroyale.RequestError:
-            await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
-            return
+            return await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 
         msg = ""
         for battle in profiledata:

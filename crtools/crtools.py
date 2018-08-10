@@ -353,8 +353,7 @@ class crtools:
         """Remove a clan from tracking"""
         clankey = clankey.lower()
         if await self.clans.delClan(clankey):
-            await self.bot.say("Success")
-            return
+            return await self.bot.say("Success")
         else:
             await self.bot.say("Failed")
 
@@ -365,8 +364,7 @@ class crtools:
         try:
             await self.clans.setPBTrophies(clankey, pb)
         except KeyError:
-            await self.bot.say("Please use a valid clanname: {}".format(await self.clans.namesClans()))
-            return
+            return await self.bot.say("Please use a valid clanname: {}".format(await self.clans.namesClans()))
 
         await self.bot.say("Success")
 
@@ -377,8 +375,7 @@ class crtools:
         try:
             await self.clans.setCWR(clankey, percent)
         except KeyError:
-            await self.bot.say("Please use a valid clanname: {}".format(await self.clans.namesClans()))
-            return
+            return await self.bot.say("Please use a valid clanname: {}".format(await self.clans.namesClans()))
 
         await self.bot.say("Success")
 
@@ -389,8 +386,7 @@ class crtools:
         try:
             await self.clans.setBonus(clankey, " ".join(bonus))
         except KeyError:
-            await self.bot.say("Please use a valid clanname: {}".format(await self.clans.namesClans()))
-            return
+            return await self.bot.say("Please use a valid clanname: {}".format(await self.clans.namesClans()))
 
         await self.bot.say("Success")
 
@@ -402,8 +398,7 @@ class crtools:
             server = ctx.message.server
 
             if not server.get_member(self.bot.user.id).permissions_in(channel).send_messages:
-                await self.bot.say("I do not have permissions to send messages to {0.mention}".format(channel))
-                return
+                return await self.bot.say("I do not have permissions to send messages to {0.mention}".format(channel))
 
             if channel is None:
                 await self.bot.say("I can't find the specified channel. It might have been deleted.")
@@ -427,8 +422,7 @@ class crtools:
             server = ctx.message.server
 
             if not server.get_member(self.bot.user.id).permissions_in(channel).send_messages:
-                await self.bot.say("I do not have permissions to send messages to {0.mention}".format(channel))
-                return
+                return await self.bot.say("I do not have permissions to send messages to {0.mention}".format(channel))
 
             if channel is None:
                 await self.bot.say("I can't find the specified channel. It might have been deleted.")
@@ -439,8 +433,7 @@ class crtools:
             await self.bot.say("Clash war log channel for {} is now set to {}".format(clankey, channel))
 
         except KeyError:
-            await self.bot.say("Please use a valid clanname: {}".format(await self.clans.namesClans()))
-            return
+            return await self.bot.say("Please use a valid clanname: {}".format(await self.clans.namesClans()))
         except discord.errors.Forbidden:
             await self.bot.say("No permission to send messages to that channel")
 
@@ -451,8 +444,7 @@ class crtools:
         try:
             await self.bot.say("Private Approval now is set to " + str(await self.clans.togglePrivate(clankey)))
         except KeyError:
-            await self.bot.say("Please use a valid clanname: {}".format(await self.clans.namesClans()))
-            return
+            return await self.bot.say("Please use a valid clanname: {}".format(await self.clans.namesClans()))
 
 
 def check_folders():
