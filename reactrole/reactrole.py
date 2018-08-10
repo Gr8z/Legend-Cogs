@@ -96,9 +96,17 @@ class reactrole:
             dataIO.save_json(settings_path, self.settings)
             return await self.bot.say("Reactrole will no longer check for reactions in that message.")
 
-        msg = await self.bot.get_message(channel, messageID)
-        if not msg:
+        try:
+            msg = await self.bot.get_message(channel, messageID)
+        except NotFound:
             return await self.bot.say("Error, Message not found, execute this command where the message exists.")
+
+        for emoji in self.settings[server.id]["roles"].keys():
+            await self.bot.add_reaction(msg, emoji)
+
+        self.settings[server.id]["messages"].append(messageID)
+        await self.bot.say("Reactrole will now check for reactions on ```{}```".format(msg.content))
+        dataIO.save_json(settings_path, self.settings)
 
     @_reactrole.command(pass_context=True, name="embed")
     @checks.mod_or_permissions(administrator=True)
