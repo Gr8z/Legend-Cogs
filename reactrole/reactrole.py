@@ -98,7 +98,7 @@ class reactrole:
 
         try:
             msg = await self.bot.get_message(channel, messageID)
-        except NotFound:
+        except discord.errors.NotFound:
             return await self.bot.say("Error, Message not found, execute this command where the message exists.")
 
         for emoji in self.settings[server.id]["roles"].keys():
