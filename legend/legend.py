@@ -418,16 +418,16 @@ class legend:
                                 "**CW Readiness:** {}\n"
                                 "**Max Challenge Wins:** {}\n"
                                 "**Clan:** {}\n\n"
-                                ":warning: **PLEASE DO NOT REQUEST TO "
-                                "JOIN ANY CLANS IF YOU HAVE NOT YET "
-                                "RECIEVED YOUR RECRUIT CODE!**".format(ign,
-                                                                       ign,
-                                                                       profiletag,
-                                                                       trophies,
-                                                                       maxtrophies,
-                                                                       await self.getBestLeague(cards),
-                                                                       maxwins,
-                                                                       clanname)))
+                                ":warning: **YOU WILL BE REJECTED "
+                                "IF YOU JOIN ANY CLAN WITHOUT "
+                                "APPROVAL**".format(ign,
+                                                    ign,
+                                                    profiletag,
+                                                    trophies,
+                                                    maxtrophies,
+                                                    await self.getBestLeague(cards),
+                                                    maxwins,
+                                                    clanname)))
 
     @commands.command(pass_context=True, no_pm=True)
     @commands.has_any_role(*BOTCOMMANDER_ROLES)
@@ -515,9 +515,9 @@ class legend:
                     return await self.bot.say("Approval failed, there is a waiting queue for this clan. Please first join the waiting list.")
 
             if not leftClan:
-                warning = ("\n\n:warning: **PLEASE DO NOT REQUEST TO "
-                           "JOIN ANY CLANS IF YOU HAVE NOT YET "
-                           "RECIEVED YOUR RECRUIT CODE!**")
+                warning = ("\n\n:warning: **YOU WILL BE REJECTED "
+                           "IF YOU JOIN ANY CLAN WITHOUT "
+                           "APPROVAL**")
                 await self.bot.say(("{} Please leave your current clan now. "
                                     "Your recruit code will arrive in 3 minutes.{}".format(member.mention, warning)))
                 await asyncio.sleep(180)
