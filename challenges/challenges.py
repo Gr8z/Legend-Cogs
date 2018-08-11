@@ -138,6 +138,7 @@ class challenges:
             await send_cmd_help(ctx)
 
     @chal.command(pass_context=True)
+    @commands.cooldown(1, 7200, commands.BucketType.server)
     async def start(self, ctx):
         """Start the challenge on the specified channel"""
         server = ctx.message.server
