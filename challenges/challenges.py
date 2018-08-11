@@ -3,7 +3,7 @@
 import discord
 from discord.ext import commands
 from cogs.utils import checks
-from .utils.dataIO import dataIO
+from .utils.dataIO import dataIO, fileIO
 from collections import Counter, namedtuple
 from .utils.chat_formatting import box
 from __main__ import send_cmd_help
@@ -551,18 +551,9 @@ def check_folders():
 
 def check_files():
     f = settings_path
-    if not dataIO.is_valid_json(f):
+    if not fileIO(f, "check"):
         print("Creating challenges settings.json...")
-        dataIO.save_json(f, {})
-    else:  # consistency check
-        current = dataIO.load_json(f)
-        for k, v in current.items():
-            if v.keys() != default_settings.keys():
-                for key in default_settings.keys():
-                    if key not in v.keys():
-                        current[k][key] = deepcopy(default_settings)[key]
-                        print("Adding " + str(key) +
-                              " field to challenges settings.json")
+        fileIO(f, "save", {})
 
 
 def setup(bot):
