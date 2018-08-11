@@ -111,34 +111,36 @@ class reactrole:
     async def on_reaction_add(self, reaction, user):
         if not reaction.message.channel.is_private and self.bot.user.id != user.id:
             server = reaction.message.server
-            channel = reaction.message.channel
-            reactionEmoji = str(reaction.emoji).replace(">", "").replace("<", "")
-            if int(reaction.message.id) in self.settings[server.id]["messages"]:
-                emoji = self.settings[server.id]["roles"]
-                if reactionEmoji in emoji.keys():
-                    role = discord.utils.get(server.roles, id=emoji[reactionEmoji])
-                    if role is None:
-                        return await self.bot.send_message(channel, "ReactRole: Role not found.")
-                    try:
-                        await self.bot.add_roles(user, role)
-                    except discord.errors.Forbidden:
-                        await self.bot.send_message(channel, "ReactRole: No permission to add roles.")
+            if server.id in self.settings:
+                channel = reaction.message.channel
+                reactionEmoji = str(reaction.emoji).replace(">", "").replace("<", "")
+                if int(reaction.message.id) in self.settings[server.id]["messages"]:
+                    emoji = self.settings[server.id]["roles"]
+                    if reactionEmoji in emoji.keys():
+                        role = discord.utils.get(server.roles, id=emoji[reactionEmoji])
+                        if role is None:
+                            return await self.bot.send_message(channel, "ReactRole: Role not found.")
+                        try:
+                            await self.bot.add_roles(user, role)
+                        except discord.errors.Forbidden:
+                            await self.bot.send_message(channel, "ReactRole: No permission to add roles.")
 
     async def on_reaction_remove(self, reaction, user):
         if not reaction.message.channel.is_private and self.bot.user.id != user.id:
             server = reaction.message.server
-            channel = reaction.message.channel
-            reactionEmoji = str(reaction.emoji).replace(">", "").replace("<", "")
-            if int(reaction.message.id) in self.settings[server.id]["messages"]:
-                emoji = self.settings[server.id]["roles"]
-                if reactionEmoji in emoji.keys():
-                    role = discord.utils.get(server.roles, id=emoji[reactionEmoji])
-                    if role is None:
-                        return await self.bot.send_message(channel, "ReactRole: Role not found.")
-                    try:
-                        await self.bot.remove_roles(user, role)
-                    except discord.errors.Forbidden:
-                        await self.bot.send_message(channel, "ReactRole: No permission to remove roles.")
+            if server.id in self.settings:
+                channel = reaction.message.channel
+                reactionEmoji = str(reaction.emoji).replace(">", "").replace("<", "")
+                if int(reaction.message.id) in self.settings[server.id]["messages"]:
+                    emoji = self.settings[server.id]["roles"]
+                    if reactionEmoji in emoji.keys():
+                        role = discord.utils.get(server.roles, id=emoji[reactionEmoji])
+                        if role is None:
+                            return await self.bot.send_message(channel, "ReactRole: Role not found.")
+                        try:
+                            await self.bot.remove_roles(user, role)
+                        except discord.errors.Forbidden:
+                            await self.bot.send_message(channel, "ReactRole: No permission to remove roles.")
 
 
 def check_folders():
