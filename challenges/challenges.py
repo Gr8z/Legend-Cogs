@@ -132,7 +132,6 @@ class challenges:
         dataIO.save_json(settings_path, self.settings)
 
     @commands.group(pass_context=True, no_pm=True)
-    @checks.admin_or_permissions(manage_server=True)
     async def chal(self, ctx):
         """Challenge Controls"""
         if ctx.invoked_subcommand is None:
@@ -155,6 +154,9 @@ class challenges:
         if channel is None:
             return await self.bot.say("Challenge channel not set, use ``[p]chalset channel`` to set your channel.")
 
+        if ctx.message.channel != channel:
+            return await self.bot.say("You cannot start a challenge in this channel. Please use {}".format(channel.mention))
+
         if role_name is not None:
             challenges_role = discord.utils.get(server.roles, name=role_name)
             if challenges_role is None:
@@ -162,13 +164,18 @@ class challenges:
                 challenges_role = discord.utils.get(server.roles, name=role_name)
 
             await self.bot.edit_role(server, challenges_role, mentionable=True)
-            await self.bot.send_message(channel, (":rotating_light: New challenge starting in "
-                                                  "{} seconds :rotating_light: {}".format(str(delay),
-                                                                                          challenges_role.mention)))
+            msg = await self.bot.send_message(channel, ("{} New challenge starting in "
+                                                        "{} seconds, react to this message "
+                                                        "with a :rotating_light: "
+                                                        "to join.".format(challenges_role.mention,
+                                                                          str(delay))))
             await self.bot.edit_role(server, challenges_role, mentionable=False)
         else:
-            await self.bot.send_message(channel, (":rotating_light: New challenge starting in "
-                                                  "{} seconds :rotating_light:".format(str(delay))))
+            msg = await self.bot.send_message(channel, ("New challenge starting in "
+                                                        "{} seconds, react to this message "
+                                                        "with a :rotating_light: to join.".format(str(delay))))
+
+        await self.bot.add_reaction(msg, "🚨")
 
         if lock_state:
             perm = discord.PermissionOverwrite(send_messages=False, read_messages=False)
@@ -176,16 +183,31 @@ class challenges:
 
         self.active = True
 
-        await asyncio.sleep(delay)
+        def check(reaction, user):
+            if user == self.bot.user:
+                return False
+            if reaction.count <= 6:
+                return False
+            return True
 
-        if lock_state:
-            perm = discord.PermissionOverwrite(send_messages=None, read_messages=False)
-            await self.bot.edit_channel_permissions(channel, server.default_role, perm)
+        react = await self.bot.wait_for_reaction(message=msg, emoji='🚨', check=check, timeout=delay)
 
-        c = challengeSession(self.bot)
-        await c.start_game(server)
+        if react is None:
+            return await self.bot.say("Challenge cancelled, you need at least 5 people to start.")
+            self.active = False
 
-        self.active = False
+        if react.reaction.emoji == '🚨':
+            if lock_state:
+                perm = discord.PermissionOverwrite(send_messages=None, read_messages=False)
+                await self.bot.edit_channel_permissions(channel, server.default_role, perm)
+
+            await self.bot.say("Challenge started! Good Luck")
+            await asyncio.sleep(5)
+
+            c = challengeSession(self.bot)
+            await c.start_game(server)
+
+            self.active = False
 
     @chal.command(pass_context=True)
     async def stop(self, ctx):
