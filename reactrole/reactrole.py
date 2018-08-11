@@ -108,21 +108,6 @@ class reactrole:
         await self.bot.say("Reactrole will now check for reactions on ```{}```".format(msg.content))
         dataIO.save_json(settings_path, self.settings)
 
-    @_reactrole.command(pass_context=True, name="embed")
-    @checks.mod_or_permissions(administrator=True)
-    async def _reactrole_embed(self, ctx):
-        """Dummy embed (do not use)"""
-        server = ctx.message.server
-        embed = discord.Embed(title="Notification Roles", description="React with emojis to choose which notifications you would like to turn on!", color=0x0080ff)
-        embed.add_field(name="Tournaments", value=f"<:tourney:466243255504470036> — When a 100-1000 player tournament is posted in {server.get_channel('374597050530136064').mention}", inline=False)
-        embed.add_field(name="Giveaways", value=f"<:coin:380832316932489268> — When a giveaway for credits/games is hosted in {server.get_channel('421623464567504896').mention}", inline=False)
-        embed.add_field(name="Challenges", value=f":hourglass: — When a Word Challenge Game starts in {server.get_channel('405062108175269898').mention}", inline=False)
-        embed.add_field(name="Heist", value=f":bank: — When a Heist is planned in {server.get_channel('381338682298466315').mention}", inline=False)
-        embed.add_field(name="Duels", value=f"<:battle:466243249149837314> — When a player is looking for a Clash Royale battle in {server.get_channel('430083671429611530').mention}", inline=False)
-        embed.set_footer(text=credits, icon_url=creditIcon)
-
-        await self.bot.say(embed=embed)
-
     async def on_reaction_add(self, reaction, user):
         if not reaction.message.channel.is_private and self.bot.user.id != user.id:
             server = reaction.message.server

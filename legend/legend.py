@@ -62,6 +62,7 @@ info_text = """You will find several channels on our Discord Server\n
 **#global-chat**: to discuss about the game.
 **#tourneys**: Dozens of tournaments posted everyday.
 **#news**: important info about family.
+**#request-role**: Easily get your notification and archetype roles.
 **#giveaways**: Win Discord credits and game keys every day.
 **#deck-recommendation**: decks discussion.
 **#off-topic**: you can chat about anything unrelated to clash royale here.
