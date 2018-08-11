@@ -194,8 +194,12 @@ class challenges:
         react = await self.bot.wait_for_reaction(message=msg, emoji='🚨', check=check, timeout=delay)
 
         if react is None:
-            return await self.bot.say("Challenge cancelled, you need at least 5 people to start.")
+            await self.bot.say("Challenge cancelled, you need at least 5 people to start.")
+            if lock_state:
+                perm = discord.PermissionOverwrite(send_messages=None, read_messages=False)
+                await self.bot.edit_channel_permissions(channel, server.default_role, perm)
             self.active = False
+            return
 
         if react.reaction.emoji == '🚨':
             if lock_state:
