@@ -194,7 +194,8 @@ class challenges:
         react = await self.bot.wait_for_reaction(message=msg, emoji='🚨', check=check, timeout=delay)
 
         if react is None:
-            await self.bot.say("Challenge cancelled, you need at least 5 people to start.")
+            await self.bot.say("Challenge cancelled, you need at least 5 people to start."
+                               "Type ``!togglerole challenges`` to get notified on the next challenge.")
             if lock_state:
                 perm = discord.PermissionOverwrite(send_messages=None, read_messages=False)
                 await self.bot.edit_channel_permissions(channel, server.default_role, perm)
