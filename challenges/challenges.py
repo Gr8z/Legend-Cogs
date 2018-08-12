@@ -524,14 +524,14 @@ class challengeSession():
         start = time.time()
 
         def check(msg):
-            if (math.ceil(time.time() - start) == timer) and (msg.content.lower() == "stop"):
+            if (time.time() - start > timer) and (msg.content.lower() == "stop"):
                 return True
             else:
                 niceTry.append(msg.author.id)
                 return False
 
         while True:
-            if (time.time() - start > timer+3):
+            if (time.time() - start > timer+2):
                 await self.bot.say("Time's up, you missed it.")
                 self.timeout += 1
                 break
