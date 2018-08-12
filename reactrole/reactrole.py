@@ -118,24 +118,33 @@ class reactrole:
         dataIO.save_json(settings_path, self.settings)
 
     async def toggle_roles_reaction(self, data_type, server_id, message_id, user_id, emoji_data):
-        if self.bot.user.id != user_id:
-            server = self.bot.get_server(server_id)
-            user = server.get_member(user_id)
-            if server.id in self.settings:
-                reactionEmoji = await self.formatEmoji(emoji_data)
-                if int(message_id) in self.settings[server.id]["messages"]:
-                    emoji = self.settings[server.id]["roles"]
-                    if reactionEmoji in emoji.keys():
-                        role = discord.utils.get(server.roles, id=emoji[reactionEmoji])
-                        if role is None:
-                            print("ReactRole: Role not found.")
-                        try:
-                            if data_type == "MESSAGE_REACTION_ADD":
-                                await self.bot.add_roles(user, role)
-                            elif data_type == "MESSAGE_REACTION_REMOVE":
-                                await self.bot.remove_roles(user, role)
-                        except discord.errors.Forbidden:
-                            print("ReactRole: No permission to add roles.")
+        if self.bot.user.id == user_id:
+            return
+
+        if server_id not in self.settings:
+            return
+
+        if int(message_id) not in self.settings[server_id]["messages"]:
+            return
+
+        reactionEmoji = await self.formatEmoji(emoji_data)
+        emoji = self.settings[server_id]["roles"]
+        if reactionEmoji not in emoji.keys():
+            return
+
+        server = self.bot.get_server(server_id)
+        role = discord.utils.get(server.roles, id=emoji[reactionEmoji])
+        if role is None:
+            return
+
+        user = server.get_member(user_id)
+        try:
+            if data_type == "MESSAGE_REACTION_ADD":
+                await self.bot.add_roles(user, role)
+            elif data_type == "MESSAGE_REACTION_REMOVE":
+                await self.bot.remove_roles(user, role)
+        except discord.errors.Forbidden:
+            print("ReactRole: No permission to add roles.")
 
     async def on_socket_raw_receive(self, raw_msg):
         """ Listens to reaction adds/removes """
