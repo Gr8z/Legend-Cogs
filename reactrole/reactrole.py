@@ -148,7 +148,10 @@ class reactrole:
 
     async def on_socket_raw_receive(self, raw_msg):
         """ Listens to reaction adds/removes """
-        msg = json.loads(raw_msg)
+        try:
+            msg = json.loads(raw_msg)
+        except UnicodeDecodeError:
+            return
         data_type = msg['t']
         msg_data = msg['d']
 
