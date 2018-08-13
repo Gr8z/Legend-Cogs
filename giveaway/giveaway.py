@@ -676,9 +676,8 @@ class Giveaway:
             await asyncio.sleep(load_pref["Timer"])
             if settings["Config"]["Lottery ID"] == giveaway_id:
                 end_msg = self.lottery_teardown(settings, load_pref, author.server)
-                await self.bot.say("The giveaway is now ending...")
                 await asyncio.sleep(5)
-                await self.bot.say(end_msg)
+                await self.bot.edit_message(msg, end_msg)
 
     @giveaway.command(name="stats", pass_context=True)
     async def _stats_giveaway(self, ctx):
@@ -858,11 +857,12 @@ class Giveaway:
             self.update_entries(settings, user.id)
             self.save_system()
 
-            if load_pref["Limit"] <= players:
-                await asyncio.sleep(10)
+            if load_pref["Limit"] != 0:
+                if load_pref["Limit"] <= players:
+                    await asyncio.sleep(10)
 
-                end_msg = self.lottery_teardown(settings, load_pref, user.server)
-                await self.bot.send_message(reaction.message.channel, end_msg)
+                    end_msg = self.lottery_teardown(settings, load_pref, user.server)
+                    await self.bot.edit_message(reaction.message, end_msg)
 
     def save_system(self):
         dataIO.save_json(self.file_path, self.system)
