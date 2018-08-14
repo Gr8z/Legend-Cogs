@@ -187,7 +187,7 @@ class challenges:
         def check(reaction, user):
             if user == self.bot.user:
                 return False
-            if reaction.count <= 5:
+            if reaction.count < 4:
                 return False
             return True
 

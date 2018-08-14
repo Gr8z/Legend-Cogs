@@ -1283,7 +1283,9 @@ class legend:
 
         try:
             tourney = await self.clash.get_tournament(tag)
-        except clashroyale.RequestError:
+        except clashroyaleAPI.NotFoundError:
+            return await self.bot.say("Error: Tournament not found. Please double check your #TAG")
+        except clashroyaleAPI.RequestError:
             return await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 
         clanwar_dict = {}

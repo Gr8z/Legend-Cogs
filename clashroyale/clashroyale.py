@@ -392,8 +392,10 @@ class clashroyale:
 
         try:
             tourneydata = await self.clash.get_tournament(tag)
-        except clashroyaleAPI.RequestError:
+        except clashroyaleAPI.NotFoundError:
             return await self.bot.say("Error: Tournament not found. Please double check your #TAG")
+        except clashroyaleAPI.RequestError:
+            return await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 
         maxPlayers = tourneydata.max_capacity
         cards = self.getCards(maxPlayers)
