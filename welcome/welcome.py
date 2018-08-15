@@ -40,11 +40,11 @@ dm_menu = {
                 "name": "Yes",
                 "emoji": Letter.a,
                 "execute": {
-                    "menu": "end_guest"
+                    "menu": "refferal_menu"
                 }
             },
             {
-                "name": "No.",
+                "name": "No",
                 "emoji": Letter.b,
                 "execute": {
                     "menu": "leave_alone"
@@ -113,7 +113,7 @@ dm_menu = {
     "location_menu": {
         "embed": embed(title="What part of the world do you come from?", color=discord.Color.orange(),
                        description="To better serve you, "
-                                   "pick a region you current live in."),
+                                   "pick a region you currently live in."),
         "options": [
             {
                 "name": "Northern America",
