@@ -440,7 +440,7 @@ class clashroyale:
 
         await self.bot.say(embed=embed)
 
-    @commands.command(pass_context=True)
+    @commands.command(pass_context=True, no_pm=True)
     async def save(self, ctx, profiletag: str, member: discord.Member=None):
         """ save your Clash Royale Profile Tag
 

@@ -156,6 +156,9 @@ class reactrole:
         msg_data = msg['d']
 
         if data_type in ['MESSAGE_REACTION_ADD', 'MESSAGE_REACTION_REMOVE']:
+            if 'guild_id' not in msg_data:
+                msg_data['guild_id'] = 0
+                
             await self.toggle_roles_reaction(data_type,
                                              msg_data['guild_id'],
                                              msg_data['message_id'],

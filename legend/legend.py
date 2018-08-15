@@ -219,6 +219,24 @@ class legend:
         else:
             return False
 
+    def emoji(self, name):
+        """Emoji by name."""
+        for emoji in self.bot.get_all_emojis():
+            if emoji.name == name.replace(" ", "").replace("-", "").replace(".", ""):
+                return '<:{}:{}>'.format(emoji.name, emoji.id)
+        return ''
+
+    def getLeagueEmoji(self, trophies):
+        """Get clan war League Emoji"""
+        if trophies >= 3000:
+            return self.emoji("legendleague")
+        elif trophies >= 1500:
+            return self.emoji("goldleague")
+        elif trophies >= 600:
+            return self.emoji("silverleague")
+        else:
+            return self.emoji("bronzeleague")
+
     async def getLeague(self, trophies):
         if trophies >= 3000:
             return "legend"
@@ -382,10 +400,11 @@ class legend:
                 title += bonustitle
 
             desc = ("{} {}  <:crtrophy:448609948008579073> "
-                    "{}+  <:wartrophy:448609141796241408> {}".format(emoji,
-                                                                     showMembers,
-                                                                     clan.required_trophies,
-                                                                     warTrophies))
+                    "{}+  {} {}".format(emoji,
+                                        showMembers,
+                                        clan.required_trophies,
+                                        self.getLeagueEmoji(warTrophies),
+                                        warTrophies))
 
             if (member is None) or ((clan.required_trophies <= trophies) and
                                     (maxtrophies > personalbest) and

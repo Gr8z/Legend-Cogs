@@ -12,7 +12,7 @@ settings_path = "data/stats/settings.json"
 
 
 class stats:
-    """Clash Royale 1v1 Duels with bets"""
+    """Discord user stats in a voice channel"""
 
     def __init__(self, bot):
         self.bot = bot
