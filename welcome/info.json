@@ -1,0 +1,10 @@
+{
+    "AUTHOR" : "GR8",
+    "INSTALL_MSG" : "Welcome Addon added, if there are any issues, please mention them on https://github.com/Gr8z/LeGeND-Bot",
+    "NAME" : "Welcome",
+    "SHORT" : "Welcome user with an interactive menu.",
+    "DESCRIPTION" : "elcome user with an interactive menu, and log data in a channel.",
+    "TAGS" : ["welcome", "on-entry", "menu", "reactionmenu"],
+    "REQUIREMENTS" : [],
+    "HIDDEN" : false
+}
