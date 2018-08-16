@@ -194,49 +194,49 @@ dm_menu = {
                                    " certain age group. Please pick one."),
         "options": [
             {
-                "name": "Under 18",
+                "name": "Under 16",
                 "emoji": Letter.a,
                 "execute": {
                     "menu": "save_tag_menu"
                 }
             },
             {
-                "name": "18-24",
+                "name": "16-20",
                 "emoji": Letter.b,
                 "execute": {
                     "menu": "save_tag_menu"
                 }
             },
             {
-                "name": "25-34",
+                "name": "21-30",
                 "emoji": Letter.c,
                 "execute": {
                     "menu": "save_tag_menu"
                 }
             },
             {
-                "name": "35-44",
+                "name": "31-40",
                 "emoji": Letter.d,
                 "execute": {
                     "menu": "save_tag_menu"
                 }
             },
             {
-                "name": "45-54",
+                "name": "41-50",
                 "emoji": Letter.e,
                 "execute": {
                     "menu": "save_tag_menu"
                 }
             },
             {
-                "name": "55-64",
+                "name": "51-60",
                 "emoji": Letter.f,
                 "execute": {
                     "menu": "save_tag_menu"
                 }
             },
             {
-                "name": "65 or Above",
+                "name": "61 or Above",
                 "emoji": Letter.g,
                 "execute": {
                     "menu": "save_tag_menu"
