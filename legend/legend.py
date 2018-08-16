@@ -130,7 +130,7 @@ Visit our website to see live clan statistics:
 https://legendclans.com
 """
 
-guest_rules = """Welcome to the **Legend Family** Discord server. As a guest, you agree to follow the following rules:
+guest_rules = """Welcome to the **Legend Family** Discord server. As a guest, you agree to the following rules:
 
 • Respect others' opinions. If you disagree, please do so in a constructive manner.
 • This is an English only server, please use any other languages in a private message.

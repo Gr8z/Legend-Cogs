@@ -256,18 +256,30 @@ dm_menu = {
     "save_tag_menu": {
         "embed": embed(title="What is your Clash Royale player tag?", color=discord.Color.orange(),
                        description="Before we let you talk in the server, we need to take a look at your stats. "
-                                   "To do that, we need your Clash Royale player tag.\n\n"
-                                   "Please type in **!savetag #YOURTAG** to submit your ID."),
-        "image": "https://legendclans.com/wp-content/uploads/2017/11/profile_screen3.png",
+                                   "To do that, we need your Clash Royale player tag.\n\n"),
         "options": [
             {
-                "name": "I don't play Clash Royale",
+                "name": "Continue",
                 "emoji": Letter.a,
                 "execute": {
-                    "menu": "end_guest"
+                    "menu": "save_tag"
+                }
+            },
+            {
+                "name": "I don't play Clash Royale",
+                "emoji": Letter.b,
+                "execute": {
+                    "menu": "leave_alone"
                 }
             }
         ],
+        "go_back": True
+    },
+    "save_tag": {
+        "embed": embed(title="Type in your tag", color=discord.Color.orange(),
+                       description="Please type **!savetag #YOURTAG** below to submit your ID."),
+        "image": "https://legendclans.com/wp-content/uploads/2017/11/profile_screen3.png",
+        "options": [],
         "go_back": True
     },
     "choose_path": {
@@ -349,7 +361,7 @@ dm_menu = {
     "end_guest": {
         "embed": embed(title="Enjoy your stay", color=discord.Color.orange(),
                        description="Welcome to the **Legend Family** Discord server. "
-                       "As a guest, you agree to follow the following rules:\n\n"
+                       "As a guest, you agree to the following rules:\n\n"
                        "• Respect others' opinions. If you disagree, please do so "
                        "in a constructive manner.\n• This is an English only server, "
                        "please use any other languages in a private message.\n"
@@ -536,6 +548,16 @@ class welcome:
 
         return new_message
 
+    async def on_member_join(self, member):
+        server = member.server
+        if server.id != "363728974821457923":
+            return
+
+        await self.load_menu(member, "main")
+
+        if member.id in self.user_history:
+            del self.user_history[member.id]
+
     async def on_reaction_add(self, reaction: discord.Reaction, user: discord.User):
         if reaction.message.channel.is_private and self.bot.user.id != user.id:
 
@@ -720,12 +742,7 @@ class welcome:
     @commands.command(pass_context=True, no_pm=True)
     async def menu(self, ctx):
         user = ctx.message.author
-
-        await self.load_menu(user, "main")
-
-        if user.id in self.user_history:
-            del self.user_history[user.id]
-        return
+        await self.on_member_join(user)
 
     @commands.command(pass_context=True)
     async def savetag(self, ctx, profiletag: str):
