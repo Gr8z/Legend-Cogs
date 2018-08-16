@@ -137,52 +137,45 @@ dm_menu = {
                 "execute": {
                     "menu": "age_menu"
                 }
-            },
+            }
             {
-                "name": "Middle Africa",
+                "name": "Southern Africa",
                 "emoji": Letter.d,
                 "execute": {
                     "menu": "age_menu"
                 }
             },
             {
-                "name": "Southern Africa",
-                "emoji": Letter.e,
-                "execute": {
-                    "menu": "age_menu"
-                }
-            },
-            {
                 "name": "Europe",
-                "emoji": Letter.f,
+                "emoji": Letter.e,
                 "execute": {
                     "menu": "age_menu"
                 }
             }
             {
                 "name": "Middle East",
-                "emoji": Letter.g,
+                "emoji": Letter.f,
                 "execute": {
                     "menu": "age_menu"
                 }
             },
             {
                 "name": "Asia",
-                "emoji": Letter.h,
+                "emoji": Letter.g,
                 "execute": {
                     "menu": "age_menu"
                 }
             },
             {
                 "name": "South-east Asia",
-                "emoji": Letter.i,
+                "emoji": Letter.h,
                 "execute": {
                     "menu": "age_menu"
                 }
             },
             {
                 "name": "Australia",
-                "emoji": Letter.j,
+                "emoji": Letter.i,
                 "execute": {
                     "menu": "age_menu"
                 }
