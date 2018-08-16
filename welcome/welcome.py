@@ -86,24 +86,24 @@ dm_menu = {
                 "execute": {
                     "menu": "location_menu"
                 }
-            }
+            },
             {
                 "name": "Twitter",
-                "emoji": Letter.f,
+                "emoji": Letter.e,
                 "execute": {
                     "menu": "location_menu"
                 }
             },
             {
                 "name": "From in-game",
-                "emoji": Letter.g,
+                "emoji": Letter.f,
                 "execute": {
                     "menu": "location_menu"
                 }
             },
             {
                 "name": "Other",
-                "emoji": Letter.h,
+                "emoji": Letter.g,
                 "execute": {
                     "menu": "location_menu"
                 }
