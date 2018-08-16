@@ -137,7 +137,7 @@ dm_menu = {
                 "execute": {
                     "menu": "age_menu"
                 }
-            }
+            },
             {
                 "name": "Southern Africa",
                 "emoji": Letter.d,
