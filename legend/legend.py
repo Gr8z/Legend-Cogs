@@ -135,9 +135,9 @@ guest_rules = """Welcome to the **Legend Family** Discord server. As a guest, yo
 • Respect others' opinions. If you disagree, please do so in a constructive manner.
 • This is an English only server, please use any other languages in a private message.
 • Do not spam, and avoid ever using @clanname without permission from clan managers or deputies.
-• No advertisement of any kind, e.g. clans, websites, discord invites.
-• Use #bot-spam for bot features, e.g. !deck or !payday
-• Respect and do not subvert moderators and managers.
+• No advertisement of any kind, e.g. clans, websites, discord invites, etc.
+• Use #bot-spam for bot features, e.g. !deck or !payday.
+• Respect and do not subvert moderators or managers.
 • A good rule is to talk to people as if you were talking to them face to face.
 
 Failure to follow these rules will get you kicked from the server. Repeat offenders will be banned.

@@ -168,7 +168,7 @@ dm_menu = {
                 }
             },
             {
-                "name": "South-east Asia",
+                "name": "Southeast Asia",
                 "emoji": Letter.h,
                 "execute": {
                     "menu": "age_menu"
@@ -354,9 +354,9 @@ dm_menu = {
                        "• Do not spam, and avoid ever using @clanname without "
                        "permission from clan managers or deputies.\n"
                        "• No advertisement of any kind, e.g. clans, websites, "
-                       "discord invites.\n• Use #bot-spam for bot features, "
-                       "e.g. !deck or !payday\n• Respect and do not subvert "
-                       "moderators and managers.\n• A good rule is to talk to "
+                       "discord invites, etc.\n• Use #bot-spam for bot features, "
+                       "e.g. !deck or !payday.\n• Respect and do not subvert "
+                       "moderators or managers.\n• A good rule is to talk to "
                        "people as if you were talking to them face to face.\n\n"
                        "Failure to follow these rules will get you kicked from the server. "
                        "Repeat offenders will be banned.\n\nYou can chat with "
@@ -441,6 +441,7 @@ class welcome:
     def __init__(self, bot):
         self.bot = bot
         self.user_history = {}
+        self.welcome = dataIO.load_json('data/legend/welcome.json')
         self.auth = self.bot.get_cog('crtools').auth
         self.tags = self.bot.get_cog('crtools').tags
         self.clans = self.bot.get_cog('crtools').clans
@@ -623,6 +624,9 @@ class welcome:
         await self.load_menu(member, menu_name)
         self.user_history[member.id]["history"].append(menu_name)
 
+        welcomeMsg = rand_choice(self.welcome["GREETING"])
+        await self.bot.send_message(discord.Object(id='363728974821457923'), welcomeMsg.format(member))
+
     async def clans_options(self, user):
         clandata = []
         options = []
@@ -688,7 +692,7 @@ class welcome:
             embed.description = path_map[data["choose_path"]]
 
         if "name" in data:
-            embed.add_field(name="Player:", value="{} {} (#{})".format(data["emoji"],
+            embed.add_field(name="Player:", value="{} {} ({})".format(data["emoji"],
                                                                      data["name"],
                                                                      data["tag"]), inline=False)
 
