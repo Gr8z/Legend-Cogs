@@ -557,19 +557,22 @@ class welcome:
         roles = [discord.utils.get(server.roles, name=role_name) for role_name in role_names]
         await self.bot.add_roles(member, *roles)
 
+    async def errorer(self, member: discord.User):
+        menu_name = "choose_path"
+        await self.load_menu(member, menu_name)
+        self.user_history[member.id]["history"].append(menu_name)
+
     async def guest(self, member: discord.Member):
         """Add guest role and change nickname to CR"""
-        async def errorer():
-            menu_name = "choose_path"
-            await self.load_menu(member, menu_name)
-            self.user_history[member.id]["history"].append(menu_name)
+        server = self.bot.get_server("374596069989810176")
+        member = server.get_member(member.id)
 
         try:
             profiletag = await self.tags.getTag(member.id)
             profiledata = await self.clash.get_player(profiletag)
             ign = profiledata.name
         except (clashroyale.RequestError, KeyError):
-            return await errorer()
+            return await self.errorer(member)
 
         try:
             newname = ign + " | Guest"
@@ -588,11 +591,8 @@ class welcome:
         self.user_history[member.id]["history"].append(menu_name)
 
     async def verify_membership(self, member: discord.Member):
-
-        async def errorer():
-            menu_name = "choose_path"
-            await self.load_menu(member, menu_name)
-            self.user_history[member.id]["history"].append(menu_name)
+        server = self.bot.get_server("374596069989810176")
+        member = server.get_member(member.id)
 
         try:
             profiletag = await self.tags.getTag(member.id)
@@ -604,7 +604,7 @@ class welcome:
 
             ign = profiledata.name
         except clashroyale.RequestError:
-            return await errorer()
+            return await self.errorer(member)
 
         membership = await self.clans.verifyMembership(clantag)
         if membership:
@@ -622,7 +622,7 @@ class welcome:
             except (discord.Forbidden, discord.HTTPException):
                 pass
         else:
-            return await errorer()
+            return await self.errorer(member)
 
         menu_name = "give_tags"
         await self.load_menu(member, menu_name)
