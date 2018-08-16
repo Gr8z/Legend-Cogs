@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 import clashroyale
+import deepcopy
 
 
 def embed(**kwargs):
@@ -490,7 +491,7 @@ class welcome:
         message = ""
         reactions = []
 
-        embed = menu.get("embed")
+        embed = deepcopy(menu.get("embed"))
         embed.description = embed.description.format(user)
 
         if "thumbnail" in menu:
@@ -687,7 +688,7 @@ class welcome:
             embed.description = path_map[data["choose_path"]]
 
         if "name" in data:
-            embed.add_field(name="Player:", value="{} {} (#)".format(data["emoji"],
+            embed.add_field(name="Player:", value="{} {} (#{})".format(data["emoji"],
                                                                      data["name"],
                                                                      data["tag"]), inline=False)
 
