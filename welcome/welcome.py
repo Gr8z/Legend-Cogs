@@ -433,21 +433,6 @@ dm_menu = {
         "go_back": False,
         "finished": True
     },
-    "kick_invite": {
-        "embed": embed(title="You have been kicked", color=discord.Color.orange(),
-                       description="You must complete the entry process to join the server. "
-                                   "If you ever want to join again, you can use this "
-                                   "invite link: https://discord.gg/yhD84nK"),
-        "options": [
-            {
-                "name": "Done",
-                "emoji": Symbol.white_check_mark,
-                "execute": {}
-            }
-        ],
-        "go_back": False,
-        "finished": True
-    },
     "give_tags": {
         "embed": embed(title="Membership verified", color=discord.Color.orange(),
                        description="We have unlocked all member channels for you, enjoy your stay!"),
@@ -474,25 +459,12 @@ class welcome:
         self.clans = self.bot.get_cog('crtools').clans
         self.clash = clashroyale.OfficialAPI(self.auth.getOfficialToken(), is_async=True)
 
-    async def delete_all_messages(self, channel):
+    async def change_message(self, user, new_embed, reactions: list=None):
+        channel = await self.bot.start_private_message(user)
+
         async for message in self.bot.logs_from(channel, limit=10):
             if message.author.id == self.bot.user.id:
                 await self.bot.delete_message(message)
-
-    async def change_message(self, channel, user, new_embed, reactions: list=None):
-        """
-        ctx: Context as bot
-        new_content: :str: content for new message to display
-        userid: :int: Any users' long ID
-        reactions: :list: of Emojis to react with. Defaults to None for no reactions to be used
-
-        Changes a message's content (typically using `find_earliest_message()`) and adding reactions, if any, to the new message.
-        Deletes the old message object in order to clear the recipients' previous reactions
-
-        In the event that a user does not have an old message, userid will get the channel
-        returns: message
-        """
-        await self.delete_all_messages(channel)
 
         new_message = await self.bot.send_message(user, embed=new_embed)
         for reaction in reactions:
@@ -501,12 +473,6 @@ class welcome:
         return new_message.id
 
     async def ReactionAddedHandler(self, reaction: discord.Reaction, user: discord.User, history, data):
-        """
-        ctx: Context as bot
-        reaction: :discord.Reaction: object to handle
-        user: :discord.User: user that made the reaction
-        history: stack of menu's the user has been through
-        """
         menu = dm_menu.get(history[-1])
         if(Symbol.arrow_backward == reaction.emoji):       # if back button then just load previous
             history.pop()
@@ -527,14 +493,6 @@ class welcome:
                 return
 
     async def load_menu(self, user: discord.User, menu: str):
-        """
-            ctx: Context as bot
-            user: :discord.User: the user whom the menu should get sent to
-            menu: :str: menu name to load, to get as key from dm_menu dictionary
-
-            Calls
-        """
-        channel = await self.bot.start_private_message(user)
         menu = dm_menu.get(menu)
         message = ""
         reactions = []
@@ -577,7 +535,7 @@ class welcome:
         if "finished" in menu:
             await self.logger(user)
 
-        new_message = await self.change_message(channel, user, embed, reactions=reactions)
+        new_message = await self.change_message(user, embed, reactions=reactions)
 
         return new_message
 
@@ -597,18 +555,10 @@ class welcome:
         """Add roles"""
         server = member.server
         roles = [discord.utils.get(server.roles, name=role_name) for role_name in role_names]
-        try:
-            await self.bot.add_roles(member, *roles)
-        except discord.Forbidden:
-            raise
-        except discord.HTTPException:
-            raise
+        await self.bot.add_roles(member, *roles)
 
     async def guest(self, member: discord.Member):
         """Add guest role and change nickname to CR"""
-        server = self.bot.get_server("374596069989810176")
-        member = server.get_member(member.id)
-
         async def errorer():
             menu_name = "choose_path"
             await self.load_menu(member, menu_name)
@@ -627,7 +577,7 @@ class welcome:
         except (discord.Forbidden, discord.HTTPException):
             return await errorer()
 
-        role = discord.utils.get(server.roles, name="Guest")
+        role = discord.utils.get(member.server.roles, name="Guest")
         try:
             await self.bot.add_roles(member, role)
         except (discord.Forbidden, discord.HTTPException):
@@ -637,17 +587,15 @@ class welcome:
         await self.load_menu(member, menu_name)
         self.user_history[member.id]["history"].append(menu_name)
 
-    async def verify_membership(self, user):
-        server = self.bot.get_server("374596069989810176")
-        user = server.get_member(user.id)
+    async def verify_membership(self, member: discord.Member):
 
         async def errorer():
             menu_name = "choose_path"
-            await self.load_menu(user, menu_name)
-            self.user_history[user.id]["history"].append(menu_name)
+            await self.load_menu(member, menu_name)
+            self.user_history[member.id]["history"].append(menu_name)
 
         try:
-            profiletag = await self.tags.getTag(user.id)
+            profiletag = await self.tags.getTag(member.id)
             profiledata = await self.clash.get_player(profiletag)
             if profiledata.clan is None:
                 clantag = ""
@@ -664,27 +612,21 @@ class welcome:
                 savekey = await self.clans.getClanKey(clantag)
                 newclanname = await self.clans.getClanData(savekey, 'nickname')
                 newname = ign + " | " + newclanname
-                await self.bot.change_nickname(user, newname)
+                await self.bot.change_nickname(member, newname)
             except (discord.Forbidden, discord.HTTPException):
                 return await errorer()
 
             role_names = [await self.clans.getClanData(savekey, 'role'), 'Member']
             try:
-                await self._add_roles(user, role_names)
+                await self._add_roles(member, role_names)
             except (discord.Forbidden, discord.HTTPException):
                 return await errorer()
         else:
             return await errorer()
 
         menu_name = "give_tags"
-        await self.load_menu(user, menu_name)
-        self.user_history[user.id]["history"].append(menu_name)
-
-    async def kick_user(self, user):
-        try:
-            await self.bot.kick(user)
-        except discord.errors.Forbidden:
-            return
+        await self.load_menu(member, menu_name)
+        self.user_history[member.id]["history"].append(menu_name)
 
     async def clans_options(self, user):
         clandata = []
@@ -784,8 +726,6 @@ class welcome:
         Example:
             [p]savetag #CRRYRPCC
         """
-
-        server = self.bot.get_server("374596069989810176")
         member = ctx.message.author
 
         profiletag = await self.tags.formatTag(profiletag)
@@ -797,7 +737,7 @@ class welcome:
             profiledata = await self.clash.get_player(profiletag)
             name = profiledata.name
 
-            checkUser = await self.tags.getUser(server.members, profiletag)
+            checkUser = await self.tags.getUser(self.bot.get_all_members(), profiletag)
             if checkUser is not None:
                 if checkUser != member:
                     return await self.bot.say("Error, This Player ID is already linked with **" + checkUser.display_name + "**")
