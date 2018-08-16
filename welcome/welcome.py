@@ -288,14 +288,14 @@ dm_menu = {
         "options": [
             {
                 "name": "I am just visiting.",
-                "emoji": Letter.b,
+                "emoji": Letter.a,
                 "execute": {
                     "function": "guest"
                 }
             },
             {
                 "name": "I want to join a clan.",
-                "emoji": Letter.a,
+                "emoji": Letter.b,
                 "execute": {
                     "menu": "join_clan"
                 }
