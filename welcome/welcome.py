@@ -51,7 +51,8 @@ dm_menu = {
                 }
             }
         ],
-        "go_back": False
+        "go_back": False,
+        "track": True
     },
     "refferal_menu": {
         "embed": embed(title="How did you get here?", color=discord.Color.orange(),
@@ -108,7 +109,8 @@ dm_menu = {
                 }
             }
         ],
-        "go_back": True
+        "go_back": True,
+        "track": True
     },
     "location_menu": {
         "embed": embed(title="What part of the world do you come from?", color=discord.Color.orange(),
@@ -116,14 +118,14 @@ dm_menu = {
                                    "pick a region you currently live in."),
         "options": [
             {
-                "name": "Northern America",
+                "name": "North America",
                 "emoji": Letter.a,
                 "execute": {
                     "menu": "age_menu"
                 }
             },
             {
-                "name": "Central America",
+                "name": "South America",
                 "emoji": Letter.b,
                 "execute": {
                     "menu": "age_menu"
@@ -193,7 +195,8 @@ dm_menu = {
                 }
             }
         ],
-        "go_back": True
+        "go_back": True,
+        "track": True
     },
     "age_menu": {
         "embed": embed(title="How old are you?", color=discord.Color.orange(),
@@ -231,49 +234,65 @@ dm_menu = {
             },
             {
                 "name": "45-54",
-                "emoji": Letter.a,
+                "emoji": Letter.e,
                 "execute": {
                     "menu": "save_tag_menu"
                 }
             },
             {
                 "name": "55-64",
-                "emoji": Letter.e,
+                "emoji": Letter.f,
                 "execute": {
                     "menu": "save_tag_menu"
                 }
             },
             {
                 "name": "65 or Above",
-                "emoji": Letter.d,
+                "emoji": Letter.g,
                 "execute": {
                     "menu": "save_tag_menu"
                 }
             },
             {
                 "name": "Prefer Not to Answer",
-                "emoji": Letter.e,
+                "emoji": Letter.h,
                 "execute": {
                     "menu": "save_tag_menu"
                 }
             }
         ],
-        "go_back": True
+        "go_back": True,
+        "track": True
     },
     "save_tag_menu": {
-        "embed": embed(title="What is your playertag?", color=discord.Color.orange(),
+        "embed": embed(title="What is your Clash Royale player tag?", color=discord.Color.orange(),
                        description="Before we let you talk in the server, we need to take a look at your stats. "
                                    "To do that, we need your Clash Royale player tag.\n\n"
                                    "Please type in **!savetag #YOURTAG** to submit your ID."),
         "image": "https://legendclans.com/wp-content/uploads/2017/11/profile_screen3.png",
-        "options": [],
+        "options": [
+            {
+                "name": "I don't play Clash Royale",
+                "emoji": Letter.a,
+                "execute": {
+                    "menu": "end_guest"
+                }
+            }
+        ],
         "go_back": True
     },
     "choose_path": {
-        "embed": embed(title="Why are you here?", color=discord.Color.orange(),
+        "embed": embed(title="So, why are you here?", color=discord.Color.orange(),
                        description="Please select your path "
                                    "below to get started."),
         "options": [
+            {
+                "name": "I am just visiting.",
+                "emoji": Letter.b,
+                "execute": {
+                    "function": "guest"
+                }
+            },
             {
                 "name": "I want to join a clan.",
                 "emoji": Letter.a,
@@ -282,30 +301,23 @@ dm_menu = {
                 }
             },
             {
-                "name": "I am just visiting.",
-                "emoji": Letter.b,
-                "execute": {
-                    "function": "guest",
-                    "parameters": ""
-                }
-            },
-            {
                 "name": "I am already in one of your clans.",
                 "emoji": Letter.c,
                 "execute": {
-                    "function": "verify_membership",
-                    "parameters": ""
+                    "function": "verify_membership"
                 }
             }
         ],
-        "go_back": False
+        "go_back": False,
+        "track": True
     },
     "join_clan": {
         "embed": embed(title="Legend Family Clans", color=discord.Color.orange(),
                        description="Here are all our clans, which clan do you prefer?"),
         "dynamic_options": "clans_options",
         "options": [],
-        "go_back": True
+        "go_back": True,
+        "track": True
     },
     "end_member": {
         "embed": embed(title="That was it", color=discord.Color.orange(),
@@ -323,13 +335,14 @@ dm_menu = {
                 }
             }
         ],
-        "go_back": False
+        "go_back": False,
+        "finished": True
     },
     "end_human": {
         "embed": embed(title="Requesting assistance", color=discord.Color.orange(),
                        description="We have notified our officers about your information."
                                    " Please wait in #welcome-gate "
-                                   "channel while someone comes and helps you.\n\n"
+                                   "channel while an officer comes and helps you.\n\n"
                                    " Please do not join any clans without talking to an officer.\n\n"
                                    "**Enjoy your stay!**"),
         "options": [
@@ -341,10 +354,11 @@ dm_menu = {
                 }
             }
         ],
-        "go_back": False
+        "go_back": False,
+        "finished": True
     },
     "end_guest": {
-        "embed": embed(title="Guest Rules", color=discord.Color.orange(),
+        "embed": embed(title="Enjoy your stay", color=discord.Color.orange(),
                        description="Welcome to the **Legend Family** Discord server. "
                        "As a guest, you agree to follow the following rules:\n\n"
                        "• Respect others' opinions. If you disagree, please do so "
@@ -375,7 +389,8 @@ dm_menu = {
                 }
             }
         ],
-        "go_back": False
+        "go_back": False,
+        "finished": True
     },
     "global_chat": {
         "embed": embed(title="#global-chat", color=discord.Color.orange(),
@@ -391,7 +406,7 @@ dm_menu = {
     },
     "welcome_gate": {
         "embed": embed(title="#welcome-gate", color=discord.Color.orange(),
-                       description="Click here: http://discord.gg/T7XdjFS"),
+                       description="Click here: https://discord.gg/yhD84nK"),
         "options": [
             {
                 "name": "Done",
@@ -402,8 +417,10 @@ dm_menu = {
         "go_back": False
     },
     "leave_alone": {
-        "embed": embed(title="Ok, I leave you alone", color=discord.Color.orange(),
-                       description="You can go talk to a human in #welcome-gate. "),
+        "embed": embed(title="Enjoy your stay", color=discord.Color.orange(),
+                       description="We look forward to welcoming "
+                                   "you into the Legend Clan Family!\n\n"
+                                   "You can go talk to an officer in #welcome-gate. "),
         "options": [
             {
                 "name": "Go to #welcome-gate",
@@ -413,7 +430,8 @@ dm_menu = {
                 }
             }
         ],
-        "go_back": False
+        "go_back": False,
+        "finished": True
     },
     "kick_invite": {
         "embed": embed(title="You have been kicked", color=discord.Color.orange(),
@@ -427,11 +445,12 @@ dm_menu = {
                 "execute": {}
             }
         ],
-        "go_back": False
+        "go_back": False,
+        "finished": True
     },
     "give_tags": {
         "embed": embed(title="Membership verified", color=discord.Color.orange(),
-                       description="We have unlocked all member channels for you, enjoy!"),
+                       description="We have unlocked all member channels for you, enjoy your stay!"),
         "options": [
             {
                 "name": "Done",
@@ -439,7 +458,8 @@ dm_menu = {
                 "execute": {}
             }
         ],
-        "go_back": False
+        "go_back": False,
+        "finished": True
     }
 }
 
@@ -460,113 +480,118 @@ class welcome:
                 await self.bot.delete_message(message)
 
     async def change_message(self, channel, user, new_embed, reactions: list=None):
-            """
-            ctx: Context as bot
-            new_content: :str: content for new message to display
-            userid: :int: Any users' long ID
-            reactions: :list: of Emojis to react with. Defaults to None for no reactions to be used
+        """
+        ctx: Context as bot
+        new_content: :str: content for new message to display
+        userid: :int: Any users' long ID
+        reactions: :list: of Emojis to react with. Defaults to None for no reactions to be used
 
-            Changes a message's content (typically using `find_earliest_message()`) and adding reactions, if any, to the new message.
-            Deletes the old message object in order to clear the recipients' previous reactions
+        Changes a message's content (typically using `find_earliest_message()`) and adding reactions, if any, to the new message.
+        Deletes the old message object in order to clear the recipients' previous reactions
 
-            In the event that a user does not have an old message, userid will get the channel
-            returns: message
-            """
-            await self.delete_all_messages(channel)
+        In the event that a user does not have an old message, userid will get the channel
+        returns: message
+        """
+        await self.delete_all_messages(channel)
 
-            new_message = await self.bot.send_message(user, embed=new_embed)
-            for reaction in reactions:
-                await self.bot.add_reaction(new_message, reaction)
+        new_message = await self.bot.send_message(user, embed=new_embed)
+        for reaction in reactions:
+            await self.bot.add_reaction(new_message, reaction)
 
-            return new_message.id
+        return new_message.id
 
-    async def ReactionAddedHandler(self, reaction: discord.Reaction, user: discord.User, history):
-            """
-            ctx: Context as bot
-            reaction: :discord.Reaction: object to handle
-            user: :discord.User: user that made the reaction
-            history: stack of menu's the user has been through
-            """
-            menu = dm_menu.get(history[-1])
-            if(Symbol.arrow_backward == reaction.emoji):       # if back button then just load previous
-                history.pop()
-                await self.load_menu(reaction.message.channel, user, history[-1])
+    async def ReactionAddedHandler(self, reaction: discord.Reaction, user: discord.User, history, data):
+        """
+        ctx: Context as bot
+        reaction: :discord.Reaction: object to handle
+        user: :discord.User: user that made the reaction
+        history: stack of menu's the user has been through
+        """
+        menu = dm_menu.get(history[-1])
+        if(Symbol.arrow_backward == reaction.emoji):       # if back button then just load previous
+            history.pop()
+            await self.load_menu(user, history[-1])
+            return
+
+        for option in menu.get("options"):      # do the corresponding reaction
+            emoji = option.get('emoji')
+            if emoji == str(reaction.emoji):
+                if "track" in menu:
+                    data[history[-1]] = option.get('name')
+                if "menu" in option.get('execute'):
+                    history.append(option.get('execute').get("menu"))
+                    await self.load_menu(user, option.get('execute').get("menu"))
+                if "function" in option.get('execute'):       # if it is executable
+                    method = getattr(self, option.get('execute').get("function"))
+                    await method(user)
                 return
 
-            for option in menu.get("options"):      # do the corresponding reaction
+    async def load_menu(self, user: discord.User, menu: str):
+        """
+            ctx: Context as bot
+            user: :discord.User: the user whom the menu should get sent to
+            menu: :str: menu name to load, to get as key from dm_menu dictionary
+
+            Calls
+        """
+        channel = await self.bot.start_private_message(user)
+        menu = dm_menu.get(menu)
+        message = ""
+        reactions = []
+
+        embed = menu.get("embed")
+        embed.description = embed.description.format(user)
+
+        if "thumbnail" in menu:
+            embed.set_thumbnail(url=menu.get("thumbnail"))
+
+        if "image" in menu:
+            embed.set_image(url=menu.get("image"))
+
+        if "dynamic_options" in menu:
+            method = getattr(self, menu.get("dynamic_options"))
+            menu["options"] = await method(user)
+
+        if "options" in menu:
+            for option in menu.get("options"):
                 emoji = option.get('emoji')
-                if emoji == str(reaction.emoji):
-                    if "menu" in option.get('execute'):
-                        history.append(option.get('execute').get("menu"))
-                        await self.load_menu(reaction.message.channel, user, option.get('execute').get("menu"))
-                    if "function" in option.get('execute'):       # if it is executable
-                        method = getattr(self, option.get('execute').get("function"))
-                        await method(user, *option.get('execute').get("parameters"))
-                    return
-
-    async def load_menu(self, channel, user: discord.User, menu: str):
-            """
-                ctx: Context as bot
-                user: :discord.User: the user whom the menu should get sent to
-                menu: :str: menu name to load, to get as key from dm_menu dictionary
-
-                Calls
-            """
-            menu = dm_menu.get(menu)
-            message = ""
-            reactions = []
-
-            embed = menu.get("embed")
-            embed.description = embed.description.format(user)
-
-            if "thumbnail" in menu:
-                embed.set_thumbnail(url=menu.get("thumbnail"))
-
-            if "image" in menu:
-                embed.set_image(url=menu.get("image"))
-
-            if "dynamic_options" in menu:
-                method = getattr(self, menu.get("dynamic_options"))
-                menu["options"] = await method(user)
-
-            if "options" in menu:
-                for option in menu.get("options"):
-                    emoji = option.get('emoji')
-                    reactions.append(emoji.replace(">", "").replace("<", ""))
-                    message += f"{emoji} "
-                    message += option.get('name')
-                    message += "\r\n"
-
-            if menu.get("go_back"):
+                reactions.append(emoji.replace(">", "").replace("<", ""))
+                message += f"{emoji} "
+                message += option.get('name')
                 message += "\r\n"
-                message += f":arrow_backward: "
-                message += "Go back"
-                message += "\r\n"
-                reactions.append(Symbol.arrow_backward)
 
-            if "options" in menu:
-                name = "Options"
-                if embed.fields and embed.fields[-1].name == name:
-                    embed.set_field_at(len(embed.fields) - 1, name=name, value=message)
-                else:
-                    embed.add_field(name=name, value=message)
+        if menu.get("go_back"):
+            message += "\r\n"
+            message += f":arrow_backward: "
+            message += "Go back"
+            message += "\r\n"
+            reactions.append(Symbol.arrow_backward)
 
-            new_message = await self.change_message(channel, user, embed, reactions=reactions)
+        if "options" in menu:
+            name = "Options"
+            if embed.fields and embed.fields[-1].name == name:
+                embed.set_field_at(len(embed.fields) - 1, name=name, value=message)
+            else:
+                embed.add_field(name=name, value=message)
 
-            return new_message
+        if "finished" in menu:
+            await self.logger(user)
+
+        new_message = await self.change_message(channel, user, embed, reactions=reactions)
+
+        return new_message
 
     async def on_reaction_add(self, reaction: discord.Reaction, user: discord.User):
         if reaction.message.channel.is_private and self.bot.user.id != user.id:
 
-            history = {"history": ["main"], "timer": 0}
+            history = {"history": ["main"], "data": {}}
 
             if user.id in self.user_history:
                 history = self.user_history[user.id]
-                history['timer'] = 0
             else:
                 self.user_history.update({user.id: history})
 
-            await self.ReactionAddedHandler(reaction, user, history["history"])
+            await self.ReactionAddedHandler(reaction, user, history["history"], history["data"])
 
     async def _add_roles(self, member, role_names):
         """Add roles"""
@@ -583,52 +608,43 @@ class welcome:
         """Add guest role and change nickname to CR"""
         server = self.bot.get_server("374596069989810176")
         member = server.get_member(member.id)
-        channel = await self.bot.start_private_message(member)
 
         async def errorer():
-            await self.load_menu(channel, member, "choose_path")
-
-            history = {"history": ["main", "choose_path"], "timer": 0}
-            self.user_history.update({member.id: history})
+            menu_name = "choose_path"
+            await self.load_menu(member, menu_name)
+            self.user_history[member.id]["history"].append(menu_name)
 
         try:
             profiletag = await self.tags.getTag(member.id)
             profiledata = await self.clash.get_player(profiletag)
             ign = profiledata.name
-        except clashroyale.RequestError:
-            return await errorer()
-        except KeyError:
+        except (clashroyale.RequestError, KeyError):
             return await errorer()
 
         try:
             newname = ign + " | Guest"
             await self.bot.change_nickname(member, newname)
-        except discord.HTTPException:
+        except (discord.Forbidden, discord.HTTPException):
             return await errorer()
 
         role = discord.utils.get(server.roles, name="Guest")
         try:
             await self.bot.add_roles(member, role)
-        except discord.Forbidden:
-            return await errorer()
-        except discord.HTTPException:
+        except (discord.Forbidden, discord.HTTPException):
             return await errorer()
 
-        await self.load_menu(channel, member, "end_guest")
-
-        history = {"history": ["main", "end_guest"], "timer": 0}
-        self.user_history.update({member.id: history})
+        menu_name = "end_path"
+        await self.load_menu(member, menu_name)
+        self.user_history[member.id]["history"].append(menu_name)
 
     async def verify_membership(self, user):
         server = self.bot.get_server("374596069989810176")
-        channel = await self.bot.start_private_message(user)
         user = server.get_member(user.id)
 
         async def errorer():
-            await self.load_menu(channel, user, "choose_path")
-
-            history = {"history": ["main", "choose_path"], "timer": 0}
-            self.user_history.update({user.id: history})
+            menu_name = "choose_path"
+            await self.load_menu(user, menu_name)
+            self.user_history[user.id]["history"].append(menu_name)
 
         try:
             profiletag = await self.tags.getTag(user.id)
@@ -649,31 +665,26 @@ class welcome:
                 newclanname = await self.clans.getClanData(savekey, 'nickname')
                 newname = ign + " | " + newclanname
                 await self.bot.change_nickname(user, newname)
-            except discord.HTTPException:
+            except (discord.Forbidden, discord.HTTPException):
                 return await errorer()
 
             role_names = [await self.clans.getClanData(savekey, 'role'), 'Member']
             try:
                 await self._add_roles(user, role_names)
-            except discord.Forbidden:
-                return await errorer()
-            except discord.HTTPException:
+            except (discord.Forbidden, discord.HTTPException):
                 return await errorer()
         else:
             return await errorer()
 
-        await self.load_menu(channel, user, "give_tags")
-
-        history = {"history": ["main", "give_tags"], "timer": 0}
-        self.user_history.update({user.id: history})
+        menu_name = "give_tags"
+        await self.load_menu(user, menu_name)
+        self.user_history[user.id]["history"].append(menu_name)
 
     async def kick_user(self, user):
         try:
             await self.bot.kick(user)
         except discord.errors.Forbidden:
             return
-        except Exception as e:
-            print(e)
 
     async def clans_options(self, user):
         clandata = []
@@ -719,11 +730,48 @@ class welcome:
 
         return options
 
+    async def logger(self, user):
+        """Log into a channel"""
+        data = self.user_history[user.id]["data"]
+        channel = self.bot.get_channel("363728974821457923")
+
+        embed = discord.Embed(color=discord.Color.green(), description="User Joined")
+        avatar = user.avatar_url if user.avatar else user.default_avatar_url
+        embed.set_author(name=user.name, icon_url=avatar)
+
+        if data is None:
+            return
+
+        if "choose_path" in data:
+            path_map = {
+                "I am just visiting.": "Guest Joined",
+                "I want to join a clan.": "Recruit Joined",
+                "I am already in one of your clans.": "Member Joined",
+            }
+            embed.description = path_map[data["choose_path"]]
+
+        if "join_clan" in data:
+            if data["join_clan"] != "I am not sure, I want to talk to a human.":
+                embed.add_field(name="Clan Preference:", value=data["join_clan"], inline=False)
+
+        if "refferal_menu" in data:
+            if data["refferal_menu"] != "Other":
+                embed.add_field(name="Invited from:", value=data["refferal_menu"], inline=False)
+
+        if "location_menu" in data:
+            embed.add_field(name="Region:", value=data["location_menu"], inline=False)
+
+        if "age_menu" in data:
+            if data["age_menu"] != "Prefer Not to Answer":
+                embed.add_field(name="Age:", value=data["age_menu"], inline=False)
+
+        await self.bot.send_message(channel, embed=embed)
+
     @commands.command(pass_context=True)
     async def menu(self, ctx):
         user = ctx.message.author
-        channel = ctx.message.channel
-        await self.load_menu(channel, user, "main")
+
+        await self.load_menu(user, "main")
 
         if user.id in self.user_history:
             del self.user_history[user.id]
@@ -739,7 +787,6 @@ class welcome:
 
         server = self.bot.get_server("374596069989810176")
         member = ctx.message.author
-        channel = ctx.message.channel
 
         profiletag = await self.tags.formatTag(profiletag)
 
@@ -757,10 +804,9 @@ class welcome:
 
             await self.tags.linkTag(profiletag, member.id)
 
-            await self.load_menu(channel, member, "choose_path")
-
-            history = {"history": ["main", "choose_path"], "timer": 0}
-            self.user_history.update({member.id: history})
+            menu_name = "choose_path"
+            await self.load_menu(member, menu_name)
+            self.user_history[member.id]["history"].append(menu_name)
 
         except clashroyale.NotFoundError:
             return await self.bot.say("We cannot find your ID in our database, please try again.")
