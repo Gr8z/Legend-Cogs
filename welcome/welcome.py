@@ -628,7 +628,6 @@ class welcome:
         menu_name = "give_tags"
         await self.load_menu(member, menu_name)
         self.user_history[member.id]["history"].append(menu_name)
-        self.user_history[member.id]["data"]["clan"] = clanname
 
     async def clans_options(self, user):
         clandata = []
