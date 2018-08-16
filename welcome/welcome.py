@@ -81,29 +81,29 @@ dm_menu = {
                 }
             },
             {
-                "name": "Royale Recruit Discord",
+                "name": "Discord",
                 "emoji": Letter.d,
                 "execute": {
                     "menu": "location_menu"
                 }
-            },
+            }
             {
                 "name": "Twitter",
-                "emoji": Letter.e,
-                "execute": {
-                    "menu": "location_menu"
-                }
-            },
-            {
-                "name": "From in-game",
                 "emoji": Letter.f,
                 "execute": {
                     "menu": "location_menu"
                 }
             },
             {
-                "name": "Other",
+                "name": "From in-game",
                 "emoji": Letter.g,
+                "execute": {
+                    "menu": "location_menu"
+                }
+            },
+            {
+                "name": "Other",
+                "emoji": Letter.h,
                 "execute": {
                     "menu": "location_menu"
                 }
@@ -153,43 +153,36 @@ dm_menu = {
                 }
             },
             {
-                "name": "Western Europe",
+                "name": "Europe",
                 "emoji": Letter.f,
                 "execute": {
                     "menu": "age_menu"
                 }
-            },
+            }
             {
-                "name": "Eastern Europe",
+                "name": "Middle East",
                 "emoji": Letter.g,
                 "execute": {
                     "menu": "age_menu"
                 }
             },
             {
-                "name": "Middle East",
+                "name": "Asia",
                 "emoji": Letter.h,
                 "execute": {
                     "menu": "age_menu"
                 }
             },
             {
-                "name": "Asia",
+                "name": "South-east Asia",
                 "emoji": Letter.i,
                 "execute": {
                     "menu": "age_menu"
                 }
             },
             {
-                "name": "South-east Asia",
-                "emoji": Letter.j,
-                "execute": {
-                    "menu": "age_menu"
-                }
-            },
-            {
                 "name": "Australia",
-                "emoji": Letter.k,
+                "emoji": Letter.j,
                 "execute": {
                     "menu": "age_menu"
                 }
@@ -706,12 +699,11 @@ class welcome:
                                                                      data["tag"]), inline=False)
 
         if "clan" in data:
-            embed.add_field(name="Current clan:", value=data["clan_member"], inline=False)
+            embed.add_field(name="Current clan:", value=data["clan"], inline=False)
 
         if "join_clan" in data:
             if data["join_clan"] != "I am not sure, I want to talk to a human.":
                 embed.add_field(name="Clan Preference:", value=data["join_clan"], inline=False)
-
 
         if "refferal_menu" in data:
             if data["refferal_menu"] != "Other":
