@@ -190,7 +190,7 @@ dm_menu = {
     "age_menu": {
         "embed": embed(title="How old are you?", color=discord.Color.orange(),
                        description="Everyone is welcome! "
-                                   "However some clans do require you to be of a"
+                                   "However, some clans do require you to be of a"
                                    " certain age group. Please pick one."),
         "options": [
             {
@@ -626,7 +626,7 @@ class welcome:
         self.user_history[member.id]["history"].append(menu_name)
 
         welcomeMsg = rand_choice(self.welcome["GREETING"])
-        await self.bot.send_message(discord.Object(id='363728974821457923'), welcomeMsg.format(member))
+        await self.bot.send_message(discord.Object(id='374597911436328971'), welcomeMsg.format(member))
 
     async def clans_options(self, user):
         clandata = []
@@ -675,7 +675,7 @@ class welcome:
     async def logger(self, user):
         """Log into a channel"""
         data = self.user_history[user.id]["data"]
-        channel = self.bot.get_channel("363728974821457923")
+        channel = self.bot.get_channel("374597911436328971")
 
         embed = discord.Embed(color=discord.Color.green(), description="User Joined")
         avatar = user.avatar_url if user.avatar else user.default_avatar_url
@@ -719,13 +719,22 @@ class welcome:
 
     async def on_member_join(self, member):
         server = member.server
-        if server.id != "363728974821457921":
+        if server.id != "374596069989810176":
             return
 
         await self.load_menu(member, "main")
 
         if member.id in self.user_history:
             del self.user_history[member.id]
+
+    async def on_member_remove(self, member):
+        server = member.server
+
+        embed = discord.Embed(color=discord.Color.red(), description="User Left")
+        avatar = member.avatar_url if member.avatar else member.default_avatar_url
+        embed.set_author(name=member.name, icon_url=avatar)
+
+        await self.bot.send_message(server.get_channel("374597911436328971"), embed=embed)
 
     async def on_reaction_add(self, reaction: discord.Reaction, user: discord.User):
         if reaction.message.channel.is_private and self.bot.user.id != user.id:
