@@ -575,13 +575,13 @@ class welcome:
             newname = ign + " | Guest"
             await self.bot.change_nickname(member, newname)
         except (discord.Forbidden, discord.HTTPException):
-            return await errorer()
+            pass
 
         role = discord.utils.get(member.server.roles, name="Guest")
         try:
             await self.bot.add_roles(member, role)
         except (discord.Forbidden, discord.HTTPException):
-            return await errorer()
+            pass
 
         menu_name = "end_path"
         await self.load_menu(member, menu_name)
@@ -614,13 +614,13 @@ class welcome:
                 newname = ign + " | " + newclanname
                 await self.bot.change_nickname(member, newname)
             except (discord.Forbidden, discord.HTTPException):
-                return await errorer()
+                pass
 
             role_names = [await self.clans.getClanData(savekey, 'role'), 'Member']
             try:
                 await self._add_roles(member, role_names)
             except (discord.Forbidden, discord.HTTPException):
-                return await errorer()
+                pass
         else:
             return await errorer()
 
@@ -709,7 +709,7 @@ class welcome:
 
         await self.bot.send_message(channel, embed=embed)
 
-    @commands.command(pass_context=True)
+    @commands.command(pass_context=True, no_pm=True)
     async def menu(self, ctx):
         user = ctx.message.author
 
