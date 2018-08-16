@@ -586,7 +586,7 @@ class welcome:
         except (discord.Forbidden, discord.HTTPException):
             pass
 
-        menu_name = "end_path"
+        menu_name = "end_guest"
         await self.load_menu(member, menu_name)
         self.user_history[member.id]["history"].append(menu_name)
 
