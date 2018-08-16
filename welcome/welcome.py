@@ -459,6 +459,13 @@ class welcome:
         self.clans = self.bot.get_cog('crtools').clans
         self.clash = clashroyale.OfficialAPI(self.auth.getOfficialToken(), is_async=True)
 
+    async def emoji(self, name):
+        """Emoji by name."""
+        for emoji in self.bot.get_all_emojis():
+            if emoji.name == name.replace(" ", "").replace("-", "").replace(".", ""):
+                return '<:{}:{}>'.format(emoji.name, emoji.id)
+        return ''
+
     async def change_message(self, user, new_embed, reactions: list=None):
         channel = await self.bot.start_private_message(user)
 
@@ -757,7 +764,7 @@ class welcome:
 
             self.user_history[member.id]["data"]["name"] = name
             self.user_history[member.id]["data"]["tag"] = profiledata.tag
-            self.user_history[member.id]["data"]["emoji"] = self.emoji(profiledata.arena.name.replace(' ', '').lower())
+            self.user_history[member.id]["data"]["emoji"] = await self.emoji(profiledata.arena.name.replace(' ', '').lower())
 
             await self.tags.linkTag(profiletag, member.id)
 
