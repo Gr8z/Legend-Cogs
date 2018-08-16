@@ -151,7 +151,7 @@ dm_menu = {
                 "execute": {
                     "menu": "age_menu"
                 }
-            }
+            },
             {
                 "name": "Middle East",
                 "emoji": Letter.f,
