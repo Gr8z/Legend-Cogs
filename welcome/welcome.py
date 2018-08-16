@@ -601,6 +601,7 @@ class welcome:
                 clantag = ""
             else:
                 clantag = profiledata.clan.tag.strip("#")
+                clanname = profiledata.clan.name
 
             ign = profiledata.name
         except clashroyale.RequestError:
@@ -627,6 +628,7 @@ class welcome:
         menu_name = "give_tags"
         await self.load_menu(member, menu_name)
         self.user_history[member.id]["history"].append(menu_name)
+        self.user_history[member.id]["data"]["clan"] = clanname
 
     async def clans_options(self, user):
         clandata = []
@@ -692,9 +694,18 @@ class welcome:
             }
             embed.description = path_map[data["choose_path"]]
 
+        if "name" in data:
+            embed.add_field(name="Player:", value="{} {} (#)".format(data["emoji"],
+                                                                     data["name"],
+                                                                     data["tag"]), inline=False)
+
+        if "clan" in data:
+            embed.add_field(name="Current clan:", value=data["clan_member"], inline=False)
+
         if "join_clan" in data:
             if data["join_clan"] != "I am not sure, I want to talk to a human.":
                 embed.add_field(name="Clan Preference:", value=data["join_clan"], inline=False)
+
 
         if "refferal_menu" in data:
             if data["refferal_menu"] != "Other":
@@ -741,6 +752,13 @@ class welcome:
             if checkUser is not None:
                 if checkUser != member:
                     return await self.bot.say("Error, This Player ID is already linked with **" + checkUser.display_name + "**")
+
+            if profiledata.clan is not None:
+                self.user_history[member.id]["data"]["clan"] = profiledata.clan.name
+
+            self.user_history[member.id]["data"]["name"] = name
+            self.user_history[member.id]["data"]["tag"] = profiledata.tag
+            self.user_history[member.id]["data"]["emoji"] = self.emoji(profiledata.arena.name.replace(' ', '').lower())
 
             await self.tags.linkTag(profiletag, member.id)
 
