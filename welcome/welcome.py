@@ -3,6 +3,7 @@ from discord.ext import commands
 import clashroyale
 from copy import deepcopy
 from .utils.dataIO import dataIO
+from random import choice as rand_choice
 
 
 def embed(**kwargs):
@@ -597,7 +598,6 @@ class welcome:
                 clantag = ""
             else:
                 clantag = profiledata.clan.tag.strip("#")
-                clanname = profiledata.clan.name
 
             ign = profiledata.name
         except clashroyale.RequestError:
@@ -694,8 +694,8 @@ class welcome:
 
         if "name" in data:
             embed.add_field(name="Player:", value="{} {} ({})".format(data["emoji"],
-                                                                     data["name"],
-                                                                     data["tag"]), inline=False)
+                                                                      data["name"],
+                                                                      data["tag"]), inline=False)
 
         if "clan" in data:
             embed.add_field(name="Current clan:", value=data["clan"], inline=False)
