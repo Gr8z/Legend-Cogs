@@ -4,6 +4,7 @@ import clashroyale
 from copy import deepcopy
 from .utils.dataIO import dataIO
 from random import choice as rand_choice
+from .utils import checks
 
 
 def embed(**kwargs):
@@ -752,6 +753,7 @@ class welcome:
             await self.ReactionAddedHandler(reaction, user, history["history"], history["data"])
 
     @commands.command(pass_context=True, no_pm=True)
+    @checks.admin_or_permissions(manage_server=True)
     async def menu(self, ctx):
         user = ctx.message.author
         await self.on_member_join(user)
