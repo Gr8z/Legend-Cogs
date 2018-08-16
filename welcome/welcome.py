@@ -548,28 +548,6 @@ class welcome:
 
         return new_message
 
-    async def on_member_join(self, member):
-        server = member.server
-        if server.id != "363728974821457923":
-            return
-
-        await self.load_menu(member, "main")
-
-        if member.id in self.user_history:
-            del self.user_history[member.id]
-
-    async def on_reaction_add(self, reaction: discord.Reaction, user: discord.User):
-        if reaction.message.channel.is_private and self.bot.user.id != user.id:
-
-            history = {"history": ["main"], "data": {}}
-
-            if user.id in self.user_history:
-                history = self.user_history[user.id]
-            else:
-                self.user_history.update({user.id: history})
-
-            await self.ReactionAddedHandler(reaction, user, history["history"], history["data"])
-
     async def _add_roles(self, member, role_names):
         """Add roles"""
         server = member.server
@@ -738,6 +716,28 @@ class welcome:
                 embed.add_field(name="Age:", value=data["age_menu"], inline=False)
 
         await self.bot.send_message(channel, embed=embed)
+
+    async def on_member_join(self, member):
+        server = member.server
+        if server.id != "363728974821457921":
+            return
+
+        await self.load_menu(member, "main")
+
+        if member.id in self.user_history:
+            del self.user_history[member.id]
+
+    async def on_reaction_add(self, reaction: discord.Reaction, user: discord.User):
+        if reaction.message.channel.is_private and self.bot.user.id != user.id:
+
+            history = {"history": ["main"], "data": {}}
+
+            if user.id in self.user_history:
+                history = self.user_history[user.id]
+            else:
+                self.user_history.update({user.id: history})
+
+            await self.ReactionAddedHandler(reaction, user, history["history"], history["data"])
 
     @commands.command(pass_context=True, no_pm=True)
     async def menu(self, ctx):
