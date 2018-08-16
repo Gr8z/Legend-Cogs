@@ -473,7 +473,10 @@ class welcome:
 
         async for message in self.bot.logs_from(channel, limit=10):
             if message.author.id == self.bot.user.id:
-                await self.bot.delete_message(message)
+                try:
+                    await self.bot.delete_message(message)
+                except discord.NotFound:
+                    pass
 
         new_message = await self.bot.send_message(user, embed=new_embed)
         for reaction in reactions:
