@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 import clashroyale
-import deepcopy
+from copy import deepcopy
 
 
 def embed(**kwargs):
