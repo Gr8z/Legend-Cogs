@@ -115,7 +115,7 @@ dm_menu = {
     "location_menu": {
         "embed": embed(title="What part of the world do you come from?", color=discord.Color.orange(),
                        description="To better serve you, "
-                                   "pick a region you currently live in."),
+                                   "pick the region you currently live in."),
         "options": [
             {
                 "name": "North America",
