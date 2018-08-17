@@ -630,7 +630,7 @@ class welcome:
         self.user_history[member.id]["history"].append(menu_name)
 
         welcomeMsg = rand_choice(self.welcome["GREETING"])
-        await self.bot.send_message(discord.Object(id='374597911436328971'), welcomeMsg.format(member))
+        await self.bot.send_message(discord.Object(id='374596069989810178'), welcomeMsg.format(member))
 
     async def clans_options(self, user):
         clandata = []
