@@ -550,9 +550,8 @@ class legend:
                                                     "Send this code in the join request message.\n\n" +
                                                     "Click this link to join the clan: https://legendclans.com/clanInfo/" +
                                                     clan_tag + "\n\n" +
-                                                    "That's it! Now wait for your clan leadership to accept you. \n" +
-                                                    "If you do not see a 'request to join' button, make sure you leave " +
-                                                    "your current clan and check the trophy requirements. \n\n" +
+                                                    "That's it! Now wait for your clan leadership to accept you. " +
+                                                    "It usually takes a few minutes to get accepted, but it may take up to a few hours. \n\n" +
                                                     "**IMPORTANT**: Once your clan leadership has accepted your request, " +
                                                     "let a staff member in discord know that you have been accepted. " +
                                                     "They will then unlock all the member channels for you.")

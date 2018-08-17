@@ -5,6 +5,7 @@ from copy import deepcopy
 from .utils.dataIO import dataIO
 from random import choice as rand_choice
 from .utils import checks
+import asyncio
 
 
 def embed(**kwargs):
@@ -37,26 +38,26 @@ dm_menu = {
                                    "We are one of the oldest and biggest families in "
                                    "Clash Royale with our 700 members and 14 clans! "
                                    "<a:goblinstab:468708996153475072>\n\n"
-                                   "We are glad you joined us, may I ask you a few questions?"),
+                                   "We are glad you joined us, can we ask a few questions "
+                                   "to customize your experience?"),
         "thumbnail": "https://cdn.discordapp.com/icons/374596069989810176/8cadece4b0197ce2a77a4c41a490f0fc.jpg",
         "options": [
             {
-                "name": "Yes",
+                "name": "Yes please!",
                 "emoji": Letter.a,
                 "execute": {
                     "menu": "refferal_menu"
                 }
             },
             {
-                "name": "No",
+                "name": "Skip it, and talk to our friendly staff.",
                 "emoji": Letter.b,
                 "execute": {
                     "menu": "leave_alone"
                 }
             }
         ],
-        "go_back": False,
-        "track": True
+        "go_back": False
     },
     "refferal_menu": {
         "embed": embed(title="How did you get here?", color=discord.Color.orange(),
@@ -278,7 +279,8 @@ dm_menu = {
     },
     "save_tag": {
         "embed": embed(title="Type in your tag", color=discord.Color.orange(),
-                       description="Please type **!savetag #YOURTAG** below to submit your ID."),
+                       description="Please type **!savetag #YOURTAG** below to submit your ID.\n\n"
+                                   "You can find your player tag in your profile in game."),
         "image": "https://legendclans.com/wp-content/uploads/2017/11/profile_screen3.png",
         "options": [],
         "go_back": True
@@ -394,29 +396,20 @@ dm_menu = {
         "go_back": False,
         "finished": True
     },
-    "global_chat": {
-        "embed": embed(title="#global-chat", color=discord.Color.orange(),
-                       description="Click here: http://discord.gg/T7XdjFS"),
+    "give_tags": {
+        "embed": embed(title="Membership verified", color=discord.Color.orange(),
+                       description="We have unlocked all member channels for you, enjoy your stay!"),
         "options": [
             {
-                "name": "Done",
-                "emoji": Symbol.white_check_mark,
-                "execute": {}
+                "name": "Go to #global-chat",
+                "emoji": Letter.a,
+                "execute": {
+                    "menu": "global_chat"
+                }
             }
         ],
-        "go_back": False
-    },
-    "welcome_gate": {
-        "embed": embed(title="#welcome-gate", color=discord.Color.orange(),
-                       description="Click here: https://discord.gg/yhD84nK"),
-        "options": [
-            {
-                "name": "Done",
-                "emoji": Symbol.white_check_mark,
-                "execute": {}
-            }
-        ],
-        "go_back": False
+        "go_back": False,
+        "finished": True
     },
     "leave_alone": {
         "embed": embed(title="Enjoy your stay", color=discord.Color.orange(),
@@ -435,9 +428,9 @@ dm_menu = {
         "go_back": False,
         "finished": True
     },
-    "give_tags": {
-        "embed": embed(title="Membership verified", color=discord.Color.orange(),
-                       description="We have unlocked all member channels for you, enjoy your stay!"),
+    "global_chat": {
+        "embed": embed(title="#global-chat", color=discord.Color.orange(),
+                       description="Click here: http://discord.gg/T7XdjFS"),
         "options": [
             {
                 "name": "Done",
@@ -446,7 +439,20 @@ dm_menu = {
             }
         ],
         "go_back": False,
-        "finished": True
+        "hide_options": True
+    },
+    "welcome_gate": {
+        "embed": embed(title="#welcome-gate", color=discord.Color.orange(),
+                       description="Click here: https://discord.gg/yhD84nK"),
+        "options": [
+            {
+                "name": "Done",
+                "emoji": Symbol.white_check_mark,
+                "execute": {}
+            }
+        ],
+        "go_back": False,
+        "hide_options": True
     }
 }
 
@@ -539,11 +545,12 @@ class welcome:
             reactions.append(Symbol.arrow_backward)
 
         if "options" in menu:
-            name = "Options"
-            if embed.fields and embed.fields[-1].name == name:
-                embed.set_field_at(len(embed.fields) - 1, name=name, value=message)
-            else:
-                embed.add_field(name=name, value=message)
+            if "hide_options" not in menu:
+                name = "Options"
+                if embed.fields and embed.fields[-1].name == name:
+                    embed.set_field_at(len(embed.fields) - 1, name=name, value=message)
+                else:
+                    embed.add_field(name=name, value=message)
 
         if "finished" in menu:
             await self.logger(user)
@@ -678,15 +685,16 @@ class welcome:
 
     async def logger(self, user):
         """Log into a channel"""
-        data = self.user_history[user.id]["data"]
         channel = self.bot.get_channel("374597911436328971")
 
         embed = discord.Embed(color=discord.Color.green(), description="User Joined")
         avatar = user.avatar_url if user.avatar else user.default_avatar_url
         embed.set_author(name=user.name, icon_url=avatar)
 
-        if data is None:
-            return
+        try:
+            data = self.user_history[user.id]["data"]
+        except KeyError:
+            return await self.bot.send_message(channel, embed=embed)
 
         if "choose_path" in data:
             path_map = {
@@ -730,6 +738,13 @@ class welcome:
 
         if member.id in self.user_history:
             del self.user_history[member.id]
+
+        await asyncio.sleep(1200)
+
+        if member.id not in self.user_history:
+            menu_name = "leave_alone"
+            await self.load_menu(member, menu_name)
+            self.user_history[member.id]["history"].append(menu_name)
 
     async def on_member_remove(self, member):
         server = member.server
