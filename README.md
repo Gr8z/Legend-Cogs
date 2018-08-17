@@ -5,6 +5,7 @@ Made with Python and [RED](https://github.com/Cog-Creators/Red-DiscordBot).
 
 If you want to see this bot in action, join the LeGeND Family Discord at [legendclans.com/discord](http://discord.gg/T7XdjFS)
 
+
 ## Cogs
 
  * **crtools** - Clash Royale Tools required for most CR cogs to work.
@@ -34,6 +35,7 @@ If you want to see this bot in action, join the LeGeND Family Discord at [legend
  * **seen** - Check when a user was last seen, port from aikaterna-cogs.
  * **welcome** - Welcome a user with an interactive menu.
 
+
 ## Installation
 
 To install a cog on your bot instance:
@@ -48,12 +50,35 @@ To install a cog on your bot instance:
 
 [p] = Replace this with your bot's command prefix. (usually '!')
 
+
+## FAQ
+
+### Why does it say "Cannot reach Clash Royale servers?"
+
+Make sure you have set your Official Clash Royale API Token from https://developer.clashroyale.com using the [p]settokencr.
+
+### Why are some cogs not loading?
+
+Many cogs depend on additional python libraries, and also other cogs. If you want to install a clash royale cog, make sure you have crtools installed first.
+
+### Why are my cogs getting unloaded after restart?
+
+Some of your clash royale cogs might get disabled on restart because it requires crtools to be loaded first. To fix this:
+
+* Go to your bot's root folder and open `red.py`
+* look for ``bot.load_extension('cogs.owner')``
+* Then add this line after: ``bot.load_extension('cogs.crtools')``
+
+
+
 ## Credits
 
 * [RED](https://github.com/Cog-Creators/Red-DiscordBot)
 * [RoyaleAPI](https://github.com/royaleapi)
+* [clashroyale](https://github.com/cgrok/clashroyale)
 * [AtomToast](https://github.com/AtomToast)
 * [SML](https://github.com/smlbiobot)
+* [fourjr](https://github.com/fourjr)
 * [Bobloy](https://github.com/bobloy)
 * [Joshua](https://github.com/yeongjoshua)
 * [SauravAnchlia](https://github.com/SauravAnchlia)
