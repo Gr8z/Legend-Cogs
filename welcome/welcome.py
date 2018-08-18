@@ -24,11 +24,7 @@ class Letter:
 
 class Symbol:
     white_check_mark = "✅"
-    x = "❌"
     arrow_backward = "◀"
-    arrow_forward = "▶"
-    arrow_up_small = "🔼"
-    arrow_down_small = "🔽"
 
 
 dm_menu = {
