@@ -32,7 +32,7 @@ class constants:
         """Get a region's key name."""
         for region in self.constants["region"]:
             if num == region["id"]:
-                return region["key"]
+                return region["key"].lower()
         return None
 
     async def decklink_url(self, deck, war=False):

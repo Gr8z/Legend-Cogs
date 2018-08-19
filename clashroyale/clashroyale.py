@@ -371,7 +371,7 @@ class clashroyale:
         embed.add_field(name="Status", value=":envelope_with_arrow: {}".format(self.camelToString(clandata.type).capitalize()), inline=True)
         if clandata.location.is_country:
             embed.add_field(name="Country",
-                            value=":flag_{}: {}".format(await self.constants.get_region_key(clandata.location.id).lower(),
+                            value=":flag_{}: {}".format(await self.constants.get_region_key(clandata.location.id),
                                                         clandata.location.name), inline=True)
         else:
             embed.add_field(name="Location", value=":earth_americas: {}".format(clandata.location.name), inline=True)
