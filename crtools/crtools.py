@@ -30,7 +30,7 @@ class constants:
 
     async def get_region_key(self, num):
         """Get a region's key name."""
-        for region in self.constants["region"]:
+        for region in self.constants["regions"]:
             if num == region["id"]:
                 return region["key"].lower()
         return None
