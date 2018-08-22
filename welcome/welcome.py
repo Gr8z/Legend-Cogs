@@ -738,6 +738,9 @@ class welcome:
         await asyncio.sleep(1200)
 
         if member.id not in self.user_history:
+            return
+
+        if member in server.members:
             menu_name = "leave_alone"
             await self.load_menu(member, menu_name)
             self.user_history[member.id]["history"].append(menu_name)
