@@ -48,11 +48,11 @@ class warbattles:
             if card.max_level == 13:
                 levels += card.level
             elif card.max_level == 11:
-                levels += card.level + 3
+                levels += card.level + 2
             elif card.max_level == 8:
-                levels += card.level + 6
+                levels += card.level + 5
             elif card.max_level == 5:
-                levels += card.level + 9
+                levels += card.level + 8
 
         return levels
 
