@@ -481,9 +481,12 @@ class welcome:
                 except discord.NotFound:
                     pass
 
-        new_message = await self.bot.send_message(user, embed=new_embed)
-        for reaction in reactions:
-            await self.bot.add_reaction(new_message, reaction)
+        try:
+            new_message = await self.bot.send_message(user, embed=new_embed)
+            for reaction in reactions:
+                await self.bot.add_reaction(new_message, reaction)
+        except discord.Forbidden:
+            await self.logger(user)
 
         return new_message.id
 
