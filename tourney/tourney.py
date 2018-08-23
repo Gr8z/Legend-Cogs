@@ -171,6 +171,7 @@ class tournament:
             await asyncio.sleep(120)
 
     @commands.command()
+    @commands.cooldown(3, 60, commands.BucketType.server)
     @commands.has_any_role(*BOTCOMMANDER_ROLES)
     async def tourney(self):
         """ Get a open tournament"""
