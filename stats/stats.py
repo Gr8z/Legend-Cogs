@@ -104,13 +104,13 @@ class stats:
                     self.member_log = dataIO.load_json('data/clanlog/member_log.json')
                     members = self.member_log[max(self.member_log.keys())]
                     if members != values['member']:
-                        self.settings[server.id]['values']['member'] = members
+                        values['member'] = members
                         await self.bot.edit_channel(server.get_channel(channels['member_channel']),
                                                     name="{} Members".format(members))
 
                     guests = await self.getUserCount(server, "Guest")
                     if guests != values['guests']:
-                        self.settings[server.id]['values']['guests'] = guests
+                        values['guests'] = guests
                         await self.bot.edit_channel(server.get_channel(channels['guests_channel']),
                                                     name="{} Guests".format(guests))
 
@@ -119,14 +119,14 @@ class stats:
                         current_time = get_time()
                         self.discord_log[str(current_time)] = userTotal
                         dataIO.save_json('data/clanlog/discord_log.json', self.discord_log)
-                        self.settings[server.id]['values']['user'] = userTotal
+                        values['user'] = userTotal
 
                         await self.bot.edit_channel(server.get_channel(channels['user_channel']),
                                                     name="{} Total Users".format(userTotal))
 
                     passed = (datetime.datetime.utcnow() - server.created_at).days
                     if passed != values['server']:
-                        self.settings[server.id]['values']['server'] = passed
+                        values['server'] = passed
                         await self.bot.edit_channel(server.get_channel(channels['server_channel']),
                                                     name="{} Days Old".format(passed))
 
