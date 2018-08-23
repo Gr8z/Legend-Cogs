@@ -740,7 +740,7 @@ class welcome:
 
         await asyncio.sleep(1200)
 
-        if member.id not in self.user_history:
+        if member.id in self.user_history:
             return
 
         if member in server.members:
