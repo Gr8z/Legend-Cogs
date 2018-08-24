@@ -237,6 +237,9 @@ class duels:
         author = ctx.message.author
 
         duelID = self.settings["CONFIG"]["ACTIVE"]
+        if duelID not in self.settings["DUELS"]:
+            return await self.bot.say("There is no active duel to cancel.")
+
         duelPlayers = self.settings["DUELS"][duelID]["PLAYERS"]
         duelBet = self.settings["DUELS"][duelID]["BET"]
 
