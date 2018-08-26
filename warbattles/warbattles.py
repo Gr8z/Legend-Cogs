@@ -5,6 +5,8 @@ import asyncio
 import clashroyale
 import time
 from datetime import datetime
+import requests
+import json
 
 try:
     from cogs.deck import Deck
@@ -130,6 +132,10 @@ class warbattles:
                             embed.set_footer(text=credits, icon_url=creditIcon)
 
                             await self.bot.send_message(discord.Object(id=channel), embed=embed)
+
+                            if clankey == "titan":
+                                url = 'https://script.google.com/macros/s/AKfycbx8idfEQE2ochft4vKg7um0VVZ16_li5AnRvDQZHhyLimJjvlw/exec'
+                                requests.post(url, data=json.dumps(battledata))
 
                             card_keys = await self.deck.decklink_to_cards(battledata["deckLink"])
                             newctx = ctx
