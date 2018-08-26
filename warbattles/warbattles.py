@@ -134,6 +134,7 @@ class warbattles:
                             await self.bot.send_message(discord.Object(id=channel), embed=embed)
 
                             if clankey == "titan":
+                                battledata["wincolor"] = None
                                 url = 'https://script.google.com/macros/s/AKfycbx8idfEQE2ochft4vKg7um0VVZ16_li5AnRvDQZHhyLimJjvlw/exec'
                                 requests.post(url, data=json.dumps(battledata))
 
