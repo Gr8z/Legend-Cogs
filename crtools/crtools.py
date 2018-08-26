@@ -9,6 +9,9 @@ auth_path = "data/crtools/auth.json"
 clans_path = "data/crtools/clans.json"
 constants_path = "data/crtools/constants.json"
 
+BOTCOMMANDER_ROLES = ["Family Representative", "Clan Manager",
+                      "Clan Deputy", "Co-Leader", "Hub Officer", "admin"]
+
 default_clans = {'defualt': {'tag': '9PJYVVL2', 'role': 'everyone', 'name': 'defualt',
                              'nickname': 'defualt', 'discord': None, 'waiting': [], 'members': {},
                              'bonustitle': '', 'personalbest': 0, 'warTrophies': 0, 'approval': False,
@@ -341,7 +344,7 @@ class crtools:
         await self.bot.say("OfficialAPI Token set")
 
     @commands.group(pass_context=True, name="clans")
-    @checks.mod_or_permissions(administrator=True)
+    @commands.has_any_role(*BOTCOMMANDER_ROLES)
     async def _clans(self, ctx):
         """Base command for managing clash royale clans. [p]help clans for details"""
         if ctx.invoked_subcommand is None:
