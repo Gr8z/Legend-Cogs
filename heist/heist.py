@@ -921,6 +921,8 @@ class Heist:
 
         if "Player" not in settings["Targets"][target]:
             settings["Targets"][target]["Vault"] -= credits_stolen * len(settings["Crew"])
+        elif settings["Targets"][target]["Player"] is None:
+            settings["Targets"][target]["Vault"] -= credits_stolen * len(settings["Crew"])
         else:
             bank = self.bot.get_cog('Economy').bank
             user = discord.utils.get(server.members, id=settings["Targets"][target]["Player"])
