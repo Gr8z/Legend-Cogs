@@ -876,8 +876,8 @@ class Heist:
             data = self.calculate_credits(settings, players, target, server)
             headers = ["Players", "Credits Obtained", "Bonuses", "Total"]
             t = tabulate(data, headers=headers)
-            msg = ("The credits collected from the {} was split among the winners:\n```"
-                   "C\n{}```".format(t_vault, t))
+            msg = ("The credits collected from the {} was split among {}:\n```"
+                   "C\n{}```".format(t_vault, " ".join([x.mention for x in players]), t))
         else:
             msg = "No one made it out safe."
         settings["Config"]["Alert Time"] = int(time.perf_counter())
@@ -919,7 +919,7 @@ class Heist:
         stolen_data = [credits_stolen] * len(settings["Crew"])
         total_winnings = [x + y for x, y in zip(stolen_data, bonuses)]
 
-        if settings["Targets"][target]["Player"] is None:
+        if "Player" not in settings["Targets"][target]:
             settings["Targets"][target]["Vault"] -= credits_stolen * len(settings["Crew"])
         else:
             bank = self.bot.get_cog('Economy').bank
