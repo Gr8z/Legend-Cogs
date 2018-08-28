@@ -470,11 +470,11 @@ class shop:
         epic = await self._is_epic(author)
         legendary = await self._is_legendary(author)
 
+        if epic or legendary:
+            return await self.bot.say("You are already Epic™.")
+
         if not rare:
             return await self.bot.say("You need to have **Rare™** to buy this role.")
-
-        if epic or legendary:
-            return await self.bot.say("You are already Rare™.")
 
         if self.bank_check(author, 750000):
             bank = self.bot.get_cog('Economy').bank
@@ -500,11 +500,11 @@ class shop:
         epic = await self._is_epic(author)
         legendary = await self._is_legendary(author)
 
-        if not epic:
-            return await self.bot.say("You need to have **Epic™** to buy this role.")
-
         if legendary:
             return await self.bot.say("You are already LeGeNDary™.")
+
+        if not epic:
+            return await self.bot.say("You need to have **Epic™** to buy this role.")
 
         if self.bank_check(author, 1000000):
             bank = self.bot.get_cog('Economy').bank
