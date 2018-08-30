@@ -501,7 +501,7 @@ class legend:
             if (clandata.get("members") == 50):
                 return await self.bot.say("Approval failed, the clan is Full.")
 
-            if ((trophies < clandata.required_trophies) and (maxtrophies < clan_pb)):
+            if ((trophies < clandata.required_trophies) or (maxtrophies < clan_pb)):
                 return await self.bot.say("Approval failed, you don't meet the trophy requirements.")
 
             if (plyrLeagueCWR < clan_cwr):
