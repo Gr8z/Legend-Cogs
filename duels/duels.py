@@ -141,6 +141,9 @@ class duels:
         if bet < 5000:
             return await self.bot.say("Your bet is too low, minimum credits for a duel are 5000.")
 
+        if bet > 900000:
+            return await self.bot.say("Your bet is too high, maximum credits for a duel are 900000.")
+
         if not self.bank_check(author, bet):
             return await self.bot.say("You do not have {} credits to bet on this duel.".format(str(bet)))
 
