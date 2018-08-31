@@ -229,7 +229,7 @@ class legend:
     def getLeagueEmoji(self, trophies):
         """Get clan war League Emoji"""
         mapLeagues = {
-            "legendleague": range(3000, 0),
+            "legendleague": range(3000, 5000),
             "gold3league": range(2500, 2999),
             "gold2league": range(2000, 2499),
             "goldleague": range(1500, 1999),
