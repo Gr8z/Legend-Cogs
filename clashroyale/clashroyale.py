@@ -73,48 +73,48 @@ class clashroyale:
     def getLeagueEmoji(self, trophies):
         """Get clan war League Emoji"""
         mapLeagues = {
-            "legendleague": range(3000, 5000),
-            "gold3league": range(2500, 2999),
-            "gold2league": range(2000, 2499),
-            "goldleague": range(1500, 1999),
-            "silver3league": range(1200, 1499),
-            "silver2league": range(900, 1199),
-            "silverleague": range(600, 899),
-            "bronze3league": range(400, 599),
-            "bronze2league": range(200, 399),
-            "bronzeleague": range(0, 199)
+            "legendleague": [3000, 5000],
+            "gold3league": [2500, 2999],
+            "gold2league": [2000, 2499],
+            "goldleague": [1500, 1999],
+            "silver3league": [1200, 1499],
+            "silver2league": [900, 1199],
+            "silverleague": [600, 899],
+            "bronze3league": [400, 599],
+            "bronze2league": [200, 399],
+            "bronzeleague": [0, 199]
         }
         for league in mapLeagues.keys():
-            if trophies in list(mapLeagues[league]):
+            if mapLeagues[league][0] <= trophies <= mapLeagues[league][1]:
                 return self.emoji(league)
 
     def getArenaEmoji(self, trophies):
         """Get Arena and League Emoji"""
         arenaMap = {
-            "arena1": range(0, 399),
-            "arena2": range(400, 799),
-            "arena3": range(800, 1099),
-            "arena4": range(1100, 1399),
-            "arena5": range(1400, 1699),
-            "arena6": range(1700, 1999),
-            "arena7": range(2000, 2299),
-            "arena8": range(2300, 2599),
-            "arena9": range(2600, 2999),
-            "arena10": range(3000, 3399),
-            "arena11": range(3400, 3799),
-            "arena12": range(3800, 3999),
-            "league1": range(4000, 4299),
-            "league2": range(4300, 4599),
-            "league3": range(4600, 4899),
-            "league4": range(4900, 5199),
-            "league5": range(5200, 5499),
-            "league6": range(5500, 5799),
-            "league7": range(5800, 6099),
-            "league8": range(6100, 6399),
-            "league9": range(6400, 9999)
+            "arena1": [0, 399],
+            "arena2": [400, 799],
+            "arena3": [800, 1099],
+            "arena4": [1100, 1399],
+            "arena5": [1400, 1699],
+            "arena6": [1700, 1999],
+            "arena7": [2000, 2299],
+            "arena8": [2300, 2599],
+            "arena9": [2600, 2999],
+            "arena10": [3000, 3399],
+            "arena11": [3400, 3799],
+            "arena12": [3800, 3999],
+            "league1": [4000, 4299],
+            "league2": [4300, 4599],
+            "league3": [4600, 4899],
+            "league4": [4900, 5199],
+            "league5": [5200, 5499],
+            "league6": [5500, 5799],
+            "league7": [5800, 6099],
+            "league8": [6100, 6399],
+            "league9": [6400, 9999]
         }
         for arena in arenaMap.keys():
-            if trophies in list(arenaMap[arena]):
+            if arenaMap[arena][0] <= trophies <= arenaMap[arena][1]:
                 return self.emoji(arena)
 
     async def getClanWarTrophies(self, tag):
