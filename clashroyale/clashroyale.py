@@ -72,14 +72,21 @@ class clashroyale:
 
     def getLeagueEmoji(self, trophies):
         """Get clan war League Emoji"""
-        if trophies >= 3000:
-            return self.emoji("legendleague")
-        elif trophies >= 1500:
-            return self.emoji("goldleague")
-        elif trophies >= 600:
-            return self.emoji("silverleague")
-        else:
-            return self.emoji("bronzeleague")
+        mapLeagues = {
+            "legendleague": range(3000, 0),
+            "gold3league": range(2500, 2999),
+            "gold2league": range(2000, 2499),
+            "goldleague": range(1500, 1999),
+            "silver3league": range(1200, 1499),
+            "silver2league": range(900, 1199),
+            "silverleague": range(600, 899),
+            "bronze3league": range(400, 599),
+            "bronze2league": range(200, 399),
+            "bronzeleague": range(0, 199)
+        }
+        for league in mapLeagues.keys():
+            if trophies in list(mapLeagues[league]):
+                return self.emoji(league)
 
     def getArenaEmoji(self, trophies):
         """Get Arena and League Emoji"""
