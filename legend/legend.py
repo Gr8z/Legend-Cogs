@@ -1003,7 +1003,7 @@ class legend:
             if not cr_clanSettings[2]: message += "\n• Clan description is incorrect."
             if not cr_clanSettings[3]: message += "\n• Clan is closed."
 
-            message += "```"
+            message += "```\n\n"
 
         if cr_members_with_no_player_tag:
             message += ":warning: **({})** Players in **{}**, but have **NOT** joined discord: ```• ".format(len(cr_members_with_no_player_tag), clan_name)
