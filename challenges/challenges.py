@@ -199,6 +199,9 @@ class challenges:
             if lock_state:
                 perm = discord.PermissionOverwrite(send_messages=None, read_messages=False)
                 await self.bot.edit_channel_permissions(channel, server.default_role, perm)
+
+            await self.bot.delete_message(msg)
+
             self.active = False
             return
 
