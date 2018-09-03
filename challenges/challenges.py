@@ -480,7 +480,11 @@ class challengeSession():
         endNum = random.randint(startNum + 25, startNum + 100)
         number = random.randint(startNum, endNum)
 
-        embed = discord.Embed(title="", description='A number between {} - {}'.format(startNum, endNum), color=0x0080ff)
+        embed = discord.Embed(title="",
+                              description=("A number between {} - {}\n\n"
+                                           "🔽 — Guess too low\n"
+                                           "🔼 — Guess too high".format(startNum, endNum)),
+                              color=0x0080ff)
         embed.set_author(name="Guess the number")
         embed.set_footer(text=credits, icon_url=creditIcon)
 
