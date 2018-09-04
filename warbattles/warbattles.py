@@ -43,25 +43,10 @@ class warbattles:
             return False
         return True
 
-    async def getLevels(self, deck):
-        """Get common, rare, epic, legendary levels"""
-        levels = 0
-        for card in deck:
-            if card.max_level == 13:
-                levels += card.level
-            elif card.max_level == 11:
-                levels += card.level + 2
-            elif card.max_level == 8:
-                levels += card.level + 5
-            elif card.max_level == 5:
-                levels += card.level + 8
-
-        return levels
-
     async def deckStrength(self, team, opp):
         """Check if deck if underleveled or not"""
-        perc = round((1 - (team / opp)) * 100, 2)
-        return '{0:{1}}%'.format(perc, '+' if perc else '')
+        diff = int(sum(card.level for card in team) - sum(card.level for card in opp))
+        return '{0:{1}}'.format(diff, '+' if diff else '')
 
     async def cleanTime(self, time):
         """Converts time to timestamp"""
@@ -90,13 +75,13 @@ class warbattles:
 
                 for battle in clanBattles:
                     battledata = {"train": 0, "time": await self.cleanTime(battle.battle_time)}
-                    if battledata["time"] > self.moment:
+                    if battledata["time"] < self.moment:
                         if battle.type == "clanWarWarDay" and (battledata["time"] not in self.completed[1]):
                             battledata["tag"] = battle.team[0].tag.strip("#")
                             battledata["name"] = battle.team[0].name
                             battledata["deckLink"] = await self.constants.decklink_url(battle.team[0].cards)
-                            battledata["deckLevels"] = await self.deckStrength(await self.getLevels(battle.team[0].cards),
-                                                                               await self.getLevels(battle.opponent[0].cards))
+                            battledata["deckLevels"] = await self.deckStrength(battle.team[0].cards,
+                                                                               battle.opponent[0].cards)
                             battledata["trophies"] = battle.opponent[0].starting_trophies - battle.team[0].starting_trophies
 
                             for pracBattle in clanBattles:

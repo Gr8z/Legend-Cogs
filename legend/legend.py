@@ -283,24 +283,15 @@ class legend:
             "bronze": 0
         }
         leagueLevels = {
-            "legend": [12, 10, 7, 4],
-            "gold": [11, 9, 6, 3],
-            "silver": [10, 8, 5, 2],
-            "bronze": [9, 7, 4, 1]
+            "legend": 12,
+            "gold": 11,
+            "silver": 10,
+            "bronze": 9
         }
 
         for card in cards:
             for league in leagueLevels.keys():
-                if card.max_level == 13:
-                    overlevel = card.level >= leagueLevels[league][0]
-                elif card.max_level == 11:
-                    overlevel = card.level >= leagueLevels[league][1]
-                elif card.max_level == 8:
-                    overlevel = card.level >= leagueLevels[league][2]
-                elif card.max_level == 5:
-                    overlevel = card.level >= leagueLevels[league][3]
-
-                if overlevel:
+                if card.level >= leagueLevels[league]:
                     readiness[league] += 1
             count += 1
 

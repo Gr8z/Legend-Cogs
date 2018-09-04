@@ -155,36 +155,25 @@ class clashroyale:
         """Calculate clanwar readiness"""
         readiness = {}
         leagueLevels = {
-            "legendary": [12, 10, 7, 4],
-            "gold": [11, 9, 6, 3],
-            "silver": [10, 8, 5, 2],
-            "bronze": [9, 7, 4, 1]
+            "legendary": 12,
+            "gold": 11,
+            "silver": 10,
+            "bronze": 9
         }
 
         for league in leagueLevels.keys():
             readiness[league] = {"name": league.capitalize(),
-                                 "total": 0,
                                  "percent": 0,
                                  "cards": [],
-                                 "levels": "/".join(str(x) for x in leagueLevels[league])}
+                                 "levels": str(leagueLevels[league])}
             count = 0
             for card in cards:
-                if card.max_level == 13:
-                    overlevel = card.level >= leagueLevels[league][0]
-                elif card.max_level == 11:
-                    overlevel = card.level >= leagueLevels[league][1]
-                elif card.max_level == 8:
-                    overlevel = card.level >= leagueLevels[league][2]
-                elif card.max_level == 5:
-                    overlevel = card.level >= leagueLevels[league][3]
-
-                if overlevel:
-                    readiness[league]["total"] += 1
+                if card.level >= leagueLevels[league]:
                     readiness[league]["cards"].append(card.name)
                 count += 1
 
         for levels in readiness.keys():
-            readiness[levels]["percent"] = int((readiness[levels]["total"] / count) * 100)
+            readiness[levels]["percent"] = int((len(readiness[levels]["cards"]) / count) * 100)
 
         readiness["gold"]["cards"] = list(set(readiness["gold"]["cards"]) -
                                           set(readiness["legendary"]["cards"]))
@@ -336,7 +325,7 @@ class clashroyale:
         embed.set_footer(text=credits, icon_url=creditIcon)
 
         for league in leagues.keys():
-            f_title = "{} League ({}%) - {}".format(leagues[league]["name"], leagues[league]["percent"], leagues[league]["levels"])
+            f_title = "{} League (Lvl {}) - {}%".format(leagues[league]["name"], leagues[league]["levels"], leagues[league]["percent"])
             groups = self.grouper(leagues[league]["cards"], 30)
             for index, cards in enumerate(groups):
                 value = ""
