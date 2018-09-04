@@ -753,7 +753,7 @@ class welcome:
 
         embed = discord.Embed(color=discord.Color.red(), description="User Left")
         avatar = member.avatar_url if member.avatar else member.default_avatar_url
-        embed.set_author(name=member.name, icon_url=avatar)
+        embed.set_author(name=member.display_name, icon_url=avatar)
 
         await self.bot.send_message(server.get_channel("374597911436328971"), embed=embed)
 
