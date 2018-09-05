@@ -75,7 +75,7 @@ class warbattles:
 
                 for battle in clanBattles:
                     battledata = {"train": 0, "time": await self.cleanTime(battle.battle_time)}
-                    if battledata["time"] < self.moment:
+                    if battledata["time"] > self.moment:
                         if battle.type == "clanWarWarDay" and (battledata["time"] not in self.completed[1]):
                             battledata["tag"] = battle.team[0].tag.strip("#")
                             battledata["name"] = battle.team[0].name
