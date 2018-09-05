@@ -168,7 +168,7 @@ class clashroyale:
                                  "levels": str(leagueLevels[league])}
             count = 0
             for card in cards:
-                if card.level >= leagueLevels[league]:
+                if await self.constants.get_new_level(card) >= leagueLevels[league]:
                     readiness[league]["cards"].append(card.name)
                 count += 1
 

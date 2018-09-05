@@ -45,7 +45,8 @@ class warbattles:
 
     async def deckStrength(self, team, opp):
         """Check if deck if underleveled or not"""
-        diff = int(sum(card.level for card in team) - sum(card.level for card in opp))
+
+        diff = int(sum(await self.constants.get_new_level(card) for card in team) - sum(await self.constants.get_new_level(card) for card in opp))
         return '{0:{1}}'.format(diff, '+' if diff else '')
 
     async def cleanTime(self, time):

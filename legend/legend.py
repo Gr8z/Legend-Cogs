@@ -158,6 +158,7 @@ class legend:
         self.bot = bot
         self.settings = dataIO.load_json('data/legend/settings.json')
         self.auth = self.bot.get_cog('crtools').auth
+        self.constants = self.bot.get_cog('crtools').constants
         self.tags = self.bot.get_cog('crtools').tags
         self.clans = self.bot.get_cog('crtools').clans
         self.clash = clashroyale.OfficialAPI(self.auth.getOfficialToken(), is_async=True)
@@ -291,7 +292,7 @@ class legend:
 
         for card in cards:
             for league in leagueLevels.keys():
-                if card.level >= leagueLevels[league]:
+                if await self.constants.get_new_level(card) >= leagueLevels[league]:
                     readiness[league] += 1
             count += 1
 

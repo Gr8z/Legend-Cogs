@@ -31,6 +31,18 @@ class constants:
                 return str(card["id"])
         return None
 
+    async def get_new_level(self, card):
+        """Conver the old card levels to the new ones"""
+        newLevel = card.level
+        if card.max_level == 11:
+            newLevel = card.level + 2
+        elif card.max_level == 8:
+            newLevel = card.level + 5
+        elif card.max_level == 5:
+            newLevel = card.level + 8
+
+        return newLevel
+
     async def get_region_key(self, num):
         """Get a region's key name."""
         for region in self.constants["regions"]:
