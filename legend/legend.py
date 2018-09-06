@@ -409,7 +409,10 @@ class legend:
                                     (maxtrophies > personalbest) and
                                     (plyrLeagueCWR >= cwr) and
                                     (trophies - clan.required_trophies < 1200) and
-                                    (clan.type != 'closed')):
+                                    (clan.type != 'closed')) or ((clan.required_trophies < 2000) and
+                                                                 (member_count != 50) and
+                                                                 (2000 < trophies < 4000) and
+                                                                 (clan.type != 'closed')):
                 foundClan = True
                 embed.add_field(name=title, value=desc, inline=False)
 
