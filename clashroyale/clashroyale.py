@@ -213,7 +213,7 @@ class clashroyale:
         if profiledata.clan is not None:
             embed.add_field(name="Clan {}".format(profiledata.role.capitalize()),
                             value="{} {}".format(await self.getClanEmoji(profiledata.clan.tag), profiledata.clan.name), inline=True)
-        embed.add_field(name="Cards Found", value="{} {}/87".format(self.emoji("card"), len(profiledata.cards)), inline=True)
+        embed.add_field(name="Cards Found", value="{} {}/88".format(self.emoji("card"), len(profiledata.cards)), inline=True)
         embed.add_field(name="Favourite Card", value="{} {}".format(self.emoji(profiledata.current_favourite_card.name),
                                                                     profiledata.current_favourite_card.name), inline=True)
         embed.add_field(name="Games Played", value="{} {:,}".format(self.emoji("battle"), profiledata.battle_count), inline=True)
