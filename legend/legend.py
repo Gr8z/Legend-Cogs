@@ -289,7 +289,7 @@ class legend:
             for card in cards:
                 if await self.constants.get_new_level(card) >= leagueLevels[league]:
                     readiness[league] += 1
-                readiness[league] = int((readiness[league] / len(cards)) * 100)
+            readiness[league] = int((readiness[league] / len(cards)) * 100)
 
         return readiness
 
