@@ -166,14 +166,11 @@ class clashroyale:
                                  "percent": 0,
                                  "cards": [],
                                  "levels": str(leagueLevels[league])}
-            count = 0
             for card in cards:
                 if await self.constants.get_new_level(card) >= leagueLevels[league]:
                     readiness[league]["cards"].append(card.name)
-                count += 1
 
-        for levels in readiness.keys():
-            readiness[levels]["percent"] = int((len(readiness[levels]["cards"]) / count) * 100)
+            readiness[league]["percent"] = int((len(readiness[league]["cards"]) / len(cards)) * 100)
 
         readiness["gold"]["cards"] = list(set(readiness["gold"]["cards"]) -
                                           set(readiness["legendary"]["cards"]))

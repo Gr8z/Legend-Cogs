@@ -276,13 +276,7 @@ class legend:
 
     async def clanwarReadiness(self, cards):
         """Calculate clanwar readiness"""
-        count = 0
-        readiness = {
-            "legend": 0,
-            "gold": 0,
-            "silver": 0,
-            "bronze": 0
-        }
+        readiness = {}
         leagueLevels = {
             "legend": 12,
             "gold": 11,
@@ -290,14 +284,12 @@ class legend:
             "bronze": 9
         }
 
-        for card in cards:
-            for league in leagueLevels.keys():
+        for league in leagueLevels.keys():
+            readiness[league] = 0
+            for card in cards:
                 if await self.constants.get_new_level(card) >= leagueLevels[league]:
                     readiness[league] += 1
-            count += 1
-
-        for levels in readiness.keys():
-            readiness[levels] = int((readiness[levels] / count) * 100)
+                readiness[league] = int((readiness[league] / len(cards)) * 100)
 
         return readiness
 
