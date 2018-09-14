@@ -328,7 +328,7 @@ class Race:
                 return await self.bot.say("**{}** entered the race!".format(author.name))
 
         if time.time() - self.cooldown < timer:
-            return await self.bot.say("You need to wait {} minutes before starting another race.".format(int(timer - (time.time() - self.cooldown))/60))
+            return await self.bot.say("You need to wait {} minutes before starting another race.".format(int(timer - (time.time() - self.cooldown)/60)))
 
         if self.bank_check(settings, author):
             bank = self.bot.get_cog('Economy').bank
