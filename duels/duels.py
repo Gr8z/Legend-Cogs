@@ -32,7 +32,7 @@ class duels:
         """
         Calculate the new Elo rating for a player
         """
-        if A <= 0:
+        if (A <= 0) and (score == 0):
             return 0
 
         exp = 1 / (1 + 10 ** ((B - int(A)) / 400))
@@ -377,27 +377,17 @@ class duels:
                     msg = "Congratulations {}, you won the duel against **{}** and recieved **{}** credits!".format(author.mention,
                                                                                                                     battle.opponent[0].name,
                                                                                                                     str(duelBet * 2))
-                    await self.bot.say(msg)
-
                     bank = self.bot.get_cog('Economy').bank
                     pay = bank.get_balance(author) + (duelBet * 2)
                     bank.set_credits(author, pay)
 
-                    return
+                    return await self.bot.say(msg)
                 elif battle.winner == 0:
                     msg = "Sorry, you and **{}** tied the match, try again.".format(battle.opponent[0].name)
-                    await self.bot.say(msg)
-
-                    return
+                    return await self.bot.say(msg)
                 else:
                     msg = "Sorry {}, you lost the duel against **{}**".format(author.mention, battle.opponent[0].name)
-
-                    duelPlayer["DUELID"] = "0"
-                    fileIO(settings_path, "save", self.settings)
-
-                    await self.bot.say(msg)
-
-                    return
+                    return await self.bot.say(msg)
 
         if not msg:
             await self.bot.say("Error: Could not find the duel results, please try again later.")
