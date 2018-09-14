@@ -420,7 +420,7 @@ class Race:
         if data['Race Active']:
             return
 
-        if data['First'] is None:
+        if all(v is None for v in [data['First'], data['Second'], data['Third']]):
             return
 
         try:
@@ -453,8 +453,6 @@ class Race:
         else:
             await self.bot.say("After paying for king's tax, entrance fees, and arena fees, "
                                "you get {} credits.".format(prize))
-        finally:
-            data['Winner'] = None
 
     def bank_check(self, settings, user):
         bank = self.bot.get_cog('Economy').bank
