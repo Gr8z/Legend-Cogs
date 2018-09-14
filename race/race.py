@@ -414,8 +414,8 @@ class Race:
         author = ctx.message.author
         data = self.check_server(author.server)
         settings = self.check_config(author.server)
-        prize_pool = len(data['Players']) * settings['Cost']
-        prize = prize_pool * 2
+        prize_pool = (len(data['Players']) * settings['Cost']) * 2
+        prize = prize_pool
 
         if data['Race Active']:
             return
