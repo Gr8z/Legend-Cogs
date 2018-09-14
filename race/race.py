@@ -276,11 +276,6 @@ class Race:
         self.save_settings()
         await self.bot.say("Mode now set to {}.".format(mode))
 
-    @race.command(name="version")
-    async def _version_race(self):
-        """Displays the version of race"""
-        await self.bot.say("You are running race version {}".format(self.version))
-
     @race.command(name="reset", pass_context=True, hidden=True)
     @checks.admin_or_permissions(manage_server=True)
     async def _reset_race(self, ctx):
@@ -317,8 +312,7 @@ class Race:
 
         channel = ctx.message.channel
         if channel.name != "race":
-            await self.bot.say("You cannot run this command in this channel. Please run this command at #race")
-            return
+            return await self.bot.say("You cannot run this command in this channel. Please run this command at #race")
 
         if data['Race Active']:
             if author.id in data['Players']:
@@ -334,7 +328,7 @@ class Race:
                 return await self.bot.say("**{}** entered the race!".format(author.name))
 
         if time.time() - self.cooldown < timer:
-            return await self.bot.say("You need to wait {} seconds before starting another race.".format(int(timer - (time.time() - self.cooldown))))
+            return await self.bot.say("You need to wait {} minutes before starting another race.".format(int(timer - (time.time() - self.cooldown))/60))
 
         if self.bank_check(settings, author):
             bank = self.bot.get_cog('Economy').bank
