@@ -32,7 +32,7 @@ class Racer:
         self.current = Racer.track + self.animal
 
     def field(self):
-        field = "<:elixir:488709583418687539> **{}** :flag_black:  [{}]".format(self.current, self.user)
+        field = "<:elixir:488709583418687539> **{}** :flag_black:  [{}]".format(self.current, self.user.display_name)
         return field
 
     def get_position(self):
@@ -319,7 +319,7 @@ class Race:
                 return await self.bot.say("You are already in the race!")
             elif not self.bank_check(settings, author):
                 return await self.bot.say("You do not meet the cost of entry. You need atleast {} credits.".format(cost))
-            elif len(data['Players']) == 8:
+            elif len(data['Players']) == 10:
                 return await self.bot.say("There are no more spots left in the race!")
             else:
                 bank = self.bot.get_cog('Economy').bank
@@ -328,7 +328,7 @@ class Race:
                 return await self.bot.say("**{}** entered the race!".format(author.name))
 
         if time.time() - self.cooldown < timer:
-            return await self.bot.say("You need to wait {} minutes before starting another race.".format(int((timer - (time.time() - self.cooldown))/60)))
+            return await self.bot.say("You need to wait {} minutes before starting another race.".format(round((timer - (time.time() - self.cooldown))/60, 2)))
 
         if self.bank_check(settings, author):
             bank = self.bot.get_cog('Economy').bank
@@ -367,12 +367,12 @@ class Race:
         race_msg = await self.bot.say('\u200b'+'\n'+'\n'.join([player.field() for player in racers]))
         await self.run_game(racers, race_msg, data)
 
-        first = ':first_place:  {0}'.format(*data['First'])
+        first = ':first_place:  {0.display_name}'.format(*data['First'])
         fv = '{1}\n{2:.2f}s'.format(*data['First'])
-        second = ':second_place: {0}'.format(*data['Second'])
+        second = ':second_place: {0.display_name}'.format(*data['Second'])
         sv = '{1}\n{2:.2f}s'.format(*data['Second'])
         if data['Third']:
-            third = ':third_place:  {0}'.format(*data['Third'])
+            third = ':third_place:  {0.display_name}'.format(*data['Third'])
             tv = '{1}\n{2:.2f}s'.format(*data['Third'])
         else:
             third = ':third_place:'
@@ -389,6 +389,7 @@ class Race:
         embed.title = "Race Results"
         embed.set_footer(text=credits, icon_url=creditIcon)
         await self.bot.say(embed=embed)
+
         self.game_teardown(data)
 
         self.cooldown = time.time()
