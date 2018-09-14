@@ -415,7 +415,7 @@ class Race:
         data = self.check_server(author.server)
         settings = self.check_config(author.server)
         prize_pool = len(data['Players']) * settings['Cost']
-        prize = prize_pool
+        prize = prize_pool * 2
 
         if data['Race Active']:
             return
@@ -431,7 +431,7 @@ class Race:
                 prize = int(prize_pool * 0.25)
                 data['Second'] = None
             elif data['Third'][0] == author:
-                prize = int(prize_pool * 0.1)
+                prize = int(prize_pool * 0.15)
                 data['Third'] = None
             else:
                 return await self.bot.say("Scram kid. You didn't win nothing yet.")
