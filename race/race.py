@@ -325,7 +325,7 @@ class Race:
                 bank = self.bot.get_cog('Economy').bank
                 bank.withdraw_credits(author, cost)
                 data['Players'][author.id] = {}
-                return await self.bot.say("**{}** entered the race!".format(author.name))
+                return await self.bot.say("**{}** entered the race!".format(author.display_name))
 
         if time.time() - self.cooldown < timer:
             return await self.bot.say("You need to wait {} minutes before starting another race.".format(round((timer - (time.time() - self.cooldown))/60, 2)))
@@ -348,9 +348,9 @@ class Race:
         wait = settings['Time']
 
         await self.bot.edit_role(server, raceRole, mentionable=True)
-        await self.bot.say(":triangular_flag_on_post: A race has begun! Type ``{}race enter`` "
-                           "to join the race! :triangular_flag_on_post:\n{}The {} will "
-                           "start in {} seconds!".format(ctx.prefix, ' ' * 23, raceRole.mention, wait))
+        await self.bot.say(":triangular_flag_on_post: {} has started a race! Type ``{}race enter`` "
+                           "to join! :triangular_flag_on_post:\n{}The {} will "
+                           "begin in {} seconds!".format(author.mention, ctx.prefix, ' ' * 23, raceRole.mention, wait))
         await self.bot.edit_role(server, raceRole, mentionable=False)
 
         await asyncio.sleep(wait)
