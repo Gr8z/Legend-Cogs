@@ -315,6 +315,11 @@ class Race:
         cost = settings["Cost"]
         timer = 600
 
+        channel = ctx.message.channel
+        if channel.name != "race":
+            await self.bot.say("You cannot run this command in this channel. Please run this command at #race")
+            return
+
         if data['Race Active']:
             if author.id in data['Players']:
                 return await self.bot.say("You are already in the race!")
