@@ -5,6 +5,7 @@
 import asyncio
 import random
 import os
+import time
 
 # Discord and Red Utils
 import discord
@@ -14,18 +15,7 @@ from .utils import checks
 from .utils.dataIO import dataIO
 
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
-credits = "Bot by GR8 | Academy"
-
-animals = ((':rabbit2:', 'fast'), (':monkey:', 'fast'), (':cat2:', 'fast'), (':mouse2:', 'slow'),
-           (':chipmunk:', 'fast'), (':rat:', 'fast'), (':dove:', 'fast'), (':bird:', 'fast'),
-           (':dromedary_camel:', 'steady'), (':camel:', 'steady'), (':dog2:', 'steady'),
-           (':poodle:', 'steady'), (':racehorse:', 'steady'), (':ox:', 'abberant'),
-           (':cow2:', 'abberant'), (':elephant:', 'abberant'), (':water_buffalo:', 'abberant'),
-           (':ram:', 'abberant'), (':goat:', 'abberant'), (':sheep:', 'abberant'),
-           (':leopard:', 'predator'), (':tiger2:', 'predator'), (':dragon:', 'special'),
-           (':unicorn:', 'special'), (':turtle:', 'slow'), (':bug:', 'slow'), (':rooster:', 'slow'),
-           (':snail:', 'slow'), (':scorpion:', 'slow'), (':crocodile:', 'slow'), (':pig2:', 'slow'),
-           (':turkey:', 'slow'), (':duck:', 'slow'), (':baby_chick:', 'slow'))
+credits = "Bot by GR8 | Titan"
 
 
 class Racer:
@@ -42,7 +32,7 @@ class Racer:
         self.current = Racer.track + self.animal
 
     def field(self):
-        field = ":carrot: **{}** :flag_black:  [{}]".format(self.current, self.user)
+        field = "<:elixir:488709583418687539> **{}** :flag_black:  [{}]".format(self.current, self.user)
         return field
 
     def get_position(self):
@@ -80,7 +70,7 @@ class Racer:
             else:
                 return random.randint(2, 5) * 3
 
-        elif self.animal == ':unicorn:':
+        elif self.animal == '<:EliteBarbarians:329284880070606861>':
             if self.turn % 3:
                 return random.choice([len('blue'), len('red'), len('green')]) * 3
             else:
@@ -102,6 +92,77 @@ class Race:
         self.system = {}
         self.config = dataIO.load_json('data/race/race.json')
         self.version = "1.1.03"
+        self.cooldown = 0
+
+    def getAminals(self):
+        """Get a list of animal emojis."""
+        return ((self.emoji('Bandit'), 'predator'),
+                (self.emoji('MegaKnight'), 'predator'),
+                (self.emoji('BattleRam'), 'predator'),
+                (self.emoji('IceSpirit'), 'fast'),
+                (self.emoji('FireSpirits'), 'fast'),
+                (self.emoji('GoblinGiant'), 'abberant'),
+                (self.emoji('LavaHound'), 'abberant'),
+                (self.emoji('Golem'), 'slow'),
+                (self.emoji('Giant'), 'slow'),
+                (self.emoji('HogRider'), 'fast'),
+                (self.emoji('PEKKA'), 'predator'),
+                (self.emoji('Goblins'), 'fast'),
+                (self.emoji('SpearGoblins'), 'abberant'),
+                (self.emoji('Princess'), 'abberant'),
+                (self.emoji('Wizard'), 'fast'),
+                (self.emoji('IceWizard'), 'fast'),
+                (self.emoji('ElectroWizard'), 'fast'),
+                (self.emoji('Sparky'), 'slow'),
+                (self.emoji('Miner'), 'abberant'),
+                (self.emoji('Valkyrie'), 'fast'),
+                (self.emoji('GoblinGang'), 'fast'),
+                (self.emoji('RoyalGhost'), 'fast'),
+                (self.emoji('MagicArcher'), 'fast'),
+                (self.emoji('NightWitch'), 'slow'),
+                (self.emoji('InfernoDragon'), 'slow'),
+                (self.emoji('BabyDragon'), 'slow'),
+                (self.emoji('Lumberjack'), 'fast'),
+                (self.emoji('SkeletonArmy'), 'fast'),
+                (self.emoji('Skeletons'), 'fast'),
+                (self.emoji('Guards'), 'fast'),
+                (self.emoji('Hunter'), 'slow'),
+                (self.emoji('DarkPrince'), 'predator'),
+                (self.emoji('Prince'), 'predator'),
+                (self.emoji('Bowler'), 'slow'),
+                (self.emoji('Balloon'), 'slow'),
+                (self.emoji('Witch'), 'abberant'),
+                (self.emoji('CannonCart'), 'abberant'),
+                (self.emoji('Executioner'), 'slow'),
+                (self.emoji('GiantSkeleton'), 'slow'),
+                (self.emoji('IceGolem'), 'slow'),
+                (self.emoji('MegaMinion'), 'slow'),
+                (self.emoji('DartGoblin'), 'fast'),
+                (self.emoji('Musketeer'), 'fast'),
+                (self.emoji('Zappies'), 'fast'),
+                (self.emoji('FlyingMachine'), 'slow'),
+                (self.emoji('MiniPEKKA'), 'abberant'),
+                (self.emoji('ThreeMusketeers'), 'fast'),
+                (self.emoji('RoyalHogs'), 'fast'),
+                (self.emoji('Bats'), 'fast'),
+                (self.emoji('SkeletonBarrel'), 'slow'),
+                (self.emoji('Bomber'), 'fast'),
+                (self.emoji('Minions'), 'fast'),
+                (self.emoji('MinionHorde'), 'fast'),
+                (self.emoji('Archers'), 'fast'),
+                (self.emoji('Knight'), 'slow'),
+                (self.emoji('Barbarians'), 'fast'),
+                (self.emoji('EliteBarbarians'), 'fast'),
+                (self.emoji('RoyalGiant'), 'slow'),
+                (self.emoji('Rascals'), 'abberant'),
+                (self.emoji('RoyalRecruits'), 'steady'))
+
+    def emoji(self, name):
+        """Emoji by name."""
+        for emoji in self.bot.get_all_emojis():
+            if emoji.name == name:
+                return '<:{}:{}>'.format(emoji.name, emoji.id)
+        return ''
 
     @commands.group(pass_context=True, no_pm=True)
     async def race(self, ctx):
@@ -143,6 +204,22 @@ class Race:
         settings['Prize'] = (minimum, maximum)
         self.save_settings()
         await self.bot.say("Prize range set to {}-{}".format(minimum, maximum))
+
+    @setrace.command(name="cost", pass_context=True)
+    @checks.admin_or_permissions(manage_server=True)
+    async def _cost_setrace(self, ctx, num: int):
+        """Set the cost to enter the race
+
+        Returns:
+            Bot replies with invalid mode
+            Bot replies with valid mode and saves choice
+        """
+
+        server = ctx.message.server
+        settings = self.check_config(server)
+        settings['Cost'] = num
+        self.save_settings()
+        await self.bot.say("Cost set to {} credits.".format(num))
 
     @setrace.command(name="time", pass_context=True)
     @checks.admin_or_permissions(manage_server=True)
@@ -213,8 +290,8 @@ class Race:
         self.game_teardown(data, force=True)
         await self.bot.say("Parameters reset.")
 
-    @race.command(name="start", pass_context=True)
-    async def _start_race(self, ctx):
+    @race.command(name="enter", pass_context=True)
+    async def _enter_race(self, ctx):
         """Start an animal race and enter yourself as participant
 
             Returns:
@@ -235,12 +312,32 @@ class Race:
         server = ctx.message.server
         data = self.check_server(author.server)
         settings = self.check_config(author.server)
+        cost = settings["Cost"]
+        timer = 600
 
         if data['Race Active']:
-            return
+            if author.id in data['Players']:
+                return await self.bot.say("You are already in the race!")
+            elif not self.bank_check(settings, author):
+                return await self.bot.say("You do not meet the cost of entry. You need atleast {} credits.".format(cost))
+            elif len(data['Players']) == 8:
+                return await self.bot.say("There are no more spots left in the race!")
+            else:
+                bank = self.bot.get_cog('Economy').bank
+                bank.withdraw_credits(author, cost)
+                data['Players'][author.id] = {}
+                return await self.bot.say("**{}** entered the race!".format(author.name))
+
+        if time.time() - self.cooldown < timer:
+            return await self.bot.say("You need to wait {} seconds before starting another race.".format(int(timer - (time.time() - self.cooldown))))
+
+        if self.bank_check(settings, author):
+            bank = self.bot.get_cog('Economy').bank
+            bank.withdraw_credits(author, cost)
+        else:
+            return await self.bot.say("You do not meet the cost of entry. You need atleast {} credits.".format(cost))
 
         role_name = "Race"
-
         raceRole = discord.utils.get(server.roles, name=role_name)
         if raceRole is None:
             await self.bot.create_role(server, name=role_name)
@@ -252,9 +349,9 @@ class Race:
         wait = settings['Time']
 
         await self.bot.edit_role(server, raceRole, mentionable=True)
-        await self.bot.say(":triangular_flag_on_post: A race has begun! Type {}race enter "
+        await self.bot.say(":triangular_flag_on_post: A race has begun! Type ``{}race enter`` "
                            "to join the race! :triangular_flag_on_post:\n{}The {} will "
-                           "begin in {} seconds!".format(ctx.prefix, ' ' * 23, raceRole.mention, wait))
+                           "start in {} seconds!".format(ctx.prefix, ' ' * 23, raceRole.mention, wait))
         await self.bot.edit_role(server, raceRole, mentionable=False)
 
         await asyncio.sleep(wait)
@@ -265,10 +362,12 @@ class Race:
 
         data['Race Start'] = True
 
+        perm = discord.PermissionOverwrite(send_messages=False, read_messages=False)
+        await self.bot.edit_channel_permissions(ctx.message.channel, server.default_role, perm)
+
         race_msg = await self.bot.say('\u200b'+'\n'+'\n'.join([player.field() for player in racers]))
         await self.run_game(racers, race_msg, data)
 
-        footer = "Type {}race claim to receive prize money. You must claim it before the next race!"
         first = ':first_place:  {0}'.format(*data['First'])
         fv = '{1}\n{2:.2f}s'.format(*data['First'])
         second = ':second_place: {0}'.format(*data['Second'])
@@ -280,7 +379,9 @@ class Race:
             third = ':third_place:'
             tv = '--\n--'
 
-        await self.bot.say("{} is the winner!".format(data['Winner'].mention))
+        perm = discord.PermissionOverwrite(send_messages=None, read_messages=False)
+        await self.bot.edit_channel_permissions(ctx.message.channel, server.default_role, perm)
+
         embed = discord.Embed(colour=0x00CC33)
         embed.add_field(name=first, value=fv)
         embed.add_field(name=second, value=sv)
@@ -291,33 +392,7 @@ class Race:
         await self.bot.say(embed=embed)
         self.game_teardown(data)
 
-    @race.command(name="enter", pass_context=True)
-    async def _enter_race(self, ctx):
-        """Enter an animal race
-
-        Returns:
-            Text informing the user they have entered the race.
-            If they cannot join for any reason (look at notes) then
-            it will return silently with no response.
-
-        Notes:
-            Users cannot join if a race is not active, has 5 (exluding the bot)
-            or more players, or is already in the race.
-        """
-        author = ctx.message.author
-        data = self.check_server(author.server)
-
-        if data['Race Start']:
-            return
-        elif not data['Race Active']:
-            return
-        elif author.id in data['Players']:
-            return
-        elif len(data['Players']) == 8:
-            return
-        else:
-            data['Players'][author.id] = {}
-            await self.bot.say("**{}** entered the race!".format(author.name))
+        self.cooldown = time.time()
 
     @race.command(name="claim", pass_context=True)
     async def _claim_race(self, ctx):
@@ -339,19 +414,31 @@ class Race:
         author = ctx.message.author
         data = self.check_server(author.server)
         settings = self.check_config(author.server)
+        prize_pool = len(data['Players']) * settings['Cost']
+        prize = prize_pool
 
         if data['Race Active']:
             return
 
-        if data['Winner'] != author:
+        try:
+            if data['First'][0] == author:
+                prize = int(prize_pool * 0.5)
+                data['First'] = None
+            elif data['Second'][0] == author:
+                prize = int(prize_pool * 0.25)
+                data['Second'] = None
+            elif data['Third'][0] == author:
+                prize = int(prize_pool * 0.1)
+                data['Third'] = None
+            else:
+                return await self.bot.say("Scram kid. You didn't win nothing yet.")
+        except TypeError:
             return await self.bot.say("Scram kid. You didn't win nothing yet.")
+
         try:
             bank = self.bot.get_cog('Economy').bank
         except AttributeError:
             return await self.bot.say("Economy is not loaded.")
-
-        prize_range = settings['Prize']
-        prize = random.randint(*prize_range)
 
         try:  # Because people will play games for money without a fucking account smh
             bank.deposit_credits(author, prize)
@@ -361,10 +448,22 @@ class Race:
                                "account.\nTo teach you a lesson, your winnings are mine this "
                                "time. Now go register!")
         else:
-            await self.bot.say("After paying for animal feed, entrance fees, track fees, "
+            await self.bot.say("After paying for king's tax, entrance fees, and arena fees, "
                                "you get {} credits.".format(prize))
         finally:
             data['Winner'] = None
+
+    def bank_check(self, settings, user):
+        bank = self.bot.get_cog('Economy').bank
+        amount = settings["Cost"]
+        if bank.account_exists(user):
+            try:
+                if bank.can_spend(user, amount):
+                    return True
+                else:
+                    return False
+            except:
+                return False
 
     def check_server(self, server):
         if server.id in self.system:
@@ -379,19 +478,19 @@ class Race:
         if server.id in self.config['Servers']:
             return self.config['Servers'][server.id]
         else:
-            self.config['Servers'][server.id] = {'Prize': (1, 100), 'Mode': 'standard', 'Time': 60}
+            self.config['Servers'][server.id] = {'Prize': (1, 100), 'Cost': 500, 'Mode': 'standard', 'Time': 60}
             self.save_settings()
             return self.config['Servers'][server.id]
 
     def game_teardown(self, data, force=False):
         if data['Winner'] == self.bot.user or force:
             data['Winner'] = None
+            data['First'] = None
+            data['Second'] = None
+            data['Third'] = None
+            data['Players'].clear()
         data['Race Active'] = False
         data['Race Start'] = False
-        data['First'] = None
-        data['Second'] = None
-        data['Third'] = None
-        data['Players'].clear()
 
     def save_settings(self):
         dataIO.save_json('data/race/race.json', self.config)
@@ -403,12 +502,12 @@ class Race:
         if mode == 'zoo':
 
             if len(data['Players']) == 1:
-                bot_set = random.choice(animals)
+                bot_set = random.choice(self.getAminals())
                 racers = [Racer(bot_set[0], bot_set[1], self.bot.user)]
 
             for user in data['Players']:
                 mobj = author.server.get_member(user)
-                animal_set = random.choice(animals)
+                animal_set = random.choice(self.getAminals())
                 racers.append(Racer(animal_set[0], animal_set[1], mobj))
         else:
             animal_set = (":turtle:", "slow")

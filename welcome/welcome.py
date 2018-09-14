@@ -746,7 +746,7 @@ class welcome:
         if member in server.members:
             menu_name = "leave_alone"
             await self.load_menu(member, menu_name)
-            self.user_history[member.id]["history"].append(menu_name)
+            self.user_history[member.id] = {"history": ["main", menu_name], "data": {}}
 
     async def on_member_remove(self, member):
         server = member.server
@@ -783,6 +783,11 @@ class welcome:
             [p]savetag #CRRYRPCC
         """
         member = ctx.message.author
+
+        if not ctx.message.channel.is_private:
+            return await self.bot.say("Error, please use {}save command.".format(ctx.prefix))
+
+        await self.bot.type()
 
         profiletag = await self.tags.formatTag(profiletag)
 

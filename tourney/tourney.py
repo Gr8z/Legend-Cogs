@@ -106,7 +106,7 @@ class tournament:
             maxplayers = tourney.max_players
             createTime = tourney.create_time
 
-            if (((int(time.time()) - createTime) < 10800) and ((joined + 1) < maxplayers)):
+            if (((int(time.time()) - createTime) < 10800) and ((joined + 1) < maxplayers) and (maxplayers < 1000)):
 
                 try:
                     tourneyAPI = await self.clash.get_tournament(tag)

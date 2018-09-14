@@ -28,7 +28,7 @@ If you want to see this bot in action, join the LeGeND Family Discord at [legend
  * **fourinarow** - Four in a row game with additional features, post from Red-Cogs.
  * **academy** - Coaching command for LeGeND Family.
  * **deck** - Clash Royale deck management system with additional features, port from SML-Cogs.
- * **duels** - Clash Royale 1v1 duels with credit bets.
+ * **duels** - Clash Royale 1v1 duels with credit bets with its own elo system.
  * **warlog** - Clash Royale Clan War Logs using images.
  * **warbattles** - Clash Royale Clan War Attack Logs using images. (deck cog required)
  * **fmod** - Advanced Warning system by RSNFreud.

@@ -28,6 +28,16 @@ class duels:
         self.clash = clashroyale.OfficialAPI(self.auth.getOfficialToken(), is_async=True)
         self.active = False
 
+    def elo_rating(self, A, B, score, k=32):
+        """
+        Calculate the new Elo rating for a player
+        """
+        if A <= 0:
+            return 0
+
+        exp = 1 / (1 + 10 ** ((B - int(A)) / 400))
+        return int(A + k * (score - exp))
+
     def account_check(self, id):
         """Check if there is an account made"""
         try:
@@ -60,7 +70,7 @@ class duels:
         topScore = []
         if len(self.settings["USERS"]) >= 1:
             for p in self.settings["USERS"]:
-                points = self.settings["USERS"][p]["WON"]
+                points = self.settings["USERS"][p]["SCORE"]
                 userName = self.settings["USERS"][p]["NAME"].encode("ascii", errors="ignore").decode()
                 topScore.append((p, points, userName.split('|', 1)[0]))
             topScore = sorted(topScore, key=itemgetter(1), reverse=True)
@@ -113,6 +123,7 @@ class duels:
 
             self.settings["USERS"][author.id] = {
                 "WON": 0,
+                "SCORE": 0,
                 "DUELID": "0",
                 "ID": author.id,
                 "NAME": author.display_name,
@@ -178,11 +189,11 @@ class duels:
         embed.set_author(name=profiledata.name + " ("+profiledata.tag+")", icon_url=await self.constants.get_clan_image(profiledata))
         embed.set_thumbnail(url="https://imgur.com/9DoEq22.jpg")
         embed.add_field(name="Duel Wins", value="{} {}".format(self.emoji("battle"), duelPlayer['WON']), inline=True)
+        embed.add_field(name="Duel Score", value="{} {}".format(self.emoji("crtrophy"), duelPlayer['SCORE']), inline=True)
         embed.add_field(name="Trophies", value="{} {:,}".format(self.emoji(arenaFormat), profiledata.trophies), inline=True)
         if profiledata.clan is not None:
             embed.add_field(name="Clan {}".format(profiledata.role.capitalize()),
                             value="{} {}".format(self.emoji("clan"), profiledata.clan.name), inline=True)
-        embed.add_field(name="Challenge Max Wins", value="{} {}".format(self.emoji("tourney"), profiledata.challenge_max_wins), inline=True)
         embed.set_footer(text=credits, icon_url=creditIcon)
 
         if privateDuel is None:
@@ -274,7 +285,6 @@ class duels:
         duelPlayers = self.settings["DUELS"][duelID]["PLAYERS"]
         duelBet = self.settings["DUELS"][duelID]["BET"]
         privateDuel = self.settings["DUELS"][duelID]["PRIVATE"]
-        max_trophies = 0
 
         if duelPlayers[0] == author.id:
             return await self.bot.say("Sorry, You cannot duel yourself.")
@@ -289,29 +299,18 @@ class duels:
         if not self.account_check(author.id):
             return await self.bot.say("You need to register before accepting a duel, type ``{}duel register``.".format(ctx.prefix))
 
-        duelPlayers.append(author.id)
-        for player in duelPlayers:
-            try:
-                profiledata = await self.clash.get_player(self.settings['USERS'][player]["TAG"])
-                if max_trophies == 0:
-                    max_trophies = profiledata.best_trophies
-                else:
-                    if (max_trophies + 600) < profiledata.best_trophies:
-                        return await self.bot.say("Sorry, your trophies are too high for this duel.")
-                        duelPlayers.remove(author.id)
-            except clashroyale.RequestError:
-                duelPlayers.remove(author.id)
-                return await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
+        if (self.settings['USERS'][duelPlayers[0]]["SCORE"] + 600) < self.settings['USERS'][author.id]["SCORE"]:
+            return await self.bot.say("Sorry, your duel score is too high, ask your opponent to accept your own duel instead.")
 
         await self.bot.say("{} Are you sure you want to accept the bet of {} credits? (Yes/No)".format(author.mention, str(duelBet)))
         answer = await self.bot.wait_for_message(timeout=15, author=author)
 
         if answer is None or "yes" not in answer.content.lower():
-            duelPlayers.remove(author.id)
             return
 
         bank = self.bot.get_cog('Economy').bank
         bank.withdraw_credits(author, duelBet)
+        duelPlayers.append(author.id)
 
         duelPlayers = self.settings["DUELS"][duelID]["PLAYERS"]
 
@@ -339,6 +338,7 @@ class duels:
             return await self.bot.say("You need to register before claiming your bet, type ``{}duel register``.".format(ctx.prefix))
 
         duelPlayer = self.settings['USERS'][author.id]
+        duelPlayerOpp = None
         duelID = duelPlayer["DUELID"]
 
         if int(duelID) == 0:
@@ -350,6 +350,8 @@ class duels:
 
         for player in duelPlayers:
             playerTags.append(self.settings['USERS'][player]["TAG"])
+            if player != duelPlayer["ID"]:
+                duelPlayerOpp = self.settings['USERS'][player]
 
         await self.bot.type()
 
@@ -365,7 +367,9 @@ class duels:
                 if battle.winner > 0:
 
                     duelPlayer["WON"] += 1
-                    duelPlayer["DUELID"] = "0"
+                    duelPlayer["SCORE"] += self.elo_rating(duelPlayer["SCORE"], duelPlayerOpp["SCORE"], 1)
+                    duelPlayerOpp["SCORE"] += self.elo_rating(duelPlayerOpp["SCORE"], duelPlayer["SCORE"], 0)
+                    duelPlayer["DUELID"], duelPlayerOpp["DUELID"] = "0", "0"
                     self.settings["DUELS"][duelID]["WINNER"] = author.id
 
                     fileIO(settings_path, "save", self.settings)
@@ -412,7 +416,7 @@ class duels:
             raise
             data = False
         # Put players and their earned points in to a table.
-        msgHeader = "{}\n```erlang\nRank   |   Username         |  Wins\n----------------------------------\n".format(user.mention)
+        msgHeader = "{}\n```erlang\nRank   |   Username         |  Score\n----------------------------------\n".format(user.mention)
         if data and playerAmount >= 1:
             pages = []
             totalPages = 0

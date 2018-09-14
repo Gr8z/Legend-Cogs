@@ -1,8 +1,8 @@
 @echo off
 
-mklink D:\Red-DiscordBot\cogs\%1.py D:\Scripts\LeGeND-Cogs\%1\%1.py
+mklink C:\Scripts\Red-DiscordBot\cogs\%1.py C:\Scripts\LeGeND-Cogs\%1\%1.py
 
-set source=D:\Red-DiscordBot\data\%1
-set target=D:\Scripts\LeGeND-Cogs\%1\data
+set source=C:\Scripts\Red-DiscordBot\data\%1
+set target=C:\Scripts\LeGeND-Cogs\%1\data
 
 mklink /d %source% %target%
