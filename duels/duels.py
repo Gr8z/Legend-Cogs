@@ -149,8 +149,8 @@ class duels:
         if self.active:
             return await self.bot.say("Another duel is already in progress, type ``{}duel accept``.".format(ctx.prefix))
 
-        if bet < 5000:
-            return await self.bot.say("Your bet is too low, minimum credits for a duel are 5000.")
+        if bet < 2000:
+            return await self.bot.say("Your bet is too low, minimum credits for a duel are 2000.")
 
         if bet > 900000:
             return await self.bot.say("Your bet is too high, maximum credits for a duel are 900000.")
