@@ -361,24 +361,24 @@ class Race:
 
         data['Race Start'] = True
 
-        perm = discord.PermissionOverwrite(send_messages=False, read_messages=False)
+        perm = discord.PermissionOverwrite(send_messages=False)
         await self.bot.edit_channel_permissions(ctx.message.channel, server.default_role, perm)
 
         race_msg = await self.bot.say('\u200b'+'\n'+'\n'.join([player.field() for player in racers]))
         await self.run_game(racers, race_msg, data)
 
         first = ':first_place:  {0.display_name}'.format(*data['First'])
-        fv = '{1}\n{2:.2f}s'.format(*data['First'])
+        fv = '{1} {2:.2f}s'.format(*data['First'])
         second = ':second_place: {0.display_name}'.format(*data['Second'])
-        sv = '{1}\n{2:.2f}s'.format(*data['Second'])
+        sv = '{1} {2:.2f}s'.format(*data['Second'])
         if data['Third']:
             third = ':third_place:  {0.display_name}'.format(*data['Third'])
-            tv = '{1}\n{2:.2f}s'.format(*data['Third'])
+            tv = '{1} {2:.2f}s'.format(*data['Third'])
         else:
             third = ':third_place:'
-            tv = '--\n--'
+            tv = '--'
 
-        perm = discord.PermissionOverwrite(send_messages=None, read_messages=False)
+        perm = discord.PermissionOverwrite(send_messages=None)
         await self.bot.edit_channel_permissions(ctx.message.channel, server.default_role, perm)
 
         embed = discord.Embed(colour=0x00CC33)
@@ -424,15 +424,17 @@ class Race:
             return await self.bot.say("There is nothing to collect.")
 
         if data['First'] is not None:
-            if data['First'][0] == author:
+            if data['First'][0].id == author.id:
                 prize = int(prize_pool * 0.5)
                 data['First'] = None
-        elif data['Second'] is not None:
-            if data['Second'][0] == author:
+
+        if data['Second'] is not None:
+            if data['Second'][0].id == author.id:
                 prize = int(prize_pool * 0.25)
                 data['Second'] = None
-        elif data['Third'] is not None:
-            if data['Third'][0] == author:
+
+        if data['Third'] is not None:
+            if data['Third'][0].id == author.id:
                 prize = int(prize_pool * 0.15)
                 data['Third'] = None
 
@@ -453,7 +455,7 @@ class Race:
                                "time. Now go register!")
         else:
             await self.bot.say("After paying for king's tax, entrance fees, and arena fees, "
-                               "you get {} credits.".format(prize))
+                               "you get **{}** credits.".format(prize))
 
     def bank_check(self, settings, user):
         bank = self.bot.get_cog('Economy').bank
