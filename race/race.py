@@ -421,21 +421,22 @@ class Race:
             return
 
         if all(v is None for v in [data['First'], data['Second'], data['Third']]):
-            return
+            return await self.bot.say("There is nothing to collect.")
 
-        try:
+        if data['First'] is not None:
             if data['First'][0] == author:
                 prize = int(prize_pool * 0.5)
                 data['First'] = None
-            elif data['Second'][0] == author:
+        elif data['Second'] is not None:
+            if data['Second'][0] == author:
                 prize = int(prize_pool * 0.25)
                 data['Second'] = None
-            elif data['Third'][0] == author:
+        elif data['Third'] is not None:
+            if data['Third'][0] == author:
                 prize = int(prize_pool * 0.15)
                 data['Third'] = None
-            else:
-                return await self.bot.say("Scram kid. You didn't win nothing yet.")
-        except TypeError:
+
+        if prize == prize_pool:
             return await self.bot.say("Scram kid. You didn't win nothing yet.")
 
         try:
