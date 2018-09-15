@@ -325,9 +325,10 @@ class duels:
         await self.bot.say(("**DUEL STARTED** — {} vs {} ({} credits)```"
                             "1. Send your friend links below for your opponent and spectators.\n"
                             "2. Duel each other once using friendly battle.\n"
-                            "3. Type !duel claim after the game to recieve your credits.```".format(userOne.mention,
-                                                                                                    userTwo.mention,
-                                                                                                    str(duelBet*2))))
+                            "3. Type {}duel claim after the game to receive your credits.```".format(userOne.mention,
+                                                                                                     userTwo.mention,
+                                                                                                     str(duelBet*2),
+                                                                                                     ctx.prefix)))
 
     @duel.command(pass_context=True)
     async def claim(self, ctx):
