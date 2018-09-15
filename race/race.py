@@ -361,7 +361,7 @@ class Race:
 
         data['Race Start'] = True
 
-        perm = discord.PermissionOverwrite(send_messages=False)
+        perm = discord.PermissionOverwrite(send_messages=False, read_messages=False)
         await self.bot.edit_channel_permissions(ctx.message.channel, server.default_role, perm)
 
         race_msg = await self.bot.say('\u200b'+'\n'+'\n'.join([player.field() for player in racers]))
@@ -378,7 +378,7 @@ class Race:
             third = ':third_place:'
             tv = '--'
 
-        perm = discord.PermissionOverwrite(send_messages=None)
+        perm = discord.PermissionOverwrite(send_messages=None, read_messages=False)
         await self.bot.edit_channel_permissions(ctx.message.channel, server.default_role, perm)
 
         embed = discord.Embed(colour=0x00CC33)
