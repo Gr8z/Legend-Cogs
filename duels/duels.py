@@ -368,8 +368,8 @@ class duels:
                 if battle.winner > 0:
 
                     duelPlayer["WON"] += 1
-                    duelPlayer["SCORE"] += self.elo_rating(duelPlayer["SCORE"], duelPlayerOpp["SCORE"], 1)
-                    duelPlayerOpp["SCORE"] += self.elo_rating(duelPlayerOpp["SCORE"], duelPlayer["SCORE"], 0)
+                    duelPlayer["SCORE"] = self.elo_rating(duelPlayer["SCORE"], duelPlayerOpp["SCORE"], 1)
+                    duelPlayerOpp["SCORE"] = self.elo_rating(duelPlayerOpp["SCORE"], duelPlayer["SCORE"], 0)
                     duelPlayer["DUELID"], duelPlayerOpp["DUELID"] = "0", "0"
                     self.settings["DUELS"][duelID]["WINNER"] = author.id
 
