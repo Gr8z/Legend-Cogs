@@ -18,6 +18,18 @@ creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
 
 
+class PluralDict(dict):
+    def __missing__(self, key):
+        if '(' in key and key.endswith(')'):
+            key, rest = key.split('(', 1)
+            value = super().__getitem__(key)
+            suffix = rest.rstrip(')').split(',')
+            if len(suffix) == 1:
+                suffix.insert(0, '')
+            return suffix[0] if value <= 1 else suffix[1]
+        raise KeyError(key)
+
+
 class Racer:
 
     track = '•   ' * 20
@@ -328,7 +340,7 @@ class Race:
                 return await self.bot.say("**{}** entered the race!".format(author.display_name))
 
         if time.time() - self.cooldown < timer:
-            return await self.bot.say("You need to wait {} minutes before starting another race.".format(round((timer - (time.time() - self.cooldown))/60, 2)))
+            return await self.bot.say("You need to wait {} before starting another race.".format(self.time_format(int(timer - (time.time() - self.cooldown)))))
 
         if self.bank_check(settings, author):
             bank = self.bot.get_cog('Economy').bank
@@ -468,6 +480,30 @@ class Race:
                     return False
             except:
                 return False
+
+    def time_format(self, seconds):
+        m, s = divmod(seconds, 60)
+        h, m = divmod(m, 60)
+        data = PluralDict({'hour': h, 'minute': m, 'second': s})
+        if h > 0:
+            fmt = "{hour} hour{hour(s)}"
+            if data["minute"] > 0 and data["second"] > 0:
+                fmt += ", {minute} minute{minute(s)}, and {second} second{second(s)}"
+            if data["second"] > 0 == data["minute"]:
+                fmt += ", and {second} second{second(s)}"
+            msg = fmt.format_map(data)
+        elif h == 0 and m > 0:
+            if data["second"] == 0:
+                fmt = "{minute} minute{minute(s)}"
+            else:
+                fmt = "{minute} minute{minute(s)}, and {second} second{second(s)}"
+            msg = fmt.format_map(data)
+        elif m == 0 and h == 0 and s > 0:
+            fmt = "{second} second{second(s)}"
+            msg = fmt.format_map(data)
+        else:
+            msg = "No Cooldown"
+        return msg
 
     def check_server(self, server):
         if server.id in self.system:
