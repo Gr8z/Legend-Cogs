@@ -32,11 +32,9 @@ class duels:
         """
         Calculate the new Elo rating for a player
         """
-        if (A <= 0) and (score == 0):
-            return 0
 
         exp = 1 / (1 + 10 ** ((B - int(A)) / 400))
-        return int(A + k * (score - exp))
+        return max(0, int(A + k * (score - exp)))
 
     def account_check(self, id):
         """Check if there is an account made"""
