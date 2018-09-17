@@ -1198,7 +1198,7 @@ class legend:
     @commands.command(pass_context=True, no_pm=True)
     @commands.has_any_role(*BOTCOMMANDER_ROLES)
     async def platoon(self, ctx, member: discord.Member):
-        """Tpgg;e pPlatoon Role for Brawlers"""
+        """Toggle Platoon Role for Brawlers"""
         server = ctx.message.server
         legendServer = ["374596069989810176"]
 
