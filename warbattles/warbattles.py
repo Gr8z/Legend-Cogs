@@ -52,7 +52,7 @@ class warbattles:
             teamCards += await self.constants.get_new_level(team[x])
             oppCards += await self.constants.get_new_level(opp[x])
 
-        diff = teamCards - oppCards
+        diff = oppCards - teamCards
         return '{0:{1}}'.format(diff, '+' if diff else '')
 
     async def cleanTime(self, time):
