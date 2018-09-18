@@ -442,12 +442,12 @@ class Race:
 
         if data['Second'] is not None:
             if data['Second'][0].id == author.id:
-                prize = int(prize_pool * 0.25)
+                prize = int(prize_pool * 0.20)
                 data['Second'] = None
 
         if data['Third'] is not None:
             if data['Third'][0].id == author.id:
-                prize = int(prize_pool * 0.15)
+                prize = int(prize_pool * 0.10)
                 data['Third'] = None
 
         if prize == prize_pool:
