@@ -764,7 +764,7 @@ class welcome:
 
     async def on_member_join(self, member):
         server = member.server
-        if server.id != "363728974821457921":
+        if server.id != "374596069989810176":
             return
 
         await self.load_menu(member, "main")
