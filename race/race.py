@@ -384,9 +384,11 @@ class Race:
         second = ':second_place: {0.display_name}'.format(*data['Second'])
         sv = '{1} {2:.2f}s'.format(*data['Second'])
         if data['Third']:
+            mention = "{} {} {}".format(data['First'][0].mention, data['Second'][0].mention, data['Third'][0].mention)
             third = ':third_place:  {0.display_name}'.format(*data['Third'])
             tv = '{1} {2:.2f}s'.format(*data['Third'])
         else:
+            mention = "{} {}".format(data['First'][0].mention, data['Second'][0].mention)
             third = ':third_place:'
             tv = '--'
 
@@ -400,7 +402,7 @@ class Race:
         embed.add_field(name='-' * 70, value='Type ``!race claim`` to receive prize money. \nType ``!togglerole race`` to get notified on the next race.')
         embed.title = "Race Results"
         embed.set_footer(text=credits, icon_url=creditIcon)
-        await self.bot.say(embed=embed)
+        await self.bot.say(content=mention, embed=embed)
 
         self.game_teardown(data)
 

@@ -297,7 +297,7 @@ dm_menu = {
                 "name": "I want to join a clan.",
                 "emoji": Letter.b,
                 "execute": {
-                    "menu": "join_clan"
+                    "menu": "academy_coaching"
                 }
             },
             {
@@ -309,6 +309,36 @@ dm_menu = {
             }
         ],
         "go_back": False,
+        "track": True
+    },
+    "academy_coaching": {
+        "embed": embed(title="Are you interested in coaching?", color=discord.Color.orange(),
+                       description="We provide all of our members "
+                                   "with free coaching and training."),
+        "options": [
+            {
+                "name": "I am interested in coaching.",
+                "emoji": Letter.a,
+                "execute": {
+                    "menu": "join_clan"
+                }
+            },
+            {
+                "name": "I want to coach people.",
+                "emoji": Letter.b,
+                "execute": {
+                    "menu": "join_clan"
+                }
+            },
+            {
+                "name": "Not interested.",
+                "emoji": Letter.c,
+                "execute": {
+                    "menu": "join_clan"
+                }
+            }
+        ],
+        "go_back": True,
         "track": True
     },
     "join_clan": {
@@ -711,6 +741,10 @@ class welcome:
         if "clan" in data:
             embed.add_field(name="Current clan:", value=data["clan"], inline=False)
 
+        if "academy_coaching" in data:
+            if data["academy_coaching"] != "Not interested.":
+                embed.add_field(name="Coaching:", value=data["academy_coaching"], inline=False)
+
         if "join_clan" in data:
             if data["join_clan"] != "I am not sure, I want to talk to a human.":
                 embed.add_field(name="Clan Preference:", value=data["join_clan"], inline=False)
@@ -730,7 +764,7 @@ class welcome:
 
     async def on_member_join(self, member):
         server = member.server
-        if server.id != "374596069989810176":
+        if server.id != "363728974821457921":
             return
 
         await self.load_menu(member, "main")
