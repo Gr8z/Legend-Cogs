@@ -1284,7 +1284,6 @@ class legend:
         await self.bot.say(datetime.datetime.now(datetime.timezone.utc).strftime("%H:%M GMT"))
 
     @commands.command(pass_context=True, name="embed")
-    @checks.mod_or_permissions(administrator=True)
     async def _reactrole_embed(self, ctx):
         """Dummy embed (do not use)"""
         server = ctx.message.server
