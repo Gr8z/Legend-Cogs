@@ -1283,6 +1283,23 @@ class legend:
         """Get the currect GMT time"""
         await self.bot.say(datetime.datetime.now(datetime.timezone.utc).strftime("%H:%M GMT"))
 
+    @commands.command(pass_context=True, name="embed")
+    @checks.mod_or_permissions(administrator=True)
+    async def _reactrole_embed(self, ctx):
+        """Dummy embed (do not use)"""
+        server = ctx.message.server
+        embed = discord.Embed(title="Notification Roles", description="React with emojis to choose which notifications you would like to turn on!", color=0x0080ff)
+        embed.add_field(name="Challenges", value=f":hourglass: — When a Word Challenge Game starts in {server.get_channel('405062108175269898').mention}", inline=False)
+        embed.add_field(name="Heist", value=f":bank: — When a Heist is planned in {server.get_channel('381338682298466315').mention}", inline=False)
+        embed.add_field(name="Duels", value=f"<:battle:466243249149837314> — When a player is looking for a Clash Royale battle in {server.get_channel('430083671429611530').mention}", inline=False)
+        embed.add_field(name="Giveaways", value=f"<:coin:380832316932489268> — When a giveaway for credits/games is hosted in {server.get_channel('421623464567504896').mention}", inline=False)
+        embed.add_field(name="Tournaments", value=f"<:tourney:466243255504470036> — When a 100+ player tournament is hosted in {server.get_channel('374597050530136064').mention}", inline=False)
+        embed.add_field(name="Race", value=f":race_car: — When a CR Race starts in {server.get_channel('490125656223514627').mention}", inline=False)
+        embed.set_footer(text=credits, icon_url=creditIcon)
+
+        embed2 = await self.bot.get_message("426697128883257344", "477582487162454056")
+        await self.bot.edit_message(embed2, embed=embed)
+
     @commands.command(pass_context=True, no_pm=True)
     async def cwstats(self, ctx, tag):
         """Tournament/Clanwar Statistics generator"""
@@ -1295,9 +1312,9 @@ class legend:
 
         try:
             tourney = await self.clash.get_tournament(tag)
-        except clashroyaleAPI.NotFoundError:
+        except clashroyale.NotFoundError:
             return await self.bot.say("Error: Tournament not found. Please double check your #TAG")
-        except clashroyaleAPI.RequestError:
+        except clashroyale.RequestError:
             return await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 
         clanwar_dict = {}
