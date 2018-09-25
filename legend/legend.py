@@ -1296,7 +1296,7 @@ class legend:
         embed.add_field(name="Race", value=f":race_car: — When a CR Race starts in {server.get_channel('490125656223514627').mention}", inline=False)
         embed.set_footer(text=credits, icon_url=creditIcon)
 
-        embed2 = await self.bot.get_message("426697128883257344", "477582487162454056")
+        embed2 = await self.bot.get_message(server.get_channel("426697128883257344"), "477582487162454056")
         await self.bot.edit_message(embed2, embed=embed)
 
     @commands.command(pass_context=True, no_pm=True)
