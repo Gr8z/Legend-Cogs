@@ -892,6 +892,63 @@ class legend:
 
     @commands.command(pass_context=True, no_pm=True)
     @commands.has_any_role(*BOTCOMMANDER_ROLES)
+    async def changeclan(self, ctx, member: discord.Member=None):
+        """ Change clan of a user of their IGN + Clan"""
+
+        member = member or ctx.message.author
+
+        try:
+            await self.bot.type()
+            profiletag = await self.tags.getTag(member.id)
+            profiledata = await self.clash.get_player(profiletag)
+            if profiledata.clan is None:
+                clantag = "none"
+            else:
+                clantag = profiledata.clan.tag.strip("#")
+            ign = profiledata.name
+        except clashroyale.RequestError:
+            return await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
+        except KeyError:
+            return await self.bot.say("You must assosiate a tag with this member first using ``{}save #tag @member``".format(ctx.prefix))
+
+        membership = await self.clans.verifyMembership(clantag)
+
+        if membership:
+            mymessage = ""
+            savekey = await self.clans.getClanKey(clantag)
+
+            rolesToRemove = await self.clans.rolesClans()
+            await self._remove_roles(member, rolesToRemove)
+
+            if ign is None:
+                await self.bot.say("Cannot find IGN.")
+            else:
+                try:
+                    newclanname = await self.clans.getClanData(savekey, 'nickname')
+                    newname = ign + " | " + newclanname
+                    await self.bot.change_nickname(member, newname)
+                except discord.HTTPException:
+                    await self.bot.say("I don’t have permission to change nick for this user.")
+                else:
+                    mymessage += "Nickname changed to **{}**\n".format(newname)
+
+            role_names = [await self.clans.getClanData(savekey, 'role'), 'Member']
+            try:
+                await self._add_roles(member, role_names)
+                mymessage += "**" + await self.clans.getClanData(savekey, 'role') + "** and **Member** roles added."
+            except discord.Forbidden:
+                await self.bot.say(
+                    "{} does not have permission to edit {}’s roles.".format(
+                        member.display_name, member.display_name))
+            except discord.HTTPException:
+                await self.bot.say("failed to add {}.".format(', '.join(role_names)))
+
+            await self.bot.say(mymessage)
+        else:
+            await self.bot.say("This command is only available for family members.")
+
+    @commands.command(pass_context=True, no_pm=True)
+    @commands.has_any_role(*BOTCOMMANDER_ROLES)
     async def audit(self, ctx, clankey):
         """ Check to see if your clan members are setup properly in discord."""
         server = ctx.message.server
