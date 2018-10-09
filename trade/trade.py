@@ -104,6 +104,7 @@ class Trade:
     async def show(self, ctx, member: discord.Member=None):
         """Show cards you can trade"""
         member = member or ctx.message.author
+        giveset = False
 
         await self.bot.type()
 
@@ -128,6 +129,7 @@ class Trade:
             for index, cards in enumerate(groups):
                 value = "Want: "
                 if member.id in self.settings:
+                    giveset = True
                     for cardern in self.settings[member.id][rarity]:
                         if cardern is not None:
                             value += self.emoji(cardern)
@@ -136,7 +138,10 @@ class Trade:
                 value += "\nGiving: " if index == 0 else ""
                 for card in cards:
                     if card is not None:
-                        if card not in self.settings[member.id][rarity]:
+                        if giveset:
+                            if card not in self.settings[member.id][rarity]:
+                                value += self.emoji(card)
+                        else:
                             value += self.emoji(card)
                 embed.add_field(name=f_title if index == 0 else '\u200b', value=value, inline=False)
 
