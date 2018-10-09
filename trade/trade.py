@@ -127,9 +127,12 @@ class Trade:
             groups = self.grouper(rarities[rarity], 30)
             for index, cards in enumerate(groups):
                 value = "Want: "
-                for cardern in self.settings[member.id][rarity]:
-                    if cardern is not None:
-                        value += self.emoji(cardern)
+                if member.id in self.settings:
+                    for cardern in self.settings[member.id][rarity]:
+                        if cardern is not None:
+                            value += self.emoji(cardern)
+                else:
+                    value += "Type ``{}trade add`` to add cards here.".format(ctx.prefix)
                 value += "\nGiving: " if index == 0 else ""
                 for card in cards:
                     if card is not None:
