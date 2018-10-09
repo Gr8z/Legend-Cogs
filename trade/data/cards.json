@@ -12,7 +12,7 @@
 		"bbd",
 		"babyd",
 		"bd",
-		"baby-dragon"
+		"baby dragon"
 	],
 	"Balloon": [
 		"loon",
@@ -24,9 +24,9 @@
 		"bandit"
 	],
 	"Barbarian Hut": [
-		"barb-hut",
+		"barb hut",
 		"bh",
-		"barbarian-hut"
+		"barbarian hut"
 	],
 	"Barbarians": [
 		"barb",
@@ -41,11 +41,11 @@
 		"br",
 		"ram",
 		"bram",
-		"battle-ram"
+		"battle ram"
 	],
 	"Bomb Tower": [
 		"bt",
-		"bomb-tower"
+		"bomb tower"
 	],
 	"Bomber": ["bomber"],
 	"Bowler": ["bowler"],
@@ -53,37 +53,37 @@
 	"Cannon Cart": [
 		"cc",
 		"cart",
-		"cannon-cart"
+		"cannon cart"
 	],
 	"Clone": ["clone"],
 	"Dark Prince": [
 		"dp",
-		"dank-prince",
-		"dark-prince"
+		"dank prince",
+		"dark prince"
 	],
 	"Dart Goblin": [
 		"dg",
-		"dart-gob",
-		"dart-gobs",
-		"dart-goblin"
+		"dart gob",
+		"dart gobs",
+		"dart goblin"
 	],
 	"Electro Wizard": [
 		"ew",
 		"ewiz",
 		"ewizard",
-		"electro-wizard"
+		"electro wizard"
 	],
 	"Elite Barbarians": [
 		"eb",
 		"ebarb",
 		"ebarbs",
-		"elite-barbarians"
+		"elite barbarians"
 	],
 	"Elixir Collector": [
 		"ec",
 		"pump",
 		"collector",
-		"elixir-collector"
+		"elixir collector"
 	],
 	"Executioner": [
 		"ex",
@@ -93,7 +93,7 @@
 	],
 	"Fire Spirits": [
 		"fs",
-		"fire-spirits"
+		"fire spirits"
 	],
 	"Fireball": [
 		"fb",
@@ -103,50 +103,50 @@
 		"fm",
 		"fly",
 		"machine",
-		"flying-machine"
+		"flying machine"
 	],
 	"Freeze": ["freeze"],
 	"Furnace": ["furnace"],
 	"Giant": ["giant"],
 	"Giant Skeleton": [
 		"gs",
-		"giant-skeleton",
-		"giant-skelly"
+		"giant skeleton",
+		"giant skelly"
 	],
 	"Giant Snowball": [
 		"snow",
 		"sb",
 		"gsb",
 		"snowball",
-		"giant-snowball"
+		"giant snowball"
 	],
 	"Goblin Barrel": [
 		"gb",
-		"gob-barrel",
+		"gob barrel",
 		"barrel",
-		"goblin-barrel"
+		"goblin barrel"
 	],
 	"Goblin Gang": [
 		"gg",
-		"gob-gang",
-		"goblin-gang"
+		"gob gang",
+		"goblin gang"
 	],
 	"Goblin Giant": [
 		"ggiant",
 		"ggi",
-		"goblin-giant"
+		"goblin giant"
 	],
 	"Goblin Hut": [
-		"gob-hut",
+		"gob hut",
 		"gobhut",
 		"gh",
-		"goblin-hut"
+		"goblin hut"
 	],
 	"Goblins": [
 		"gobs",
 		"gob",
-		"stab-gobs",
-		"stab-gob",
+		"stab gobs",
+		"stab gob",
 		"goblins"
 	],
 	"Golem": ["golem"],
@@ -159,7 +159,7 @@
 	"Heal": ["heal"],
 	"Hog Rider": [
 		"hog",
-		"hog-rider"
+		"hog rider"
 	],
 	"Hunter": [
 		"htr",
@@ -168,33 +168,33 @@
 	],
 	"Ice Golem": [
 		"ig",
-		"ice-golem"
+		"ice golem"
 	],
 	"Ice Spirit": [
 		"is",
-		"ice-spirit"
+		"ice spirit"
 	],
 	"Ice Wizard": [
 		"iw",
-		"ice-wiz",
+		"ice wiz",
 		"iwiz",
-		"ice-wizard"
+		"ice wizard"
 	],
 	"Inferno Dragon": [
 		"id",
-		"inferno-dragon"
+		"inferno dragon"
 	],
 	"Inferno Tower": [
 		"inferno",
 		"it",
-		"inferno-tower"
+		"inferno tower"
 	],
 	"Knight": ["knight"],
 	"Lava Hound": [
 		"lava",
 		"lh",
 		"hound",
-		"lava-hound"
+		"lava hound"
 	],
 	"Lightning": ["lightning"],
 	"Lumberjack": [
@@ -203,30 +203,30 @@
 	],
 	"Magic Archer": [
 		"ma",
-		"magic-archer"
+		"magic archer"
 	],
 	"Mega Knight": [
 		"mk",
 		"mknight",
-		"mega-knight"
+		"mega knight"
 	],
 	"Mega Minion": [
 		"mm",
-		"meta-minion",
+		"meta minion",
 		"mega",
-		"mega-minion"
+		"mega minion"
 	],
 	"Miner": ["miner"],
 	"Mini P.E.K.K.A": [
 		"minip",
-		"mini-p",
+		"mini p",
 		"mp",
-		"mini-pekka"
+		"mini pekka"
 	],
 	"Minion Horde": [
 		"mh",
 		"horde",
-		"minion-horde"
+		"minion horde"
 	],
 	"Minions": ["minions"],
 	"Mirror": ["mirror"],
@@ -240,7 +240,7 @@
 	"Night Witch": [
 		"nwitch",
 		"nw",
-		"night-witch"
+		"night witch"
 	],
 	"P.E.K.K.A": ["pekka"],
 	"Poison": ["poison"],
@@ -255,33 +255,33 @@
 	"Rocket": ["rocket"],
 	"Royal Ghost": [
 		"ghost",
-		"royal-ghost"
+		"royal ghost"
 	],
 	"Royal Giant": [
 		"rg",
 		"rgg",
-		"royal-giant"
+		"royal giant"
 	],
 	"Royal Hogs": [
 		"rh",
-		"royal-hog",
+		"royal hog",
 		"royalhogs",
-		"royal-hog"
+		"royal hogs"
 	],
 	"Royal Recruits": [
 		"rr",
-		"royal-recruits"
+		"royal recruits"
 	],
 	"Skeleton Army": [
 		"skarmy",
 		"sa",
-		"skeleton-army",
+		"skeleton army",
 		"army"
 	],
 	"Skeleton Barrel": [
 		"sbarrel",
 		"sb",
-		"skeleton-barrel"
+		"skeleton barrel"
 	],
 	"Skeletons": [
 		"skele",
@@ -291,26 +291,26 @@
 	],
 	"Sparky": ["sparky"],
 	"Spear Goblins": [
-		"spear-gobs",
-		"spear-gob",
+		"spear gobs",
+		"spear gob",
 		"sgobs",
 		"sgob",
 		"sg",
 		"spear",
 		"speargobs",
-		"spear-goblins"
+		"spear goblins"
 	],
 	"Tesla": ["tesla"],
 	"The Log": [
 		"log",
-		"the-log"
+		"the log"
 	],
 	"Three Musketeers": [
 		"3m",
 		"3musk",
 		"3musks",
 		"muskies",
-		"three-musketeers"
+		"three musketeers"
 	],
 	"Tombstone": [
 		"ts",

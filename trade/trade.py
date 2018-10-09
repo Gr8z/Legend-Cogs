@@ -148,7 +148,7 @@ class Trade:
         await self.bot.say(embed=embed)
 
     @trade.command(pass_context=True, no_pm=True)
-    async def add(self, ctx, card):
+    async def add(self, ctx, *, card):
         """Add a card you need for trading"""
         author = ctx.message.author
         try:
@@ -160,7 +160,7 @@ class Trade:
         await self.bot.say("You are now looking for {}".format(self.emoji(card)))
 
     @trade.command(pass_context=True, no_pm=True)
-    async def remove(self, ctx, card):
+    async def remove(self, ctx, *, card):
         """Remove a card you dont need for trading"""
         author = ctx.message.author
         try:
