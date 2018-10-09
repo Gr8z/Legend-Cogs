@@ -1,0 +1,10 @@
+{
+    "AUTHOR" : "GR8",
+    "INSTALL_MSG" : "Clash Royale Trade added, if there are any issues, please mention them on https://github.com/Gr8z/LeGeND-Bot",
+    "NAME" : "trade",
+    "SHORT" : "Show which cards you want to trade and can give away.",
+    "DESCRIPTION" : "Show which cards you want to trade and can give away.",
+    "TAGS" : ["trade", "clashroyale", "cards", "tokens"],
+    "REQUIREMENTS" : ["clashroyale"],
+    "HIDDEN" : false
+}

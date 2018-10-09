@@ -1,0 +1,340 @@
+{
+	"Archers": [
+		"arch",
+		"archers"
+	],
+	"Arrows": [
+		"arrow",
+		"arr",
+		"arrows"
+	],
+	"Baby Dragon": [
+		"bbd",
+		"babyd",
+		"bd",
+		"baby-dragon"
+	],
+	"Balloon": [
+		"loon",
+		"baloon",
+		"balloon"
+	],
+	"Bandit": [
+		"band",
+		"bandit"
+	],
+	"Barbarian Hut": [
+		"barb-hut",
+		"bh",
+		"barbarian-hut"
+	],
+	"Barbarians": [
+		"barb",
+		"barbs",
+		"barbarians"
+	],
+	"Bats": [
+		"bat",
+		"bats"
+	],
+	"Battle Ram": [
+		"br",
+		"ram",
+		"bram",
+		"battle-ram"
+	],
+	"Bomb Tower": [
+		"bt",
+		"bomb-tower"
+	],
+	"Bomber": ["bomber"],
+	"Bowler": ["bowler"],
+	"Cannon": ["cannon"],
+	"Cannon Cart": [
+		"cc",
+		"cart",
+		"cannon-cart"
+	],
+	"Clone": ["clone"],
+	"Dark Prince": [
+		"dp",
+		"dank-prince",
+		"dark-prince"
+	],
+	"Dart Goblin": [
+		"dg",
+		"dart-gob",
+		"dart-gobs",
+		"dart-goblin"
+	],
+	"Electro Wizard": [
+		"ew",
+		"ewiz",
+		"ewizard",
+		"electro-wizard"
+	],
+	"Elite Barbarians": [
+		"eb",
+		"ebarb",
+		"ebarbs",
+		"elite-barbarians"
+	],
+	"Elixir Collector": [
+		"ec",
+		"pump",
+		"collector",
+		"elixir-collector"
+	],
+	"Executioner": [
+		"ex",
+		"exe",
+		"exec",
+		"executioner"
+	],
+	"Fire Spirits": [
+		"fs",
+		"fire-spirits"
+	],
+	"Fireball": [
+		"fb",
+		"fireball"
+	],
+	"Flying Machine": [
+		"fm",
+		"fly",
+		"machine",
+		"flying-machine"
+	],
+	"Freeze": ["freeze"],
+	"Furnace": ["furnace"],
+	"Giant": ["giant"],
+	"Giant Skeleton": [
+		"gs",
+		"giant-skeleton",
+		"giant-skelly"
+	],
+	"Giant Snowball": [
+		"snow",
+		"sb",
+		"gsb",
+		"snowball",
+		"giant-snowball"
+	],
+	"Goblin Barrel": [
+		"gb",
+		"gob-barrel",
+		"barrel",
+		"goblin-barrel"
+	],
+	"Goblin Gang": [
+		"gg",
+		"gob-gang",
+		"goblin-gang"
+	],
+	"Goblin Giant": [
+		"ggiant",
+		"ggi",
+		"goblin-giant"
+	],
+	"Goblin Hut": [
+		"gob-hut",
+		"gobhut",
+		"gh",
+		"goblin-hut"
+	],
+	"Goblins": [
+		"gobs",
+		"gob",
+		"stab-gobs",
+		"stab-gob",
+		"goblins"
+	],
+	"Golem": ["golem"],
+	"Graveyard": [
+		"gy",
+		"skillyard",
+		"graveyard"
+	],
+	"Guards": ["guards"],
+	"Heal": ["heal"],
+	"Hog Rider": [
+		"hog",
+		"hog-rider"
+	],
+	"Hunter": [
+		"htr",
+		"hu",
+		"hunter"
+	],
+	"Ice Golem": [
+		"ig",
+		"ice-golem"
+	],
+	"Ice Spirit": [
+		"is",
+		"ice-spirit"
+	],
+	"Ice Wizard": [
+		"iw",
+		"ice-wiz",
+		"iwiz",
+		"ice-wizard"
+	],
+	"Inferno Dragon": [
+		"id",
+		"inferno-dragon"
+	],
+	"Inferno Tower": [
+		"inferno",
+		"it",
+		"inferno-tower"
+	],
+	"Knight": ["knight"],
+	"Lava Hound": [
+		"lava",
+		"lh",
+		"hound",
+		"lava-hound"
+	],
+	"Lightning": ["lightning"],
+	"Lumberjack": [
+		"lj",
+		"lumberjack"
+	],
+	"Magic Archer": [
+		"ma",
+		"magic-archer"
+	],
+	"Mega Knight": [
+		"mk",
+		"mknight",
+		"mega-knight"
+	],
+	"Mega Minion": [
+		"mm",
+		"meta-minion",
+		"mega",
+		"mega-minion"
+	],
+	"Miner": ["miner"],
+	"Mini P.E.K.K.A": [
+		"minip",
+		"mini-p",
+		"mp",
+		"mini-pekka"
+	],
+	"Minion Horde": [
+		"mh",
+		"horde",
+		"minion-horde"
+	],
+	"Minions": ["minions"],
+	"Mirror": ["mirror"],
+	"Mortar": ["mortor"],
+	"Musketeer": [
+		"1m",
+		"musk",
+		"musky",
+		"musketeer"
+	],
+	"Night Witch": [
+		"nwitch",
+		"nw",
+		"night-witch"
+	],
+	"P.E.K.K.A": ["pekka"],
+	"Poison": ["poison"],
+	"Prince": ["prince"],
+	"Princess": ["princess"],
+	"Rage": ["rage"],
+	"Rascals": [
+		"ras",
+		"r",
+		"rascals"
+	],
+	"Rocket": ["rocket"],
+	"Royal ghost": [
+		"ghost",
+		"royal-ghost"
+	],
+	"Royal Giant": [
+		"rg",
+		"rgg",
+		"royal-giant"
+	],
+	"Royal Hogs": [
+		"rh",
+		"royal-hog",
+		"royalhogs",
+		"royal-hog"
+	],
+	"Royal Recruits": [
+		"rr",
+		"royal-recruits"
+	],
+	"Skeleton Army": [
+		"skarmy",
+		"sa",
+		"skeleton-army",
+		"army"
+	],
+	"Skeleton Barrel": [
+		"sbarrel",
+		"sb",
+		"skeleton-barrel"
+	],
+	"Skeletons": [
+		"skele",
+		"sk",
+		"skellys",
+		"skeletons"
+	],
+	"Sparky": ["sparky"],
+	"Spear Goblins": [
+		"spear-gobs",
+		"spear-gob",
+		"sgobs",
+		"sgob",
+		"sg",
+		"spear",
+		"speargobs",
+		"spear-goblins"
+	],
+	"Tesla": ["tesla"],
+	"The Log": [
+		"log",
+		"the-log"
+	],
+	"Three Musketeers": [
+		"3m",
+		"3musk",
+		"3musks",
+		"muskies",
+		"three-musketeers"
+	],
+	"Tombstone": [
+		"ts",
+		"tombstone"
+	],
+	"Tornado": [
+		"nado",
+		"tornado"
+	],
+	"Valkyrie": [
+		"valk",
+		"valkyrie"
+	],
+	"Witch": ["witch"],
+	"Wizard": [
+		"wiz",
+		"wizard"
+	],
+	"X-bow": [
+		"xbow"
+	],
+	"Zap": ["zap"],
+	"Zappies": [
+		"zp",
+		"zappies"
+	]
+}

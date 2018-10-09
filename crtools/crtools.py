@@ -31,6 +31,13 @@ class constants:
                 return str(card["id"])
         return None
 
+    async def card_to_rarity(self, name):
+        """Card name to rarity."""
+        for card in self.constants["cards"]:
+            if name == card["name"]:
+                return card["rarity"]
+        return None
+
     async def get_new_level(self, card):
         """Conver the old card levels to the new ones"""
         newLevel = card.level
