@@ -30,7 +30,7 @@ class Trade:
         for k, v in self.cards.items():
             for value in v:
                 self.cards_abbrev[value] = k
-            self.cards_abbrev[k.replace('-', '')] = k
+            self.cards_abbrev[k] = k
 
     def emoji(self, name):
         """Emoji by name."""
