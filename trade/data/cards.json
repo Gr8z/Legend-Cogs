@@ -231,7 +231,7 @@
 	],
 	"Minions": ["minions"],
 	"Mirror": ["mirror"],
-	"Mortar": ["mortor"],
+	"Mortar": ["mortor", "mortar"],
 	"Musketeer": [
 		"1m",
 		"musk",
