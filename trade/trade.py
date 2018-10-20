@@ -8,6 +8,7 @@ import itertools
 
 settings_path = "data/trade/settings.json"
 cards_path = "data/trade/cards.json"
+
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
 
