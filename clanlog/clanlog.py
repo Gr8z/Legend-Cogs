@@ -40,14 +40,6 @@ class Clanlog:
     def update_discord_log(self):
         self.discord_log = dataIO.load_json('data/clanlog/discord_log.json')
 
-    async def post_titan(self, memberName, memberTag, logType):
-        data = {}
-        data["name"] = memberName
-        data["tag"] = memberTag
-        data["type"] = logType
-        url = 'https://script.google.com/macros/s/AKfycbzNFDTF7SAi2p0yeXfpIQmt5OZd1wC6ZAhobwdm/exec'
-        requests.post(url, data=json.dumps(data))
-
     @checks.mod_or_permissions(administrator=True)
     @commands.command(pass_context=True, no_pm=True)
     async def clanlog(self, ctx, download=None):
@@ -108,8 +100,6 @@ class Clanlog:
                                                url="https://royaleapi.com/player/{}".format(memberTag),
                                                description=desc,
                                                color=0xff0000)
-                    if clankey == "titan":
-                        await self.post_titan(memberName, memberTag, "left")
 
                     if server.id == "374596069989810176":
                         channel = await self.clans.getClanData(clankey, 'log_channel')
@@ -137,8 +127,6 @@ class Clanlog:
                                                url="https://royaleapi.com/player/{}".format(memberTag),
                                                description=desc,
                                                color=0x00ff40) 
-                    if clankey == "titan":
-                        await self.post_titan(memberName, memberTag, "join")
 
                     if server.id == "374596069989810176":
                         channel = await self.clans.getClanData(clankey, 'log_channel')
