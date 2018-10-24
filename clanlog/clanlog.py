@@ -13,8 +13,6 @@ import matplotlib.ticker as ticker
 
 import numpy as np
 import clashroyale
-import requests
-import json
 
 plt.switch_backend('agg')
 
