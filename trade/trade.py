@@ -44,15 +44,23 @@ class Trade:
         args = [iter(iterable)] * n
         return itertools.zip_longest(*args)
 
+    async def defualt_settings(self, member):
+        self.settings[member.id] = {}
+        self.settings[member.id]["Legendary"] = []
+        self.settings[member.id]["Epic"] = []
+        self.settings[member.id]["Rare"] = []
+        self.settings[member.id]["Common"] = []
+        self.settings[member.id]["Tokens"] = {}
+        self.settings[member.id]["Tokens"]["legendary"] = False
+        self.settings[member.id]["Tokens"]["epic"] = False
+        self.settings[member.id]["Tokens"]["rare"] = False
+        self.settings[member.id]["Tokens"]["common"] = False
+
     async def saveCard(self, member, card):
         rarity = await self.constants.card_to_rarity(card)
 
         if member.id not in self.settings:
-            self.settings[member.id] = {}
-            self.settings[member.id]["Legendary"] = []
-            self.settings[member.id]["Epic"] = []
-            self.settings[member.id]["Rare"] = []
-            self.settings[member.id]["Common"] = []
+            await self.defualt_settings(member)
 
         if card not in self.settings[member.id][rarity]:
             self.settings[member.id][rarity].append(card)
@@ -62,14 +70,24 @@ class Trade:
         rarity = await self.constants.card_to_rarity(card)
 
         if member.id not in self.settings:
-            self.settings[member.id] = {}
-            self.settings[member.id]["Legendary"] = []
-            self.settings[member.id]["Epic"] = []
-            self.settings[member.id]["Rare"] = []
-            self.settings[member.id]["Common"] = []
+            await self.defualt_settings(member)
 
         if card in self.settings[member.id][rarity]:
             self.settings[member.id][rarity].remove(card)
+        dataIO.save_json(settings_path, self.settings)
+
+    async def saveToken(self, member, token):
+        if member.id not in self.settings:
+            await self.defualt_settings(member)
+
+        self.settings[member.id]["Tokens"][token] = True
+        dataIO.save_json(settings_path, self.settings)
+
+    async def removeToken(self, member, token):
+        if member.id not in self.settings:
+            await self.defualt_settings(member)
+
+        self.settings[member.id]["Tokens"][token] = False
         dataIO.save_json(settings_path, self.settings)
 
     async def tradeCards(self, cards):
@@ -96,7 +114,7 @@ class Trade:
         return trades
 
     @commands.group(pass_context=True, no_pm=True)
-    async def trade(self, ctx,):
+    async def trade(self, ctx):
         """Clash Royale trade commands"""
         if ctx.invoked_subcommand is None:
             await send_cmd_help(ctx)
@@ -145,6 +163,16 @@ class Trade:
                         else:
                             value += self.emoji(card)
                 embed.add_field(name=f_title if index == 0 else '\u200b', value=value, inline=False)
+        
+        tokenText = ""
+        if member.id in self.settings:
+            for token in self.settings[member.id]["Tokens"]:
+                if self.settings[member.id]["Tokens"][token]:
+                    tokenText += self.emoji("Token" + token.capitalize())
+        
+        if not tokenText:
+            tokenText = "*No Tokens*\nType ``{}trade token add`` to add tokens here.".format(ctx.prefix)
+        embed.add_field(name="My Tokens", value=tokenText, inline=False)
 
         await self.bot.say(embed=embed)
 
@@ -171,6 +199,36 @@ class Trade:
 
         await self.removeCard(author, card)
         await self.bot.say("You are no longer looking for {}".format(self.emoji(card)))
+
+    @trade.group(pass_context=True, no_pm=True)
+    async def token(self, ctx):
+        """Add/Remove trade tokens"""
+        if ctx.invoked_subcommand is None:
+            await send_cmd_help(ctx)
+
+    @token.command(pass_context=True, no_pm=True, name="add")
+    async def add_token(self, ctx, *, token):
+        """Add a trade token"""
+        author = ctx.message.author
+        token = token.lower()
+        try:
+            await self.saveToken(author, token)
+        except KeyError:
+            return await self.bot.say("Error, Invalid Token")
+
+        await self.bot.say("You now have a {}".format(self.emoji("Token" + token.capitalize())))
+
+    @token.command(pass_context=True, no_pm=True, name="remove")
+    async def remove_token(self, ctx, *, token):
+        """Remove a trade token"""
+        author = ctx.message.author
+        token = token.lower()
+        try:
+            await self.removeToken(author, token)
+        except KeyError:
+            return await self.bot.say("Error, Invalid Token")
+
+        await self.bot.say("You no longer have a {}".format(self.emoji("Token" + token.capitalize())))
 
 
 def check_folders():
