@@ -2165,6 +2165,16 @@
       "id": 26000062
     },
     {
+      "key": "electro-dragon",
+      "name": "Electro Dragon",
+      "elixir": 5,
+      "type": "Troop",
+      "rarity": "Epic",
+      "arena": 11,
+      "description": "Spits out bolts of electricity hitting up to three targets. Suffers from middle child syndrome to boot.",
+      "id": 26000063
+    },
+    {
       "key": "cannon",
       "name": "Cannon",
       "elixir": 3,
