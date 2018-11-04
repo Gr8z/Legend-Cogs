@@ -501,4 +501,3 @@ def setup(bot):
     check_files()
     check_auth()
     bot.add_cog(crtools(bot))
-
