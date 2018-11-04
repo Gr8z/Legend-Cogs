@@ -14,7 +14,7 @@ credits = "Bot by GR8 | Titan"
 
 
 class Trade:
-    """Clash Royale 1v1 trade with bets"""
+    """Clash Royale Trading Helper"""
 
     def __init__(self, bot):
         self.bot = bot
