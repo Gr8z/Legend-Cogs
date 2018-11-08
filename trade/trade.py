@@ -163,13 +163,13 @@ class Trade:
                         else:
                             value += self.emoji(card)
                 embed.add_field(name=f_title if index == 0 else '\u200b', value=value, inline=False)
-        
+
         tokenText = ""
         if member.id in self.settings:
             for token in self.settings[member.id]["Tokens"]:
                 if self.settings[member.id]["Tokens"][token]:
                     tokenText += self.emoji("Token" + token.capitalize())
-        
+
         if not tokenText:
             tokenText = "*No Tokens*\nType ``{}trade token add`` to add tokens here.".format(ctx.prefix)
         embed.add_field(name="My Tokens", value=tokenText, inline=False)
