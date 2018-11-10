@@ -670,6 +670,16 @@
       "id": 27000005
     },
     {
+      "key": "barbarian-barrel",
+      "name": "Barbarian Barrel",
+      "elixir": 2,
+      "type": "Spell",
+      "rarity": "Epic",
+      "arena": 3,
+      "description": "It rolls over and damages anything in its path, then breaks open and out pops a Barbarian! How did he get inside?!",
+      "id": 28000015
+    },
+    {
       "key": "tesla",
       "name": "Tesla",
       "elixir": 4,
