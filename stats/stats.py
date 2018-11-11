@@ -121,6 +121,12 @@ class stats:
                         dataIO.save_json('data/clanlog/discord_log.json', self.discord_log)
                         values['user'] = userTotal
 
+                        saved_times = list(self.discord_log.keys())
+                        for time in saved_times:
+                            if (current_time - float(time)) > 2678400:  # one month
+                                self.discord_log.pop(time, None)
+                        dataIO.save_json('data/clanlog/discord_log.json', self.discord_log)
+
                         await self.bot.edit_channel(server.get_channel(channels['user_channel']),
                                                     name="{} Total Users".format(userTotal))
 
