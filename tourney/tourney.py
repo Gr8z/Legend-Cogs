@@ -19,6 +19,7 @@ class tournament:
         self.bot = bot
         self.auth = self.bot.get_cog('crtools').auth
         self.clash = clashroyale.RoyaleAPI(self.auth.getToken(), is_async=True)
+        self.clashAPI = clashroyale.OfficialAPI(self.auth.getOfficialToken(), is_async=True)
 
     def getCards(self, maxPlayers):
         """Converts maxPlayers to Cards"""
@@ -76,16 +77,17 @@ class tournament:
             maxplayers = tourney.max_players
             createTime = tourney.create_time
 
-            if (((int(time.time()) - createTime) < 10800) and (maxplayers > 50) and ((joined + 4) < maxplayers) and (tag != lastTag) and (tourney.first_place_card_prize > 0)):
+            if (((int(time.time()) - createTime) < 10800) and (maxplayers > 50) and ((joined + 4) < maxplayers) and (tag != lastTag)):
 
                 try:
-                    tourneyAPI = await self.clash.get_tournament(tag)
-                    joined = tourneyAPI.current_players
-                    maxplayers = tourneyAPI.max_players
+                    tourneyAPI = await self.clashAPI.get_tournament(tag)
+                    joined = tourneyAPI.capacity
+                    maxplayers = tourneyAPI.max_capacity
+                    tourneyAPI.open = True if tourneyAPI.type == "open" else False
                 except clashroyale.RequestError:
                     return None
 
-                if ((maxplayers > 50) and ((joined + 4) < maxplayers) and (tourneyAPI.status != "ended") and (tourneyAPI.open)):
+                if ((maxplayers > 50) and ((joined + 4) < maxplayers) and (tourneyAPI.status != "ended") and (tourneyAPI.open) and (tourneyAPI.first_place_card_prize > 0)):
                     lastTag = tag
                     return tourneyAPI
 
@@ -106,16 +108,17 @@ class tournament:
             maxplayers = tourney.max_players
             createTime = tourney.create_time
 
-            if (((int(time.time()) - createTime) < 10800) and ((joined + 1) < maxplayers) and (tourney.first_place_card_prize > 0)):
+            if (((int(time.time()) - createTime) < 10800) and ((joined + 1) < maxplayers)):
 
                 try:
-                    tourneyAPI = await self.clash.get_tournament(tag)
-                    joined = tourneyAPI.current_players
-                    maxplayers = tourneyAPI.max_players
+                    tourneyAPI = await self.clashAPI.get_tournament(tag)
+                    joined = tourneyAPI.capacity
+                    maxplayers = tourneyAPI.max_capacity
+                    tourneyAPI.open = True if tourneyAPI.type == "open" else False
                 except clashroyale.RequestError:
                     return None
 
-                if ((joined < maxplayers) and (tourneyAPI.status != "ended") and (tourneyAPI.open)):
+                if ((joined < maxplayers) and (tourneyAPI.status != "ended") and (tourneyAPI.open) and (tourneyAPI.first_place_card_prize > 0)):
                     return tourneyAPI
 
         return None
