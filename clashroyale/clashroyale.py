@@ -425,10 +425,12 @@ class clashroyale:
             embed.add_field(name="Ends In", value=endTime, inline=True)
 
         embed.add_field(name="Hosted By", value=await self.getCreaterName(tourneydata.creator_tag, tourneydata.members_list), inline=True)
-        embed.add_field(name="Top prize", value="{} {}     {} {}".format(self.emoji("tournamentcards"),
-                                                                         cards,
-                                                                         self.emoji("coin"),
-                                                                         coins), inline=True)
+
+        if tourneydata.first_place_card_prize > 0:
+            embed.add_field(name="Top prize", value="{} {}     {} {}".format(self.emoji("tournamentcards"),
+                                                                             cards,
+                                                                             self.emoji("coin"),
+                                                                             coins), inline=True)
         embed.set_footer(text=credits, icon_url=creditIcon)
 
         await self.bot.say(embed=embed)
