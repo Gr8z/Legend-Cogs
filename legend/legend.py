@@ -332,7 +332,7 @@ class legend:
             except clashroyale.RequestError:
                 return await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 
-        clandata = sorted(clandata, key=lambda x: (x.required_trophies, x.clan_score), reverse=True)
+        clandata = sorted(clandata, key=lambda x: (x.clan_war_trophies, x.required_trophies, x.clan_score), reverse=True)
 
         embed = discord.Embed(color=0xFAA61A)
         if "url" in self.settings and "family" in self.settings:
