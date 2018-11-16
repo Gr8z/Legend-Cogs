@@ -117,13 +117,6 @@ class clashroyale:
             if arenaMap[arena][0] <= trophies <= arenaMap[arena][1]:
                 return self.emoji(arena)
 
-    async def getClanWarTrophies(self, tag):
-        """Check if war trophies exists for the clan"""
-        clankey = await self.clans.getClanKey(tag)
-        if clankey is not None:
-            return await self.clans.getClanData(clankey, 'warTrophies')
-        return None
-
     async def getClanLeader(self, members):
         """Return clan leader from a list of members"""
         for member in members:
@@ -353,12 +346,8 @@ class clashroyale:
         embed.add_field(name="Leader", value=await self.getClanLeader(clandata.member_list), inline=True)
         embed.add_field(name="Donations", value="{} {:,}".format(self.emoji("cards"), clandata.donations_per_week), inline=True)
         embed.add_field(name="Score", value="{} {:,}".format(self.emoji("PB"), clandata.clan_score), inline=True)
-
-        warTrophies = await self.getClanWarTrophies(clandata.tag.strip("#"))
-        if warTrophies is not None:
-            embed.add_field(name="War Trophies",
-                            value="{} {:,}".format(self.getLeagueEmoji(warTrophies), warTrophies), inline=True)
-
+        embed.add_field(name="War Trophies",
+                        value="{} {:,}".format(self.getLeagueEmoji(clandata.clan_war_trophies), clandata.clan_war_trophies), inline=True)
         embed.add_field(name="Required Trophies",
                         value="{} {:,}".format(self.emoji("crtrophy"), clandata.required_trophies), inline=True)
         embed.add_field(name="Status", value=":envelope_with_arrow: {}".format(self.camelToString(clandata.type).capitalize()), inline=True)
