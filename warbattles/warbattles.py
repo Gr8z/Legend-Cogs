@@ -57,7 +57,7 @@ class warbattles:
 
     async def cleanTime(self, time):
         """Converts time to timestamp"""
-        return int(datetime.strptime(time, '%Y%m%dT%H%M%S.%fZ').timestamp()) + 7200
+        return int(datetime.strptime(time, '%Y%m%dT%H%M%S.%fZ').timestamp()) + 3600
 
     async def get_clan_battles(self, clankey):
         """ Get war battles from each clan member"""
@@ -141,7 +141,6 @@ class warbattles:
                 await asyncio.sleep(1)
         self.completed = [[], []]
         self.moment = time.time()
-        print("warbattles Done")
 
 
 def setup(bot):
