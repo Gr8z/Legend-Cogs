@@ -7,6 +7,7 @@ import time
 from datetime import datetime
 import requests
 import json
+from copy import deepcopy
 
 try:
     from cogs.deck import Deck
@@ -62,7 +63,8 @@ class warbattles:
     async def get_clan_battles(self, clankey):
         """ Get war battles from each clan member"""
         battles = []
-        for member in self.clans.keysClanMembers(clankey):
+        members = deepcopy(self.clans.keysClanMembers(clankey))  # Fix for RuntimeError: dictionary changed size during iteration
+        for member in members:
             battles += await self.clash.get_player_battles(member)
             await asyncio.sleep(0.08)
         return battles
