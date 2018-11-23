@@ -46,71 +46,108 @@ class Trade:
 
     async def defualt_settings(self, member):
         self.settings[member.id] = {}
-        self.settings[member.id]["Legendary"] = []
-        self.settings[member.id]["Epic"] = []
-        self.settings[member.id]["Rare"] = []
-        self.settings[member.id]["Common"] = []
-        self.settings[member.id]["Tokens"] = {}
-        self.settings[member.id]["Tokens"]["legendary"] = False
-        self.settings[member.id]["Tokens"]["epic"] = False
-        self.settings[member.id]["Tokens"]["rare"] = False
-        self.settings[member.id]["Tokens"]["common"] = False
+        self.settings[member.id]["want"] = []
+        self.settings[member.id]["give"] = []
+        self.settings[member.id]["token"] = []
 
-    async def saveCard(self, member, card):
+        self.settings[member.id]["want"] = {}
+        self.settings[member.id]["want"]["legendary"] = []
+        self.settings[member.id]["want"]["epic"] = []
+        self.settings[member.id]["want"]["rare"] = []
+        self.settings[member.id]["want"]["common"] = []
+
+        self.settings[member.id]["give"] = {}
+        self.settings[member.id]["give"]["legendary"] = []
+        self.settings[member.id]["give"]["epic"] = []
+        self.settings[member.id]["give"]["rare"] = []
+        self.settings[member.id]["give"]["common"] = []
+
+        self.settings[member.id]["token"] = {}
+        self.settings[member.id]["token"]["legendary"] = False
+        self.settings[member.id]["token"]["epic"] = False
+        self.settings[member.id]["token"]["rare"] = False
+        self.settings[member.id]["token"]["common"] = False
+
+    async def saveCardWant(self, member, card):
         rarity = await self.constants.card_to_rarity(card)
+        rarity = rarity.lower()
 
         if member.id not in self.settings:
             await self.defualt_settings(member)
 
-        if card not in self.settings[member.id][rarity]:
-            self.settings[member.id][rarity].append(card)
+        if card not in self.settings[member.id]['want'][rarity]:
+            self.settings[member.id]['want'][rarity].append(card)
         dataIO.save_json(settings_path, self.settings)
 
-    async def removeCard(self, member, card):
+    async def saveCardsGive(self, member, rarity, cards):
+        if member.id not in self.settings:
+            await self.defualt_settings(member)
+
+        self.settings[member.id]['give'][rarity] = cards
+        dataIO.save_json(settings_path, self.settings)
+
+    async def removeCardWant(self, member, card):
         rarity = await self.constants.card_to_rarity(card)
+        rarity = rarity.lower()
 
         if member.id not in self.settings:
             await self.defualt_settings(member)
 
-        if card in self.settings[member.id][rarity]:
-            self.settings[member.id][rarity].remove(card)
+        if card in self.settings[member.id]['want'][rarity]:
+            self.settings[member.id]['want'][rarity].remove(card)
         dataIO.save_json(settings_path, self.settings)
 
     async def saveToken(self, member, token):
         if member.id not in self.settings:
             await self.defualt_settings(member)
 
-        self.settings[member.id]["Tokens"][token] = True
+        self.settings[member.id]["token"][token] = True
         dataIO.save_json(settings_path, self.settings)
 
     async def removeToken(self, member, token):
         if member.id not in self.settings:
             await self.defualt_settings(member)
 
-        self.settings[member.id]["Tokens"][token] = False
+        self.settings[member.id]["token"][token] = False
         dataIO.save_json(settings_path, self.settings)
 
     async def tradeCards(self, cards):
         trades = {
-            "Legendary": [],
-            "Epic": [],
-            "Rare": [],
-            "Common": []
+            "legendary": [],
+            "epic": [],
+            "rare": [],
+            "common": []
         }
 
         for card in cards:
             if card.max_level == 13:
                 if (card.count == 250 and card.level != 1) or (card.count > 250):
-                    trades["Common"].append(card.name)
+                    trades["common"].append(card.name)
             elif card.max_level == 11:
                 if (card.count == 50 and card.level != 1) or (card.count > 50):
-                    trades["Rare"].append(card.name)
+                    trades["rare"].append(card.name)
             elif card.max_level == 8:
                 if (card.count == 10 and card.level != 1) or (card.count > 10):
-                    trades["Epic"].append(card.name)
+                    trades["epic"].append(card.name)
             elif card.max_level == 5:
                 if (card.count == 1 and card.level != 1) or (card.count > 1):
-                    trades["Legendary"].append(card.name)
+                    trades["legendary"].append(card.name)
+        return trades
+
+    async def searchTrades(self, card):
+        rarity = await self.constants.card_to_rarity(card)
+        rarity = rarity.lower()
+
+        trades = {}
+        for player in self.settings:
+            trades[player] = [False, False, False]
+            if card in self.settings[player]["give"][rarity]:
+                trades[player][0] = True
+            if card in self.settings[player]["want"][rarity]:
+                trades[player][1] = True
+            if self.settings[player]["token"][rarity]:
+                trades[player][2] = True
+
         return trades
 
     @commands.group(pass_context=True, no_pm=True)
@@ -143,13 +180,14 @@ class Trade:
         embed.set_footer(text=credits, icon_url=creditIcon)
 
         for rarity in rarities.keys():
-            f_title = rarity
+            f_title = rarity.capitalize()
             groups = self.grouper(rarities[rarity], 30)
             for index, cards in enumerate(groups):
                 value = "Want: "
+                give = []
                 if member.id in self.settings:
                     giveset = True
-                    for cardern in self.settings[member.id][rarity]:
+                    for cardern in self.settings[member.id]['want'][rarity]:
                         if cardern is not None:
                             value += self.emoji(cardern)
                 else:
@@ -158,16 +196,19 @@ class Trade:
                 for card in cards:
                     if card is not None:
                         if giveset:
-                            if card not in self.settings[member.id][rarity]:
+                            if card not in self.settings[member.id]['want'][rarity]:
                                 value += self.emoji(card)
+                                give.append(card)
                         else:
                             value += self.emoji(card)
+                            give.append(card)
                 embed.add_field(name=f_title if index == 0 else '\u200b', value=value, inline=False)
+                await self.saveCardsGive(member, rarity, give)
 
         tokenText = ""
         if member.id in self.settings:
-            for token in self.settings[member.id]["Tokens"]:
-                if self.settings[member.id]["Tokens"][token]:
+            for token in self.settings[member.id]["token"]:
+                if self.settings[member.id]["token"][token]:
                     tokenText += self.emoji("Token" + token.capitalize())
 
         if not tokenText:
@@ -185,7 +226,7 @@ class Trade:
         except KeyError:
             return await self.bot.say("Error, Invalid Card")
 
-        await self.saveCard(author, card)
+        await self.saveCardWant(author, card)
         await self.bot.say("You are now looking for {}".format(self.emoji(card)))
 
     @trade.command(pass_context=True, no_pm=True)
@@ -197,7 +238,7 @@ class Trade:
         except KeyError:
             return await self.bot.say("Error, Invalid Card")
 
-        await self.removeCard(author, card)
+        await self.removeCardWant(author, card)
         await self.bot.say("You are no longer looking for {}".format(self.emoji(card)))
 
     @trade.group(pass_context=True, no_pm=True)
@@ -205,6 +246,39 @@ class Trade:
         """Add/Remove trade tokens"""
         if ctx.invoked_subcommand is None:
             await send_cmd_help(ctx)
+
+    @trade.command(pass_context=True, no_pm=True)
+    async def search(self, ctx, *, card):
+        """Search Trades"""
+        server = ctx.message.server
+        try:
+            card = self.cards_abbrev[card]
+        except KeyError:
+            return await self.bot.say("Error, Invalid Card")
+
+        trades = await self.searchTrades(card)
+        embed = discord.Embed(color=0xFAA61A, description="We found these members who match your card search.")
+        embed.set_author(name="{} Traders".format(card),
+                         icon_url="https://i.imgur.com/dtSMITE.jpg")
+        embed.set_footer(text=credits, icon_url=creditIcon)
+
+        givers = "\u200b"
+        wanters = "\u200b"
+        for player in trades:
+            if trades[player][0]:
+                member = server.get_member(player)
+                if trades[player][2]:
+                    givers += self.emoji("Token" + await self.constants.card_to_rarity(card))
+                givers += member.mention
+            if trades[player][1]:
+                member = server.get_member(player)
+                if trades[player][2]:
+                    wanters += self.emoji("Token" + await self.constants.card_to_rarity(card))
+                wanters += member.mention
+        embed.add_field(name="Giving {}".format(card), value=givers, inline=False)
+        embed.add_field(name="Want {}".format(card), value=wanters, inline=False)
+
+        await self.bot.say(embed=embed)
 
     @token.command(pass_context=True, no_pm=True, name="add")
     async def add_token(self, ctx, *, token):
@@ -248,4 +322,3 @@ def setup(bot):
     check_folders()
     check_files()
     bot.add_cog(Trade(bot))
-
