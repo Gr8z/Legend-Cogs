@@ -20,6 +20,7 @@
 |Good| "{0} released the Royal Hogs to distract the guards +500 credits.", 500
 |Good| "{0} cloned the crew to confuse the guardsmen +250 credits.", 250
 |Good| "{0} used a Rage spell to run past everyone and escaped +20 credits.", 20
+|Good| "{0} rode the Goblin Giant to escape +100 credits.", 100
 
 |Bad| "A butterfly brought P.E.K.K.A. to {0}.", "Dead"
 |Bad| "The Magic Archer took out {0} from far away. Where did he come from?", "Dead"

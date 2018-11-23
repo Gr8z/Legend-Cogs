@@ -18,6 +18,7 @@ from __main__ import send_cmd_help
 # Third party library requirement
 from tabulate import tabulate
 
+
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
 
