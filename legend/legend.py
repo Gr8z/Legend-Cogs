@@ -503,7 +503,7 @@ class legend:
                 return await self.bot.say("Approval failed, the clan is currently closed.")
 
             if clan_approval:
-                if clan_role in [y.name for y in member.roles]:
+                if clan_role not in [y.name for y in ctx.message.author.roles]:
                     return await self.bot.say("Approval failed, only {} staff can approve new recruits for this clan.".format(clan_name))
 
             if await self.clans.numWaiting(clankey) > 0:
