@@ -434,7 +434,7 @@ class duels:
                 pages.append(msg)
                 totalPages += 1
                 msg = ""
-                usr += 1
+                #usr += 1
             # Determine what page to show.
             if page <= -1:  # Show page with user.
                 selectPage = userFoundPage
