@@ -332,6 +332,11 @@ class clashroyale:
 
         await self.bot.type()
 
+        clantag = await self.tags.formatTag(clantag)
+
+        if not await self.tags.verifyTag(clantag):
+            return await self.bot.say("The ID you provided has invalid characters. Please try again.")
+
         try:
             clandata = await self.clash.get_clan(clantag)
         except clashroyaleAPI.RequestError:
