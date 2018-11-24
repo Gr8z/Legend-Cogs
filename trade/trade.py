@@ -269,12 +269,12 @@ class Trade:
                 member = server.get_member(player)
                 if trades[player][2]:
                     givers += self.emoji("Token" + await self.constants.card_to_rarity(card))
-                givers += member.mention + "\n"
+                givers += member.display_name + "\n"
             if trades[player][1]:
                 member = server.get_member(player)
                 if trades[player][2]:
                     wanters += self.emoji("Token" + await self.constants.card_to_rarity(card))
-                wanters += member.mention + "\n"
+                wanters += member.display_name + "\n"
         embed.add_field(name="Giving {}".format(card), value=givers, inline=False)
         embed.add_field(name="Want {}".format(card), value=wanters, inline=False)
 
