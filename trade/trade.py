@@ -150,6 +150,18 @@ class Trade:
 
         return trades
 
+    async def sortTrades(self, trades):
+        token_trades = {}
+        other_trades = {}
+
+        for player in trades:
+            if trades[player][2]:
+                token_trades[player] = trades[player]
+            else:
+                other_trades[player] = trades[player]
+
+        return {**token_trades, **other_trades}
+
     @commands.group(pass_context=True, no_pm=True)
     async def trade(self, ctx):
         """Clash Royale trade commands"""
@@ -260,22 +272,32 @@ class Trade:
         embed = discord.Embed(color=0xFAA61A, description="We found these members who match your card search.")
         embed.set_author(name="{} Traders".format(card),
                          icon_url="https://i.imgur.com/dtSMITE.jpg")
+        embed.set_thumbnail(url="https://royaleapi.github.io/cr-api-assets/cards/{}.png".format(card.replace(" ", "-").lower()))
         embed.set_footer(text=credits, icon_url=creditIcon)
 
+        trades = await self.sortTrades(trades)
         givers = "\u200b"
         wanters = "\u200b"
         for player in trades:
-            if trades[player][0]:
-                member = server.get_member(player)
-                if trades[player][2]:
-                    givers += self.emoji("Token" + await self.constants.card_to_rarity(card))
-                givers += member.display_name + "\n"
-            if trades[player][1]:
-                member = server.get_member(player)
-                if trades[player][2]:
-                    wanters += self.emoji("Token" + await self.constants.card_to_rarity(card))
-                wanters += member.display_name + "\n"
-        embed.add_field(name="Giving {}".format(card), value=givers, inline=False)
+            try:
+                if trades[player][0]:
+                    member = server.get_member(player)
+                    givers += "• {} ".format(member.display_name)
+                    if trades[player][2]:
+                        givers += self.emoji("Token" + await self.constants.card_to_rarity(card))
+                    givers += "\n"
+                if trades[player][1]:
+                    member = server.get_member(player)
+                    wanters += "• {} ".format(member.display_name)
+                    if trades[player][2]:
+                        wanters += self.emoji("Token" + await self.constants.card_to_rarity(card))
+                    wanters += "\n"
+            except AttributeError:
+                pass
+
+        if len(givers) > 1024:
+            givers = givers[:1000-len(givers)]
+        embed.add_field(name="Giving {}".format(card), value=givers + "\u200b", inline=False)
         embed.add_field(name="Want {}".format(card), value=wanters, inline=False)
 
         await self.bot.say(embed=embed)
