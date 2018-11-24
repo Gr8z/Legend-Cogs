@@ -297,7 +297,7 @@ class Trade:
 
         if len(givers) > 1024:
             givers = givers[:1000-len(givers)] + "..."
-        embed.add_field(name="Giving {}".format(card), value=givers + "\u200b", inline=False)
+        embed.add_field(name="Giving {}".format(card), value=givers + "\n\u200b", inline=False)
         embed.add_field(name="Want {}".format(card), value=wanters, inline=False)
 
         await self.bot.say(embed=embed)
