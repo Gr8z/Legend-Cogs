@@ -36,7 +36,7 @@ dm_menu = {
                                    "<a:goblinstab:468708996153475072>\n\n"
                                    "We are glad you joined us, can we ask a few questions "
                                    "to customize your experience?"),
-        "thumbnail": "https://cdn.discordapp.com/icons/374596069989810176/8cadece4b0197ce2a77a4c41a490f0fc.jpg",
+        "thumbnail": "https://i.imgur.com/8SRsdQz.png",
         "options": [
             {
                 "name": "Yes please!",
@@ -605,7 +605,7 @@ class welcome:
         member = server.get_member(member.id)
 
         try:
-            profiletag = await self.tags.getTag(member.id)
+            profiletag = await self.tags.getTagCR(member.id)
             profiledata = await self.clash.get_player(profiletag)
             ign = profiledata.name
         except (clashroyale.RequestError, KeyError):
@@ -632,7 +632,7 @@ class welcome:
         member = server.get_member(member.id)
 
         try:
-            profiletag = await self.tags.getTag(member.id)
+            profiletag = await self.tags.getTagCR(member.id)
             profiledata = await self.clash.get_player(profiletag)
             if profiledata.clan is None:
                 clantag = ""
@@ -832,7 +832,7 @@ class welcome:
             profiledata = await self.clash.get_player(profiletag)
             name = profiledata.name
 
-            checkUser = await self.tags.getUser(self.bot.get_all_members(), profiletag)
+            checkUser = await self.tags.getUserCR(self.bot.get_all_members(), profiletag)
             if checkUser is not None:
                 if checkUser != member:
                     return await self.bot.say("Error, This Player ID is already linked with **" + checkUser.display_name + "**")
@@ -844,7 +844,7 @@ class welcome:
             self.user_history[member.id]["data"]["tag"] = profiledata.tag
             self.user_history[member.id]["data"]["emoji"] = await self.emoji(profiledata.arena.name.replace(' ', '').lower())
 
-            await self.tags.linkTag(profiletag, member.id)
+            await self.tags.linkTagCR(profiletag, member.id)
 
             menu_name = "choose_path"
             await self.load_menu(member, menu_name)

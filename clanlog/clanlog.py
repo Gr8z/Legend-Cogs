@@ -190,10 +190,11 @@ class Clanlog:
         """Graph with discord user count history"""
         try:
             channel = ctx.message.channel
+            server = ctx.message.server
             await self.bot.send_typing(channel)
             self.update_discord_log()
 
-            secs, vals = zip(*sorted(self.discord_log.items()))
+            secs, vals = zip(*sorted(self.discord_log[server.id].items()))
 
             # Convert to the correct format for matplotlib.
             # mdate.epoch2num converts epoch timestamps to the right format for matplotlib
@@ -213,7 +214,7 @@ class Clanlog:
             ax.xaxis.set_major_formatter(date_formatter)
             ax.xaxis.set_major_locator(ticker.MultipleLocator(tick_spacing))
 
-            plt.title("DISCORD USER HISTORY OF LEGEND FAMILY", color="#7289DA", weight="bold", size=19)
+            plt.title("DISCORD USER HISTORY OF {}".format(server.name.upper()), color="#7289DA", weight="bold", size=19)
             plt.xlabel("DATE", color="gray")
             plt.ylabel("MEMBERS", color="gray")
 

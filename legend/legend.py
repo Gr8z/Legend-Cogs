@@ -305,7 +305,7 @@ class legend:
         else:
             try:
                 await self.bot.type()
-                profiletag = await self.tags.getTag(member.id)
+                profiletag = await self.tags.getTagCR(member.id)
                 profiledata = await self.clash.get_player(profiletag)
                 trophies = profiledata.trophies
                 cards = profiledata.cards
@@ -466,7 +466,7 @@ class legend:
         leftClan = False
         try:
             await self.bot.type()
-            profiletag = await self.tags.getTag(member.id)
+            profiletag = await self.tags.getTagCR(member.id)
             profiledata = await self.clash.get_player(profiletag)
             clandata = await self.clash.get_clan(clan_tag)
 
@@ -587,7 +587,7 @@ class legend:
 
         try:
             await self.bot.type()
-            profiletag = await self.tags.getTag(member.id)
+            profiletag = await self.tags.getTagCR(member.id)
             profiledata = await self.clash.get_player(profiletag)
             if profiledata.clan is None:
                 clantag = ""
@@ -738,7 +738,7 @@ class legend:
 
         try:
             await self.bot.type()
-            profiletag = await self.tags.getTag(member.id)
+            profiletag = await self.tags.getTagCR(member.id)
             profiledata = await self.clash.get_player(profiletag)
             clandata = await self.clash.get_clan(clan_tag)
 
@@ -857,7 +857,7 @@ class legend:
 
         try:
             await self.bot.type()
-            profiletag = await self.tags.getTag(member.id)
+            profiletag = await self.tags.getTagCR(member.id)
             profiledata = await self.clash.get_player(profiletag)
             if profiledata.clan is None:
                 clantag = "none"
@@ -896,7 +896,7 @@ class legend:
 
         try:
             await self.bot.type()
-            profiletag = await self.tags.getTag(member.id)
+            profiletag = await self.tags.getTagCR(member.id)
             profiledata = await self.clash.get_player(profiletag)
             if profiledata.clan is None:
                 clantag = "none"
@@ -997,7 +997,7 @@ class legend:
 
         for d_member in d_members:
             try:
-                player_tag = await self.tags.getTag(d_member.id)
+                player_tag = await self.tags.getTagCR(d_member.id)
 
                 if player_tag not in cr_members_tag:
                     d_members_not_in_clan.append(d_member.display_name)
@@ -1013,7 +1013,7 @@ class legend:
 
         for index, player_tag in enumerate(cr_members_tag):
             try:
-                dc_member = await self.tags.getUser(server.members, player_tag)
+                dc_member = await self.tags.getUserCR(server.members, player_tag)
 
                 if role not in dc_member.roles:
                     d_members_without_role.append(dc_member.display_name)
@@ -1284,7 +1284,7 @@ class legend:
 
         try:
             await self.bot.type()
-            profiletag = await self.tags.getTag(member.id)
+            profiletag = await self.tags.getTagCR(member.id)
             profiledata = await self.clash.get_player(profiletag)
             ign = profiledata.name
         except clashroyale.RequestError:

@@ -115,7 +115,7 @@ class duels:
 
         if not self.account_check(author.id):
             try:
-                player_tag = await self.tags.getTag(author.id)
+                player_tag = await self.tags.getTagCR(author.id)
             except KeyError:
                 return await self.bot.say("You need to first save your profile using ``{}save clash #GAMETAG``".format(ctx.prefix))
 

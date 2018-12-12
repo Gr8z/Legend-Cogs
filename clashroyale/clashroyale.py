@@ -185,7 +185,7 @@ class clashroyale:
 
         await self.bot.type()
         try:
-            profiletag = await self.tags.getTag(member.id)
+            profiletag = await self.tags.getTagCR(member.id)
             profiledata = await self.clash.get_player(profiletag)
         except clashroyaleAPI.RequestError:
             return await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
@@ -233,7 +233,7 @@ class clashroyale:
 
         await self.bot.type()
         try:
-            profiletag = await self.tags.getTag(member.id)
+            profiletag = await self.tags.getTagCR(member.id)
             chestdata = (await self.clash.get_player_chests(profiletag)).get("items")
         except clashroyaleAPI.RequestError:
             return await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
@@ -245,7 +245,7 @@ class clashroyale:
             'Golden Chest': 'gold',
             'Giant Chest': 'giant',
             'Epic Chest': 'epic',
-            'Super Magical Chest': 'super',
+            'Super Magical Chest': 'mlc',
             'Magical Chest': 'magic',
             'Legendary Chest': 'legendary'
         }
@@ -276,7 +276,7 @@ class clashroyale:
         await self.bot.type()
 
         try:
-            profiletag = await self.tags.getTag(member.id)
+            profiletag = await self.tags.getTagCR(member.id)
             profiledata = await self.clash.get_player(profiletag)
         except clashroyaleAPI.RequestError:
             return await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
@@ -298,7 +298,7 @@ class clashroyale:
         await self.bot.type()
 
         try:
-            profiletag = await self.tags.getTag(member.id)
+            profiletag = await self.tags.getTagCR(member.id)
             profiledata = await self.clash.get_player(profiletag)
             leagues = await self.clanwarReadiness(profiledata.cards)
         except clashroyaleAPI.RequestError:
@@ -468,11 +468,11 @@ class clashroyale:
         try:
             profiledata = await self.clash.get_player(profiletag)
 
-            checkUser = await self.tags.getUser(server.members, profiletag)
+            checkUser = await self.tags.getUserCR(server.members, profiletag)
             if checkUser is not None:
                 return await self.bot.say("Error, This Player ID is already linked with **" + checkUser.display_name + "**")
 
-            await self.tags.linkTag(profiletag, member.id)
+            await self.tags.linkTagCR(profiletag, member.id)
 
             embed = discord.Embed(color=discord.Color.green())
             avatar = member.avatar_url if member.avatar else member.default_avatar_url

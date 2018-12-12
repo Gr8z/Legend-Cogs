@@ -19,7 +19,7 @@ class stats:
         self.settings = dataIO.load_json(settings_path)
         self.member_log = dataIO.load_json('data/clanlog/member_log.json')
         self.discord_log = dataIO.load_json('data/clanlog/discord_log.json')
-        self.last_count = {'member': 0, 'guests': 0, 'user': 0, 'server': 0}
+        self.last_count = {}
         self.cycle_task1 = bot.loop.create_task(self.updateUserCount())
         self.cycle_task2 = bot.loop.create_task(self.updateMiscCount())
 
@@ -101,38 +101,45 @@ class stats:
                     channels = self.settings[server.id]['channels']
                     values = self.last_count
 
+                    if server.id not in values:
+                        values[server.id] = {'member': 0, 'guests': 0, 'user': 0, 'server': 0}
+
                     self.member_log = dataIO.load_json('data/clanlog/member_log.json')
                     members = self.member_log[max(self.member_log.keys())]
-                    if members != values['member']:
-                        values['member'] = members
+                    if members != values[server.id]['member']:
+                        values[server.id]['member'] = members
                         await self.bot.edit_channel(server.get_channel(channels['member_channel']),
                                                     name="{} Members".format(members))
 
                     guests = await self.getUserCount(server, "Guest")
-                    if guests != values['guests']:
-                        values['guests'] = guests
+                    if guests != values[server.id]['guests']:
+                        values[server.id]['guests'] = guests
                         await self.bot.edit_channel(server.get_channel(channels['guests_channel']),
                                                     name="{} Guests".format(guests))
 
                     userTotal = len(server.members)
-                    if userTotal != values['user']:
+                    if userTotal != values[server.id]['user']:
                         current_time = get_time()
-                        self.discord_log[str(current_time)] = userTotal
-                        dataIO.save_json('data/clanlog/discord_log.json', self.discord_log)
-                        values['user'] = userTotal
 
-                        saved_times = list(self.discord_log.keys())
+                        if server.id not in self.discord_log:
+                            self.discord_log[server.id] = {}
+
+                        self.discord_log[server.id][str(current_time)] = userTotal
+                        dataIO.save_json('data/clanlog/discord_log.json', self.discord_log)
+                        values[server.id]['user'] = userTotal
+
+                        saved_times = list(self.discord_log[server.id].keys())
                         for time in saved_times:
                             if (current_time - float(time)) > 2678400:  # one month
-                                self.discord_log.pop(time, None)
+                                self.discord_log[server.id].pop(time, None)
                         dataIO.save_json('data/clanlog/discord_log.json', self.discord_log)
 
                         await self.bot.edit_channel(server.get_channel(channels['user_channel']),
                                                     name="{} Total Users".format(userTotal))
 
                     passed = (datetime.datetime.utcnow() - server.created_at).days
-                    if passed != values['server']:
-                        values['server'] = passed
+                    if passed != values[server.id]['server']:
+                        values[server.id]['server'] = passed
                         await self.bot.edit_channel(server.get_channel(channels['server_channel']),
                                                     name="{} Days Old".format(passed))
 

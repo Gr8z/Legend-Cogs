@@ -177,7 +177,7 @@ class Trade:
         await self.bot.type()
 
         try:
-            profiletag = await self.tags.getTag(member.id)
+            profiletag = await self.tags.getTagCR(member.id)
             profiledata = await self.clash.get_player(profiletag)
             rarities = await self.tradeCards(profiledata.cards)
         except clashroyale.RequestError:

@@ -5,8 +5,12 @@ import os
 from cogs.utils import checks
 
 tags_path = "data/crtools/tags.json"
-auth_path = "data/crtools/auth.json"
 clans_path = "data/crtools/clans.json"
+
+tags_bs_path = "data/crtools/tags_bs.json"
+bands_path = "data/crtools/bands.json"
+
+auth_path = "data/crtools/auth.json"
 constants_path = "data/crtools/constants.json"
 
 BOTCOMMANDER_ROLES = ["Family Representative", "Clan Manager",
@@ -16,6 +20,11 @@ default_clans = {'defualt': {'tag': '9PJYVVL2', 'role': 'everyone', 'name': 'def
                              'nickname': 'defualt', 'discord': None, 'waiting': [], 'members': {},
                              'bonustitle': '', 'personalbest': 0, 'warTrophies': 0, 'approval': False,
                              'log_channel': None, 'warlog_channel': None, 'emoji': '', 'cwr': 0}}
+
+default_bands = {'defualt': {'tag': '9PJYVVL2', 'role': 'everyone', 'name': 'defualt',
+                             'nickname': 'defualt', 'discord': None, 'waiting': [], 'members': {},
+                             'bonustitle': '', 'personalbest': 0, 'approval': False,
+                             'log_channel': None, 'emoji': ''}}
 
 
 class constants:
@@ -89,6 +98,7 @@ class tags:
     """Tags Management"""
     def __init__(self):
         self.tags = dataIO.load_json(tags_path)
+        self.tags_bs = dataIO.load_json(tags_bs_path)
 
     async def verifyTag(self, tag):
         """Check if a player/can tag is valid"""
@@ -102,30 +112,62 @@ class tags:
     async def formatTag(self, tag):
         """Sanitize and format CR Tag"""
         return tag.strip('#').upper().replace('O', '0')
+        return True
 
-    async def linkTag(self, tag, userID):
-        """Link a player tag to a discord User"""
+    async def formatName(self, name):
+        """Sanitize and format CR Tag"""
+        return name.replace('<c1>', '').replace('<c2>', '').replace('<c3>', '').replace('<c4>', '').replace('<c5>', '').replace('<c6>', '').replace('<c7>', '').replace('<c8>', '').replace('<c9>', '').replace('</c>', '')
+
+    async def linkTagCR(self, tag, userID):
+        """Link a CR player tag to a discord User"""
         tag = await self.formatTag(tag)
 
         self.tags.update({userID: {'tag': tag}})
         dataIO.save_json(tags_path, self.tags)
 
-    async def unlinkTag(self, userID):
-        """Unlink a player tag to a discord User"""
-        if self.c.pop(str(userID), None):
+    async def unlinkTagCR(self, userID):
+        """Unlink a CR player tag to a discord User"""
+        if self.tags.pop(str(userID), None):
             dataIO.save_json(tags_path, self.tags)
             return True
         return False
 
-    async def getTag(self, userID):
+    async def getTagCR(self, userID):
         """Get a user's CR Tag"""
         return self.tags[userID]['tag']
 
-    async def getUser(self, serverUsers, tag):
+    async def linkTagBS(self, tag, userID):
+        """Link a BS player tag to a discord User"""
+        tag = await self.formatTag(tag)
+
+        self.tags_bs.update({userID: {'tag': tag}})
+        dataIO.save_json(tags_bs_path, self.tags_bs)
+
+    async def unlinkTagBS(self, userID):
+        """Unlink a BS player tag to a discord User"""
+        if self.tags_bs.pop(str(userID), None):
+            dataIO.save_json(tags_bs_path, self.tags_bs)
+            return True
+        return False
+
+    async def getTagBS(self, userID):
+        """Get a user's BS Tag"""
+        return self.tags_bs[userID]['tag']
+
+    async def getUserCR(self, serverUsers, tag):
         """Get User from CR Tag"""
         for user in serverUsers:
             if user.id in self.tags:
                 player_tag = self.tags[user.id]['tag']
+                if player_tag == await self.formatTag(tag):
+                    return user
+        return None
+
+    async def getUserBS(self, serverUsers, tag):
+        """Get User from BS Tag"""
+        for user in serverUsers:
+            if user.id in self.tags_bs:
+                player_tag = self.tags_bs[user.id]['tag']
                 if player_tag == await self.formatTag(tag):
                     return user
         return None
@@ -142,8 +184,8 @@ class auth:
         dataIO.save_json(auth_path, self.auth)
 
     async def addTokenBS(self, key):
-        """Add a brawlstars-api Token"""
-        self.auth['brawlstars-api'] = key
+        """Add a BrawlAPI.cf Token"""
+        self.auth['BrawlAPI'] = key
         dataIO.save_json(auth_path, self.auth)
 
     async def addTokenOfficial(self, key):
@@ -161,11 +203,11 @@ class auth:
 
     def getBSToken(self):
         """Get brawlstars-api Token"""
-        return self.auth['brawlstars-api']
+        return self.auth['BrawlAPI']
 
 
 class clans:
-    """Clan Family Management"""
+    """CR Clan Family Management"""
     def __init__(self):
         self.clans = dataIO.load_json(clans_path)
 
@@ -332,12 +374,144 @@ class clans:
         return self.clans[clankey]['approval']
 
 
+class bands:
+    """BS Band Family Management"""
+    def __init__(self):
+        self.bands = dataIO.load_json(bands_path)
+
+    async def getBands(self):
+        """Return band array"""
+        return self.bands
+
+    async def getBandData(self, bandkey, data):
+        """Return band array"""
+        return self.bands[bandkey][data]
+
+    async def getBandMemberData(self, bandkey, memberkey, data):
+        """Return band member's dict"""
+        return self.bands[bandkey]['members'][memberkey][data]
+
+    async def numBands(self):
+        """Return the number of bands"""
+        return len(self.bands.keys())
+
+    def keysBands(self):
+        """Get keys of all the bands"""
+        return self.bands.keys()
+
+    def keysBandMembers(self, bandkey):
+        """Get keys of all the band members"""
+        return self.bands[bandkey]['members'].keys()
+
+    async def namesBands(self):
+        """Get name of all the bands"""
+        return ", ".join(key for key in self.keysBands())
+
+    async def tagsBands(self):
+        """Get tags of all the bands"""
+        return [self.bands[band]["tag"] for band in self.bands]
+
+    async def rolesBands(self):
+        """Get roles of all the bands"""
+        roles = ["Member"]
+        for x in self.bands:
+            roles.append(self.bands[x]['role'])
+        return roles
+
+    async def verifyMembership(self, bandtag):
+        """Check if a band is part of the family"""
+        for bandkey in self.keysBands():
+            if self.bands[bandkey]['tag'] == bandtag:
+                return True
+        return False
+
+    async def getBandkey(self, bandtag):
+        """Get a band key from a band tag."""
+        for bandkey in self.keysBands():
+            if self.bands[bandkey]['tag'] == bandtag:
+                return bandkey
+        return None
+
+    async def numWaiting(self, bandkey):
+        """Get a band's wating list length from a band key."""
+        return len(self.bands[bandkey]['waiting'])
+
+    async def addWaitingMember(self, bandkey, memberID):
+        """Add a user to a band's waiting list"""
+        if memberID not in self.bands[bandkey]['waiting']:
+            self.bands[bandkey]['waiting'].append(memberID)
+            dataIO.save_json(bands_path, self.bands)
+            return True
+        else:
+            return False
+
+    async def delWaitingMember(self, bandkey, memberID):
+        """Remove a user to a band's waiting list"""
+        if memberID in self.bands[bandkey]['waiting']:
+            self.bands[bandkey]['waiting'].remove(memberID)
+            dataIO.save_json(bands_path, self.bands)
+
+            return True
+        else:
+            return False
+
+    async def checkWaitingMember(self, bandkey, memberID):
+        """check if a user is in a waiting list"""
+        return memberID in self.bands[bandkey]['waiting']
+
+    async def getWaitingIndex(self, bandkey, memberID):
+        """Get the waiting position from a band's waiting list"""
+        return self.bands[bandkey]['waiting'].index(memberID)
+
+    async def delBand(self, bandkey):
+        """delete a band from the family"""
+        if self.bands.pop(bandkey, None):
+            dataIO.save_json(bands_path, self.bands)
+            return True
+        return False
+
+    async def setPBTrophies(self, bandkey, trophies):
+        """Set a band's PB Trohies"""
+        self.bands[bandkey]['personalbest'] = trophies
+        dataIO.save_json(bands_path, self.bands)
+
+    async def setBonus(self, bandkey, bonus):
+        """Set a band's Bonus Statement"""
+        self.bands[bandkey]['bonustitle'] = bonus
+        dataIO.save_json(bands_path, self.bands)
+
+    async def setLogChannel(self, bandkey, channel):
+        """Set a band's log channel"""
+        self.bands[bandkey]['log_channel'] = channel
+        dataIO.save_json(bands_path, self.bands)
+
+    async def addMember(self, bandkey, name, tag):
+        """Add a member to the band"""
+        self.bands[bandkey]['members'][tag] = {}
+        self.bands[bandkey]['members'][tag]["tag"] = tag
+        self.bands[bandkey]['members'][tag]["name"] = name
+        dataIO.save_json(bands_path, self.bands)
+
+    async def delMember(self, bandkey, tag):
+        """Remove a member to the band"""
+        self.bands[bandkey]['members'].pop(tag, None)
+        dataIO.save_json(bands_path, self.bands)
+
+    async def togglePrivate(self, bandkey):
+        """oggle Private approval of new recruits"""
+        self.bands[bandkey]['approval'] = not self.bands[bandkey]['approval']
+        dataIO.save_json(bands_path, self.bands)
+
+        return self.bands[bandkey]['approval']
+
+
 class crtools:
     """Clash Royale Tools"""
     def __init__(self, bot):
         self.bot = bot
         self.tags = tags()
         self.clans = clans()
+        self.bands = bands()
         self.auth = auth()
         self.constants = constants()
 
@@ -353,7 +527,7 @@ class crtools:
     async def settokenbs(self, *, key):
         """Input your BrawlStars API Token"""
         await self.auth.addTokenBS(key)
-        await self.bot.say("brawlstars-api Token set")
+        await self.bot.say("BrawlAPI Token set")
 
     @commands.command()
     @checks.mod_or_permissions(administrator=True)
@@ -468,6 +642,78 @@ class crtools:
         except KeyError:
             return await self.bot.say("Please use a valid clanname: {}".format(await self.clans.namesClans()))
 
+    @commands.group(pass_context=True, name="bands")
+    @commands.has_any_role(*BOTCOMMANDER_ROLES)
+    async def _bands(self, ctx):
+        """Base command for managing clash royale bands. [p]help bands for details"""
+        if ctx.invoked_subcommand is None:
+            await self.bot.send_cmd_help(ctx)
+
+    @_bands.command(pass_context=True, name="delete")
+    @checks.is_owner()
+    async def bands_delete(self, ctx, clankey):
+        """Remove a clan from tracking"""
+        clankey = clankey.lower()
+        if await self.bands.delClan(clankey):
+            return await self.bot.say("Success")
+        else:
+            await self.bot.say("Failed")
+
+    @_bands.command(pass_context=True, name="pb")
+    async def bands_pb(self, ctx, clankey, pb: int):
+        """Set a CWR requirement for a clan"""
+        clankey = clankey.lower()
+        try:
+            await self.bands.setCWR(clankey, pb)
+        except KeyError:
+            return await self.bot.say("Please use a valid clanname: {}".format(await self.bands.namesBands()))
+
+        await self.bot.say("Success")
+
+    @_bands.command(pass_context=True, name="bonus")
+    async def bands_bonus(self, ctx, clankey, *bonus):
+        """Add bonus information to title of clan (i.e. Age: 21+)"""
+        clankey = clankey.lower()
+        try:
+            await self.bands.setBonus(clankey, " ".join(bonus))
+        except KeyError:
+            return await self.bot.say("Please use a valid clanname: {}".format(await self.bands.namesBands()))
+
+        await self.bot.say("Success")
+
+    @_bands.command(pass_context=True, name="log")
+    async def bands_log(self, ctx, clankey, channel: discord.Channel):
+        """Set Clan's Log channel to track in's and outs"""
+        clankey = clankey.lower()
+        try:
+            server = ctx.message.server
+
+            if not server.get_member(self.bot.user.id).permissions_in(channel).send_messages:
+                return await self.bot.say("I do not have permissions to send messages to {0.mention}".format(channel))
+
+            if channel is None:
+                await self.bot.say("I can't find the specified channel. It might have been deleted.")
+
+            await self.bands.setLogChannel(clankey, channel.id)
+
+            await self.bot.send_message(channel, "I will now send log messages to {0.mention}".format(channel))
+            await self.bot.say("Clash log channel for {} is now set to {}".format(clankey, channel))
+
+        except KeyError:
+            await self.bot.say("Please use a valid clanname: {}".format(await self.bands.namesBands()))
+            return
+        except discord.errors.Forbidden:
+            await self.bot.say("No permission to send messages to that channel")
+
+    @_bands.command(pass_context=True, name="private")
+    async def bands_private(self, ctx, clankey):
+        """Toggle Private approval of new recruits"""
+        clankey = clankey.lower()
+        try:
+            await self.bot.say("Private Approval now is set to " + str(await self.bands.togglePrivate(clankey)))
+        except KeyError:
+            return await self.bot.say("Please use a valid clanname: {}".format(await self.bands.namesBands()))
+
 
 def check_folders():
     if not os.path.exists("data/crtools"):
@@ -480,19 +726,33 @@ def check_files():
         print("Creating empty tags.json...")
         fileIO(tags_path, "save", {"0": {"tag": "DONOTREMOVE"}})
 
+    if not fileIO(tags_bs_path, "check"):
+        print("Creating empty tags_bs.json...")
+        fileIO(tags_bs_path, "save", {"0": {"tag": "DONOTREMOVE"}})
+
     if not fileIO(auth_path, "check"):
         print("enter your RoyaleAPI token in data/crtools/auth.json...")
-        fileIO(auth_path, "save", {"token": "enter your RoyaleAPI token here!"})
+        fileIO(auth_path, "save", {"OfficialAPI": "enter your OfficialAPI token here!"})
 
     if not fileIO(clans_path, "check"):
         print("Creating empty clans.json...")
         fileIO(clans_path, "save", default_clans)
+
+    if not fileIO(bands_path, "check"):
+        print("Creating empty bands.json...")
+        fileIO(bands_path, "save", default_bands)
 
 
 def check_auth():
     c = dataIO.load_json(auth_path)
     if 'RoyaleAPI' not in c:
         c['RoyaleAPI'] = "enter your RoyaleAPI token here!"
+    c = dataIO.load_json(auth_path)
+    if 'OfficialAPI' not in c:
+        c['OfficialAPI'] = "enter your OfficialAPI token here!"
+    c = dataIO.load_json(auth_path)
+    if 'BrawlAPI' not in c:
+        c['BrawlAPI'] = "enter your BrawlAPI token here!"
     dataIO.save_json(auth_path, c)
 
 
@@ -501,4 +761,3 @@ def setup(bot):
     check_files()
     check_auth()
     bot.add_cog(crtools(bot))
-

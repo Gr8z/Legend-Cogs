@@ -146,7 +146,7 @@ class shop:
 
                 for key in range(0, len(banks)):
                     try:
-                        if (clan_donations+clan_wins+clan_cards > 0) and (clan_tag == await self.tags.getTag(banks[key])):
+                        if (clan_donations+clan_wins+clan_cards > 0) and (clan_tag == await self.tags.getTagCR(banks[key])):
 
                             try:
                                 user = discord.utils.get(ctx.message.server.members, id=banks[key])
@@ -239,7 +239,7 @@ class shop:
 
             for key in range(0, len(banks)):
                 try:
-                    if (tourney_score > 0) and (tourney_tag == await self.tags.getTag(banks[key])):
+                    if (tourney_score > 0) and (tourney_tag == await self.tags.getTagCR(banks[key])):
 
                         try:
                             user = discord.utils.get(ctx.message.server.members, id=banks[key])
@@ -380,7 +380,7 @@ class shop:
 
             try:
                 await self.bot.type()
-                profiletag = await self.tags.getTag(author.id)
+                profiletag = await self.tags.getTagCR(author.id)
                 profiledata = await self.clash.get_player(profiletag)
 
                 if profiledata.clan is None:

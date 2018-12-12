@@ -17,6 +17,17 @@ from .utils.dataIO import dataIO
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
 
+animals = ((':rabbit2:', 'fast'), (':monkey:', 'fast'), (':cat2:', 'fast'), (':mouse2:', 'slow'),
+           (':chipmunk:', 'fast'), (':rat:', 'fast'), (':dove:', 'fast'), (':bird:', 'fast'),
+           (':dromedary_camel:', 'steady'), (':camel:', 'steady'), (':dog2:', 'steady'),
+           (':poodle:', 'steady'), (':racehorse:', 'steady'), (':ox:', 'abberant'),
+           (':cow2:', 'abberant'), (':elephant:', 'abberant'), (':water_buffalo:', 'abberant'),
+           (':ram:', 'abberant'), (':goat:', 'abberant'), (':sheep:', 'abberant'),
+           (':leopard:', 'predator'), (':tiger2:', 'predator'), (':dragon:', 'special'),
+           (':unicorn:', 'special'), (':turtle:', 'slow'), (':bug:', 'slow'), (':rooster:', 'slow'),
+           (':snail:', 'slow'), (':scorpion:', 'slow'), (':crocodile:', 'slow'), (':pig2:', 'slow'),
+           (':turkey:', 'slow'), (':duck:', 'slow'), (':baby_chick:', 'slow'))
+
 
 class PluralDict(dict):
     def __missing__(self, key):
@@ -106,8 +117,8 @@ class Race:
         self.version = "1.1.03"
         self.cooldown = 0
 
-    def getAminals(self):
-        """Get a list of animal emojis."""
+    def getCRChars(self):
+        """Get a list of CR emojis."""
         return ((self.emoji('Bandit'), 'predator'),
                 (self.emoji('MegaKnight'), 'predator'),
                 (self.emoji('BattleRam'), 'predator'),
@@ -168,6 +179,31 @@ class Race:
                 (self.emoji('RoyalGiant'), 'slow'),
                 (self.emoji('Rascals'), 'abberant'),
                 (self.emoji('RoyalRecruits'), 'steady'))
+
+    def getBSChars(self):
+        """Get a list of BS emojis."""
+        return ((self.emoji('Shelly'), 'slow'),
+                (self.emoji('Colt'), 'slow'),
+                (self.emoji('Nita'), 'slow'),
+                (self.emoji('Bo'), 'slow'),
+                (self.emoji('Bull'), 'predator'),
+                (self.emoji('Jessie'), 'slow'),
+                (self.emoji('Brock'), 'slow'),
+                (self.emoji('Dynamike'), 'slow'),
+                (self.emoji('ElPrimo'), 'abberant'),
+                (self.emoji('Barley'), 'slow'),
+                (self.emoji('Poco'), 'slow'),
+                (self.emoji('Darryl'), 'predator'),
+                (self.emoji('Penny'), 'slow'),
+                (self.emoji('Ricochet'), 'slow'),
+                (self.emoji('Frank'), 'abberant'),
+                (self.emoji('Piper'), 'slow'),
+                (self.emoji('Pam'), 'slow'),
+                (self.emoji('Mortis'), 'fast'),
+                (self.emoji('Tara'), 'slow'),
+                (self.emoji('Crow'), 'fast'),
+                (self.emoji('Spike'), 'slow'),
+                (self.emoji('Leon'), 'slow'))
 
     def emoji(self, name):
         """Emoji by name."""
@@ -280,7 +316,7 @@ class Race:
         server = ctx.message.server
         settings = self.check_config(server)
         mode = mode.lower()
-        modes = ['standard', 'zoo']
+        modes = ['standard', 'zoo', 'clashroyale', 'brawlstars']
         if mode not in modes:
             return await self.bot.say("Invalid mode. Acceptable responses "
                                       "include: {}.".format(', '.join(modes)))
@@ -542,14 +578,32 @@ class Race:
         racers = []
 
         if mode == 'zoo':
-
             if len(data['Players']) == 1:
-                bot_set = random.choice(self.getAminals())
+                bot_set = random.choice(animals)
                 racers = [Racer(bot_set[0], bot_set[1], self.bot.user)]
 
             for user in data['Players']:
                 mobj = author.server.get_member(user)
-                animal_set = random.choice(self.getAminals())
+                animal_set = random.choice(animals)
+                racers.append(Racer(animal_set[0], animal_set[1], mobj))
+        if mode == 'clashroyale':
+            if len(data['Players']) == 1:
+                bot_set = random.choice(self.getCRChars())
+                racers = [Racer(bot_set[0], bot_set[1], self.bot.user)]
+
+            for user in data['Players']:
+                mobj = author.server.get_member(user)
+                animal_set = random.choice(self.getCRChars())
+                racers.append(Racer(animal_set[0], animal_set[1], mobj))
+                racers.append(Racer(animal_set[0], animal_set[1], mobj))
+        if mode == 'brawlstars':
+            if len(data['Players']) == 1:
+                bot_set = random.choice(self.getBSChars())
+                racers = [Racer(bot_set[0], bot_set[1], self.bot.user)]
+
+            for user in data['Players']:
+                mobj = author.server.get_member(user)
+                animal_set = random.choice(self.getBSChars())
                 racers.append(Racer(animal_set[0], animal_set[1], mobj))
         else:
             animal_set = (":turtle:", "slow")
