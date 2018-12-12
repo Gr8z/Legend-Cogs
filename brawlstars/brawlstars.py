@@ -80,7 +80,7 @@ class brawlstars:
         except brawlstats.RequestError as e:
             return await self.bot.say('```\n{}: {}\n```'.format(e.code, e.error))
         except KeyError:
-            return await self.bot.say("You need to first save your profile using ``{}save #GAMETAG``".format(ctx.prefix))
+            return await self.bot.say("You need to first save your profile using ``{}bsave #GAMETAG``".format(ctx.prefix))
 
         embed = discord.Embed(color=0xFAA61A)
         embed.set_author(name="{} (#{})".format(await self.tags.formatName(profiledata.name), profiledata.tag),
