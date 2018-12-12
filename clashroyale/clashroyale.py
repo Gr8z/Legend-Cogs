@@ -245,7 +245,7 @@ class clashroyale:
             'Golden Chest': 'gold',
             'Giant Chest': 'giant',
             'Epic Chest': 'epic',
-            'Super Magical Chest': 'mlc',
+            'Mega Lightning Chest': 'mlc',
             'Magical Chest': 'magic',
             'Legendary Chest': 'legendary'
         }
