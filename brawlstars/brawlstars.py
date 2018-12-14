@@ -1,7 +1,6 @@
 import discord
 from discord.ext import commands
 import brawlstats
-import re
 
 BOTCOMMANDER_ROLES = ["Family Representative", "Clan Manager",
                       "Clan Deputy", "Co-Leader", "Hub Officer", "admin"]
@@ -19,10 +18,6 @@ class brawlstars:
         self.tags = self.bot.get_cog('crtools').tags
         self.bands = self.bot.get_cog('crtools').bands
         self.brawl = brawlstats.Client(self.auth.getBSToken(), is_async=False)
-
-    def camelToString(self, label):
-        """Convert from camel case to normal"""
-        return re.sub(r'((?<=[a-z])[A-Z]|(?<!\A)[A-Z](?=[a-z]))', r' \1', label)
 
     def emoji(self, name):
         """Emoji by name."""

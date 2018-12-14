@@ -115,7 +115,7 @@ class Race:
         self.system = {}
         self.config = dataIO.load_json('data/race/race.json')
         self.version = "1.1.03"
-        self.cooldown = 0
+        self.cooldown = {}
 
     def getCRChars(self):
         """Get a list of CR emojis."""
@@ -354,6 +354,7 @@ class Race:
         author = ctx.message.author
         server = ctx.message.server
         data = self.check_server(author.server)
+        cooldown = self.check_cooldown(author.server)
         settings = self.check_config(author.server)
         cost = settings["Cost"]
         timer = 600
@@ -375,8 +376,8 @@ class Race:
                 data['Players'][author.id] = {}
                 return await self.bot.say("**{}** entered the race!".format(author.display_name))
 
-        if time.time() - self.cooldown < timer:
-            return await self.bot.say("You need to wait {} before starting another race.".format(self.time_format(int(timer - (time.time() - self.cooldown)))))
+        if time.time() - cooldown < timer:
+            return await self.bot.say("You need to wait {} before starting another race.".format(self.time_format(int(timer - (time.time() - cooldown)))))
 
         if self.bank_check(settings, author):
             bank = self.bot.get_cog('Economy').bank
@@ -442,7 +443,7 @@ class Race:
 
         self.game_teardown(data)
 
-        self.cooldown = time.time()
+        cooldown = time.time()
 
     @race.command(name="claim", pass_context=True)
     async def _claim_race(self, ctx):
@@ -552,6 +553,13 @@ class Race:
                                       }
             return self.system[server.id]
 
+    def check_cooldown(self, server):
+        if server.id in self.cooldown:
+            return self.cooldown[server.id]
+        else:
+            self.cooldown[server.id] = 0
+            return self.cooldown[server.id]
+
     def check_config(self, server):
         if server.id in self.config['Servers']:
             return self.config['Servers'][server.id]
@@ -578,41 +586,22 @@ class Race:
         racers = []
 
         if mode == 'zoo':
-            if len(data['Players']) == 1:
-                bot_set = random.choice(animals)
-                racers = [Racer(bot_set[0], bot_set[1], self.bot.user)]
-
-            for user in data['Players']:
-                mobj = author.server.get_member(user)
-                animal_set = random.choice(animals)
-                racers.append(Racer(animal_set[0], animal_set[1], mobj))
-        if mode == 'clashroyale':
-            if len(data['Players']) == 1:
-                bot_set = random.choice(self.getCRChars())
-                racers = [Racer(bot_set[0], bot_set[1], self.bot.user)]
-
-            for user in data['Players']:
-                mobj = author.server.get_member(user)
-                animal_set = random.choice(self.getCRChars())
-                racers.append(Racer(animal_set[0], animal_set[1], mobj))
-                racers.append(Racer(animal_set[0], animal_set[1], mobj))
-        if mode == 'brawlstars':
-            if len(data['Players']) == 1:
-                bot_set = random.choice(self.getBSChars())
-                racers = [Racer(bot_set[0], bot_set[1], self.bot.user)]
-
-            for user in data['Players']:
-                mobj = author.server.get_member(user)
-                animal_set = random.choice(self.getBSChars())
-                racers.append(Racer(animal_set[0], animal_set[1], mobj))
+            characters = animals
+        elif mode == 'clashroyale':
+            characters = self.getCRChars()
+        elif mode == 'brawlstars':
+            characters = self.getBSChars()
         else:
-            animal_set = (":turtle:", "slow")
-            if len(data['Players']) == 1:
-                racers = [Racer(animal_set[0], animal_set[1], self.bot.user)]
+            characters = ((":turtle:", "slow"), (':rabbit2:', 'fast'))
 
-            for user in data['Players']:
-                mobj = author.server.get_member(user)
-                racers.append(Racer(animal_set[0], animal_set[1], mobj))
+        if len(data['Players']) == 1:
+            bot_set = random.choice(characters)
+            racers = [Racer(bot_set[0], bot_set[1], self.bot.user)]
+
+        for user in data['Players']:
+            mobj = author.server.get_member(user)
+            animal_set = random.choice(characters)
+            racers.append(Racer(animal_set[0], animal_set[1], mobj))
 
         return racers
 
