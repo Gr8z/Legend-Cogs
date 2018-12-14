@@ -180,7 +180,7 @@ class fmod:
 
                 await self.bot.edit_message(embedmsg, embed=embed)
                 answer = await self.bot.wait_for_message(channel=channel, author=ctx.message.author)
-                if 'stop' in answer.content:
+                if 'stop' in answer.content.lower():
                     await self.bot.send_message(channel, "Stopping....")
                     break
                 else:
@@ -956,7 +956,7 @@ class fmod:
                     if warning_key == warnid:
                         await self.bot.say("Are you sure you want to delete warn number **{}**?\n\nType `yes` to continue.".format(warnid))
                         continuemsg = await self.bot.wait_for_message(channel=channel, author=ctx.message.author)
-                        if 'yes' in continuemsg.content:
+                        if 'yes' in continuemsg.content.lower():
                             user = discord.utils.get(server.members, id=mid)
                             if data['Warning Number'] == 'Channel Denied':
                                 role = self.settingsload[server.id]['Denied Role']
@@ -1196,7 +1196,7 @@ class fmod:
                             attachlist = []
                         stuff = await self.bot.wait_for_message(channel=dmchannel, author=ctx.message.author)
                         while stuff.content is not None:
-                            if stuff.content == 'stop':
+                            if stuff.content.lower() == 'stop':
                                 await self.bot.send_message(dmchannel, "Done!")
                                 break
                             else:
@@ -1255,7 +1255,7 @@ class fmod:
         confirm = await self.bot.wait_for_message(channel=channel, author=ctx.message.author)
         attachlist = []
         while confirm.content is not None:
-            if confirm.content == 'yes':
+            if confirm.content.lower() == 'yes':
                 await self.bot.send_message(channel, "Please enter your image attachments as proof. "
                                                      "Formats accepted are: Discord, Gyazo and Lightshot. "
                                                      "File uploads via discord are also allowed. Once you are done type `send`.")
