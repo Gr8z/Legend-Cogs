@@ -121,16 +121,16 @@ class Trade:
 
         for card in cards:
             if card.max_level == 13:
-                if (card.count == 250 and card.level != 1) or (card.count > 250):
+                if (card.count == 250 and card.level != 1) or (card.count > 250 or card.level == 13):
                     trades["common"].append(card.name)
             elif card.max_level == 11:
-                if (card.count == 50 and card.level != 1) or (card.count > 50):
+                if (card.count == 50 and card.level != 1) or (card.count > 50 or card.level == 11):
                     trades["rare"].append(card.name)
             elif card.max_level == 8:
-                if (card.count == 10 and card.level != 1) or (card.count > 10):
+                if (card.count == 10 and card.level != 1) or (card.count > 10 or card.level == 8):
                     trades["epic"].append(card.name)
             elif card.max_level == 5:
-                if (card.count == 1 and card.level != 1) or (card.count > 1):
+                if (card.count == 1 and card.level != 1) or (card.count > 1 or card.level == 5):
                     trades["legendary"].append(card.name)
         return trades
 
