@@ -1,0 +1,32 @@
+|Good| "{0} dove just in time to break open the vault. +2000 credits", 2000
+|Good| "{0} had a shootout with Colt and won. +100 credits", 100
+|Good| "{0} turned invisible and escaped. +50 credits", 50
+|Good| "{0} distracted Nita's bear. +100 credits", 100
+
+
+|Bad| "{0} was caught hiding in the bushes the guards.", "Apprehended"
+|Bad| "{0} was jumped on by El Primo.", "Apprehended"
+|Bad| "{0} didn’t realize Bo has placed his mines around the vault.", "Apprehended"
+|Bad| "{0} bumped into Bull and got caught.", "Apprehended"
+|Bad| "{0} was smashed by Frank’s massive hammer.", "Dead"
+|Bad| "{0} got stuck in Spike’s cactus party.", "Apprehended"
+|Bad| "{0} got poisoned by Crow’s sharp knives.", "Apprehended"
+|Bad| "The last thing that {0} saw was a big-bada-barrel of dynamite thrown at him.", "Apprehended"
+|Bad| "{0} stepped into Brock’s Rocket rain by mistake.", "Dead"
+|Bad| "{0} got blown by Bo’s explosive traps.", "Dead"
+|Bad| "{0} was surrounded by Mortis' bats.", "Apprehended"
+|Bad| "{0} got caught in Tara’s black hole.", "Apprehended"
+|Bad| "{0} got bulldozed by Bull.", "Dead"
+|Bad| "El Primo landed on {0} like a comet.", "Apprehended"
+|Bad| "The {0} was knocked down by Nita’s shockwaves.", "Apprehended"
+|Bad| "Darryl rolled over {0}.", "Apprehended"
+|Bad| "Spike hugged {0}.", "Apprehended"
+
+Jail = jail
+OOB = out on bail
+Police = guards
+Bail = bail
+Crew = squad
+Sentence = sentence
+Heist = heist
+Vault = safe

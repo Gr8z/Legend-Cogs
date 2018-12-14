@@ -1367,3 +1367,4 @@ def setup(bot):
     check_files()
     n = Heist(bot)
     bot.add_cog(n)
+
