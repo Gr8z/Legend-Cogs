@@ -443,7 +443,7 @@ class Race:
 
         self.game_teardown(data)
 
-        cooldown = time.time()
+        self.cooldown[server.id] = time.time()
 
     @race.command(name="claim", pass_context=True)
     async def _claim_race(self, ctx):
