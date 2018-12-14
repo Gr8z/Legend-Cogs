@@ -150,17 +150,36 @@ class Trade:
 
         return trades
 
-    async def sortTrades(self, trades):
+    async def sortTrades(self, server, author, trades):
+        try:
+            author_clan = author.display_name.split("|", 1)[1]
+        except IndexError:
+            author_clan = "None"
         token_trades = {}
-        other_trades = {}
+        sorted1 = {}
+        sorted2 = {}
 
         for player in trades:
+            try:
+                member = server.get_member(player)
+                clan = member.display_name.split("|", 1)[1]
+            except AttributeError:
+                continue
+            except IndexError:
+                author_clan = "None"
+
+            if author_clan == clan:
+                token_trades[player] = trades[player]
+            else:
+                sorted1[player] = trades[player]
+
+        for player in sorted1:
             if trades[player][2]:
                 token_trades[player] = trades[player]
             else:
-                other_trades[player] = trades[player]
+                sorted2[player] = trades[player]
 
-        return {**token_trades, **other_trades}
+        return {**token_trades, **sorted2}
 
     @commands.group(pass_context=True, no_pm=True)
     async def trade(self, ctx):
@@ -262,6 +281,7 @@ class Trade:
     @trade.command(pass_context=True, no_pm=True)
     async def search(self, ctx, *, card):
         """Search Trades"""
+        author = ctx.message.author
         server = ctx.message.server
         try:
             card = self.cards_abbrev[card]
@@ -275,7 +295,7 @@ class Trade:
         embed.set_thumbnail(url="https://royaleapi.github.io/cr-api-assets/cards/{}.png".format(card.replace(" ", "-").lower()))
         embed.set_footer(text=credits, icon_url=creditIcon)
 
-        trades = await self.sortTrades(trades)
+        trades = await self.sortTrades(server, author, trades)
         givers = "\u200b"
         wanters = "\u200b"
         for player in trades:

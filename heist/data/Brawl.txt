@@ -21,6 +21,7 @@
 |Bad| "The {0} was knocked down by Nita’s shockwaves.", "Apprehended"
 |Bad| "Darryl rolled over {0}.", "Apprehended"
 |Bad| "Spike hugged {0}.", "Apprehended"
+|Bad| "{0} fell asleep to Poco's amazing melody.", "Apprehended"
 
 Jail = jail
 OOB = out on bail
