@@ -391,7 +391,7 @@ class shop:
             except clashroyale.RequestError:
                 return await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
             except KeyError:
-                return await self.bot.say("You must assosiate a tag with this member first using ``{}save #tag @member``".format(ctx.prefix))
+                return await self.bot.say("You must associate a tag with this member first using ``{}save #tag @member``".format(ctx.prefix))
 
             membership = await self.clans.verifyMembership(clantag)
 
