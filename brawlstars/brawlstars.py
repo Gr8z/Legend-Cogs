@@ -79,7 +79,7 @@ class brawlstars:
 
         embed = discord.Embed(color=0xFAA61A)
         embed.set_author(name="{} (#{})".format(await self.tags.formatName(profiledata.name), profiledata.tag),
-                         icon_url=profiledata.club.badge_url,
+                         icon_url=profiledata.club.badge_url if profiledata.club is not None else "",
                          url="https://brawlstats.com/profile/"+profiledata.tag)
         embed.set_thumbnail(url=profiledata.avatar_url)
         embed.add_field(name="Trophies", value="{} {:,}".format(self.getLeagueEmoji(profiledata.trophies), profiledata.trophies), inline=True)
