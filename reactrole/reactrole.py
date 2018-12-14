@@ -117,6 +117,20 @@ class reactrole:
         await self.bot.say("Reactrole will now check for reactions on ```{}```".format(msg.content))
         dataIO.save_json(settings_path, self.settings)
 
+    @_reactrole.command(pass_context=True, name="embed")
+    @checks.mod_or_permissions(administrator=True)
+    async def _reactrole_embed(self, ctx):
+        """Dummy embed (do not use)"""
+        server = ctx.message.server
+        embed = discord.Embed(title="Notification Roles", description="React with emojis to choose which notifications you would like to turn on!", color=0x0080ff)
+        embed.add_field(name="Giveaways", value=f"<:coin:380832316932489268> — When a giveaway for credits/games is hosted in {server.get_channel('517033365023490069').mention}", inline=False)
+        embed.add_field(name="Challenges", value=f":hourglass: — When a Word Challenge Game starts in {server.get_channel('517059337836036097').mention}", inline=False)
+        embed.add_field(name="Heist", value=f":bank: — When a Heist is planned in {server.get_channel('517059408124182529').mention}", inline=False)
+        embed.add_field(name="Race", value=f"<:tourney:466243255504470036> — When a CR Race starts in {server.get_channel('517059300007477248').mention}", inline=False)
+        embed.set_footer(text=credits, icon_url=creditIcon)
+
+        await self.bot.say(embed=embed)
+
     async def toggle_roles_reaction(self, data_type, server_id, message_id, user_id, emoji_data):
         if self.bot.user.id == user_id:
             return
