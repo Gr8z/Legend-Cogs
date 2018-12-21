@@ -8,7 +8,7 @@ tags_path = "data/crtools/tags.json"
 clans_path = "data/crtools/clans.json"
 
 tags_bs_path = "data/crtools/tags_bs.json"
-bands_path = "data/crtools/bands.json"
+clubs_path = "data/crtools/clubs.json"
 
 auth_path = "data/crtools/auth.json"
 constants_path = "data/crtools/constants.json"
@@ -21,7 +21,7 @@ default_clans = {'defualt': {'tag': '9PJYVVL2', 'role': 'everyone', 'name': 'def
                              'bonustitle': '', 'personalbest': 0, 'warTrophies': 0, 'approval': False,
                              'log_channel': None, 'warlog_channel': None, 'emoji': '', 'cwr': 0}}
 
-default_bands = {'defualt': {'tag': '9PJYVVL2', 'role': 'everyone', 'name': 'defualt',
+default_clubs = {'defualt': {'tag': 'VUYG8U2', 'role': 'everyone', 'name': 'defualt',
                              'nickname': 'defualt', 'discord': None, 'waiting': [], 'members': {},
                              'bonustitle': '', 'personalbest': 0, 'approval': False,
                              'log_channel': None, 'emoji': ''}}
@@ -374,135 +374,135 @@ class clans:
         return self.clans[clankey]['approval']
 
 
-class bands:
-    """BS Band Family Management"""
+class clubs:
+    """BS Club Family Management"""
     def __init__(self):
-        self.bands = dataIO.load_json(bands_path)
+        self.clubs = dataIO.load_json(clubs_path)
 
-    async def getBands(self):
-        """Return band array"""
-        return self.bands
+    async def getClubs(self):
+        """Return club array"""
+        return self.clubs
 
-    async def getBandData(self, bandkey, data):
-        """Return band array"""
-        return self.bands[bandkey][data]
+    async def getClubData(self, clubkey, data):
+        """Return club array"""
+        return self.clubs[clubkey][data]
 
-    async def getBandMemberData(self, bandkey, memberkey, data):
-        """Return band member's dict"""
-        return self.bands[bandkey]['members'][memberkey][data]
+    async def getClubMemberData(self, clubkey, memberkey, data):
+        """Return club member's dict"""
+        return self.clubs[clubkey]['members'][memberkey][data]
 
-    async def numBands(self):
-        """Return the number of bands"""
-        return len(self.bands.keys())
+    async def numClubs(self):
+        """Return the number of clubs"""
+        return len(self.clubs.keys())
 
-    def keysBands(self):
-        """Get keys of all the bands"""
-        return self.bands.keys()
+    def keysClubs(self):
+        """Get keys of all the clubs"""
+        return self.clubs.keys()
 
-    def keysBandMembers(self, bandkey):
-        """Get keys of all the band members"""
-        return self.bands[bandkey]['members'].keys()
+    def keysClubMembers(self, clubkey):
+        """Get keys of all the club members"""
+        return self.clubs[clubkey]['members'].keys()
 
-    async def namesBands(self):
-        """Get name of all the bands"""
-        return ", ".join(key for key in self.keysBands())
+    async def namesClubs(self):
+        """Get name of all the clubs"""
+        return ", ".join(key for key in self.keysClubs())
 
-    async def tagsBands(self):
-        """Get tags of all the bands"""
-        return [self.bands[band]["tag"] for band in self.bands]
+    async def tagsClubs(self):
+        """Get tags of all the clubs"""
+        return [self.clubs[club]["tag"] for club in self.clubs]
 
-    async def rolesBands(self):
-        """Get roles of all the bands"""
+    async def rolesClubs(self):
+        """Get roles of all the clubs"""
         roles = ["Member"]
-        for x in self.bands:
-            roles.append(self.bands[x]['role'])
+        for x in self.clubs:
+            roles.append(self.clubs[x]['role'])
         return roles
 
-    async def verifyMembership(self, bandtag):
-        """Check if a band is part of the family"""
-        for bandkey in self.keysBands():
-            if self.bands[bandkey]['tag'] == bandtag:
+    async def verifyMembership(self, clubtag):
+        """Check if a club is part of the family"""
+        for clubkey in self.keysClubs():
+            if self.clubs[clubkey]['tag'] == clubtag:
                 return True
         return False
 
-    async def getBandkey(self, bandtag):
-        """Get a band key from a band tag."""
-        for bandkey in self.keysBands():
-            if self.bands[bandkey]['tag'] == bandtag:
-                return bandkey
+    async def getClubKey(self, clubtag):
+        """Get a club key from a club tag."""
+        for clubkey in self.keysClubs():
+            if self.clubs[clubkey]['tag'] == clubtag:
+                return clubkey
         return None
 
-    async def numWaiting(self, bandkey):
-        """Get a band's wating list length from a band key."""
-        return len(self.bands[bandkey]['waiting'])
+    async def numWaiting(self, clubkey):
+        """Get a club's wating list length from a club key."""
+        return len(self.clubs[clubkey]['waiting'])
 
-    async def addWaitingMember(self, bandkey, memberID):
-        """Add a user to a band's waiting list"""
-        if memberID not in self.bands[bandkey]['waiting']:
-            self.bands[bandkey]['waiting'].append(memberID)
-            dataIO.save_json(bands_path, self.bands)
+    async def addWaitingMember(self, clubkey, memberID):
+        """Add a user to a club's waiting list"""
+        if memberID not in self.clubs[clubkey]['waiting']:
+            self.clubs[clubkey]['waiting'].append(memberID)
+            dataIO.save_json(clubs_path, self.clubs)
             return True
         else:
             return False
 
-    async def delWaitingMember(self, bandkey, memberID):
-        """Remove a user to a band's waiting list"""
-        if memberID in self.bands[bandkey]['waiting']:
-            self.bands[bandkey]['waiting'].remove(memberID)
-            dataIO.save_json(bands_path, self.bands)
+    async def delWaitingMember(self, clubkey, memberID):
+        """Remove a user to a club's waiting list"""
+        if memberID in self.clubs[clubkey]['waiting']:
+            self.clubs[clubkey]['waiting'].remove(memberID)
+            dataIO.save_json(clubs_path, self.clubs)
 
             return True
         else:
             return False
 
-    async def checkWaitingMember(self, bandkey, memberID):
+    async def checkWaitingMember(self, clubkey, memberID):
         """check if a user is in a waiting list"""
-        return memberID in self.bands[bandkey]['waiting']
+        return memberID in self.clubs[clubkey]['waiting']
 
-    async def getWaitingIndex(self, bandkey, memberID):
-        """Get the waiting position from a band's waiting list"""
-        return self.bands[bandkey]['waiting'].index(memberID)
+    async def getWaitingIndex(self, clubkey, memberID):
+        """Get the waiting position from a club's waiting list"""
+        return self.clubs[clubkey]['waiting'].index(memberID)
 
-    async def delBand(self, bandkey):
-        """delete a band from the family"""
-        if self.bands.pop(bandkey, None):
-            dataIO.save_json(bands_path, self.bands)
+    async def delClub(self, clubkey):
+        """delete a club from the family"""
+        if self.clubs.pop(clubkey, None):
+            dataIO.save_json(clubs_path, self.clubs)
             return True
         return False
 
-    async def setPBTrophies(self, bandkey, trophies):
-        """Set a band's PB Trohies"""
-        self.bands[bandkey]['personalbest'] = trophies
-        dataIO.save_json(bands_path, self.bands)
+    async def setPBTrophies(self, clubkey, trophies):
+        """Set a club's PB Trohies"""
+        self.clubs[clubkey]['personalbest'] = trophies
+        dataIO.save_json(clubs_path, self.clubs)
 
-    async def setBonus(self, bandkey, bonus):
-        """Set a band's Bonus Statement"""
-        self.bands[bandkey]['bonustitle'] = bonus
-        dataIO.save_json(bands_path, self.bands)
+    async def setBonus(self, clubkey, bonus):
+        """Set a club's Bonus Statement"""
+        self.clubs[clubkey]['bonustitle'] = bonus
+        dataIO.save_json(clubs_path, self.clubs)
 
-    async def setLogChannel(self, bandkey, channel):
-        """Set a band's log channel"""
-        self.bands[bandkey]['log_channel'] = channel
-        dataIO.save_json(bands_path, self.bands)
+    async def setLogChannel(self, clubkey, channel):
+        """Set a club's log channel"""
+        self.clubs[clubkey]['log_channel'] = channel
+        dataIO.save_json(clubs_path, self.clubs)
 
-    async def addMember(self, bandkey, name, tag):
-        """Add a member to the band"""
-        self.bands[bandkey]['members'][tag] = {}
-        self.bands[bandkey]['members'][tag]["tag"] = tag
-        self.bands[bandkey]['members'][tag]["name"] = name
-        dataIO.save_json(bands_path, self.bands)
+    async def addMember(self, clubkey, name, tag):
+        """Add a member to the club"""
+        self.clubs[clubkey]['members'][tag] = {}
+        self.clubs[clubkey]['members'][tag]["tag"] = tag
+        self.clubs[clubkey]['members'][tag]["name"] = name
+        dataIO.save_json(clubs_path, self.clubs)
 
-    async def delMember(self, bandkey, tag):
-        """Remove a member to the band"""
-        self.bands[bandkey]['members'].pop(tag, None)
-        dataIO.save_json(bands_path, self.bands)
+    async def delMember(self, clubkey, tag):
+        """Remove a member to the club"""
+        self.clubs[clubkey]['members'].pop(tag, None)
+        dataIO.save_json(clubs_path, self.clubs)
 
-    async def togglePrivate(self, bandkey):
+    async def togglePrivate(self, clubkey):
         """oggle Private approval of new recruits"""
-        self.bands[bandkey]['approval'] = not self.bands[bandkey]['approval']
-        dataIO.save_json(bands_path, self.bands)
+        self.clubs[clubkey]['approval'] = not self.clubs[clubkey]['approval']
+        dataIO.save_json(clubs_path, self.clubs)
 
-        return self.bands[bandkey]['approval']
+        return self.clubs[clubkey]['approval']
 
 
 class crtools:
@@ -511,7 +511,7 @@ class crtools:
         self.bot = bot
         self.tags = tags()
         self.clans = clans()
-        self.bands = bands()
+        self.clubs = clubs()
         self.auth = auth()
         self.constants = constants()
 
@@ -642,47 +642,47 @@ class crtools:
         except KeyError:
             return await self.bot.say("Please use a valid clanname: {}".format(await self.clans.namesClans()))
 
-    @commands.group(pass_context=True, name="bands")
+    @commands.group(pass_context=True, name="clubs")
     @commands.has_any_role(*BOTCOMMANDER_ROLES)
-    async def _bands(self, ctx):
-        """Base command for managing clash royale bands. [p]help bands for details"""
+    async def _clubs(self, ctx):
+        """Base command for managing clash royale clubs. [p]help clubs for details"""
         if ctx.invoked_subcommand is None:
             await self.bot.send_cmd_help(ctx)
 
-    @_bands.command(pass_context=True, name="delete")
+    @_clubs.command(pass_context=True, name="delete")
     @checks.is_owner()
-    async def bands_delete(self, ctx, clankey):
+    async def clubs_delete(self, ctx, clankey):
         """Remove a clan from tracking"""
         clankey = clankey.lower()
-        if await self.bands.delClan(clankey):
+        if await self.clubs.delClan(clankey):
             return await self.bot.say("Success")
         else:
             await self.bot.say("Failed")
 
-    @_bands.command(pass_context=True, name="pb")
-    async def bands_pb(self, ctx, clankey, pb: int):
+    @_clubs.command(pass_context=True, name="pb")
+    async def clubs_pb(self, ctx, clankey, pb: int):
         """Set a CWR requirement for a clan"""
         clankey = clankey.lower()
         try:
-            await self.bands.setCWR(clankey, pb)
+            await self.clubs.setCWR(clankey, pb)
         except KeyError:
-            return await self.bot.say("Please use a valid clanname: {}".format(await self.bands.namesBands()))
+            return await self.bot.say("Please use a valid clanname: {}".format(await self.clubs.namesClubs()))
 
         await self.bot.say("Success")
 
-    @_bands.command(pass_context=True, name="bonus")
-    async def bands_bonus(self, ctx, clankey, *bonus):
+    @_clubs.command(pass_context=True, name="bonus")
+    async def clubs_bonus(self, ctx, clankey, *bonus):
         """Add bonus information to title of clan (i.e. Age: 21+)"""
         clankey = clankey.lower()
         try:
-            await self.bands.setBonus(clankey, " ".join(bonus))
+            await self.clubs.setBonus(clankey, " ".join(bonus))
         except KeyError:
-            return await self.bot.say("Please use a valid clanname: {}".format(await self.bands.namesBands()))
+            return await self.bot.say("Please use a valid clanname: {}".format(await self.clubs.namesClubs()))
 
         await self.bot.say("Success")
 
-    @_bands.command(pass_context=True, name="log")
-    async def bands_log(self, ctx, clankey, channel: discord.Channel):
+    @_clubs.command(pass_context=True, name="log")
+    async def clubs_log(self, ctx, clankey, channel: discord.Channel):
         """Set Clan's Log channel to track in's and outs"""
         clankey = clankey.lower()
         try:
@@ -694,25 +694,25 @@ class crtools:
             if channel is None:
                 await self.bot.say("I can't find the specified channel. It might have been deleted.")
 
-            await self.bands.setLogChannel(clankey, channel.id)
+            await self.clubs.setLogChannel(clankey, channel.id)
 
             await self.bot.send_message(channel, "I will now send log messages to {0.mention}".format(channel))
             await self.bot.say("Clash log channel for {} is now set to {}".format(clankey, channel))
 
         except KeyError:
-            await self.bot.say("Please use a valid clanname: {}".format(await self.bands.namesBands()))
+            await self.bot.say("Please use a valid clanname: {}".format(await self.clubs.namesClubs()))
             return
         except discord.errors.Forbidden:
             await self.bot.say("No permission to send messages to that channel")
 
-    @_bands.command(pass_context=True, name="private")
-    async def bands_private(self, ctx, clankey):
+    @_clubs.command(pass_context=True, name="private")
+    async def clubs_private(self, ctx, clankey):
         """Toggle Private approval of new recruits"""
         clankey = clankey.lower()
         try:
-            await self.bot.say("Private Approval now is set to " + str(await self.bands.togglePrivate(clankey)))
+            await self.bot.say("Private Approval now is set to " + str(await self.clubs.togglePrivate(clankey)))
         except KeyError:
-            return await self.bot.say("Please use a valid clanname: {}".format(await self.bands.namesBands()))
+            return await self.bot.say("Please use a valid clanname: {}".format(await self.clubs.namesClubs()))
 
 
 def check_folders():
@@ -738,9 +738,9 @@ def check_files():
         print("Creating empty clans.json...")
         fileIO(clans_path, "save", default_clans)
 
-    if not fileIO(bands_path, "check"):
-        print("Creating empty bands.json...")
-        fileIO(bands_path, "save", default_bands)
+    if not fileIO(clubs_path, "check"):
+        print("Creating empty clubs.json...")
+        fileIO(clubs_path, "save", default_clubs)
 
 
 def check_auth():

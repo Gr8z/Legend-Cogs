@@ -7,7 +7,7 @@ BOTCOMMANDER_ROLES = ["Family Representative", "Clan Manager",
                       "Clan Deputy", "Co-Leader", "Hub Officer", "admin"]
 
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
-credits = "Bot by GR8 | Titan"
+credits = "Bot by GR8 | Platoon"
 
 
 class brawlstars:
@@ -17,7 +17,7 @@ class brawlstars:
         self.bot = bot
         self.auth = self.bot.get_cog('crtools').auth
         self.tags = self.bot.get_cog('crtools').tags
-        self.bands = self.bot.get_cog('crtools').bands
+        self.clubs = self.bot.get_cog('crtools').clubs
         self.brawl = brawlstats.Client(self.auth.getBSToken(), is_async=False)
 
     def emoji(self, name):
@@ -29,9 +29,9 @@ class brawlstars:
 
     async def getClanEmoji(self, tag):
         """Check if emoji exists for the clan"""
-        clankey = await self.bands.getBandKey(tag.strip("#"))
+        clankey = await self.clubs.getBandKey(tag.strip("#"))
         if clankey is not None:
-            return await self.bands.getBandData(clankey, 'emoji')
+            return await self.clubs.getBandData(clankey, 'emoji')
         return self.emoji("clan")
 
     def getLeagueEmoji(self, trophies):
@@ -98,15 +98,6 @@ class brawlstars:
         embed.set_footer(text=credits, icon_url=creditIcon)
 
         await self.bot.say(embed=embed)
-
-    @commands.command(pass_context=True)
-    async def testtest(self, ctx, member: discord.Member=None):
-        """View your Brawl Stars Profile Data and Statstics."""
-
-        client = brawlstats.Client('5d0d32e01ccf5940cc05eecc6a1f7fdc79b314d2090292758e0df8735a0abb8f8f2dd3083ab7c2d7', is_async=True)
-        player = await client.get_player(tag="LJQ2GGR")
-
-        await self.bot.say(player.name + " (#" + player.tag + ")")
 
     @commands.command(pass_context=True)
     async def club(self, ctx, clantag):
@@ -187,7 +178,7 @@ class brawlstars:
 
             embed = discord.Embed(color=discord.Color.green())
             avatar = member.avatar_url if member.avatar else member.default_avatar_url
-            embed.set_author(name='{} (#{}) has been successfully saved.'.format(profiledata.name, profiletag),
+            embed.set_author(name='{} (#{}) has been successfully saved.'.format(await self.tags.formatName(profiledata.name), profiletag),
                              icon_url=avatar)
             await self.bot.say(embed=embed)
         except brawlstats.NotFoundError:

@@ -14,7 +14,8 @@ If you want to see this bot in action, join the LeGeND Family Discord at [legend
  * **brawlstars** - Brawl Stars band info, profile info and event info.
  * **clashroyale** - Clash Royale clan info, profile info, chest cycle and shop offers.
  * **drafting** - Interactive draft royale cog, pick cards using emojis and create brackets.
- * **legend** - Management system for Legend Clan Family. Used for recruits.
+ * **legend** - Management system for Legend Clash Royale Family. Used for recruits.
+ * **legendbs** - Management system for Legend Brawl Stars Family. Used for recruits.
  * **profanity** - filter and delete message that contain bad words.
  * **tourney** - Clash Royale open tournament finder.
  * **shop** - reward people for donations in credits.

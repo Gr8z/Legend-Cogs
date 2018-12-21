@@ -115,9 +115,9 @@ Please note that if you just lurk in the server and not participate for a long p
 coc_bs = """We also play **Clash of Clans** and **Brawl Stars**, we would like to invite to you join them if you play either of these supercell games.
 
 • Clash of Clans - **LeGeND Raiders! (#JQJRGVJU)** - https://discord.gg/BG7wMFw
-• Brawl Stars - **LeGeND Platoon! (#QVLUCGP)**
+• Brawl Stars - https://discord.gg/5ww5D3q
 
-You can send a request to join with the message "from LEGEND". Let us know when you have joined so we can unlock clan channels for you.
+You can join either servers and talk to our friendly staff to get you set up with a club of your choice.
 """
 
 social_info = """Stay Social! Come and follow us on these platforms to stay up to date on the latest news and announcements.
@@ -1071,11 +1071,6 @@ class legend:
             message += "\n• ".join(d_members_without_name)
             message += "```\n\n"
 
-        if d_members_without_name:
-            message += ":warning: **({})** Players in **{}**, but **DO NOT** have the clan role: ```• ".format(len(d_members_without_name), clan_name)
-            message += "\n• ".join(d_members_without_name)
-            message += "```\n\n"
-
         if cr_members_with_less_trophies:
             message += ":warning: **({})** Players in **{}**, but **DO NOT** meet the trophy requirements: ```• ".format(len(cr_members_with_less_trophies), clan_name)
             message += "\n• ".join(cr_members_with_less_trophies)
@@ -1313,22 +1308,6 @@ class legend:
     async def gmt(self):
         """Get the currect GMT time"""
         await self.bot.say(datetime.datetime.now(datetime.timezone.utc).strftime("%H:%M GMT"))
-
-    @commands.command(pass_context=True, name="embed")
-    async def _reactrole_embed(self, ctx):
-        """Dummy embed (do not use)"""
-        server = ctx.message.server
-        embed = discord.Embed(title="Notification Roles", description="React with emojis to choose which notifications you would like to turn on!", color=0x0080ff)
-        embed.add_field(name="Challenges", value=f":hourglass: — When a Word Challenge Game starts in {server.get_channel('405062108175269898').mention}", inline=False)
-        embed.add_field(name="Heist", value=f":bank: — When a Heist is planned in {server.get_channel('381338682298466315').mention}", inline=False)
-        embed.add_field(name="Duels", value=f"<:battle:466243249149837314> — When a player is looking for a Clash Royale battle in {server.get_channel('430083671429611530').mention}", inline=False)
-        embed.add_field(name="Giveaways", value=f"<:coin:380832316932489268> — When a giveaway for credits/games is hosted in {server.get_channel('421623464567504896').mention}", inline=False)
-        embed.add_field(name="Tournaments", value=f"<:tourney:466243255504470036> — When a 100+ player tournament is hosted in {server.get_channel('374597050530136064').mention}", inline=False)
-        embed.add_field(name="Race", value=f":race_car: — When a CR Race starts in {server.get_channel('490125656223514627').mention}", inline=False)
-        embed.set_footer(text=credits, icon_url=creditIcon)
-
-        embed2 = await self.bot.get_message(server.get_channel("426697128883257344"), "477582487162454056")
-        await self.bot.edit_message(embed2, embed=embed)
 
     @commands.command(pass_context=True, no_pm=True)
     async def cwstats(self, ctx, tag):

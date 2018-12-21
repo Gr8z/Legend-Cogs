@@ -1,0 +1,10 @@
+{
+    "AUTHOR" : "GR8",
+    "INSTALL_MSG" : "Legend Family Brawl Stars Addon added, if there are any issues, please mention them on https://github.com/Gr8z/LeGeND-Bot",
+    "NAME" : "legendbs",
+    "SHORT" : "Brawl Star Club management tools for Legend Family",
+    "DESCRIPTION" : "Check available clubs, add tags, change nickname, see top members from family.",
+    "TAGS" : ["brawlstars", "legend","management", "topmembers"],
+    "REQUIREMENTS" : ["brawlstats"],
+    "HIDDEN" : false
+}
