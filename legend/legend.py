@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import os
 from .utils.dataIO import dataIO, fileIO
+from __main__ import send_cmd_help
 import asyncio
 import random
 from random import choice as rand_choice
@@ -293,7 +294,14 @@ class legend:
 
         return readiness
 
-    @commands.command(pass_context=True)
+    @commands.group(pass_context=True, no_pm=True, name="clash")
+    async def _clash(self, ctx):
+        """Legend BS cog's group command"""
+
+        if ctx.invoked_subcommand is None:
+            await send_cmd_help(ctx)
+
+    @_clash.command(pass_context=True)
     async def legend(self, ctx, member: discord.Member=None):
         """ Show Legend clans, can also show clans based on a member's trophies"""
 
@@ -441,7 +449,7 @@ class legend:
                                                     maxwins,
                                                     clanname)))
 
-    @commands.command(pass_context=True, no_pm=True)
+    @_clash.command(pass_context=True, no_pm=True)
     @commands.has_any_role(*BOTCOMMANDER_ROLES)
     async def approve(self, ctx, member: discord.Member, clankey):
         """Send instructions to people joining a clan"""
@@ -570,7 +578,7 @@ class legend:
         else:
             await self.bot.say("Approval failed, You are already a part of a clan in the family.")
 
-    @commands.command(pass_context=True, no_pm=True)
+    @_clash.command(pass_context=True, no_pm=True)
     async def newmember(self, ctx, member: discord.Member):
         """Setup nickname, roles and invite links for a new member"""
 
@@ -716,7 +724,7 @@ class legend:
             message.content = ctx.prefix + "newmember {}".format(member.mention)
             await self.bot.process_commands(message)
 
-    @commands.command(pass_context=True, no_pm=True)
+    @_clash.command(pass_context=True, no_pm=True)
     @commands.has_any_role(*BOTCOMMANDER_ROLES)
     async def waiting(self, ctx, member: discord.Member, clankey):
         """Add people to the waiting list for a clan"""
@@ -776,7 +784,7 @@ class legend:
         roleName = discord.utils.get(server.roles, name=await self.clans.getClanData(clankey, 'role'))
         await self.bot.send_message(discord.Object(id='375839851955748874'), "**{} (#{})** added to the waiting list for {}".format(ign, profiletag, roleName.mention))
 
-    @commands.command(pass_context=True, no_pm=True)
+    @_clash.command(pass_context=True, no_pm=True)
     @commands.has_any_role(*BOTCOMMANDER_ROLES)
     async def remove(self, ctx, member: discord.Member, clankey):
         """Delete people from the waiting list for a clan"""
@@ -807,7 +815,7 @@ class legend:
         except ValueError:
             await self.bot.say("Recruit not found in the waiting list.")
 
-    @commands.command(pass_context=True, no_pm=True, aliases=["waitlist", "wait"])
+    @_clash.command(pass_context=True, no_pm=True, aliases=["waitlist", "wait"])
     async def waitinglist(self, ctx):
         """Show status of the waiting list."""
 
@@ -848,7 +856,7 @@ class legend:
             embed.set_footer(text=credits, icon_url=creditIcon)
             await self.bot.say(embed=embed)
 
-    @commands.command(pass_context=True, no_pm=True)
+    @_clash.command(pass_context=True, no_pm=True)
     @commands.has_any_role(*BOTCOMMANDER_ROLES)
     async def changenick(self, ctx, member: discord.Member=None):
         """ Change nickname of a user of their IGN + Clan"""
@@ -887,7 +895,7 @@ class legend:
         else:
             await self.bot.say("This command is only available for family members.")
 
-    @commands.command(pass_context=True, no_pm=True)
+    @_clash.command(pass_context=True, no_pm=True)
     @commands.has_any_role(*BOTCOMMANDER_ROLES)
     async def changeclan(self, ctx, member: discord.Member=None):
         """ Change clan of a user of their IGN + Clan"""
@@ -944,7 +952,7 @@ class legend:
         else:
             await self.bot.say("This command is only available for family members.")
 
-    @commands.command(pass_context=True, no_pm=True)
+    @_clash.command(pass_context=True, no_pm=True)
     @commands.has_any_role(*BOTCOMMANDER_ROLES)
     async def audit(self, ctx, clankey):
         """ Check to see if your clan members are setup properly in discord."""
@@ -1244,7 +1252,7 @@ class legend:
         embed.set_footer(text=credits, icon_url=creditIcon)
         await self.bot.say(embed=embed)
 
-    @commands.command(pass_context=True, no_pm=True)
+    @_clash.command(pass_context=True, no_pm=True)
     @commands.has_any_role(*BOTCOMMANDER_ROLES)
     async def guest(self, ctx, member: discord.Member):
         """Add guest role and change nickname to CR"""
@@ -1284,7 +1292,7 @@ class legend:
         except discord.HTTPException:
             raise
 
-    @commands.command(pass_context=True, no_pm=True)
+    @_clash.command(pass_context=True, no_pm=True)
     @commands.has_any_role(*BOTCOMMANDER_ROLES)
     async def inactive(self, ctx, member: discord.Member):
         """Use this command after kicking people from clan"""
