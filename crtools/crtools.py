@@ -3,6 +3,7 @@ from discord.ext import commands
 from .utils.dataIO import dataIO, fileIO
 import os
 from cogs.utils import checks
+import re
 
 tags_path = "data/crtools/tags.json"
 clans_path = "data/crtools/clans.json"
@@ -116,7 +117,8 @@ class tags:
 
     async def formatName(self, name):
         """Sanitize and format CR Tag"""
-        return name.replace('<c1>', '').replace('<c2>', '').replace('<c3>', '').replace('<c4>', '').replace('<c5>', '').replace('<c6>', '').replace('<c7>', '').replace('<c8>', '').replace('<c9>', '').replace('</c>', '')
+        p = re.compile(r'<.*?>')
+        return p.sub('', name)
 
     async def linkTagCR(self, tag, userID):
         """Link a CR player tag to a discord User"""
