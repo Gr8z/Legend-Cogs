@@ -104,8 +104,13 @@ class stats:
                     if server.id not in values:
                         values[server.id] = {'member': 0, 'guests': 0, 'user': 0, 'server': 0}
 
-                    self.member_log = dataIO.load_json('data/clanlog/member_log.json')
-                    members = self.member_log[max(self.member_log.keys())]
+                    if server.id == "515502772926414933":
+                        self.member_log = dataIO.load_json('data/clanlog/bs_member_log.json')
+                        members = self.member_log[max(self.member_log.keys())]
+                    else:
+                        self.member_log = dataIO.load_json('data/clanlog/member_log.json')
+                        members = self.member_log[max(self.member_log.keys())]
+
                     if members != values[server.id]['member']:
                         values[server.id]['member'] = members
                         await self.bot.edit_channel(server.get_channel(channels['member_channel']),
