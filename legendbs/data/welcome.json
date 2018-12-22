@@ -36,6 +36,8 @@
     "{0.mention}, as much as you would like to be given a warm welcome, we might just beat you up, cuz its brawliiiingggg time!!!!!",
     "{1.name} welcomes you to the fight, Brawler {0.name}!",
     "**Shelly is here**! Welcome to the brawl {0.mention}!",
-    "So you're the new Bralwer in Town {0.mention}"
+    "So you're the new Bralwer in Town {0.mention}",
+    "{0.mention}, welcome to the fight!",
+    "**Look out!** *It's a wild west bandit!* Wait no, that's {0.mention}!"
 ]
 }
