@@ -12,7 +12,7 @@ import brawlstats
 from cogs.utils.chat_formatting import pagify
 
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
-credits = "Bot by GR8 | Platoon"
+credits = "Bot by GR8 | Apex"
 BOTCOMMANDER_ROLES = ["Family Representative", "Club Manager",
                       "Club Deputy", "Vice President", "Hub Officer", "admin"]
 

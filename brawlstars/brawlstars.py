@@ -7,7 +7,7 @@ BOTCOMMANDER_ROLES = ["Family Representative", "Clan Manager",
                       "Clan Deputy", "Co-Leader", "Hub Officer", "admin"]
 
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
-credits = "Bot by GR8 | Platoon"
+credits = "Bot by GR8 | Apex"
 
 
 class brawlstars:
