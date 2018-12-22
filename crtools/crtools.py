@@ -117,8 +117,8 @@ class tags:
 
     async def formatName(self, name):
         """Sanitize and format CR Tag"""
-        p = re.compile(r'<.*?>')
-        return p.sub('', name)
+        p = re.sub(r'<c\d>(.*)<\/c>', '$1', name)
+        return p if p else name
 
     async def linkTagCR(self, tag, userID):
         """Link a CR player tag to a discord User"""
