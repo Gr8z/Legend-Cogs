@@ -117,7 +117,7 @@ class tags:
 
     async def formatName(self, name):
         """Sanitize player Name"""
-        p = re.sub(r'<c\d>(.*)<\/c>', '$1', name)
+        p = re.sub(r'<c\d>(.*)<\/c>',  r'\1', name)
         return p or name
 
     async def linkTagCR(self, tag, userID):
