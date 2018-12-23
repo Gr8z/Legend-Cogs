@@ -32,12 +32,13 @@ class Clanlog:
         self.bs_member_log = dataIO.load_json('data/clanlog/bs_member_log.json')
         self.discord_log = dataIO.load_json('data/clanlog/discord_log.json')
         self.last_count = 0
+        self.bs_last_count = 0
 
     def save_member_log(self):
         dataIO.save_json('data/clanlog/member_log.json', self.member_log)
 
     def save_bs_member_log(self):
-        dataIO.save_json('data/clanlog/bs_member_log.json', self.member_log)
+        dataIO.save_json('data/clanlog/bs_member_log.json', self.bs_member_log)
 
     def update_member_log(self):
         self.member_log = dataIO.load_json('data/clanlog/member_log.json')
@@ -179,11 +180,11 @@ class Clanlog:
         if download is not None:
             return
 
-        if self.last_count != count:
+        if self.bs_last_count != count:
             self.update_bs_member_log()
             current_time = get_time()
             self.bs_member_log[str(current_time)] = count
-            self.last_count = count
+            self.bs_last_count = count
 
             saved_times = list(self.bs_member_log.keys())
             for time in saved_times:
