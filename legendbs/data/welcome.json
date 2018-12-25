@@ -38,6 +38,7 @@
     "**Shelly is here**! Welcome to the brawl {0.mention}!",
     "So you're the new Bralwer in Town {0.mention}",
     "{0.mention}, welcome to the fight!",
-    "**Look out!** *It's a wild west bandit!* Wait no, that's {0.mention}!"
+    "**Look out!** *It's a wild west bandit!* Wait no, that's {0.mention}!",
+    "{0.mention} has 20 gems and currently charging into the enemy spawn. It's okay he is new here."
 ]
 }
