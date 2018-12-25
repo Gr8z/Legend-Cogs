@@ -1,5 +1,5 @@
 {
-"GREETING" : [
+  "GREETING": [
     "Discord user and resident brawler, {0.mention} has just joined {1.name} with a mighty fine smile.",
     "{0.mention} is the latest in a long line of new Brawlers. Her discord server is {1.name}",
     "{0.mention} was hit by a meteor from outer space, landing him in the perfect server!",
@@ -19,7 +19,7 @@
     "Barley broke again; looks like we have {0.mention} to replace him! Welcome!",
     "You want glory, {0.mention}? You're going to have to break a lot of bones to achieve that.",
     "One day that new fella, {0.mention} , will be hangin` dead on the back of Spike!",
-    "Welcome to the gem mine, {user.mention}! Get ready for some rough and tumble, cause we are ready to brawl!",
+    "Welcome to the gem mine, {0.mention}! Get ready for some rough and tumble, cause we are ready to brawl!",
     "{0.mention}, you up for a gun fight?",
     "Hey, look! Its the new gold miner, {0.mention}!",
     "{0.mention} Hmm... who is next on my list..? Aha, its you!",
@@ -40,5 +40,5 @@
     "{0.mention}, welcome to the fight!",
     "**Look out!** *It's a wild west bandit!* Wait no, that's {0.mention}!",
     "{0.mention} has 20 gems and currently charging into the enemy spawn. It's okay he is new here."
-]
+  ]
 }
