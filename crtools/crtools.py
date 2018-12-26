@@ -30,6 +30,7 @@ default_clubs = {'defualt': {'tag': 'VUYG8U2', 'role': 'everyone', 'name': 'defu
 
 class constants:
     """constants Management"""
+
     def __init__(self):
         self.constants = dataIO.load_json(constants_path)
         self.images = 'https://royaleapi.github.io/cr-api-assets/'
@@ -97,6 +98,7 @@ class constants:
 
 class tags:
     """Tags Management"""
+
     def __init__(self):
         self.tags = dataIO.load_json(tags_path)
         self.tags_bs = dataIO.load_json(tags_bs_path)
@@ -117,7 +119,7 @@ class tags:
 
     async def formatName(self, name):
         """Sanitize player Name"""
-        p = re.sub(r'<c\d>(.*)<\/c>',  r'\1', name)
+        p = re.sub(r'<c\d>(.*)<\/c>', r'\1', name)
         return p or name
 
     async def linkTagCR(self, tag, userID):
@@ -177,6 +179,7 @@ class tags:
 
 class auth:
     """RoyaleAPI key management"""
+
     def __init__(self):
         self.auth = dataIO.load_json(auth_path)
 
@@ -210,6 +213,7 @@ class auth:
 
 class clans:
     """CR Clan Family Management"""
+
     def __init__(self):
         self.clans = dataIO.load_json(clans_path)
 
@@ -378,6 +382,7 @@ class clans:
 
 class clubs:
     """BS Club Family Management"""
+
     def __init__(self):
         self.clubs = dataIO.load_json(clubs_path)
 
@@ -509,6 +514,7 @@ class clubs:
 
 class crtools:
     """Clash Royale Tools"""
+
     def __init__(self, bot):
         self.bot = bot
         self.tags = tags()

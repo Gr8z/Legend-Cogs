@@ -135,7 +135,7 @@ class Clanlog:
                     embed_join = discord.Embed(title=title,
                                                url="https://royaleapi.com/player/{}".format(memberTag),
                                                description=desc,
-                                               color=0x00ff40) 
+                                               color=0x00ff40)
 
                     if server.id == "374596069989810176":
                         channel = await self.clans.getClanData(clankey, 'log_channel')
@@ -201,7 +201,7 @@ class Clanlog:
                     memberTag = old_clubs[clubkey]["members"][member]["tag"]
                     await self.clubs.delMember(clubkey, memberTag)
 
-                    title = "{} (#{})".format(memberName, memberTag)
+                    title = "{} (#{})".format(await self.tags.formatName(memberName), memberTag)
                     desc = "left **{}**".format(old_clubs[clubkey]["name"])
                     embed_left = discord.Embed(title=title,
                                                url="https://brawlstats.com/profile/{}".format(memberTag),
@@ -227,13 +227,13 @@ class Clanlog:
                     memberTag = new_clubs[clubkey]["members"][member]["tag"]
                     await self.clubs.addMember(clubkey, memberName, memberTag)
 
-                    title = "{} (#{})".format(memberName, memberTag)
+                    title = "{} (#{})".format(await self.tags.formatName(memberName), memberTag)
                     desc = "joined **{}**".format(old_clubs[clubkey]["name"])
 
                     embed_join = discord.Embed(title=title,
                                                url="https://brawlstats.com/profile/{}".format(memberTag),
                                                description=desc,
-                                               color=0x00ff40) 
+                                               color=0x00ff40)
 
                     if server.id == "374596069989810176":
                         channel = await self.clubs.getClubData(clubkey, 'log_channel')

@@ -538,7 +538,7 @@ class challengeSession():
                 return False
 
         while True:
-            if (time.time() - start > timer+2):
+            if (time.time() - start > timer + 2):
                 await self.bot.say("Time's up, you missed it.")
                 self.timeout += 1
                 break

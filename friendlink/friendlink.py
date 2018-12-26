@@ -60,7 +60,7 @@ class friendlink:
             arenaFormat = profiledata.arena.name.replace(' ', '').lower()
 
             embed = discord.Embed(title='Click this link to add as friend in Clash Royale!', url=url[0], color=0x0080ff)
-            embed.set_author(name=profiledata.name + " ("+profiledata.tag+")", icon_url=await self.constants.get_clan_image(profiledata))
+            embed.set_author(name=profiledata.name + " (" + profiledata.tag + ")", icon_url=await self.constants.get_clan_image(profiledata))
             embed.set_thumbnail(url="https://imgur.com/C9rLoeh.jpg")
             embed.add_field(name="User", value=message.author.mention, inline=True)
             embed.add_field(name="Trophies", value="{} {:,}".format(self.emoji(arenaFormat), profiledata.trophies), inline=True)
@@ -92,7 +92,7 @@ class friendlink:
                 return
 
             embed = discord.Embed(title='Click this link to add as friend in Brawl Stars!', url=url[0], color=0x0080ff)
-            embed.set_author(name=profiledata.name + " (#"+profiledata.tag+")", icon_url=profiledata.club.badge_url)
+            embed.set_author(name=await self.tags.formatName(profiledata.name) + " (#" + profiledata.tag + ")", icon_url=profiledata.club.badge_url)
             embed.set_thumbnail(url="https://i.imgur.com/ThtCInQ.jpg")
             embed.add_field(name="User", value=message.author.mention, inline=True)
             embed.add_field(name="Trophies", value="{} {:,}".format(self.getLeagueEmoji(profiledata.trophies), profiledata.trophies), inline=True)

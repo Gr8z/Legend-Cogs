@@ -64,7 +64,7 @@ class brawlstars:
         return ""
 
     @commands.command(pass_context=True, aliases=['brawlprofile'])
-    async def brawlProfile(self, ctx, member: discord.Member=None):
+    async def brawlProfile(self, ctx, member: discord.Member = None):
         """View your Brawl Stars Profile Data and Statstics."""
 
         member = member or ctx.message.author
@@ -81,7 +81,7 @@ class brawlstars:
         embed = discord.Embed(color=0xFAA61A)
         embed.set_author(name="{} (#{})".format(await self.tags.formatName(profiledata.name), profiledata.tag),
                          icon_url=profiledata.club.badge_url if profiledata.club is not None else "",
-                         url="https://brawlstats.com/profile/"+profiledata.tag)
+                         url="https://brawlstats.com/profile/" + profiledata.tag)
         embed.set_thumbnail(url=profiledata.avatar_url)
         embed.add_field(name="Trophies", value="{} {:,}".format(self.getLeagueEmoji(profiledata.trophies), profiledata.trophies), inline=True)
         embed.add_field(name="Highest Trophies", value="{} {:,}".format(self.getLeagueEmoji(profiledata.highest_trophies), profiledata.highest_trophies), inline=True)
@@ -116,9 +116,9 @@ class brawlstars:
             return await self.bot.say("Error: cannot reach Brawl Stars Servers. Please try again later.")
 
         embed = discord.Embed(description=clandata.description, color=0xFAA61A)
-        embed.set_author(name=clandata.name + " (#"+clandata.tag+")",
+        embed.set_author(name=clandata.name + " (#" + clandata.tag + ")",
                          icon_url=clandata.badge_url,
-                         url="https://legendclans.com/clanInfo/"+clandata.tag)
+                         url="https://legendclans.com/clanInfo/" + clandata.tag)
         embed.set_thumbnail(url=clandata.badge_url)
         embed.add_field(name="Members", value="{} {}/100".format(self.emoji("gameroom"), clandata.members_count), inline=True)
         embed.add_field(name="President", value=await self.getClanLeader(clandata.get('members')), inline=True)
@@ -132,7 +132,7 @@ class brawlstars:
         await self.bot.say(embed=embed)
 
     @commands.command(pass_context=True, no_pm=True, aliases=['bssave'])
-    async def bsave(self, ctx, profiletag: str, member: discord.Member=None):
+    async def bsave(self, ctx, profiletag: str, member: discord.Member = None):
         """ save your Brawl Stars Profile Tag
 
         Example:
