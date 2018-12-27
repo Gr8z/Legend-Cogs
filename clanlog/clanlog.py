@@ -26,6 +26,7 @@ class Clanlog:
         self.auth = self.bot.get_cog('crtools').auth
         self.clans = self.bot.get_cog('crtools').clans
         self.clubs = self.bot.get_cog('crtools').clubs
+        self.tags = self.bot.get_cog('crtools').tags
         self.clash = clashroyale.OfficialAPI(self.auth.getOfficialToken(), is_async=True)
         self.brawl = brawlstats.Client(self.auth.getBSToken(), is_async=False)
         self.member_log = dataIO.load_json('data/clanlog/member_log.json')
