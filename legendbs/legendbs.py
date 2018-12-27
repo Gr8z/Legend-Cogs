@@ -286,7 +286,8 @@ class legendbs:
                                         self.emoji("bstrophy"),
                                         club.trophies))
 
-            if (member is None) or ((club.members_count != 100) and
+            if (member is None) or ((club.required_trophies <= trophies) and
+                                    (club.members_count != 100) and
                                     (club.status != 'Closed')):
                 foundClub = True
                 embed.add_field(name=title, value=desc, inline=False)
