@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-import clashroyale
+import brawlstats
 from copy import deepcopy
 from .utils.dataIO import dataIO
 from random import choice as rand_choice
@@ -30,10 +30,9 @@ class Symbol:
 dm_menu = {
     "main": {
         "embed": embed(title="Welcome", color=discord.Color.orange(),
-                       description="Welcome to the Legend Clash Royale Server, {0.mention}! "
-                                   "We are one of the oldest and biggest families in "
-                                   "Clash Royale with our 700 members and 14 clans! "
-                                   "<a:goblinstab:468708996153475072>\n\n"
+                       description="Welcome to the Legend Brawl Stars Server, {0.mention}! "
+                                   "We are one of the oldest and organized families in Brawl Stars"
+                                   "<a:crowThumbs:528192887037624330>\n\n"
                                    "We are glad you joined us, can we ask a few questions "
                                    "to customize your experience?"),
         "thumbnail": "https://i.imgur.com/8SRsdQz.png",
@@ -188,7 +187,7 @@ dm_menu = {
     "age_menu": {
         "embed": embed(title="How old are you?", color=discord.Color.orange(),
                        description="Everyone is welcome! "
-                                   "However, some clans do require you to be of a"
+                                   "However, some clubs do require you to be of a"
                                    " certain age group. Please pick one."),
         "options": [
             {
@@ -252,9 +251,9 @@ dm_menu = {
         "track": True
     },
     "save_tag_menu": {
-        "embed": embed(title="What is your Clash Royale player tag?", color=discord.Color.orange(),
+        "embed": embed(title="What is your Brawl Stars player tag?", color=discord.Color.orange(),
                        description="Before we let you talk in the server, we need to take a look at your stats. "
-                                   "To do that, we need your Clash Royale player tag.\n\n"),
+                                   "To do that, we need your Brawl Stars player tag.\n\n"),
         "options": [
             {
                 "name": "Continue",
@@ -264,7 +263,7 @@ dm_menu = {
                 }
             },
             {
-                "name": "I don't play Clash Royale",
+                "name": "I don't play Brawl Stars",
                 "emoji": Letter.b,
                 "execute": {
                     "menu": "other_game"
@@ -275,9 +274,9 @@ dm_menu = {
     },
     "save_tag": {
         "embed": embed(title="Type in your tag", color=discord.Color.orange(),
-                       description="Please type **!savetag #YOURTAG** below to submit your ID.\n\n"
+                       description="Please type **!bsavetag #YOURTAG** below to submit your ID.\n\n"
                                    "You can find your player tag in your profile in game."),
-        "image": "https://legendclans.com/wp-content/uploads/2017/11/profile_screen3.png",
+        "image": "https://i.imgur.com/VN30UOk.jpg",
         "options": [],
         "go_back": True
     },
@@ -294,14 +293,14 @@ dm_menu = {
                 }
             },
             {
-                "name": "I want to join a clan.",
+                "name": "I want to join a club.",
                 "emoji": Letter.b,
                 "execute": {
-                    "menu": "academy_coaching"
+                    "menu": "join_club"
                 }
             },
             {
-                "name": "I am already in one of your clans.",
+                "name": "I am already in one of your clubs.",
                 "emoji": Letter.c,
                 "execute": {
                     "function": "verify_membership"
@@ -311,50 +310,20 @@ dm_menu = {
         "go_back": False,
         "track": True
     },
-    "academy_coaching": {
-        "embed": embed(title="Are you interested in coaching?", color=discord.Color.orange(),
-                       description="We provide all of our members "
-                                   "with free coaching and training."),
-        "options": [
-            {
-                "name": "I am interested in coaching.",
-                "emoji": Letter.a,
-                "execute": {
-                    "menu": "join_clan"
-                }
-            },
-            {
-                "name": "I want to coach people.",
-                "emoji": Letter.b,
-                "execute": {
-                    "menu": "join_clan"
-                }
-            },
-            {
-                "name": "Not interested.",
-                "emoji": Letter.c,
-                "execute": {
-                    "menu": "join_clan"
-                }
-            }
-        ],
-        "go_back": True,
-        "track": True
-    },
-    "join_clan": {
-        "embed": embed(title="Legend Family Clans", color=discord.Color.orange(),
-                       description="Here are all our clans, which clan do you prefer?"),
-        "dynamic_options": "clans_options",
+    "join_club": {
+        "embed": embed(title="Legend Family Clubs", color=discord.Color.orange(),
+                       description="Here are all our clubs, which club do you prefer?"),
+        "dynamic_options": "clubs_options",
         "options": [],
         "go_back": True,
         "track": True
     },
     "end_member": {
         "embed": embed(title="That was it", color=discord.Color.orange(),
-                       description="Your chosen clan has been informed. "
+                       description="Your chosen club has been informed. "
                                    " Please wait in #welcome-gate channel "
                                    "while a discord officer comes to approve you.\n\n"
-                                   " Please do not join any clans without talking to an officer.\n\n"
+                                   " Please do not join any clubs without talking to an officer.\n\n"
                                    "**Enjoy your stay!**"),
         "options": [
             {
@@ -373,7 +342,7 @@ dm_menu = {
                        description="We have notified our officers about your information."
                                    " Please wait in #welcome-gate "
                                    "channel while an officer comes and helps you.\n\n"
-                                   " Please do not join any clans without talking to an officer.\n\n"
+                                   " Please do not join any clubs without talking to an officer.\n\n"
                                    "**Enjoy your stay!**"),
         "options": [
             {
@@ -394,9 +363,9 @@ dm_menu = {
                        "• Respect others' opinions. If you disagree, please do so "
                        "in a constructive manner.\n• This is an English only server, "
                        "please use any other languages in a private message.\n"
-                       "• Do not spam, and avoid ever using @clanname without "
-                       "permission from clan managers or deputies.\n"
-                       "• No advertisement of any kind, e.g. clans, websites, "
+                       "• Do not spam, and avoid ever using @clubname without "
+                       "permission from club managers or deputies.\n"
+                       "• No advertisement of any kind, e.g. clubs, websites, "
                        "discord invites, etc.\n• Use #bot-spam for bot features, "
                        "e.g. !deck or !payday.\n• Respect and do not subvert "
                        "moderators or managers.\n• A good rule is to talk to "
@@ -408,7 +377,7 @@ dm_menu = {
                        "and `#challenges`.\n\nIf you would like to invite "
                        "your friends to join this server, you may use this "
                        "Discord invite: <https://discord.gg/yhD84nK>\n\n"
-                       "Additional help and information: https://legendclans.com\n\n"
+                       "Additional help and information: https://legendclubs.com\n\n"
                        "Thanks + enjoy!\n"),
         "options": [
             {
@@ -439,13 +408,13 @@ dm_menu = {
     },
     "other_game": {
         "embed": embed(title="Any other game?", color=discord.Color.orange(),
-                       description="It's okay, but we play Brawl Stars, do you?"),
+                       description="It's okay, but we play Clash Royale, do you?"),
         "options": [
             {
-                "name": "I play Brawl Stars!",
+                "name": "I play Clash Royale!",
                 "emoji": Letter.a,
                 "execute": {
-                    "menu": "brawl_stars"
+                    "menu": "clash_royale"
                 }
             },
             {
@@ -459,24 +428,10 @@ dm_menu = {
         "go_back": False,
         "finished": True
     },
-    "brawl_stars": {
-        "embed": embed(title="Legend Brawl Stars", color=discord.Color.orange(),
-                       description="Guess what, we have just the right server for you.\n\n"
-                                   "Click here to join: https://discord.gg/5ww5D3q"),
-        "options": [
-            {
-                "name": "Done",
-                "emoji": Symbol.white_check_mark,
-                "execute": {}
-            }
-        ],
-        "go_back": False,
-        "hide_options": True
-    },
     "leave_alone": {
         "embed": embed(title="Enjoy your stay", color=discord.Color.orange(),
                        description="We look forward to welcoming "
-                                   "you into the Legend Clan Family!\n\n"
+                                   "you into the Legend Family!\n\n"
                                    "You can go talk to an officer in #welcome-gate. "),
         "options": [
             {
@@ -490,9 +445,23 @@ dm_menu = {
         "go_back": False,
         "finished": True
     },
+    "clash_royale": {
+        "embed": embed(title="Legend Clash Royale", color=discord.Color.orange(),
+                       description="Guess what, we have just the right server for you.\n\n"
+                                   "Click here to join: https://discord.gg/yhD84nK"),
+        "options": [
+            {
+                "name": "Done",
+                "emoji": Symbol.white_check_mark,
+                "execute": {}
+            }
+        ],
+        "go_back": False,
+        "hide_options": True
+    },
     "global_chat": {
         "embed": embed(title="#global-chat", color=discord.Color.orange(),
-                       description="Click here: https://discord.gg/T7XdjFS"),
+                       description="Click here: https://discord.gg/KmRAye8"),
         "options": [
             {
                 "name": "Done",
@@ -505,7 +474,7 @@ dm_menu = {
     },
     "welcome_gate": {
         "embed": embed(title="#welcome-gate", color=discord.Color.orange(),
-                       description="Click here: https://discord.gg/yhD84nK"),
+                       description="Click here: https://discord.gg/5ww5D3q"),
         "options": [
             {
                 "name": "Done",
@@ -525,18 +494,34 @@ class welcome:
     def __init__(self, bot):
         self.bot = bot
         self.user_history = {}
-        self.welcome = dataIO.load_json('data/legend/welcome.json')
+        self.welcome = dataIO.load_json('data/legendbs/welcome.json')
         self.auth = self.bot.get_cog('crtools').auth
         self.tags = self.bot.get_cog('crtools').tags
-        self.clans = self.bot.get_cog('crtools').clans
-        self.clash = clashroyale.OfficialAPI(self.auth.getOfficialToken(), is_async=True)
+        self.clubs = self.bot.get_cog('crtools').clubs
+        self.brawl = brawlstats.Client(self.auth.getBSToken(), is_async=False)
 
-    async def emoji(self, name):
+    def emoji(self, name):
         """Emoji by name."""
         for emoji in self.bot.get_all_emojis():
             if emoji.name == name.replace(" ", "").replace("-", "").replace(".", ""):
                 return '<:{}:{}>'.format(emoji.name, emoji.id)
         return ''
+
+    def getLeagueEmoji(self, trophies):
+        """Get clan war League Emoji"""
+        mapLeagues = {
+            "starLeague": [10000, 90000],
+            "masterLeague": [8000, 9999],
+            "crystalLeague": [6000, 7999],
+            "diamondLeague": [4000, 5999],
+            "goldLeague": [3000, 3999],
+            "silverLeague": [2000, 2999],
+            "bronzeLeague": [1000, 1999],
+            "woodLeague": [0, 999]
+        }
+        for league in mapLeagues.keys():
+            if mapLeagues[league][0] <= trophies <= mapLeagues[league][1]:
+                return self.emoji(league)
 
     async def change_message(self, user, new_embed, reactions: list = None):
         channel = await self.bot.start_private_message(user)
@@ -637,15 +622,15 @@ class welcome:
         self.user_history[member.id]["history"].append(menu_name)
 
     async def guest(self, member: discord.Member):
-        """Add guest role and change nickname to CR"""
-        server = self.bot.get_server("374596069989810176")
+        """Add guest role and change nickname to BS"""
+        server = self.bot.get_server("515502772926414933")
         member = server.get_member(member.id)
 
         try:
-            profiletag = await self.tags.getTagCR(member.id)
-            profiledata = await self.clash.get_player(profiletag)
-            ign = profiledata.name
-        except (clashroyale.RequestError, KeyError):
+            profiletag = await self.tags.getTagBS(member.id)
+            profiledata = self.brawl.get_player(profiletag)
+            ign = await self.tags.formatName(profiledata.name)
+        except brawlstats.RequestError:
             return await self.errorer(member)
 
         try:
@@ -665,32 +650,32 @@ class welcome:
         self.user_history[member.id]["history"].append(menu_name)
 
     async def verify_membership(self, member: discord.Member):
-        server = self.bot.get_server("374596069989810176")
+        server = self.bot.get_server("515502772926414933")
         member = server.get_member(member.id)
 
         try:
-            profiletag = await self.tags.getTagCR(member.id)
-            profiledata = await self.clash.get_player(profiletag)
-            if profiledata.clan is None:
-                clantag = ""
+            profiletag = await self.tags.getTagBS(member.id)
+            profiledata = self.brawl.get_player(profiletag)
+            if profiledata.club is None:
+                clubtag = ""
             else:
-                clantag = profiledata.clan.tag.strip("#")
+                clubtag = profiledata.club.tag
 
             ign = profiledata.name
-        except clashroyale.RequestError:
+        except brawlstats.RequestError:
             return await self.errorer(member)
 
-        membership = await self.clans.verifyMembership(clantag)
+        membership = await self.clubs.verifyMembership(clubtag)
         if membership:
             try:
-                savekey = await self.clans.getClanKey(clantag)
-                newclanname = await self.clans.getClanData(savekey, 'nickname')
-                newname = ign + " | " + newclanname
+                savekey = await self.clubs.getClubKey(clubtag)
+                newclubname = await self.clubs.getClubData(savekey, 'nickname')
+                newname = ign + " | " + newclubname
                 await self.bot.change_nickname(member, newname)
             except (discord.Forbidden, discord.HTTPException):
                 pass
 
-            role_names = [await self.clans.getClanData(savekey, 'role'), 'Member']
+            role_names = [await self.clubs.getClubData(savekey, 'role'), 'Member']
             try:
                 await self._add_roles(member, role_names)
             except (discord.Forbidden, discord.HTTPException):
@@ -703,31 +688,30 @@ class welcome:
         self.user_history[member.id]["history"].append(menu_name)
 
         welcomeMsg = rand_choice(self.welcome["GREETING"])
-        await self.bot.send_message(discord.Object(id='374596069989810178'), welcomeMsg.format(member))
+        await self.bot.send_message(discord.Object(id='517033716816543744'), welcomeMsg.format(member))
 
-    async def clans_options(self, user):
-        clandata = []
+    async def clubs_options(self, user):
+        clubdata = []
         options = []
-        for clankey in self.clans.keysClans():
+        for clubkey in self.clubs.keysClubs():
             try:
-                clan = await self.clash.get_clan(await self.clans.getClanData(clankey, 'tag'))
-                clandata.append(clan)
-            except clashroyale.RequestError:
-                return await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
+                club = self.brawl.get_club(await self.clubs.getClubData(clubkey, 'tag'))
+                clubdata.append(club)
+            except brawlstats.RequestError:
+                return await self.bot.say("Error: cannot reach Brawl Stars Servers. Please try again later.")
 
-        clandata = sorted(clandata, key=lambda x: (x.required_trophies, x.clan_score), reverse=True)
+        clubdata = sorted(clubdata, key=lambda x: (x.required_trophies, x.trophies), reverse=True)
 
         index = 0
-        for clan in clandata:
-            clankey = await self.clans.getClanKey(clan.tag.strip("#"))
+        for club in clubdata:
+            clubkey = await self.clubs.getClubKey(club.tag)
 
-            member_count = clan.get("members")
-            if member_count < 50:
-                showMembers = str(member_count) + "/50"
+            if club.members_count < 100:
+                showMembers = str(club.members_count) + "/100"
             else:
                 showMembers = "**FULL**"
 
-            title = "[{}] {} ({}+) ".format(showMembers, clan.name, clan.required_trophies)
+            title = "[{}] {} ({}+) ".format(showMembers, club.name, club.required_trophies)
 
             options.append({
                 "name": title,
@@ -751,7 +735,7 @@ class welcome:
 
     async def logger(self, user):
         """Log into a channel"""
-        channel = self.bot.get_channel("374597911436328971")
+        channel = self.bot.get_channel("518102498204975142")
 
         embed = discord.Embed(color=discord.Color.green(), description="User Joined")
         avatar = user.avatar_url if user.avatar else user.default_avatar_url
@@ -765,8 +749,8 @@ class welcome:
         if "choose_path" in data:
             path_map = {
                 "I am just visiting.": "Guest Joined",
-                "I want to join a clan.": "Recruit Joined",
-                "I am already in one of your clans.": "Member Joined",
+                "I want to join a club.": "Recruit Joined",
+                "I am already in one of your clubs.": "Member Joined",
             }
             embed.description = path_map[data["choose_path"]]
 
@@ -775,16 +759,12 @@ class welcome:
                                                                       data["name"],
                                                                       data["tag"]), inline=False)
 
-        if "clan" in data:
-            embed.add_field(name="Current clan:", value=data["clan"], inline=False)
+        if "club" in data:
+            embed.add_field(name="Current club:", value=data["club"], inline=False)
 
-        if "academy_coaching" in data:
-            if data["academy_coaching"] != "Not interested.":
-                embed.add_field(name="Coaching:", value=data["academy_coaching"], inline=False)
-
-        if "join_clan" in data:
-            if data["join_clan"] != "I am not sure, I want to talk to a human.":
-                embed.add_field(name="Clan Preference:", value=data["join_clan"], inline=False)
+        if "join_club" in data:
+            if data["join_club"] != "I am not sure, I want to talk to a human.":
+                embed.add_field(name="Club Preference:", value=data["join_club"], inline=False)
 
         if "refferal_menu" in data:
             if data["refferal_menu"] != "Other":
@@ -801,7 +781,7 @@ class welcome:
 
     async def on_member_join(self, member):
         server = member.server
-        if server.id != "374596069989810176":
+        if server.id != "515502772926414933":
             return
 
         await self.load_menu(member, "main")
@@ -821,14 +801,14 @@ class welcome:
 
     async def on_member_remove(self, member):
         server = member.server
-        if server.id != "374596069989810176":
+        if server.id != "515502772926414933":
             return
 
         embed = discord.Embed(color=discord.Color.red(), description="User Left")
         avatar = member.avatar_url if member.avatar else member.default_avatar_url
         embed.set_author(name=member.display_name, icon_url=avatar)
 
-        await self.bot.send_message(server.get_channel("374597911436328971"), embed=embed)
+        await self.bot.send_message(server.get_channel("518102498204975142"), embed=embed)
 
     async def on_reaction_add(self, reaction: discord.Reaction, user: discord.User):
         if reaction.message.channel.is_private and self.bot.user.id != user.id:
@@ -844,21 +824,21 @@ class welcome:
 
     @commands.command(pass_context=True, no_pm=True)
     @checks.admin_or_permissions(manage_server=True)
-    async def menu(self, ctx):
+    async def menubs(self, ctx):
         user = ctx.message.author
         await self.on_member_join(user)
 
     @commands.command(pass_context=True)
-    async def savetag(self, ctx, profiletag: str):
-        """ save your Clash Royale Profile Tag
+    async def bsavetag(self, ctx, profiletag: str):
+        """ save your Brawl Stars Profile Tag
 
         Example:
-            [p]savetag #CRRYRPCC
+            [p]bsavetag #BSRYRPCC
         """
         member = ctx.message.author
 
         if not ctx.message.channel.is_private:
-            return await self.bot.say("Error, please use {}save command.".format(ctx.prefix))
+            return await self.bot.say("Error, please use {}bsave command.".format(ctx.prefix))
 
         await self.bot.type()
 
@@ -868,31 +848,30 @@ class welcome:
             return await self.bot.say("The ID you provided has invalid characters. Please try again.")
 
         try:
-            profiledata = await self.clash.get_player(profiletag)
-            name = profiledata.name
+            profiledata = self.brawl.get_player(profiletag)
 
-            checkUser = await self.tags.getUserCR(self.bot.get_all_members(), profiletag)
+            checkUser = await self.tags.getUserBS(self.bot.get_all_members(), profiletag)
             if checkUser is not None:
                 if checkUser != member:
                     return await self.bot.say("Error, This Player ID is already linked with **" + checkUser.display_name + "**")
 
-            if profiledata.clan is not None:
-                self.user_history[member.id]["data"]["clan"] = profiledata.clan.name
+            if profiledata.club is not None:
+                self.user_history[member.id]["data"]["club"] = profiledata.club.name
 
-            self.user_history[member.id]["data"]["name"] = name
+            self.user_history[member.id]["data"]["name"] = await self.tags.formatName(profiledata.name)
             self.user_history[member.id]["data"]["tag"] = profiledata.tag
-            self.user_history[member.id]["data"]["emoji"] = await self.emoji(profiledata.arena.name.replace(' ', '').lower())
+            self.user_history[member.id]["data"]["emoji"] = self.getLeagueEmoji(profiledata.trophies)
 
-            await self.tags.linkTagCR(profiletag, member.id)
+            await self.tags.linkTagBS(profiletag, member.id)
 
             menu_name = "choose_path"
             await self.load_menu(member, menu_name)
             self.user_history[member.id]["history"].append(menu_name)
 
-        except clashroyale.NotFoundError:
+        except brawlstats.NotFoundError:
             return await self.bot.say("We cannot find your ID in our database, please try again.")
-        except clashroyale.RequestError:
-            return await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
+        except brawlstats.RequestError:
+            return await self.bot.say("Error: cannot reach Brawl Stars Servers. Please try again later.")
 
 
 def setup(bot):
