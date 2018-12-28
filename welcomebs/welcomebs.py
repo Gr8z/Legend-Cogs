@@ -30,7 +30,7 @@ class Symbol:
 dm_menu = {
     "main": {
         "embed": embed(title="Welcome", color=discord.Color.orange(),
-                       description="Welcome to the Legend Brawl Stars Server, {0.mention}! "
+                       description="Welcome to the **Legend Brawl Stars** Server, {0.mention}! "
                                    "We are one of the oldest and organized families in Brawl Stars"
                                    "<a:crowThumbs:528192887037624330>\n\n"
                                    "We are glad you joined us, can we ask a few questions "
@@ -494,6 +494,7 @@ class welcomebs:
     def __init__(self, bot):
         self.bot = bot
         self.user_history = {}
+        self.joined = []
         self.welcome = dataIO.load_json('data/legendbs/welcome.json')
         self.auth = self.bot.get_cog('crtools').auth
         self.tags = self.bot.get_cog('crtools').tags
@@ -784,6 +785,8 @@ class welcomebs:
         if server.id != "515502772926414933":
             return
 
+        self.joined.append(member.id)
+
         await self.load_menu(member, "main")
 
         if member.id in self.user_history:
@@ -813,8 +816,7 @@ class welcomebs:
     async def on_reaction_add(self, reaction: discord.Reaction, user: discord.User):
         if reaction.message.channel.is_private and self.bot.user.id != user.id:
 
-            server = user.server
-            if server.id != "515502772926414933":
+            if user.id not in self.joined:
                 return
 
             history = {"history": ["main"], "data": {}}

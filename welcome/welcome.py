@@ -30,7 +30,7 @@ class Symbol:
 dm_menu = {
     "main": {
         "embed": embed(title="Welcome", color=discord.Color.orange(),
-                       description="Welcome to the Legend Clash Royale Server, {0.mention}! "
+                       description="Welcome to the **Legend Clash Royale** Server, {0.mention}! "
                                    "We are one of the oldest and biggest families in "
                                    "Clash Royale with our 700 members and 14 clans! "
                                    "<a:goblinstab:468708996153475072>\n\n"
@@ -525,6 +525,7 @@ class welcome:
     def __init__(self, bot):
         self.bot = bot
         self.user_history = {}
+        self.joined = []
         self.welcome = dataIO.load_json('data/legend/welcome.json')
         self.auth = self.bot.get_cog('crtools').auth
         self.tags = self.bot.get_cog('crtools').tags
@@ -804,6 +805,8 @@ class welcome:
         if server.id != "374596069989810176":
             return
 
+        self.joined.append(member.id)
+
         await self.load_menu(member, "main")
 
         if member.id in self.user_history:
@@ -833,8 +836,7 @@ class welcome:
     async def on_reaction_add(self, reaction: discord.Reaction, user: discord.User):
         if reaction.message.channel.is_private and self.bot.user.id != user.id:
 
-            server = user.server
-            if server.id != "374596069989810176":
+            if user.id not in self.joined:
                 return
 
             history = {"history": ["main"], "data": {}}
