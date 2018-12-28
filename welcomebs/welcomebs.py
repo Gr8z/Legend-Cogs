@@ -488,7 +488,7 @@ dm_menu = {
 }
 
 
-class welcome:
+class welcomebs:
     """Welcome user with an interactive menu."""
 
     def __init__(self, bot):
@@ -875,4 +875,4 @@ class welcome:
 
 
 def setup(bot):
-    bot.add_cog(welcome(bot))
+    bot.add_cog(welcomebs(bot))
