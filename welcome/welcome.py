@@ -833,6 +833,10 @@ class welcome:
     async def on_reaction_add(self, reaction: discord.Reaction, user: discord.User):
         if reaction.message.channel.is_private and self.bot.user.id != user.id:
 
+            server = user.server
+            if server.id != "374596069989810176":
+                return
+
             history = {"history": ["main"], "data": {}}
 
             if user.id in self.user_history:
