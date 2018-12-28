@@ -188,7 +188,7 @@ class Trade:
             await send_cmd_help(ctx)
 
     @trade.command(pass_context=True, no_pm=True)
-    async def show(self, ctx, member: discord.Member=None):
+    async def show(self, ctx, member: discord.Member = None):
         """Show cards you can trade"""
         member = member or ctx.message.author
         giveset = False
@@ -205,9 +205,9 @@ class Trade:
             return await self.bot.say("You need to first save your profile using ``{}save #GAMETAG``".format(ctx.prefix))
 
         embed = discord.Embed(color=0xFAA61A, description="Cards available for trade.")
-        embed.set_author(name=profiledata.name + " ("+profiledata.tag+")",
+        embed.set_author(name=profiledata.name + " (" + profiledata.tag + ")",
                          icon_url=await self.constants.get_clan_image(profiledata),
-                         url="https://royaleapi.com/player/"+profiledata.tag.strip("#"))
+                         url="https://royaleapi.com/player/" + profiledata.tag.strip("#"))
         embed.set_footer(text=credits, icon_url=creditIcon)
 
         for rarity in rarities.keys():
@@ -316,11 +316,11 @@ class Trade:
                 pass
 
         if len(givers) > 1024:
-            givers = givers[:1000-len(givers)] + "..."
+            givers = givers[:1000 - len(givers)] + "..."
         embed.add_field(name="Giving {}".format(card), value=givers + "\n\u200b", inline=False)
 
         if len(wanters) > 1024:
-            wanters = wanters[:1000-len(wanters)] + "..."
+            wanters = wanters[:1000 - len(wanters)] + "..."
         embed.add_field(name="Want {}".format(card), value=wanters, inline=False)
 
         await self.bot.say(embed=embed)
