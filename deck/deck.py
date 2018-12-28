@@ -52,7 +52,7 @@ max_deck_per_user = 20
 
 PAGINATION_TIMEOUT = 20.0
 HELP_URL = "https://github.com/smlbiobot/SML-Cogs/wiki/Deck#usage"
-CARDS_JSON_URL = "https://cr-api.github.io/cr-api-data/json/cards.json"
+CARDS_JSON_URL = "https://royaleapi.github.io/cr-api-data/json/cards.json"
 
 numbs = {
     "next": "➡",
@@ -746,7 +746,7 @@ class Deck:
         """Upload deck image to the server."""
 
         deck_image = await self.bot.loop.run_in_executor(
-            self.threadex,
+            None,
             self.get_deck_image,
             deck, deck_name, author
         )

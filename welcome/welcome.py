@@ -30,7 +30,7 @@ class Symbol:
 dm_menu = {
     "main": {
         "embed": embed(title="Welcome", color=discord.Color.orange(),
-                       description="Welcome to the Legend Family Server, {0.mention}! "
+                       description="Welcome to the Legend Clash Royale Server, {0.mention}! "
                                    "We are one of the oldest and biggest families in "
                                    "Clash Royale with our 700 members and 14 clans! "
                                    "<a:goblinstab:468708996153475072>\n\n"
@@ -485,6 +485,7 @@ dm_menu = {
 
 class welcome:
     """Welcome user with an interactive menu."""
+
     def __init__(self, bot):
         self.bot = bot
         self.user_history = {}
@@ -501,7 +502,7 @@ class welcome:
                 return '<:{}:{}>'.format(emoji.name, emoji.id)
         return ''
 
-    async def change_message(self, user, new_embed, reactions: list=None):
+    async def change_message(self, user, new_embed, reactions: list = None):
         channel = await self.bot.start_private_message(user)
 
         async for message in self.bot.logs_from(channel, limit=10):
