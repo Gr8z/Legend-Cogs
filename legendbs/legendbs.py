@@ -892,7 +892,7 @@ class legendbs:
                 bs_members_with_less_trophies.append(bs_members_name[index])
 
         bs_clubSettings.append(clubdata.badge_id == 4)
-        bs_clubSettings.append("Legend Family🔥2 Clubs🔥LegendClans.com🔥Events & Prizes🔥Apply at discord.gg/5ww5D3q🔥" in clubdata.description)
+        bs_clubSettings.append("<c7>Legend Family</c> :fire: <c5>discord.gg/5ww5D3q</c> :fire: <c3>2 Clubs</c> :fire: <c8>Discord is mandatory</c> :fire:" in clubdata.description)
         bs_clubSettings.append(clubdata.type != "Closed")
 
         message = ""
