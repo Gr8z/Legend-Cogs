@@ -15,6 +15,7 @@ auth_path = "data/crtools/auth.json"
 constants_path = "data/crtools/constants.json"
 
 BOTCOMMANDER_ROLES = ["Family Representative", "Clan Manager",
+                      "Club Manager", "Club Deputy", "Vice President",
                       "Clan Deputy", "Co-Leader", "Hub Officer", "admin"]
 
 default_clans = {'defualt': {'tag': '9PJYVVL2', 'role': 'everyone', 'name': 'defualt',
