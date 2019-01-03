@@ -34,7 +34,7 @@
     "*Is it a bird? Is it a cactus?* **No!** It's {0.mention}!",
     "{0.mention}, if you cant do the brawling, then its a crime!",
     "{0.mention}, as much as you would like to be given a warm welcome, we might just beat you up, cuz its brawliiiingggg time!!!!!",
-    "{1.name} welcomes you to the fight, Brawler {0.name}!",
+    "{1.name} welcomes you to the fight, Brawler {0.mention}!",
     "**Shelly is here**! Welcome to the brawl {0.mention}!",
     "So you're the new Bralwer in Town {0.mention}",
     "{0.mention}, welcome to the fight!",

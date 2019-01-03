@@ -82,12 +82,12 @@ You can join either servers and talk to our friendly staff to get you set up wit
 
 social_info = """Stay Social! Come and follow us on these platforms to stay up to date on the latest news and announcements.
 
-https://twitter.com/TheLegendClubs
-https://www.facebook.com/LegendClubs
-https://www.instagram.com/legendclubs
+https://twitter.com/TheLegendClans
+https://www.facebook.com/LegendClans
+https://www.instagram.com/legendclans
 
 Visit our website to see live club statistics:
-https://legendclubs.com
+https://legendclans.com
 """
 
 guest_rules = """Welcome to the **Legend Brawl Stars** Discord server. As a guest, you agree to the following rules:
@@ -106,7 +106,7 @@ You can chat with family members and guests in `#global-chat`. For games, you ca
 
 If you would like to invite your friends to join this server, you may use this Discord invite: <https://discord.gg/5ww5D3q>
 
-Additional help and information: https://legendclubs.com
+Additional help and information: https://legendclans.com
 
 Thanks + enjoy!
 """

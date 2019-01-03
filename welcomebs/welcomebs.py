@@ -756,9 +756,9 @@ class welcomebs:
             embed.description = path_map[data["choose_path"]]
 
         if "name" in data:
-            embed.add_field(name="Player:", value="{} {} ({})".format(data["emoji"],
-                                                                      data["name"],
-                                                                      data["tag"]), inline=False)
+            embed.add_field(name="Player:", value="{} {} (#{})".format(data["emoji"],
+                                                                       data["name"],
+                                                                       data["tag"]), inline=False)
 
         if "club" in data:
             embed.add_field(name="Current club:", value=data["club"], inline=False)

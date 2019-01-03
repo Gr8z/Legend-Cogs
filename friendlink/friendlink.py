@@ -16,6 +16,7 @@ class friendlink:
         self.CRregex = re.compile(r"<?(https?:\/\/)?(www\.)?(link\.clashroyale\.com\/invite\/friend)\b([-a-zA-Z0-9/]*)>?")
         self.BSregex = re.compile(r"<?(https?:\/\/)?(www\.)?(link\.brawlstars\.com\/invite\/friend)\b([-a-zA-Z0-9/]*)>?")
         self.auth = self.bot.get_cog('crtools').auth
+        self.tags = self.bot.get_cog('crtools').tags
         self.constants = self.bot.get_cog('crtools').constants
         self.clash = clashroyale.OfficialAPI(self.auth.getOfficialToken(), is_async=True)
         self.brawl = brawlstats.Client(self.auth.getBSToken(), is_async=False)
@@ -106,7 +107,6 @@ class friendlink:
             await self.bot.delete_message(message)
 
         except Exception as e:
-            raise
             return
 
     async def on_message(self, message):
