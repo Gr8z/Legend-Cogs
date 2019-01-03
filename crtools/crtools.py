@@ -21,7 +21,8 @@ BOTCOMMANDER_ROLES = ["Family Representative", "Clan Manager",
 default_clans = {'defualt': {'tag': '9PJYVVL2', 'role': 'everyone', 'name': 'defualt',
                              'nickname': 'defualt', 'discord': None, 'waiting': [], 'members': {},
                              'bonustitle': '', 'personalbest': 0, 'warTrophies': 0, 'approval': False,
-                             'log_channel': None, 'warlog_channel': None, 'emoji': '', 'cwr': 0}}
+                             'log_channel': None, 'warlog_channel': None, 'emoji': '',
+                             'cwr': {"legend": 0, "gold": 0, "silver": 0, "bronze": 0}}}
 
 default_clubs = {'defualt': {'tag': 'VUYG8U2', 'role': 'everyone', 'name': 'defualt',
                              'nickname': 'defualt', 'discord': None, 'waiting': [], 'members': {},
@@ -300,6 +301,13 @@ class clans:
         except KeyError:
             return 0
 
+    async def getClanCWR(self, clankey, league):
+        """Get a clan's CWR"""
+        try:
+            return self.clans[clankey]['cwr'][league]
+        except KeyError:
+            return 0
+
     async def addWaitingMember(self, clankey, memberID):
         """Add a user to a clan's waiting list"""
         if memberID not in self.clans[clankey]['waiting']:
@@ -339,9 +347,9 @@ class clans:
         self.clans[clankey]['personalbest'] = trophies
         dataIO.save_json(clans_path, self.clans)
 
-    async def setCWR(self, clankey, cwr):
+    async def setCWR(self, clankey, league, cwr):
         """Set a clan's CWR"""
-        self.clans[clankey]['cwr'] = cwr
+        self.clans[clankey]['cwr'][league] = cwr
         dataIO.save_json(clans_path, self.clans)
 
     async def setBonus(self, clankey, bonus):
@@ -574,11 +582,25 @@ class crtools:
         await self.bot.say("Success")
 
     @_clans.command(pass_context=True, name="cwr")
-    async def clans_cwr(self, ctx, clankey, percent: int):
+    async def clans_cwr(self, ctx, clankey, league, percent: int):
         """Set a CWR requirement for a clan"""
         clankey = clankey.lower()
+
+        leagueNames = ["legend","gold","silver","bronze"]
+        if league not in leagueNames:
+            return await self.bot.say("Please use a valid league name: {}".format(", ".join(key for key in leagueNames)))
+
+        if percent < 0 or percent > 100:
+            return await self.bot.say("Error, percent value must be between 1-99.")
+        
         try:
-            await self.clans.setCWR(clankey, percent)
+            cwrDict = await self.clans.getClanData(clankey, 'cwr')
+            count = sum(1 for i in cwrDict.values() if i > 0)
+
+            if percent > 0 and count >= 2:
+                if cwrDict[league] == 0:
+                    return await self.bot.say("Error, You can only set CWR for 2 different leagues.")
+            await self.clans.setCWR(clankey, league, percent)
         except KeyError:
             return await self.bot.say("Please use a valid clanname: {}".format(await self.clans.namesClans()))
 
@@ -670,10 +692,10 @@ class crtools:
 
     @_clubs.command(pass_context=True, name="pb")
     async def clubs_pb(self, ctx, clankey, pb: int):
-        """Set a CWR requirement for a clan"""
+        """Set a Personal Best requirement for a club"""
         clankey = clankey.lower()
         try:
-            await self.clubs.setCWR(clankey, pb)
+            await self.clubs.setPBTrophies(clankey, pb)
         except KeyError:
             return await self.bot.say("Please use a valid clanname: {}".format(await self.clubs.namesClubs()))
 

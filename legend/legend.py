@@ -309,7 +309,7 @@ class legend:
         if member is None:
             trophies = 9999
             maxtrophies = 9999
-            plyrLeagueCWR = 0
+            plyrLeagueCWR = {"legend": 0, "gold": 0, "silver": 0, "bronze": 0}
         else:
             try:
                 await self.bot.type()
@@ -319,7 +319,7 @@ class legend:
                 cards = profiledata.cards
                 maxtrophies = profiledata.best_trophies
                 maxwins = profiledata.challenge_max_wins
-                plyrLeagueCWR = 0
+                plyrLeagueCWR = await self.clanwarReadiness(cards)
 
                 if profiledata.clan is None:
                     clanname = "*None*"
@@ -360,6 +360,7 @@ class legend:
             numWaiting = 0
             personalbest = 0
             bonustitle = None
+            plyrCWRGood = True
 
             clankey = await self.clans.getClanKey(clan.tag.strip("#"))
             numWaiting = await self.clans.numWaiting(clankey)
@@ -388,11 +389,12 @@ class legend:
 
             if personalbest > 0:
                 title += "PB: "+str(personalbest)+"+  "
-
-            if cwr > 0:
-                title += "CWR: "+str(cwr)+"%  "
-                if member is not None:
-                    plyrLeagueCWR = await self.getBestPerc(cards, await self.getLeague(clan.clan_war_trophies))
+                        
+            for league in cwr:
+                if cwr[league] > 0:
+                    title += "{}:{}%  ".format(league[:1].capitalize(), cwr[league])
+                    if plyrLeagueCWR[league] < cwr[league]:
+                        plyrCWRGood = False
 
             if bonustitle is not None:
                 title += bonustitle
@@ -406,7 +408,7 @@ class legend:
 
             if (member is None) or ((clan.required_trophies <= trophies) and
                                     (maxtrophies > personalbest) and
-                                    (plyrLeagueCWR >= cwr) and
+                                    (plyrCWRGood) and
                                     (trophies - clan.required_trophies < 1200) and
                                     (clan.type != 'closed')) or ((clan.required_trophies < 2000) and
                                                                  (member_count != 50) and
