@@ -392,7 +392,7 @@ class legend:
                         
             for league in cwr:
                 if cwr[league] > 0:
-                    title += "{}:{}%  ".format(league[:1].capitalize(), cwr[league])
+                    title += "{}: {}%  ".format(league[:1].capitalize(), cwr[league])
                     if plyrLeagueCWR[league] < cwr[league]:
                         plyrCWRGood = False
 

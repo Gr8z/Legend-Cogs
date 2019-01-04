@@ -101,9 +101,17 @@ dm_menu = {
                     "menu": "location_menu"
                 }
             },
+            },
+            {
+                "name": "Friend or Family",
+                "emoji": Letter.g,
+                "execute": {
+                    "menu": "location_menu"
+                }
+            },
             {
                 "name": "Other",
-                "emoji": Letter.g,
+                "emoji": Letter.h,
                 "execute": {
                     "menu": "location_menu"
                 }

@@ -103,8 +103,15 @@ dm_menu = {
                 }
             },
             {
-                "name": "Other",
+                "name": "Friend or Family",
                 "emoji": Letter.g,
+                "execute": {
+                    "menu": "location_menu"
+                }
+            },
+            {
+                "name": "Other",
+                "emoji": Letter.h,
                 "execute": {
                     "menu": "location_menu"
                 }
