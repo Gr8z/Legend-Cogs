@@ -498,7 +498,7 @@ class legend:
             trophies = profiledata.trophies
             cards = profiledata.cards
             maxtrophies = profiledata.best_trophies
-            plyrLeagueCWR = await self.getBestPerc(cards, await self.getLeague(clandata.clan_war_trophies))
+            plyrLeagueCWR = await self.clanwarReadiness(cards)
 
             if (clandata.get("members") == 50):
                 return await self.bot.say("Approval failed, the clan is Full.")
@@ -506,7 +506,13 @@ class legend:
             if ((trophies < clandata.required_trophies) or (maxtrophies < clan_pb)):
                 return await self.bot.say("Approval failed, you don't meet the trophy requirements.")
 
-            if (plyrLeagueCWR < clan_cwr):
+            plyrCWRGood = True
+            for league in clan_cwr:
+                if clan_cwr[league] > 0:
+                    if plyrLeagueCWR[league] < clan_cwr[league]:
+                        plyrCWRGood = False
+
+            if (not plyrCWRGood):
                 return await self.bot.say("Approval failed, you don't meet the CW Readiness requirements.")
 
             if (clandata.type == "closed"):
@@ -756,8 +762,8 @@ class legend:
             trophies = profiledata.trophies
             cards = profiledata.cards
             maxtrophies = profiledata.best_trophies
+            plyrLeagueCWR = await self.clanwarReadiness(cards)
 
-            plyrLeagueCWR = await self.getBestPerc(cards, await self.getLeague(clandata.clan_war_trophies))
         except clashroyale.RequestError:
             return await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
         except KeyError:
@@ -766,7 +772,13 @@ class legend:
         if ((trophies < clandata.required_trophies) and (maxtrophies < clan_pb)):
             return await self.bot.say("Cannot add you to the waiting list, you don't meet the trophy requirements.")
 
-        if (plyrLeagueCWR < clan_cwr):
+        plyrCWRGood = True
+        for league in clan_cwr:
+            if clan_cwr[league] > 0:
+                if plyrLeagueCWR[league] < clan_cwr[league]:
+                    plyrCWRGood = False
+
+        if (not plyrCWRGood):
             return await self.bot.say("Cannot add you to the waiting lists, you don't meet the CW Readiness requirements.")
 
         if not await self.clans.addWaitingMember(clankey, member.id):
