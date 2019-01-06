@@ -356,7 +356,7 @@
     "type": "Troop",
     "rarity": "Legendary",
     "arena": 8,
-    "description": "He chops trees by day and hunts The Log by night. His bottle of Rage spills everywhere when he dies.",
+    "description": "He chops trees by day and hunts The Log by night. His bottle of Rage spills everywhere when he's defeated.",
     "id": 26000035
   },
   {
@@ -472,7 +472,7 @@
   {
     "key": "royal-recruits",
     "name": "Royal Recruits",
-    "elixir": 8,
+    "elixir": 7,
     "type": "Troop",
     "rarity": "Common",
     "arena": 7,
@@ -680,16 +680,6 @@
     "id": 27000005
   },
   {
-    "key": "barbarian-barrel",
-    "name": "Barbarian Barrel",
-    "elixir": 2,
-    "type": "Spell",
-    "rarity": "Epic",
-    "arena": 3,
-    "description": "It rolls over and damages anything in its path, then breaks open and out pops a Barbarian! How did he get inside?!",
-    "id": 28000015
-  },
-  {
     "key": "tesla",
     "name": "Tesla",
     "elixir": 4,
@@ -706,7 +696,7 @@
     "type": "Building",
     "rarity": "Rare",
     "arena": 8,
-    "description": "You gotta spend Elixir to make Elixir.",
+    "description": "You gotta spend Elixir to make Elixir! This building makes 8 Elixir over its Lifetime. Does not appear in your starting hand.",
     "id": 27000007
   },
   {
@@ -726,7 +716,7 @@
     "type": "Building",
     "rarity": "Rare",
     "arena": 2,
-    "description": "Troop building that periodically deploys Skeletons to fight the enemy. When destroyed, spawns 4 Skeletons. Creepy!",
+    "description": "Building that periodically spawns Skeletons to fight the enemy... and when destroyed, spawns 3 more Skeletons! Creepy.",
     "id": 27000009
   },
   {
@@ -796,7 +786,7 @@
     "type": "Spell",
     "rarity": "Epic",
     "arena": 5,
-    "description": "Freezes troops and buildings, making them unable to move or attack. Everybody chill.",
+    "description": "Freezes and damages enemy troops and buildings, making them unable to move or attack. Everybody chill.",
     "id": 28000005
   },
   {
@@ -806,7 +796,7 @@
     "type": "Spell",
     "rarity": "Epic",
     "arena": 11,
-    "description": "Mirrors your last card played for +1 Elixir.",
+    "description": "Mirrors your last card played for +1 Elixir. Will not appear in your starting cards.",
     "id": 28000006
   },
   {
@@ -878,6 +868,16 @@
     "arena": 11,
     "description": "Duplicates all friendly troops in the target area. Cloned troops are fragile, but pack the same punch as the original! Doesn't affect buildings.",
     "id": 28000013
+  },
+  {
+    "key": "barbarian-barrel",
+    "name": "Barbarian Barrel",
+    "elixir": 2,
+    "type": "Spell",
+    "rarity": "Epic",
+    "arena": 3,
+    "description": "It rolls over and damages anything in its path, then breaks open and out pops a Barbarian! How did he get inside?!",
+    "id": 28000015
   },
   {
     "key": "heal",
