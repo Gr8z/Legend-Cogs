@@ -101,7 +101,6 @@ dm_menu = {
                     "menu": "location_menu"
                 }
             },
-            },
             {
                 "name": "Friend or Family",
                 "emoji": Letter.g,
