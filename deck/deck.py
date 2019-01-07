@@ -230,8 +230,6 @@ class Deck:
             if self.deck_is_valid:
                 em = await self.decklink_embed(member_deck)
                 await self.bot.say(embed=em)
-                em = await self.decklink_embed(member_deck, war=True)
-                await self.bot.say(embed=em)
 
     @deck.command(name="post", pass_context=True, no_pm=True)
     async def deck_post(self, ctx,
@@ -517,8 +515,6 @@ class Deck:
         decklink_setting = self.decklink_settings(server)
         if decklink_setting == 'embed':
             em = await self.decklink_embed(deck_cards)
-            await self.bot.say(embed=em)
-            em = await self.decklink_embed(deck_cards, war=True)
             await self.bot.say(embed=em)
         elif decklink_setting == 'link':
             url = await self.decklink_url(deck_cards)
@@ -918,7 +914,6 @@ class Deck:
 
                 await self.upload_deck_image(ctx, deck, deck_name, member)
                 await self.bot.send_message(msg.channel, embed=await self.decklink_embed(card_keys))
-                await self.bot.send_message(msg.channel, embed=await self.decklink_embed(card_keys, war=True))
                 await self.bot.delete_message(msg)
 
 
