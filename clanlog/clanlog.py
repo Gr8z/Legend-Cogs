@@ -209,7 +209,7 @@ class Clanlog:
                                                description=desc,
                                                color=0xff0000)
 
-                    if server.id == "374596069989810176":
+                    if server.id == "515502772926414933":
                         channel = await self.clubs.getClubData(clubkey, 'log_channel')
                         if channel is not None:
                             try:
@@ -236,7 +236,7 @@ class Clanlog:
                                                description=desc,
                                                color=0x00ff40)
 
-                    if server.id == "374596069989810176":
+                    if server.id == "515502772926414933":
                         channel = await self.clubs.getClubData(clubkey, 'log_channel')
                         if channel is not None:
                             try:
