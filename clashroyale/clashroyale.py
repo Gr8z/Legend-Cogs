@@ -193,6 +193,7 @@ class clashroyale:
             return await self.bot.say("You need to first save your profile using ``{}save #GAMETAG``".format(ctx.prefix))
 
         arenaFormat = profiledata.arena.name.replace(' ', '').lower()
+        games1v1 = profiledata.battle_count -(profiledata.battle_count - (profiledata.wins + profiledata.losses))
 
         embed = discord.Embed(color=0xFAA61A)
         embed.set_author(name=profiledata.name + " ("+profiledata.tag+")",
@@ -213,8 +214,8 @@ class clashroyale:
                                                                     profiledata.current_favourite_card.name), inline=True)
         embed.add_field(name="Games Played", value="{} {:,}".format(self.emoji("battle"), profiledata.battle_count), inline=True)
         embed.add_field(name="Tourney Games Played", value="{} {:,}".format(self.emoji("tourney"), profiledata.tournament_battle_count), inline=True)
-        embed.add_field(name="Wins", value="{} {:,} ({:.1f}%)".format(self.emoji("blueCrown"), profiledata.wins, (profiledata.wins/profiledata.battle_count)*100), inline=True)
-        embed.add_field(name="Losses", value="{} {:,} ({:.1f}%)".format(self.emoji("redCrown"), profiledata.losses, (profiledata.losses/profiledata.battle_count)*100), inline=True)
+        embed.add_field(name="Wins", value="{} {:,} ({:.1f}%)".format(self.emoji("blueCrown"), profiledata.wins, (profiledata.wins/games1v1)*100), inline=True)
+        embed.add_field(name="Losses", value="{} {:,} ({:.1f}%)".format(self.emoji("redCrown"), profiledata.losses, (profiledata.losses/games1v1)*100), inline=True)
         embed.add_field(name="Three Crown Wins", value="{} {:,} ({:.1f}%)".format(self.emoji("3crown"), profiledata.three_crown_wins, (profiledata.three_crown_wins/profiledata.battle_count)*100), inline=True)
         embed.add_field(name="Friendly Wins", value="{} {:,}".format(self.emoji("members"), profiledata.achievements[9].value), inline=True)
         embed.add_field(name="War Day Wins", value="{} {}".format(self.emoji("warwin"), profiledata.war_day_wins), inline=True)
