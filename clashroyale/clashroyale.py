@@ -214,7 +214,7 @@ class clashroyale:
         embed.add_field(name="Games Played", value="{} {:,}".format(self.emoji("battle"), profiledata.battle_count), inline=True)
         embed.add_field(name="Tourney Games Played", value="{} {:,}".format(self.emoji("tourney"), profiledata.tournament_battle_count), inline=True)
         embed.add_field(name="Wins", value="{} {:,} ({:.1f}%)".format(self.emoji("blueCrown"), profiledata.wins, (profiledata.wins/profiledata.battle_count)*100), inline=True)
-        embed.add_field(name="Losses", value="{} {:,} ({:.1f}%)".format(self.emoji("redCrown"), profiledata.losses, (profiledata.wins/profiledata.battle_count)*100), inline=True)
+        embed.add_field(name="Losses", value="{} {:,} ({:.1f}%)".format(self.emoji("redCrown"), profiledata.losses, (profiledata.losses/profiledata.battle_count)*100), inline=True)
         embed.add_field(name="Three Crown Wins", value="{} {:,} ({:.1f}%)".format(self.emoji("3crown"), profiledata.three_crown_wins, (profiledata.three_crown_wins/profiledata.battle_count)*100), inline=True)
         embed.add_field(name="Friendly Wins", value="{} {:,}".format(self.emoji("members"), profiledata.achievements[9].value), inline=True)
         embed.add_field(name="War Day Wins", value="{} {}".format(self.emoji("warwin"), profiledata.war_day_wins), inline=True)
