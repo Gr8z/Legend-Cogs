@@ -223,7 +223,7 @@ class clashroyale:
         embed.add_field(name="Challenge Max Wins", value="{} {}".format(self.emoji("tourney"), profiledata.challenge_max_wins), inline=True)
         embed.add_field(name="Challenge Cards Won", value="{} {:,}".format(self.emoji("cards"), profiledata.challenge_cards_won), inline=True)
         embed.add_field(name="Tournament Cards Won", value="{} {:,}".format(self.emoji("cards"), profiledata.tournament_cards_won), inline=True)
-        embed.add_field(name="Hosted/Played Tourneys", value="{} {:,}/{:,}".format(self.emoji("tourney"), profiledata.achievements[6].value, profiledata.achievements[7].value), inline=True)
+        embed.add_field(name="Hosted/Joined Tourneys", value="{} {:,}/{:,}".format(self.emoji("tourney"), profiledata.achievements[6].value, profiledata.achievements[7].value), inline=True)
         embed.add_field(name="Clans Joined", value="{} {:,}".format(self.emoji("clan"), profiledata.achievements[0].value), inline=True)
         embed.set_footer(text=credits, icon_url=creditIcon)
 
