@@ -202,25 +202,30 @@ class clashroyale:
         embed.add_field(name="Trophies", value="{} {:,}".format(self.emoji(arenaFormat), profiledata.trophies), inline=True)
         embed.add_field(name="Highest Trophies", value="{} {:,}".format(self.getArenaEmoji(profiledata.best_trophies),
                                                                         profiledata.best_trophies), inline=True)
-        embed.add_field(name="Level", value=self.emoji("level{}".format(profiledata.expLevel)), inline=True)
+        embed.add_field(name="Level", value=self.emoji("level{}".format(profiledata.exp_level)), inline=True)
+        if profiledata.exp_level > 12:
+            embed.add_field(name="Star Points", value="{} {:,}".format(self.emoji("starLevel"), profiledata.star_points), inline=True)
         if profiledata.clan is not None:
             embed.add_field(name="Clan {}".format(profiledata.role.capitalize()),
                             value="{} {}".format(await self.getClanEmoji(profiledata.clan.tag), profiledata.clan.name), inline=True)
-        embed.add_field(name="Cards Found", value="{} {}/89".format(self.emoji("card"), len(profiledata.cards)), inline=True)
+        embed.add_field(name="Cards Found", value="{} {}/90".format(self.emoji("card"), len(profiledata.cards)), inline=True)
         embed.add_field(name="Favourite Card", value="{} {}".format(self.emoji(profiledata.current_favourite_card.name),
                                                                     profiledata.current_favourite_card.name), inline=True)
         embed.add_field(name="Games Played", value="{} {:,}".format(self.emoji("battle"), profiledata.battle_count), inline=True)
         embed.add_field(name="Tourney Games Played", value="{} {:,}".format(self.emoji("tourney"), profiledata.tournament_battle_count), inline=True)
-        embed.add_field(name="Wins/Draws/Losses", value="{:,}/{:,}/{:,}".format(profiledata.wins,
-                                                                                profiledata.battle_count-profiledata.wins-profiledata.losses,
-                                                                                profiledata.losses), inline=True)
+        embed.add_field(name="Wins", value="{} {:,} ({:.1f}%)".format(self.emoji("blueCrown"), profiledata.wins, (profiledata.wins/profiledata.battle_count)*100), inline=True)
+        embed.add_field(name="Losses", value="{} {:,} ({:.1f}%)".format(self.emoji("redCrown"), profiledata.losses, (profiledata.wins/profiledata.battle_count)*100), inline=True)
+        embed.add_field(name="Three Crown Wins", value="{} {:,} ({:.1f}%)".format(self.emoji("3crown"), profiledata.three_crown_wins, (profiledata.three_crown_wins/profiledata.battle_count)*100), inline=True)
+        embed.add_field(name="Friendly Wins", value="{} {}".format(self.emoji("members"), profiledata.achievements[9].value), inline=True)
         embed.add_field(name="War Day Wins", value="{} {}".format(self.emoji("warwin"), profiledata.war_day_wins), inline=True)
-        embed.add_field(name="Three Crown Wins", value="{} {:,}".format(self.emoji("3crown"), profiledata.three_crown_wins), inline=True)
         embed.add_field(name="Total Donations", value="{} {:,}".format(self.emoji("card"), profiledata.total_donations), inline=True)
         embed.add_field(name="Donations Recieved", value="{} {:,}".format(self.emoji("card"), profiledata.clan_cards_collected), inline=True)
         embed.add_field(name="Challenge Max Wins", value="{} {}".format(self.emoji("tourney"), profiledata.challenge_max_wins), inline=True)
+        embed.add_field(name="Total 12 Wins", value="{} {}".format(self.emoji("tourney"), profiledata.achievements[8].value), inline=True)
         embed.add_field(name="Challenge Cards Won", value="{} {:,}".format(self.emoji("cards"), profiledata.challenge_cards_won), inline=True)
         embed.add_field(name="Tournament Cards Won", value="{} {:,}".format(self.emoji("cards"), profiledata.tournament_cards_won), inline=True)
+        embed.add_field(name="Hosted/Played Tourneys", value="{} {:,}/{:,}".format(self.emoji("tourney"), profiledata.achievements[6].value, profiledata.achievements[7].value), inline=True)
+        embed.add_field(name="Clans Joined", value="{} {:,}".format(self.emoji("clan"), profiledata.achievements[0].value), inline=True)
         embed.set_footer(text=credits, icon_url=creditIcon)
 
         await self.bot.say(embed=embed)
