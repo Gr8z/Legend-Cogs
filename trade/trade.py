@@ -244,7 +244,7 @@ class Trade:
 
         if not tokenText:
             tokenText = "*No Tokens*\nType ``{}trade token add`` to add tokens here.".format(ctx.prefix)
-        embed.add_field(name="My Tokens", value=tokenText, inline=False)
+        embed.add_field(name="Trade Tokens", value=tokenText, inline=False)
 
         await self.bot.say(embed=embed)
 

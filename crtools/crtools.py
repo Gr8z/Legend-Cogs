@@ -585,6 +585,7 @@ class crtools:
     async def clans_cwr(self, ctx, clankey, league, percent: int):
         """Set a CWR requirement for a clan"""
         clankey = clankey.lower()
+        league = league.lower()
 
         leagueNames = ["legend","gold","silver","bronze"]
         if league not in leagueNames:

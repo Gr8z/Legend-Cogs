@@ -221,6 +221,18 @@ class legend:
         else:
             return False
 
+    async def getUserCount(self, server, name):
+        """Returns the numbers of people with the member role"""
+        members = server.members
+
+        count = 0
+        for member in members:
+            for role in member.roles:
+                if role.name == name:
+                    count += 1
+
+        return count
+
     def emoji(self, name):
         """Emoji by name."""
         for emoji in self.bot.get_all_emojis():
@@ -636,6 +648,11 @@ class legend:
             try:
                 savekey = await self.clans.getClanKey(clantag)
                 invite = await self.clans.getClanData(savekey, 'discord')
+                role = await self.clans.getClanData(savekey, 'role')
+                current_members = await self.getUserCount(server, role)
+
+                if current_members > 50:
+                    return await self.bot.say("Audit Error: Maximum number of {} discord members reached, type ``!audit {}`` to resolve this issue.".format(clanname, clankey))
                 if invite is not None:
                     joinLink = "https://discord.gg/" + str(invite)
                     await self.bot.send_message(member, "Hi There! Congratulations on getting accepted into our family. " +
@@ -668,7 +685,7 @@ class legend:
                 else:
                     mymessage += "Nickname changed to **{}**\n".format(newname)
 
-            role_names = [await self.clans.getClanData(savekey, 'role'), 'Member']
+            role_names = [role, 'Member']
             try:
                 await self._add_roles(member, role_names)
                 mymessage += "**" + await self.clans.getClanData(savekey, 'role') + "** and **Member** roles added."
