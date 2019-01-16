@@ -390,8 +390,6 @@ class clashroyale:
             return await self.bot.say("Error: cannot reach Clash Royale Servers. Please try again later.")
 
         maxPlayers = tourneydata.max_capacity
-        cards = self.getCards(maxPlayers)
-        coins = self.getCoins(maxPlayers)
 
         embed = discord.Embed(title="Click this link to join the Tournament in Clash Royale!",
                               url="https://legendclans.com/tournaments?id={}&pass={}".format(tag, password), color=0xFAA61A)
@@ -426,6 +424,8 @@ class clashroyale:
         embed.add_field(name="Hosted By", value=await self.getCreaterName(tourneydata.creator_tag, tourneydata.members_list), inline=True)
 
         if tourneydata.first_place_card_prize > 0:
+            cards = self.getCards(maxPlayers)
+            coins = self.getCoins(maxPlayers)
             embed.add_field(name="Top prize", value="{} {}     {} {}".format(self.emoji("tournamentcards"),
                                                                              cards,
                                                                              self.emoji("coin"),
