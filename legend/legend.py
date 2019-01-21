@@ -652,7 +652,7 @@ class legend:
                 current_members = await self.getUserCount(server, role)
 
                 if current_members > 50:
-                    return await self.bot.say("Audit Error: Maximum number of {} discord members reached, type ``!audit {}`` to resolve this issue.".format(clanname, clankey))
+                    return await self.bot.say("Audit Error: Maximum number of {} discord members reached, type ``!audit {}`` to resolve this issue.".format(clanname, savekey))
                 if invite is not None:
                     joinLink = "https://discord.gg/" + str(invite)
                     await self.bot.send_message(member, "Hi There! Congratulations on getting accepted into our family. " +
