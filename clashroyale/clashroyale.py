@@ -199,7 +199,7 @@ class clashroyale:
         embed.set_author(name=profiledata.name + " ("+profiledata.tag+")",
                          icon_url=await self.constants.get_clan_image(profiledata),
                          url="https://royaleapi.com/player/"+profiledata.tag.strip("#"))
-        embed.set_thumbnail(url="https://royaleapi.github.io/cr-api-assets/arenas/{}.png".format(arenaFormat))
+        embed.set_thumbnail(url="https://gr8z.github.io/cr-api-assets/arenas/{}.png".format(arenaFormat))
         embed.add_field(name="Trophies", value="{} {:,}".format(self.emoji(arenaFormat), profiledata.trophies), inline=True)
         embed.add_field(name="Highest Trophies", value="{} {:,}".format(self.getArenaEmoji(profiledata.best_trophies),
                                                                         profiledata.best_trophies), inline=True)
