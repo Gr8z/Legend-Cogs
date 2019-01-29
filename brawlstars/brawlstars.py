@@ -93,7 +93,7 @@ class brawlstars:
         embed.add_field(name="Victories", value="{} {}".format(self.emoji("bountystar"), profiledata.victories), inline=True)
         embed.add_field(name="Solo SD Victories", value="{} {}".format(self.emoji("showdown"), profiledata.solo_showdown_victories), inline=True)
         embed.add_field(name="Duo SD Victories", value="{} {}".format(self.emoji("duoshowdown"), profiledata.duo_showdown_victories), inline=True)
-        embed.add_field(name="Best Time as Big Brawler", value="{} {}".format(self.emoji("bossfight"), profiledata.best_time_as_boss), inline=True)
+        embed.add_field(name="Best Time as Big Brawler", value="{} {}".format(self.emoji("bossfight"), profiledata.best_time_as_big_brawler), inline=True)
         embed.add_field(name="Best Robo Rumble Time", value="{} {}".format(self.emoji("roborumble"), profiledata.best_robo_rumble_time), inline=True)
         embed.set_footer(text=credits, icon_url=creditIcon)
 
