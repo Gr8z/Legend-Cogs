@@ -73,7 +73,7 @@ class clashroyale:
     def getLeagueEmoji(self, trophies):
         """Get clan war League Emoji"""
         mapLeagues = {
-            "legendleague": [3000, 9000],
+            "legendleague": [3000, 99999],
             "gold3league": [2500, 2999],
             "gold2league": [2000, 2499],
             "goldleague": [1500, 1999],
