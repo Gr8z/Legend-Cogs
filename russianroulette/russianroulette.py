@@ -10,12 +10,12 @@ from .utils.dataIO import dataIO
 from .utils import checks
 from __main__ import send_cmd_help
 
-
-kill_message = ["I was really pulling for {0} too. Oh well!",
+kill_message = ["At least {0} was worth 12 elixir."]
+'''kill_message = ["I was really pulling for {0} too. Oh well!",
                 "I guess {0} really wasn't a pea-brain!",
+                "Whatever {0} was worth 1 elixir anyways",
+                "I will always remember {0}, he was the greatest king ever",
                 "Ahhh now that {0} is gone we can quit playing! No? Ok fine!",
-                ("All things considered, I think we can all agree that {0} was a "
-                 "straight shooter."),
                 "Noooooooo. Not {0}!", "I call dibs on {0}\'s stuff. Too soon?",
                 "Well I guess {0} and I won't be doing that thing anymore...",
                 "Here lies {0}. A loser.", "RIP {0}.", "I kinda hated {0} anyway.",
@@ -32,9 +32,7 @@ kill_message = ["I was really pulling for {0} too. Oh well!",
                 "I think I got some splatter on me. Gross",
                 "I told you it would blow your mind!", "Well this is fun...",
                 "I go to get popcorn and you all start without me. Rude.",
-                "Oh God. Just before {0} pulled the trigger they shit their pants.",
                 "I guess I\'ll dig this hole a little bigger...",
-                "10/10 would watch {0} blow their brains out again.",
                 "Well I hope {0} has life insurance...",
                 "See you in the next life, {0}", "AND THEIR OFF! Oh... wrong game."
                 "I don\'t know how, but I think {1} cheated.",
@@ -49,7 +47,7 @@ kill_message = ["I was really pulling for {0} too. Oh well!",
                 "Don\'t act like you didn\'t enjoy that, {1}!",
                 "Is it weird that I wish {1} was dead instead?",
                 "Oh real great. {0} dies and I\'m still stuck with {1}. Real. Great.",
-                "Are you eating cheetos? Have some respect {1}! {0} just died!"]
+                "Are you eating cheetos? Have some respect {1}! {0} just died!"]'''
 
 
 class Russianroulette:
@@ -113,7 +111,7 @@ class Russianroulette:
         if await self.logic_checks(settings, user, bet):
             if settings["System"]["Roulette Initial"]:
                 if user.id in settings["Players"]:
-                    msg = "You are already in the circle. Don\'t be so eager to die."
+                    msg = "You are already in the arena. Let other king's have a chance."
                 elif len(settings["Players"].keys()) >= 6:
                     msg = "Sorry. The max amount of players is 6."
                 else:
@@ -129,13 +127,18 @@ class Russianroulette:
                 self.initial_set(settings, bet)
                 self.player_add(settings, user, bet)
                 self.subtract_credits(settings, user, bet)
-                await self.bot.say("{} has started a game of roulette with a starting bet of "
+                roulette_role = discord.utils.get(server.roles, name="Roulette")
+                ping_role = discord.utils.get (server.roles, name="ping")
+                await self.bot.edit_role(server, ping_role, manage_server=True)
+                await self.bot.edit_role(server, roulette_role, mentionable=True)
+                await self.bot.say("{} has started a game of {} with a starting bet of "
                                    "{}\nThe game will start in 60 seconds or when 5 more "
-                                   "players join.".format(user.display_name, bet))
+                                   "players join.".format(user.display_name, roulette_role.mention, bet))
+                await self.bot.edit_role(server, roulette_role, mentionable=False)
                 await asyncio.sleep(60)
                 if len(settings["Players"].keys()) == 1:
                     await self.bot.say("Sorry I can't let you play by yourself, that's just "
-                                       "suicide.\nTry again when you find some 'friends'.")
+                                       "boring.\nTry again when you find some 'opponents'.")
                     player = list(settings["Players"].keys())[0]
                     mobj = server.get_member(player)
                     initial_bet = settings["Players"][player]["Bet"]
@@ -143,9 +146,10 @@ class Russianroulette:
                     self.reset_game(settings)
                 else:
                     settings["System"]["Active"] = True
-                    await self.bot.say("Gather around! The game of russian roulette is starting.\n"
-                                       "I'm going to load a round into this six shot **revolver**, "
-                                       "give it a good spin, and pass it off to someone at random. "
+                    await self.bot.say("Gather around! The game of roulette is starting.\n"
+                                       "I'm going to load a round into this six shot musket, "
+                                       "give it a good spin, and pass it off to a musketeer. \n"
+                                       "The musketeer will shoot each of you in a random order. "
                                        "**If** everyone is lucky enough to have a turn, I\'ll "
                                        "start all over. Good luck!")
                     await asyncio.sleep(5)
@@ -194,8 +198,8 @@ class Russianroulette:
             else:
                 winner = players[0]
                 await self.bot.say("Congratulations {}, you're the only person alive. Enjoy your "
-                                   "blood money...\n{} credits were deposited into {}\'s "
-                                   "account".format(winner.mention, pot, winner.display_name))
+                                   "victory gold...\n{} credits were deposited into {}\'s "
+                                   "account.".format(winner.mention, pot, winner.display_name))
                 bank = self.bot.get_cog("Economy").bank
                 bank.deposit_credits(winner, pot)
                 break
@@ -203,9 +207,8 @@ class Russianroulette:
     async def roulette_round(self, settings, server, players, turn):
         roulette_circle = players[:]
         chamber = 6
-        await self.bot.say("*{} put one round into the six shot revolver and gave it a good spin. "
-                           "With a flick of the wrist, it locks in place."
-                           "*".format(self.bot.user.display_name))
+        await self.bot.say("*{} puts one round into the six shot musket and gives it a good spin. "
+                           "With a flick of the wrist, it locks in place.*".format(self.bot.user.display_name))
         await asyncio.sleep(20)
         await self.toggle_channel(server, "419164164544528394", True)
         await self.bot.say("Let's begin round {}.".format(turn))
@@ -214,11 +217,11 @@ class Russianroulette:
                 roulette_circle = players[:]  # Restart the circle when list is exhausted
             chance = random.randint(1, chamber)
             player = random.choice(roulette_circle)
-            await self.bot.say("{} presses the revolver to their temple and slowly squeezes the "
+            await self.bot.say("{} watches as the musketeer slowly takes aim and squeezes the "
                                "trigger...".format(player.display_name))
             if chance == 1:
                 await asyncio.sleep(4)
-                msg = "**BOOM**\n```{} died and was removed from the group.```".format(player.display_name)
+                msg = "**BOOM**\n```{} died and was converted back to elixir. ```".format(player.display_name)
                 await self.bot.say(msg)
                 await asyncio.sleep(2)
                 await self.toggle_channel(server, "419164164544528394", False)
@@ -233,8 +236,8 @@ class Russianroulette:
                 break
             else:
                 await asyncio.sleep(4)
-                await self.bot.say("**CLICK**\n```{} survived and passed the "
-                                   "revolver.```".format(player.display_name))
+                await self.bot.say("**CLICK**\n```{} survived!"
+                                   "```".format(player.display_name))
                 await asyncio.sleep(3)
                 roulette_circle.remove(player)
                 chamber -= 1
