@@ -12,6 +12,8 @@ cards_path = "data/trade/cards.json"
 creditIcon = "https://i.imgur.com/TP8GXZb.png"
 credits = "Bot by GR8 | Titan"
 
+BOTCOMMANDER_ROLES = ["Family Representative", "Clan Manager",
+                      "Clan Deputy", "Co-Leader", "Hub Officer", "admin", "Member"]
 
 class Trade:
     """Clash Royale Trading Helper"""
@@ -32,7 +34,17 @@ class Trade:
             for value in v:
                 self.cards_abbrev[value] = k
             self.cards_abbrev[k] = k
-
+     
+    async def _is_commander(self, member):
+        server = member.server
+        botcommander_roles = [discord.utils.get(server.roles, name=r) for r in BOTCOMMANDER_ROLES]
+        botcommander_roles = set(botcommander_roles)
+        author_roles = set(member.roles)
+        if len(author_roles.intersection(botcommander_roles)):
+            return True
+        else:
+            return False
+    
     def emoji(self, name):
         """Emoji by name."""
         for emoji in self.bot.get_all_emojis():
@@ -133,7 +145,7 @@ class Trade:
                 if (card.count == 1 and card.level != 1) or (card.count > 1 or card.level == 5):
                     trades["legendary"].append(card.name)
         return trades
-
+    
     async def searchTrades(self, card):
         rarity = await self.constants.card_to_rarity(card)
         rarity = rarity.lower()
@@ -249,6 +261,7 @@ class Trade:
         await self.bot.say(embed=embed)
 
     @trade.command(pass_context=True, no_pm=True)
+    @commands.has_any_role(*BOTCOMMANDER_ROLES)
     async def add(self, ctx, *, card):
         """Add a card you need for trading"""
         author = ctx.message.author
@@ -261,6 +274,7 @@ class Trade:
         await self.bot.say("You are now looking for {}".format(self.emoji(card)))
 
     @trade.command(pass_context=True, no_pm=True)
+    @commands.has_any_role(*BOTCOMMANDER_ROLES)
     async def remove(self, ctx, *, card):
         """Remove a card you dont need for trading"""
         author = ctx.message.author
@@ -273,12 +287,14 @@ class Trade:
         await self.bot.say("You are no longer looking for {}".format(self.emoji(card)))
 
     @trade.group(pass_context=True, no_pm=True)
+    @commands.has_any_role(*BOTCOMMANDER_ROLES)
     async def token(self, ctx):
         """Add/Remove trade tokens"""
         if ctx.invoked_subcommand is None:
             await send_cmd_help(ctx)
 
     @trade.command(pass_context=True, no_pm=True)
+    @commands.has_any_role(*BOTCOMMANDER_ROLES)
     async def search(self, ctx, *, card):
         """Search Trades"""
         author = ctx.message.author
@@ -326,6 +342,7 @@ class Trade:
         await self.bot.say(embed=embed)
 
     @token.command(pass_context=True, no_pm=True, name="add")
+    @commands.has_any_role(*BOTCOMMANDER_ROLES)
     async def add_token(self, ctx, *, token):
         """Add a trade token"""
         author = ctx.message.author
@@ -338,6 +355,7 @@ class Trade:
         await self.bot.say("You now have a {}".format(self.emoji("Token" + token.capitalize())))
 
     @token.command(pass_context=True, no_pm=True, name="remove")
+    @commands.has_any_role(*BOTCOMMANDER_ROLES)
     async def remove_token(self, ctx, *, token):
         """Remove a trade token"""
         author = ctx.message.author
