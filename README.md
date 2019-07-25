@@ -1,4 +1,4 @@
-# Legend-Cogs
+# Legend-Cogs (Red v2)
 <img src="https://imgur.com/fw6Mmwl.png">
 
 [<img src="https://discordapp.com/api/guilds/374596069989810176/widget.png?style=shield">](http://discord.gg/T7XdjFS) [<img src="https://img.shields.io/badge/discord-py-blue.svg">](https://github.com/Rapptz/discord.py)
@@ -7,6 +7,9 @@ Made with Python and [RED](https://github.com/Cog-Creators/Red-DiscordBot).
 
 If you want to see this bot in action, join the LeGeND Family Discord at [legendclans.com/discord](http://discord.gg/T7XdjFS)
 
+## Warning
+
+All cogs in this repository are made for Red V2. Red V3 support is coming soon.
 
 ## Cogs
 
